@@ -1,0 +1,328 @@
+/*===REZA===*/
+
+/*---------Results--------*/
+.wraperResult{
+    width:800px;/*800*/
+    height:1297px;/*1039px;/*1131*/
+    /*background:#fff url(../images/certificate-bg.png) no-repeat;*/
+    margin:0 auto;
+    padding:0;
+    font-family:"Times New Roman", Times, serif;
+    color:#000;
+    position:relative;
+    background-color:#fff;
+    overflow:hidden;
+
+    border:1px solid #000;
+}
+.wraperResult tbody, .wraperResult td, .wraperResult th, .wraperResult tr{border-color:#000}
+img.result-bg{
+    width:100%;
+    height:100%;
+    position:absolute;
+    left:0;
+    top:0;
+    float:left;
+    margin:0;
+    z-index:1;
+}
+
+
+.resHdr{
+    width:660px;
+    height:138px;
+    padding:53px 0 0;
+    margin:0 auto;
+    /*background:url(../images/reshdr-bg.png) no-repeat center bottom;*/
+    position:relative;
+    z-index:2;
+}
+.resContainer{
+    width:712px;
+    padding:12px 0 0;
+    margin:0 auto;
+    /*background: url(../images/res-containerbg.png) no-repeat center 100px;*/
+    position:relative;
+    z-index:2;
+}
+.resLogo{
+    float:left;
+    margin-top:5px;
+    display:block;
+}
+.schoolIdentity{
+    width:428px;
+    padding:0 0 0 10px;
+    margin:0;
+    float:left;
+}
+.hdrText{
+    width:100%;
+    padding:0;
+    margin:-18px 0 0;
+    position:relative;
+    text-align:center;
+}
+.hdrText strong, .hdrText span{
+    display:block;
+    text-transform:uppercase;
+    line-height:17px;
+    font-size:19px;
+}
+.hdrText strong{
+    font-size:12px;
+    padding-top:5px;
+    font-family:Arial, Helvetica, sans-serif;
+}
+/*---------------------*/
+.resTophdr{
+    width:100%;
+    padding:0;
+    margin:0 auto;
+    overflow:hidden;
+}
+.restopleft{
+    width:445px;
+    padding:0 0 0 5px;
+    margin:0;
+    float:left;
+    border-left:2px solid #afafaf;
+    line-height:16px;
+    font-size:14px;
+    text-transform:uppercase;
+    min-height:112px;
+}
+.rgttopleft{
+    width:210px;
+    padding-left:14px;
+    /*background:url(../images/left-bg.png) no-repeat;*/
+    border:0;
+    float:right;
+}
+.restopleft div{
+    width:100%;
+    overflow:hidden;
+    padding:0;
+    margin:0;
+}
+.restopleft div span, .restopleft em, .restopleft i, .restopleft b{
+    float:left;
+    font-style:normal;
+}
+.restopleft b{}
+.restopleft div span{width:120px}
+.restopleft em{padding-left:3px}
+.crsFailed{color:red; text-decoration:underline}
+
+.resmidcontainer, .btmcontainer{
+    width:100%;
+    padding:0;
+    margin:14px 0 0;
+    overflow:hidden;
+}
+.btmcontainer{margin:20px 0 0}
+.markTitle{
+    line-height:24px;
+    font-size:16px;
+    font-family:"Times New Roman", Times, serif;
+    text-align:center;
+    font-weight:bold;
+    text-align:center;
+    text-transform:uppercase;
+    padding:0;
+    margin:0;
+    color:#000;
+    /*background:url(../images/hdrtitle.gif) no-repeat;*/
+    border-bottom:3px solid #000;
+}
+/*.overalreport .markTitle{background:url(../images/hdrtitle2.gif) no-repeat;}
+.attendenceReport .markTitle{background:url(../images/hdrtitle3.gif) no-repeat;}
+.gpagrading .markTitle{background:url(../images/hdrtitle4.gif) no-repeat;}*/
+.overalreport{
+    width:306px;
+    padding:0;
+    margin:0 6px 0 0;
+    overflow:hidden;
+    float:left;
+}
+.attendenceReport{width:202px}
+.gpagrading{width:192px; margin-right:0; float:right}
+.pagetble, .pagetble_middle{
+    border:1px solid #000;
+    margin:0;
+    padding:0;
+    border-top:0;
+    border-spacing:0;
+    border-collapse:collapse;
+}
+.pagetble_middle{width:100%}
+
+.attendenceReport table,
+.gpagrading table{width:100%}
+
+.pagetble tr th, .pagetble tr td,
+.pagetble_middle tr th, .pagetble_middle tr td{
+    line-height:16px;
+    font-size:14px;
+    text-transform:uppercase;
+    height:24px;
+    padding:0;
+    margin:0;
+    text-align:center;
+    border-bottom:1px solid #000;
+    border-right:1px solid #000;
+    font-weight:normal;
+    vertical-align:middle;
+}
+
+.overalreportAll tr th{}
+
+.pagetble_middle tr th, .pagetble_middle tr td{
+    height:24px;
+    font-size:12px;
+    padding:0;
+    text-transform:none;
+}
+.pagetble_middle tr th{text-transform:uppercase}
+.attendenceReport .pagetble tr th, .attendenceReport .pagetble tr td, 
+.gpagrading .pagetble tr th, .gpagrading .pagetble tr td{
+    text-transform:none;
+}
+.attendenceReport .pagetble tr th{padding-bottom:2px}
+
+.gpagrading .pagetble tr th{
+    height:28px;
+    padding-bottom:6px;
+}
+/*.gpagrading .pagetble tr td{height:38px}*/
+
+.pagetble tr td{
+    height:19px;
+    padding:0;
+}
+.pagetble tr td.column1{width:175px; text-align:left; padding-left:5px}
+.column2{width:65px;}
+.pagetble tr td.column3, .pagetble tr th.column3{width:57px; border-right:none;}
+.pagetble tr.lastitem  td, .pagetble_middle tr.lastitem td{border-bottom:none}
+
+
+.attendenceReport .pagetble tr td{padding-top:2px; padding-bottom:1px}
+.attendenceReport .pagetble  tr td.column1{width:66px;}
+.attendenceReport .pagetble  tr td.column2{width:53px;}
+.attendenceReport .pagetble  tr td.column3{width:56px;}
+
+
+.gpagrading .pagetble  tr td.column1{width:76px}
+.gpagrading .pagetble  tr td.column2{width:43px}
+.gpagrading .pagetble  tr td.column3{width:52px}
+
+
+.pagetble_middle tr td.res1{width:42px}
+
+.pagetble_middle tr td.res2{width:210px;/*146px;*/}
+.pagetble_middle tr td.cTitle{padding-left:5px; text-align:left}
+
+.pagetble_middle tr td.res3{width:43px}
+.pagetble_middle tr td.res4{width:38px}
+.pagetble_middle tr td.res5{width:44px}
+.pagetble_middle tr td.res6{width:38px}
+.pagetble_middle tr td.res7{width:60px}
+.pagetble_middle tr th.examtitle{/*width:242px*/}
+.pagetble_middle tr th.examtitle2{width:232px}
+.pagetble_middle tr td.markTotal{/*width:272px;*/ text-align:right; padding-right:10px}
+.pagetble_middle tr td.markTotal2{width:121px;}
+.pagetble_middle tr td b{font-family:Tahoma, Geneva, sans-serif}
+
+.signatureWraper{
+    width:100%;
+    position:absolute;
+    left:0;
+    bottom:44px;
+}
+.signatureCont{
+    width:85%;
+    overflow:hidden;
+    position:relative;
+    padding:0;
+    margin:0 auto;
+}
+.signatureCont div{
+    line-height:22px;
+    font-size:16px;
+    float:left;
+    margin:0;
+    padding:0;
+    position:relative;
+}
+.signatureWraper .sign-grdn{width:140px}
+.signatureWraper .sign-clsT{width:174px; margin-left:90px}
+.signatureWraper .sign-head{width:200px; float:right}
+.signatureWraper b{width:100%; margin:80px 0 0; border-top:1px dashed #000; display:block; font-weight:normal; text-align:center}
+.signatureWraper img{max-width:100%; position:absolute; left:38px; bottom:2px; display:block; margin:0}
+
+/*---------Tabulation Sheet--------*/
+
+.tabulation{
+    background-color:#fff;
+
+}
+
+.tabulation table{ border:none; padding: 0px; margin:0px; border-spacing:0px; font-size:11px; color:#000; line-height: 13px; text-align:center}
+
+.tabulation thead, .tabulation tbody, .tabulation tfoot, .tabulation td, .tabulation th, .tabulation tr{ 
+    border-right:1px solid #717171;
+    border-bottom:1px solid #717171;
+    padding: 0px; margin:0px;
+    font-weight:normal;
+}
+.tabulation .table_title{
+    border-top:1px solid #717171;
+    border-left:1px solid #717171;
+    background: #e8e8e8;
+}
+.tabulation .table_title td{
+    border-right:1px solid #717171;
+    border-bottom:1px solid #717171;
+}
+.tabulation .subject_hd_table td{
+    border:none;
+}
+.tabulation .subject_table{
+    width:100px;
+    font-weight:normal;
+
+}
+.tabulation .subject_table td{
+    border-right:1px solid #717171;
+    border-bottom:1px solid #717171;
+}
+.tabulation .inner_mc td{
+    border-right:1px solid #717171;
+    border-bottom:1px solid #717171;
+}
+.tabulation .table_number{
+    border-top:1px solid #717171;
+    border-left:1px solid #717171;
+}
+.tabulation b{
+    font-weight:normal !important;
+}
+.tabulation .tabulation_table .tab_even{background: #f5f2f2}
+.tabulation .tabulation_table .tab_odd{background: #fafafa}
+
+
+.tabulation thead {display: table-header-group;}
+.tabulation tfoot { display: table-footer-group;}
+.tabulation tbody { display: table-row-group;}
+
+@media print{
+    .page-break{height:1px}
+    .crsFailed{color:#000}
+    .tab_even{background:initial}
+    .tab_odd{background:initial}
+    .table_title{background:initial}
+    .tabulation{ -webkit-print-color-adjust:exact; }
+	body.scms-result-print{ background-color:#fff}
+	.resHdrTabu{ margin-top:250px; page-break-after:always}
+
+}

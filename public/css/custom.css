@@ -1,0 +1,181 @@
+
+
+/*======= Basic Rules ===============*/
+body{
+    font-family: 'Open Sans', sans-seriff;
+    font-size: 14px;
+    color: #c33a2c;
+    background: url('../images/noise.png');
+    background-repeat: repeat;
+}
+
+
+h1,h2,h3,h4,h5,h6{
+    font-family: 'Open Sans', sans-seriff;
+    font-weight: 700;
+}
+
+h1{font-size: 150px; margin-top: 0px;}
+
+.center{
+    text-align: center;
+}
+
+.capital{
+    text-transform: uppercase;
+}
+
+.f1{font-size: 34px}
+
+
+@keyframes bubbles1
+{
+    0%  {opacity: 0; width:7px; height:7px; top:100px; left:70px;}
+25%  {opacity: .25; width:8px; height:8px;  top:90px; left:70px;}
+50%  {opacity: .5; width:9px; height:9px;  top:70px; left:70px;}
+75%  {opacity: .75; width:10px; height:10px;  top:60px; left:65px;}
+100%  {opacity: 0; width:11px; height:11px; top:30px; left:70px;}
+
+}
+
+@-webkit-keyframes bubbles1
+{
+    0%  {opacity: 0; width:5px; height:5px; top:100px; left:70px;}
+25%  {opacity: .25; width:6px; height:6px;  top:90px; left:70px;}
+50%  {opacity: .5; width:7px; height:7px;  top:50px; left:70px;}
+75%  {opacity: .75; width:9px; height:9px;  top:40px; left:65px;}
+100%  {opacity: 0; width:10px; height:10px; top:10px; left:75px;}
+
+}
+
+
+#cflask-holder span{
+    min-width: 150px;
+    min-height: 150px;
+    width: 150px;
+    display: block;
+    background-color: #fff;
+    margin:0px auto;
+    text-align: center;
+    border-radius: 150px;
+    position: relative;
+}
+
+#cflask-holder span i{
+    padding: 40px 0px 0px 0px;
+    font-size: 80px;
+}
+
+#cflask-holder span i#b1{
+    position: absolute;
+    min-width: 10px;
+    min-height: 10px;
+    border-radius: 50%;
+    background-color: #c33a2c;
+    left: 70px;
+    top: 70px;
+    -webkit-animation: bubbles1 infinite linear 1s;
+    animation: bubbles1 infinite linear 1s;
+    padding: 0px;
+}
+
+#cflask-holder span i#b2{
+    position: absolute;
+    min-width: 10px;
+    min-height: 10px;
+    border-radius: 50%;
+    background-color: #c33a2c;
+    left: 70px;
+    top: 70px;
+    -webkit-animation: bubbles1 infinite linear 2s;
+    animation: bubbles1 infinite linear 2s;
+    padding: 0px;
+}
+
+#cflask-holder span i#b3{
+    position: absolute;
+    min-width: 10px;
+    min-height: 10px;
+    border-radius: 50%;
+    background-color: #c33a2c;
+    left: 70px;
+    top: 70px;
+    -webkit-animation: bubbles1 infinite linear 2500ms;
+    animation: bubbles1 infinite linear 2500ms;
+    padding: 0px;
+}
+
+.row1 p{
+    font-size: 35px;
+}
+
+
+.search-form{
+    margin-top: 20px;
+}
+
+
+input[type="text"]{
+    height: 42px;
+    border: 1px solid #e6e4e4;
+    outline-color: #ccc;
+
+    transition: all .2s linear; -moz-transition: all .2s linear; -webkit-transition : all .2s linear; -o-transition: all .2s linear;
+}
+
+input[type="text"]:focus{
+    outline-color: #c33a2c;
+}
+
+a.submit{
+    height: 42px;
+    border: 1px solid #c33a4c;
+    background-color: #c33a2c;
+    color: #fff;
+    text-transform: uppercase;
+    transition: all .2s linear; -moz-transition: all .2s linear; -webkit-transition : all .2s linear; -o-transition: all .2s linear;
+}
+
+a.submit:hover{
+    background-color: #952317;
+}
+
+.links-wrapper{
+    margin-top: 20px;
+}
+
+ul.links{
+    float: none;
+    display: block;
+    margin: 0px auto;
+}
+ul.links li{
+    list-style-type: none;
+    display: block;
+    float: left;
+    margin-right: 10px;
+    margin-bottom: 20px;
+}
+
+
+ul.links li a{
+    height: 50px;
+    width: 50px;
+    min-width: 50px;
+    display: inline-block;
+    padding: 3px 0px;
+    background-color: #fff;
+    border-radius: 50%;
+    text-align: center;
+    color: #c33a2c;
+    transition: all .2s linear; -moz-transition: all .2s linear; -webkit-transition : all .2s linear; -o-transition: all .2s linear;
+}
+
+ul.links li a:hover{
+    background-color: #c33a2c;
+    color: #fff;
+}
+
+ul.links li a i{
+    padding: 10px 0px;
+}
