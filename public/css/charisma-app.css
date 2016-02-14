@@ -1,0 +1,732 @@
+/*@import url(https://fonts.googleapis.com/css?family=Shojumaru);*/
+
+select {
+    background-color: #fff;
+}
+
+.ch-container {
+    padding: 0 15px;
+}
+
+.top-block {
+    border-radius: 20px;
+    font-size: 14px;
+    text-align: center;
+    padding: 5px;
+    margin-bottom: 10px;
+    font-weight: bold;
+    position: relative;
+    display: block;
+    line-height: 22px;
+    text-shadow: 0 0 1px #DDD;
+    text-decoration: none;
+    -webkit-box-shadow: inset 0 0 0 1px #FAFAFA;
+    -moz-box-shadow: inset 0 0 0 1px #FAFAFA;
+    box-shadow: inset 0 0 0 1px #FAFAFA;
+    background: -moz-linear-gradient(top, rgba(30, 87, 153, 0.2) 0%, rgba(125, 185, 232, 0) 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(30, 87, 153, 0.2)), color-stop(100%, rgba(125, 185, 232, 0)));
+    background: -webkit-linear-gradient(top, rgba(30, 87, 153, 0.2) 0%, rgba(125, 185, 232, 0) 100%);
+    background: -o-linear-gradient(top, rgba(30, 87, 153, 0.2) 0%, rgba(125, 185, 232, 0) 100%);
+    background: -ms-linear-gradient(top, rgba(30, 87, 153, 0.2) 0%, rgba(125, 185, 232, 0) 100%);
+    background: linear-gradient(to bottom, rgba(30, 87, 153, 0.2) 0%, rgba(125, 185, 232, 0) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#331e5799', endColorstr='#007db9e8', GradientType=0);
+}
+
+.top-block span {
+    clear: both;
+}
+
+.top-block i {
+    font-size: 25px;
+}
+
+.top-block:hover {
+    text-decoration: none;
+}
+
+.notification {
+    display: block;
+    position: absolute;
+    top: -10px;
+    right: -5px;
+    line-height: 16px;
+    height: 16px;
+    padding: 0 5px;
+    font-family: Arial, sans-serif;
+    color: white !important;
+    text-shadow: 0 1px hsla(0, 0%, 0%, 0.25);
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-box-shadow: 0 1px 1px hsla(0, 0%, 0%, 0.08), inset 0 1px hsla(0, 100%, 100%, 0.3);
+    -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08), inset 0 1px rgba(255, 255, 255, 0.3);
+    box-shadow: 0 1px 1px hsla(0, 0%, 0%, 0.08), inset 0 1px hsla(0, 100%, 100%, 0.3);
+}
+
+.notification {
+    border-color: #2FABE9;
+    background-color: #67C2EF;
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, hsl(200, 80%, 82%)), color-stop(100%, hsl(200, 81%, 67%)));
+    background-image: -webkit-linear-gradient(top, hsl(200, 80%, 82%), hsl(200, 81%, 67%));
+    background-image: -moz-linear-gradient(top, hsl(200, 80%, 82%), hsl(200, 81%, 67%));
+    background-image: -ms-linear-gradient(top, hsl(200, 80%, 82%), hsl(200, 81%, 67%));
+    background-image: -o-linear-gradient(top, hsl(200, 80%, 82%), hsl(200, 81%, 67%));
+    background-image: linear-gradient(top, hsl(200, 80%, 82%), hsl(200, 81%, 67%));
+}
+
+.notification.green {
+    border-color: #5AAD34;
+    background-color: #78CD51;
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, hsl(101, 54%, 71%)), color-stop(100%, hsl(101, 55%, 56%)));
+    background-image: -webkit-linear-gradient(top, hsl(101, 54%, 71%), hsl(101, 55%, 56%));
+    background-image: -moz-linear-gradient(top, hsl(101, 54%, 71%), hsl(101, 55%, 56%));
+    background-image: -ms-linear-gradient(top, hsl(101, 54%, 71%), hsl(101, 55%, 56%));
+    background-image: -o-linear-gradient(top, hsl(101, 54%, 71%), hsl(101, 55%, 56%));
+    background-image: linear-gradient(top, hsl(101, 54%, 71%), hsl(101, 55%, 56%));
+}
+
+.notification.yellow {
+    border-color: #F4A506;
+    background-color: #FABB3D;
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, hsl(40, 95%, 76%)), color-stop(100%, hsl(40, 95%, 61%)));
+    background-image: -webkit-linear-gradient(top, hsl(40, 95%, 76%), hsl(40, 95%, 61%));
+    background-image: -moz-linear-gradient(top, hsl(40, 95%, 76%), hsl(40, 95%, 61%));
+    background-image: -ms-linear-gradient(top, hsl(40, 95%, 76%), hsl(40, 95%, 61%));
+    background-image: -o-linear-gradient(top, hsl(40, 95%, 76%), hsl(40, 95%, 61%));
+    background-image: linear-gradient(top, hsl(40, 95%, 76%), hsl(40, 95%, 61%));
+}
+
+.notification.red {
+    border-color: #FA5833;
+    background-color: #FA603D;
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, hsl(11, 95%, 76%)), color-stop(100%, hsl(11, 95%, 61%)));
+    background-image: -webkit-linear-gradient(top, hsl(11, 95%, 76%), hsl(11, 95%, 61%));
+    background-image: -moz-linear-gradient(top, hsl(11, 95%, 76%), hsl(11, 95%, 61%));
+    background-image: -ms-linear-gradient(top, hsl(11, 95%, 76%), hsl(11, 95%, 61%));
+    background-image: -o-linear-gradient(top, hsl(11, 95%, 76%), hsl(11, 95%, 61%));
+    background-image: linear-gradient(top, hsl(11, 95%, 76%), hsl(11, 95%, 61%));
+}
+
+.box {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.box-inner {
+    border: 1px solid #DEDEDE;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    box-shadow: 0 0 10px rgba(189, 189, 189, 0.4);
+    -webkit-box-shadow: 0 0 10px rgba(189, 189, 189, 0.4);
+    -moz-box-shadow: 0 0 10px rgba(189, 189, 189, 0.4);
+}
+
+.box-header {
+    border: none;
+    padding-top: 5px;
+    border-bottom: 1px solid #DEDEDE;
+    border-radius: 3px 3px 0 0;
+    -webkit-border-radius: 3px 3px 0 0;
+    -moz-border-radius: 3px 3px 0 0;
+    height: 35px;
+    min-height: 35px !important;
+    margin-bottom: 0;
+    font-weight: bold;
+    font-size: 16px;
+    background: -moz-linear-gradient(top, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.1) 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(255, 255, 255, 0)), color-stop(100%, rgba(0, 0, 0, 0.1)));
+    background: -webkit-linear-gradient(top, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.1) 100%);
+    background: -o-linear-gradient(top, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.1) 100%);
+    background: -ms-linear-gradient(top, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.1) 100%);
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', endColorstr='#1a000000', GradientType=0);
+
+}
+
+.box-header h2 {
+    font-size: 15px;
+    width: auto;
+    clear: none;
+    float: left;
+    line-height: 25px;
+    white-space: nowrap;
+    font-weight: bold;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.box-header h3 {
+    font-size: 13px;
+    width: auto;
+    clear: none;
+    float: left;
+    line-height: 25px;
+    white-space: nowrap;
+}
+
+.box-header h2 > i {
+    margin-top: 1px;
+}
+
+.box-icon {
+    float: right;
+}
+
+.box-icon a {
+    clear: none;
+    float: left;
+    margin: 0 2px;
+    height: 20px;
+    width: 5px;
+    margin-top: 1px;
+}
+
+.box-icon a i {
+    margin-left: -6px;
+    top: -1px;
+}
+
+.box-content {
+    padding: 10px;
+}
+
+.btn-round {
+    border-radius: 40px;
+    -webkit-border-radius: 40px;
+    -moz-border-radius: 40px;
+    font-size: 12px;
+    padding-top: 4px;
+}
+
+ul.dashboard-list li {
+    padding: 7px 0;
+    list-style: none;
+    border-bottom: 1px solid #EBEBEB;
+    border-top: 1px solid white;
+}
+
+ul.dashboard-list a:hover {
+    text-decoration: none;
+}
+
+ul.dashboard-list {
+    margin: 0;
+}
+
+ul.dashboard-list li a span {
+    display: inline-block;
+    font-size: 18px;
+    font-weight: bold;
+    margin-right: 10px;
+    text-align: right;
+    width: 70px;
+    zoom: 1;
+}
+
+.dashboard-avatar {
+    height: 50px;
+    width: 50px;
+    padding: 1px;
+    float: left;
+    margin-left: 15px;
+    margin-right: 15px;
+    border: 1px solid #EBEBEB;
+    border-radius: 50%;
+}
+
+.thumbnail {
+    background-color: white;
+    z-index: 2;
+    position: relative;
+    margin-bottom: 40px !important;
+}
+
+.thumbnails > li {
+    display: inline-block;
+    margin-left: 15px;
+}
+
+.thumbnail img, .thumbnail > a {
+    z-index: 2;
+    height: 100px;
+    width: 100px;
+    position: relative;
+    display: block;
+}
+
+img.grayscale {
+    -webkit-filter: grayscale(1);
+    -webkit-filter: grayscale(100%);
+    -moz-filter: grayscale(100%);
+    -ms-filter: grayscale(100%);
+    -o-filter: grayscale(100%);
+}
+
+.thumbnail .gallery-controls {
+    position: absolute;
+    z-index: 1;
+    margin-top: -30px;
+    height: 30px;
+    min-height: 30px;
+    padding: 0 6.5px;
+}
+
+.thumbnail .gallery-controls p {
+    display: block;
+    margin: auto;
+    width: 100%;
+}
+
+div.uploader {
+    border-radius: 14px;
+    -webkit-border-radius: 14px;
+    -moz-border-radius: 14px;
+}
+
+footer {
+    clear: both;
+}
+
+div.center, p.center, img.center {
+    margin-left: auto !important;
+    margin-right: auto !important;
+    float: none !important;
+    display: block;
+    text-align: center;
+}
+
+.stackControls {
+    padding: 5px;
+}
+
+
+.sidebar-nav {
+    min-height: 0;
+    box-shadow: 0 0 10px #BDBDBD;
+    border-radius: 5px;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    max-height: none;
+}
+
+.sidebar-nav > ul > li:not(.nav-header) {
+    margin-right: -2px;
+    margin-left: -2px;
+}
+
+.navbar-brand {
+    font-family: 'Shojumaru', cursive, Arial, serif;
+    letter-spacing: 2px;
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+    width: 183px;
+    font-size: 17px;
+}
+
+.navbar-brand img {
+    float: left;
+    height: 20px;
+    width: 20px;
+    margin-right: 5px;
+}
+
+.navbar-brand span {
+    float: left;
+}
+
+.theme-container {
+    z-index: 5;
+}
+
+.navbar-search {
+    margin-left: 10px;
+    margin-top: 7px;
+}
+
+.navbar-inner {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    line-height: 30px;
+    height: 60px;
+}
+
+
+
+.navbar-inner .btn-group {
+    margin: 7px 5px 0 5px;
+}
+
+ul.ajax-loaders li {
+    display: inline-block;
+    list-style: none;
+    padding: 10px;
+}
+
+ul.ajax-loaders {
+    min-height: 80px;
+}
+
+.bs-icons li {
+    list-style: none;
+}
+
+#for-is-ajax {
+    padding-left: 12px;
+    cursor: pointer;
+}
+
+#loading {
+    margin-top: 20px;
+    width: 128px;
+    font-weight: bold;
+}
+
+#loading div.center {
+    margin-top: 10px;
+    height: 15px;
+    width: 128px;
+    background: url(../img/ajax-loaders/ajax-loader-6.gif);
+}
+
+.box-content .nav-tabs {
+    margin-right: -10px;
+    margin-left: -10px;
+}
+
+
+.login-header {
+    padding-top: 30px;
+    height: 120px;
+}
+
+.pull-left {
+    float: left !important;
+}
+
+.pull-right {
+    float: right !important;
+}
+
+.remember {
+    margin-top: 3px;
+}
+
+.green {
+    color: #458746;
+}
+
+.red {
+    color: #B94846;
+}
+
+.blue {
+    color: #3986AC;
+}
+
+.yellow {
+    color: #F99406;
+}
+
+.login-box .input-prepend {
+    margin-bottom: 10px;
+}
+
+.login-box .btn {
+    margin-top: 15px;
+    width: 100%
+}
+
+.box-content.buttons {
+    min-height: 297px;
+}
+
+.main-menu > li > a {
+    border: 1px solid rgba(221, 221, 221, 0.46);
+}
+
+.main-menu > li {
+    margin-top: 0 !important;
+}
+
+.sidebar-nav .nav-header {
+    display: block;
+    padding: 3px 15px;
+    font-size: 11px;
+    font-weight: bold;
+    line-height: 18px;
+    color: #999999;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+}
+
+.navbar {
+    border-radius: 0;
+}
+
+ul.main-menu li:hover {
+    margin-left: 8px;
+}
+
+ul.main-menu li.active {
+    margin-left: 8px;
+}
+
+ul.main-menu li.nav-header:hover {
+    margin-left: 0;
+}
+
+ul.main-menu li:not(.nav-header) {
+    -webkit-transition: .3s;
+    -moz-transition: .3s;
+    -ms-transition: .3s;
+    -o-transition: .3s;
+    transition: .3s;
+}
+
+.accordion > ul {
+    display: none;
+    margin-left: 10px;
+}
+
+.nav-sm {
+    display: none;
+}
+.preview-on-phone {
+    height: 380px;
+
+}
+
+.powered-by {
+    text-align: right;
+}
+
+.whitespace:before {
+    content: "\2122";
+    color: transparent !important;
+}
+
+.center-block {
+    float: none !important;
+    text-align: center;
+}
+
+ul.github-buttons li {
+    display: inline;
+}
+
+.homepage-box {
+    height: 380px;
+}
+
+.download-buttons a {
+    margin: 5px;
+}
+
+.center-text {
+    text-align: center;
+}
+
+/* Mobile */
+@media only screen and (max-width: 767px) {
+
+    .navbar-brand {
+        font-family: 'Shojumaru', cursive, Arial, serif;
+        letter-spacing: 2px;
+        text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+        width: 40%;
+        font-size: 14px;
+    }
+
+    .nav-sm {
+        display: block;
+        margin-bottom: 10px;
+        border-bottom: solid white 1px;
+        padding-bottom: 10px;
+    }
+
+    .sidebar-nav .nav-canvas {
+        top: -20px;
+        left: -90%;
+        position: absolute;
+        width: 80%;
+        z-index: 2;
+        background: rgba(0, 0, 0, 0.8);
+        margin: 0 !important;
+        border-radius: 0 0 20px 0;
+        padding-bottom: 10px;
+        will-change: left;
+    }
+
+    .sidebar-nav.active .nav-canvas {
+        left: -20px;
+        border-right: solid 1px white;
+        border-bottom: solid 1px white;
+    }
+
+    .sidebar-nav {
+        position: relative;
+        z-index: 3;
+        margin: 0 !important;
+        padding: 0;
+    }
+
+    .nav-canvas {
+        -webkit-transition: .2s;
+        -moz-transition: .2s;
+        -ms-transition: .2s;
+        -o-transition: .2s;
+        transition: .2s;
+    }
+
+    .sidebar-nav a {
+        border: none !important;
+        color: white;
+    }
+
+    #for-is-ajax {
+        color: white;
+        margin-top: 15px;
+    }
+
+    .main-menu .nav-header {
+        color: white;
+    }
+
+    ul.main-menu li:hover {
+        margin-left: inherit;
+    }
+
+    ul.main-menu li.active {
+        margin-left: inherit;
+    }
+
+    ul.main-menu a:hover, .nav-sm a:hover {
+        background: none !important;
+        color: grey;
+    }
+
+    .navbar-default .navbar-toggle:focus {
+        background-color: inherit;
+    }
+
+    .navbar-default .navbar-toggle.active {
+        box-shadow: 0 0 7px rgb(0, 255, 40);
+        border: solid 1px white;
+    }
+
+    .navbar-toggle {
+        margin-left: 5px;
+        margin-right: 0;
+    }
+
+    .powered-by {
+        text-align: center;
+    }
+
+    .copyright {
+        text-align: center;
+    }
+
+    .table-wrapper .pinned {
+        box-shadow: 0 0 20px black;
+    }
+}
+
+/* Tablet */
+@media only screen and (min-width: 768px) and (max-width: 979px) {
+    .box-icon {
+        display: none;
+    }
+
+    .box-header h2 {
+        font-size: 13px !important;
+    }
+
+    .box-header h3 {
+        font-size: 11px !important;
+    }
+
+    .main-menu-span {
+        width: 6.2% !important;
+        margin-right: 4%;
+    }
+
+    .top-menu > li i {
+        display: none;
+    }
+
+    .sidebar-nav li span {
+        display: block !important;
+    }
+
+    .sidebar-nav li a, .sidebar-nav .nav-header {
+        text-align: center
+    }
+
+    .sidebar-nav {
+        padding: 0;
+        margin-bottom: 0;
+    }
+}
+
+/* Computer */
+@media only screen and (min-width: 980px) {
+    a, button, input[type=submit], input[type=button], .product-img {
+        -webkit-transition: .5s;
+        -moz-transition: .5s;
+        -ms-transition: .5s;
+        -o-transition: .5s;
+        transition: .5s;
+    }
+
+    .ch-container {
+        padding: 0 20px;
+    }
+}
+
+/* MailChimp Form Embed Code - Slim - 08/17/2011 */
+.email-subscription-footer a {
+    font-weight: bold;
+    font-size: 16px;
+    letter-spacing: 1px;
+}
+
+.email-subscription-footer {
+    float: right;
+    padding: 20px 0 0 20px;
+    text-align: center;
+}
+
+.mc_embed_signup {
+    font: 14px Helvetica,Arial,sans-serif;
+}
+.power_field{position: absolute; left: -5000px;display: none;}
+.mc_embed_signup form {display:block; position:relative; text-align:left; padding:10px 0 10px 3%}
+.mc_embed_signup h2 {font-weight:bold; padding:0; margin:15px 0; font-size:1.4em;}
+.mc_embed_signup input {border:1px solid #999; -webkit-appearance:none;}
+.mc_embed_signup input[type=checkbox]{-webkit-appearance:checkbox;}
+.mc_embed_signup input[type=radio]{-webkit-appearance:radio;}
+.mc_embed_signup input:focus {border-color:#333;}
+.mc_embed_signup .button {clear:both; background-color: #aaa; border: 0 none; border-radius:4px; color: #FFFFFF; cursor: pointer; display: inline-block; font-size:15px; font-weight: bold; height: 32px; line-height: 32px; margin: 0 5px 10px 0; padding:0; text-align: center; text-decoration: none; vertical-align: top; white-space: nowrap; width: auto;}
+.mc_embed_signup .button:hover {background-color:#777;}
+.mc_embed_signup .small-meta {font-size: 11px;}
+.mc_embed_signup .nowrap {white-space:nowrap;}
+.mc_embed_signup .clear {clear:none; display:inline;}
+
+.mc_embed_signup label {display:block; font-size:16px; padding-bottom:10px; font-weight:bold;}
+.mc_embed_signup input.email {display:block; padding:8px 0; margin:0 4% 10px 0; text-indent:5px; width:58%; min-width:130px;}
+.mc_embed_signup input.button {display:block; width:35%; margin:0 0 10px 0; min-width:90px;}
+
+.mc_embed_signup div#mce-responses {float:left; top:-1.4em; padding:0em .5em 0em .5em; overflow:hidden; width:90%;margin: 0 5%; clear: both;}
+.mc_embed_signup div.response {margin:1em 0; padding:1em .5em .5em 0; font-weight:bold; float:left; top:-1.5em; z-index:1; width:80%;}
+.mc_embed_signup #mce-error-response {display:none;}
+.mc_embed_signup #mce-success-response {color:#529214; display:none;}
+.mc_embed_signup label.error {display:block; float:none; width:auto; margin-left:1.05em; text-align:left; padding:.5em 0;}
+
+.footer {
+    bottom:0px;
+    position: relative;
+
+}
