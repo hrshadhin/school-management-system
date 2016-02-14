@@ -55,9 +55,9 @@ return array(
 		'mysql' => array(
 			'driver'    => 'mysql',
 			'host'      => 'localhost',
-			'database'  => 'supersof_admission',
-			'username'  => 'supersof_admUsr',
-			'password'  => 'MehdiHasan11d',
+			'database'  => 'school',
+			'username'  => 'sms',
+			'password'  => 'sms321',
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',
