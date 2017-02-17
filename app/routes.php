@@ -39,7 +39,7 @@ Route::get('/subject/list','subjectController@show');
 Route::get('/subject/edit/{id}','subjectController@edit');
 Route::post('/subject/update','subjectController@update');
 Route::get('/subject/delete/{id}','subjectController@delete');
-Route::get('/subject/getmarks/{subject}','subjectController@getmarks');
+Route::get('/subject/getmarks/{subject}/{cls}','subjectController@getmarks');
 
 
 //Student routes
@@ -58,11 +58,15 @@ Route::get('/student/getList/{class}/{section}/{shift}/{session}','studentContro
 //student attendance
 Route::get('/attendance/create','attendanceController@index');
 Route::post('/attendance/create','attendanceController@create');
+Route::get('/attendance/create-file','attendanceController@index_file');
+Route::post('/attendance/create-file','attendanceController@create_file');
 Route::get('/attendance/list','attendanceController@show');
 Route::post('/attendance/list','attendanceController@getlist');
 Route::get('/attendance/edit/{id}','attendanceController@edit');
 Route::post('/attendance/update','attendanceController@update');
-Route::get('/attendance/printlist/{class}/{section}/{shift}/{session}/{subject}/{date}','attendanceController@printlist');
+Route::get('/attendance/printlist/{class}/{section}/{shift}/{session}/{date}','attendanceController@printlist');
+Route::get('/attendance/report','attendanceController@report');
+Route::post('/attendance/report','attendanceController@getReport');
 
 
 
@@ -77,6 +81,7 @@ Route::get('/gpa/delete/{id}','gpaController@delete');
 
 
 //sms Routes
+/*
 Route::get('/sms','smsController@index');
 Route::post('/sms/create','smsController@create');
 Route::get('/sms/list','smsController@show');
@@ -84,7 +89,11 @@ Route::get('/sms/edit/{id}','smsController@edit');
 Route::post('/sms/update','smsController@update');
 Route::get('/sms/delete/{id}','smsController@delete');
 
-Route::get('/smslog','smsController@smsLog');
+Route::get('/sms','smsController@getsmssend');
+Route::post('/sms/send','smsController@postsmssend');*/
+
+Route::get('/smslog','smsController@getsmsLog');
+Route::post('/smslog','smsController@postsmsLog');
 Route::get('/smslog/delete/{id}','smsController@deleteLog');
 
 //Mark routes
@@ -100,10 +109,13 @@ Route::get('/mark/delete/{id}','markController@delete');
 Route::get('/result/generate','gradesheetController@getgenerate');
 Route::post('/result/generate','gradesheetController@postgenerate');
 
-Route::get('/result/search','gradesheetController@getsearch');
 
 Route::get('/result/search','gradesheetController@search');
 Route::post('/result/search','gradesheetController@postsearch');
+
+Route::get('/results','gradesheetController@searchpub');
+Route::post('/results','gradesheetController@postsearchpub');
+
 
 Route::get('/gradesheet','gradesheetController@index');
 Route::post('/gradesheet','gradesheetController@stdlist');
@@ -117,6 +129,9 @@ Route::post('/tabulation','tabulationController@getsheet');
 //settings
 Route::get('/settings','settingsController@index');
 Route::post('/settings','settingsController@save');
+
+Route::get('/institute','instituteController@index');
+Route::post('/institute','instituteController@save');
 
 //promotion
 Route::get('/promotion','promotionController@index');
@@ -167,8 +182,18 @@ Route::get('/fee/collection','feesController@getCollection');
 Route::post('/fee/collection','feesController@postCollection');
 Route::get('/fee/getListjson/{class}/{type}','feesController@getListjson');
 Route::get('/fee/getFeeInfo/{id}','feesController@getFeeInfo');
-
 Route::get('/fee/getDue/{class}/{stdId}','feesController@getDue');
+
+Route::get('/fees/view','feesController@stdfeeview');
+Route::post('/fees/view','feesController@stdfeeviewpost');
+Route::get('/fees/delete/{billNo}','feesController@stdfeesdelete');
+
+Route::get('/fees/report','feesController@report');
+Route::get('/fees/report/std/{regiNo}','feesController@reportstd');
+Route::get('/fees/report/{sDate}/{eDate}','feesController@reportprint');
+
+
+Route::get('/fees/details/{billNo}','feesController@billDetails');
 
 //Admisstion routes
 Route::get('/regonline','admissionController@regonline');
@@ -186,12 +211,18 @@ Route::post('/printadmitcard','admissionController@printAdmitCard');
 Route::get('/library/addbook','libraryController@getAddbook');
 Route::post('/library/addbook','libraryController@postAddbook');
 Route::get('/library/view','libraryController@getviewbook');
-Route::post('/library/view','libraryController@postviewbook');
+
+Route::get('/library/view-show','libraryController@postviewbook');
+
 Route::get('/library/edit/{id}','libraryController@getBook');
 Route::post('/library/update','libraryController@postUpdateBook');
 Route::get('/library/delete/{id}','libraryController@deleteBook');
 Route::get('/library/issuebook','libraryController@getissueBook');
+
+//check availabe book
+Route::get('/library/issuebook-availabe/{code}/{quantity}','libraryController@checkBookAvailability');
 Route::post('/library/issuebook','libraryController@postissueBook');
+
 Route::get('/library/issuebookview','libraryController@getissueBookview');
 Route::post('/library/issuebookview','libraryController@postissueBookview');
 Route::get('/library/issuebookupdate/{id}','libraryController@getissueBookupdate');
@@ -204,5 +235,37 @@ Route::post('/library/search','libraryController@postsearch');
 Route::post('/library/search2','libraryController@postsearch2');
 
 Route::get('/library/reports','libraryController@getReports');
+Route::get('/library/reports/fine','libraryController@getReportsFine');
 
 Route::get('/library/reportprint/{do}','libraryController@Reportprint');
+Route::get('/library/reports/fine/{month}','libraryController@ReportsFineprint');
+
+//Hostel Routes
+Route::get('/dormitory','dormitoryController@index');
+Route::post('/dormitory/create','dormitoryController@create');
+Route::get('/dormitory/edit/{id}','dormitoryController@edit');
+Route::post('/dormitory/update','dormitoryController@update');
+Route::get('/dormitory/delete/{id}','dormitoryController@delete');
+
+Route::get('/dormitory/getstudents/{dormid}','dormitoryController@getstudents');
+
+Route::get('/dormitory/assignstd','dormitoryController@stdindex');
+Route::post('/dormitory/assignstd/create','dormitoryController@stdcreate');
+Route::get('/dormitory/assignstd/list','dormitoryController@stdshow');
+Route::post('/dormitory/assignstd/list','dormitoryController@poststdShow');
+Route::get('/dormitory/assignstd/edit/{id}','dormitoryController@stdedit');
+Route::post('/dormitory/assignstd/update','dormitoryController@stdupdate');
+Route::get('/dormitory/assignstd/delete/{id}','dormitoryController@stddelete');
+
+Route::get('/dormitory/fee','dormitoryController@feeindex');
+Route::post('/dormitory/fee','dormitoryController@feeadd');
+Route::get('/dormitory/fee/info/{regiNo}','dormitoryController@feeinfo');
+
+Route::get('/dormitory/report/std','dormitoryController@reportstd');
+Route::get('/dormitory/report/std/{dormId}','dormitoryController@reportstdprint');
+Route::get('/dormitory/report/fee','dormitoryController@reportfee');
+Route::get('/dormitory/report/fee/{dormId}/{month}','dormitoryController@reportfeeprint');
+
+//barcode generate
+Route::get('/barcode','barcodeController@index');
+Route::post('/barcode','barcodeController@generate');

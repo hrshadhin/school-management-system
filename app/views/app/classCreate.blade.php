@@ -23,14 +23,14 @@
                         <label for="name">Name</label>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                            <input type="text" class="form-control" required name="name" placeholder="Class Name">
+                            <input type="text" class="form-control" autofocus required name="name" placeholder="Class Name">
                         </div>
                     </div>
                   <div class="form-group">
-                      <label for="name">Numeric Value</label>
+                      <label for="name">Numeric Value of Class[One=1,Six=6,Ten=10 etc]</label>
                       <div class="input-group">
                           <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                          <input type="text" class="form-control" required name="code" placeholder="1,2,3 etc">
+                          <input type="number" min="1" max="10" class="form-control" required name="code" placeholder="One=1,Six=6,Ten=10 etc">
                       </div>
                   </div>
                     <div class="form-group">

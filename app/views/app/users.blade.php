@@ -96,10 +96,10 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for="type">Address</label>
+                                            <label for="type">Description</label>
                                             <div class="input-group">
                                                 <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                                                <textarea type="text" class="form-control" required name="address" placeholder="Address">{{$user->address}}</textarea>
+                                                <textarea type="text" class="form-control" required name="desc" placeholder="Description">{{$user->desc}}</textarea>
 
                                             </div>
                                         </div>
@@ -181,10 +181,10 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for="type">Address</label>
+                                            <label for="type">Description</label>
                                             <div class="input-group">
                                                 <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                                                <textarea type="text" class="form-control" required name="address" placeholder="Address"></textarea>
+                                                <textarea type="text" class="form-control" required name="desc" placeholder="Description"></textarea>
 
                                             </div>
                                         </div>
@@ -211,7 +211,7 @@
                                     <th>Email</th>
                                     <th>Login</th>
                                     <th>Group</th>
-                                    <th>Address</th>
+                                    <th>Descripton</th>
 
                                     <th>Action</th>
                                 </tr>
@@ -224,7 +224,7 @@
                                         <td>{{$user->email}}</td>
                                         <td>{{$user->login}}</td>
                                         <td>{{$user->group}}</td>
-                                        <td>{{$user->address}}</td>
+                                        <td>{{$user->desc}}</td>
 
 
                                         <td>

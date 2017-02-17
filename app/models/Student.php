@@ -3,8 +3,9 @@
 class Student extends \Eloquent {
 	protected $table = 'Student';
 	protected $fillable = ['regiNo',
-	'fname',
-	'lname',
+	'firstName',
+	'lastName',
+	'middleName',
 	'gender',
 	'religion',
 	'bloodgroup',
@@ -17,9 +18,14 @@ class Student extends \Eloquent {
 	'fatherCellNo',
 	'motherName',
 	'motherCellNo',
-   'presentAddress',
-   'parmanentAddress'
-	];
+	'presentAddress',
+	'parmanentAddress'
+];
 
+protected $primaryKey = 'id';
+public function attendance(){
+	$this->primaryKey = "regiNo";
+	return $this->hasMany('Attendance','regiNo');
+}
 
 }

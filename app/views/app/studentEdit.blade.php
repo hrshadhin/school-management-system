@@ -22,6 +22,7 @@
                                       </ul>
                                   </div>
                   @endif
+              @if (isset($student))
               <form role="form" action="/student/update" method="post" enctype="multipart/form-data">
               <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <input type="hidden" name="id" value="{{ $student->id }}">
@@ -407,6 +408,16 @@
                     <br>
                   </div>
                 </form>
+              @else
+                      <div class="alert alert-danger">
+                          <strong>Whoops!</strong>There is no such Student!<br><br>
+                          <ul>
+                              @foreach ($errors->all() as $error)
+                                  <li>{{ $error }}</li>
+                              @endforeach
+                          </ul>
+                      </div>
+             @endif
 
 
 
@@ -434,7 +445,7 @@
 
 
     });
-window.onload = function () {$('#class option[value="{{$student->class}}"]').attr("selected", "selected"); }
+
 
 </script>
 @stop

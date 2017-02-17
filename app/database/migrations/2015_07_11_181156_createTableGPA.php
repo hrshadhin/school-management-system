@@ -15,6 +15,7 @@ class CreateTableGPA extends Migration {
 		Schema::create('GPA', function(Blueprint $table)
 		{
 			$table->increments('id');
+			$table->string('for',2);
 			$table->string('gpa',20);
 			$table->float('grade');
 			$table->integer('markfrom');

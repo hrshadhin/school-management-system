@@ -78,7 +78,17 @@
                           </div>
                       </div>
                         </div>
-                          <div class="col-md-3">
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="control-label" for="rack">Quantity</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign  blue"></i></span>
+                                      {{ Form::text('quantity','',['class'=>'form-control','required'=>'true','placeholder'=>'How many?']) }}
+
+                                </div>
+                            </div>
+                        </div>
+                          <div class="col-md-2">
                               <div class="form-group">
                                   <label class="control-label" for="rack">Rack No</label>
                                   <div class="input-group">
@@ -88,7 +98,7 @@
                                   </div>
                               </div>
                           </div>
-                          <div class="col-md-3">
+                          <div class="col-md-2">
                               <div class="form-group">
                                   <label class="control-label" for="row">Row No</label>
                                   <div class="input-group">

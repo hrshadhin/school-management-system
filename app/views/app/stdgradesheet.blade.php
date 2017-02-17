@@ -1,5 +1,4 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<!-- saved from url=(0070)http://dinajpurzillaschool.edu.bd/student_results/index/2013/2/0903001 -->
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
     <title>Marks Sheet</title>
@@ -13,27 +12,53 @@
         //<![CDATA[
         var Croogo = {"basePath":"\/","params":{"controller":"student_results","action":"index","named":[]}};
         //]]>
-    </script><style>[href^="http://www.linkbucks.com/referral/"],
-        [href^="http://www.faceporn.net/free?"]
-        {display:none !important;}</style>
+    </script>
+
     <script type="text/javascript" src="<?php echo url();?>/markssheetcontent/jquery-1.8.2.min.js"></script>
     <script type="text/javascript" src="<?php echo url();?>/markssheetcontent/js.js"></script>
     <script type="text/javascript" src="<?php echo url();?>/markssheetcontent/admin.js"></script>
+
+<style type="text/css">
+.btn-print {
+    color: #ffffff;
+    background-color: #49b3e2;
+    border-color: #aed0df;
+    float: right;
+
+    font-size: 40px;
+    padding: 5px;
+    margin: 10px 10px;
+    border-radius: 20px;
+}
+
+.btn-print:hover,
+.btn-print:focus,
+.btn-print:active,
+.btn-print.active,
+.open .dropdown-toggle.btn-print {
+  color: #ffffff;
+  background-color: #0F9966;
+  border-color: #19910E;
+}
+
+.btn-print:active,
+.btn-print.active,
+.open .dropdown-toggle.btn-print {
+  background-image: none;
+}
+
+.btn-print .badge {
+  color: #34BA1F;
+  background-color: #ffffff;
+}
+</style>
+
 </head>
-<style id="stylish-2" class="stylish" type="text/css">
 
-
-    @namespace url(http://www.w3.org/1999/xhtml);</style>
 <body class="scms-result-print">
-
-
-
-
-
-
-
-
-<div class="wraperResult">
+  <button class="btn-print" onclick="printDiv('printableArea')">Print</button>
+<div id="printableArea">
+  <div class="wraperResult">
     <div class="resHdr">
         <img src="<?php echo url();?>/markssheetcontent/res-logo.png" alt="" class="resLogo">            <div class="schoolIdentity">
             <img src="<?php echo url();?>/markssheetcontent/school-title.png" alt="">                <div class="hdrText">
@@ -53,7 +78,7 @@
                 <div><span>DATE OF BIRTH</span><i>: </i><em>{{$student->dob}}</em></div>
                 <!--<div><span>NEW CLASS ROLL :  </span><em>02</em></div>-->
                 <div><span>SHIFT</span><i>: </i><em>{{$student->shift}}</em></div>
-                <div><span>BOARD</span><i>: </i><em>DINAJPUR</em></div>
+                <div><span>BOARD</span><i>: </i><em>KHULNA</em></div>
             </div><!-- end of restopleft -->
 
             <div class="restopleft rgttopleft">
@@ -329,26 +354,17 @@
                 <h2 class="markTitle">Attendance Report</h2>
                 <table class="pagetble" style="height:181px">
                     <tbody><tr>
-                        <th colspan="2">Month : Presence/Working Days</th>
-                    </tr>                        <tr>
-                        <td>Jan : -/-</td>
-                        <td>Feb : -/-</td>
-                    </tr>                        <tr>
-                        <td>Mar : -/-</td>
-                        <td>Apr : -/-</td>
-                    </tr>                        <tr>
-                        <td>May : -/-</td>
-                        <td>Jun : -/-</td>
-                    </tr>                        <tr>
-                        <td>Jul : -/-</td>
-                        <td>Aug : -/-</td>
-                    </tr>                        <tr>
-                        <td>Sep : -/-</td>
-                        <td>Oct : -/-</td>
-                    </tr>                        <tr>
-                        <td>Nov : -/-</td>
-                        <td>Dec : -/-</td>
-                    </tr>                    </tbody></table>
+                        <th colspan="2">Month : Presence</th>
+                    </tr>
+
+                    @for($i = 0; $i < 12; $i=$i+2)
+                    <tr>
+                        <td>{{$attendance[$i]->month}} : {{$attendance[$i]->present}}</td>
+                        <td>{{$attendance[$i+1]->month}} : {{$attendance[$i+1]->present}}</td>
+
+                    </tr>
+                  @endfor
+                  </tbody></table>
 
                 <h2 class="markTitle">Extra Activities </h2>
                 <table class="pagetble" style="height:106px"><tbody>
@@ -404,7 +420,24 @@
 
                 <h2 class="markTitle">Achievement</h2>
                 <table class="pagetble" style="height:106px"><tbody>
-                    <tr><th align="center" valign="middle">{{$extra[0]}}</th><th align="center" valign="middle">Good</th></tr>                    </tbody></table>
+                    <tr><th align="center" valign="middle">{{$extra[0]}}</th><th align="center" valign="middle">
+                      @if($meritdata->grade!="F")
+                        @if($meritdata->point>=5.00)
+                        Excellent
+                        @elseif($meritdata->point>=4.00)
+                        Good
+                        @elseif($meritdata->point>="3.00")
+                        Average
+                        @elseif($meritdata->point>="2.00")
+                        Poor
+                        @else
+                        Fail
+                        @endif
+                      @else
+                        Fail
+                      @endif
+
+                    </th></tr>                    </tbody></table>
             </div><!-- end of overalreport -->
 
         </div><!-- end of resmidcontainer -->
@@ -413,11 +446,26 @@
             <div class="sign-grdn"><b>Signature (Guardian)</b></div>
             <div class="sign-clsT"><b>Signature (Class Teacher)</b></div>
             <div class="sign-head">
-                <img src="<?php echo url();?>/markssheetcontent/head-sign.png" alt="" style="left:23px;bottom:21px">                <b>Signature (Head Master)</b>
+                <!--<img src="<?php echo url();?>/markssheetcontent/head-sign.png" alt="" style="left:23px;bottom:21px">-->                <b>Signature (Head Master)</b>
             </div>
         </div></div><!-- end of signatureWraper -->
     <img src="<?php echo url();?>/markssheetcontent/certificate-bg.png" alt="" class="result-bg">    </div><!-- end of wraperResult -->
+  </div>
 
 
+   <script>
+   function printDiv(divName) {
+        var printContents = document.getElementById(divName).innerHTML;
+        var originalContents = document.body.innerHTML;
 
-</body><!-- end of fromwrapper--></html>
+        document.body.innerHTML = printContents;
+
+        window.print();
+
+        document.body.innerHTML = originalContents;
+
+   }
+
+   </script>
+</body><!-- end of fromwrapper-->
+</html>

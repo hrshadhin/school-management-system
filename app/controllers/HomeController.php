@@ -17,8 +17,14 @@ class HomeController extends BaseController {
 
 	public function index()
 	{
-        $error = Session::get('error');
-        return View::make('login')->with('error', $error);
+		$error = Session::get('error');
+		$institute=Institute::select('name')->first();
+		if(!$institute)
+		{
+			$institute=new Institute;
+			$institute->name="ShanixLab";
+		}
+		return View::make('login',compact('error','institute'));
 
 	}
 

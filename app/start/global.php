@@ -62,7 +62,7 @@ App::error(function(Exception $exception, $code)
 
         case 500: /* internal error */
         default:
-            return View::make('errors.500');
+            return View::make('errors.error');
     }
 });
 

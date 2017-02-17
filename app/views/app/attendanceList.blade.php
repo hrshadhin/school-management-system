@@ -64,7 +64,6 @@
 
 
                                                 <select id="class" id="class" name="class" required="true" class="form-control" >
-                                                    <option value="" >--Select Class--</option>
                                                     @foreach($classes as $class)
                                                         <option value="{{$class->code}}">{{$class->name}}</option>
                                                     @endforeach
@@ -131,23 +130,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label class="control-label" for="subject">subject</label>
 
-                                        <div class="input-group">
-                                            <span class="input-group-addon"><i class="glyphicon glyphicon-book blue"></i></span>
-                                            @if(isset($subjects))
-                                                {{ Form::select('subject',$subjects,$formdata->subject,['class'=>'form-control','id'=>'subject','required'=>'true'])}}
-                                            @else
-                                                <select id="subject" id="subject" name="subject" required="true" class="form-control" >
-                                                    <option value="">--Select Subjects--</option>
-
-                                                </select>
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
                                 <div class="col-md-4">
                                     <div class="form-group ">
                                         <label for="dob">Date</label>
@@ -183,7 +166,6 @@
                                         <th>Roll No</th>
                                         <th>Name</th>
                                         <th>Is Present</th>
-                                        <th>Action</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -192,11 +174,16 @@
                                             <td>{{$atd->regiNo}}</td>
                                             <td>{{$atd->rollNo}}</td>
                                             <td>{{$atd->firstName}} {{$atd->middleName}} {{$atd->lastName}}</td>
-
-                                            <td>{{$atd->status}}</td>
                                             <td>
-                                                <a title='Edit' class='btn btn-info' target="_blank" href='{{url("/attendance/edit")}}/{{$atd->id}}'> <i class="glyphicon glyphicon-edit icon-white"></i></a>
+                                              @if(count($atd->attendance))
+                                              <span class="text-success">Present</span>
+                                              @else
+
+                                              <span class="text-danger">Absent</span>
+
+                                              @endif
                                             </td>
+
                                     @endforeach
                                     </tbody>
                                 </table>
@@ -224,27 +211,10 @@
             });
             $(".datepicker").datepicker( {
                 autoclose:true,
-                toDay:true
+                todayHighlight: true
 
             });
-            $('#class').on('change', function (e) {
-                var val = $(e.target).val();
-                $.ajax({
-                    url:'/class/getsubjects/'+val,
-                    type:'get',
-                    dataType: 'json',
-                    success: function( json ) {
-                        $('#subject').empty();
-                        $('#subject').append($('<option>').text("--Select Subject--").attr('value',""));
-                        $.each(json, function(i, subject) {
-                            // console.log(subject);
 
-                            $('#subject').append($('<option>').text(subject.name).attr('value', subject.code));
-                        });
-                    }
-                });
-
-            });
             $('#attendanceList').dataTable();
 
             $( "#btnPrint" ).click(function() {
@@ -255,10 +225,10 @@
                 var subject = $('#subject').val();
                 var atedate =$('#date').val().trim();
 
-                if(aclass!="" && section !="" && shift !="" && session !="" && subject !="" && atedate!="")
+                if(aclass!="" && section !="" && shift !="" && session !="" && atedate!="")
                 {
 
-                   var exurl='/attendance/printlist/'+aclass+'/'+section+'/'+shift+'/'+session+'/'+subject+'/'+atedate;
+                   var exurl='/attendance/printlist/'+aclass+'/'+section+'/'+shift+'/'+session+'/'+atedate;
 
                     var win = window.open(exurl, '_blank');
                     win.focus();

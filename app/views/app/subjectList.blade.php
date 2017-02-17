@@ -24,6 +24,7 @@
                                                                  <th>Group</th>
                                                                  <th>Student Group</th>
                                                                  <th>Class</th>
+                                                                 <th>Grade System</th>
                                                                     <th>
                                                                       Full Marks
                                                                     </th>
@@ -42,6 +43,11 @@
                                                                              <td>{{$subject->subgroup}}</td>
                                                                              <td>{{$subject->stdgroup}}</td>
                                                                   <td>{{$subject->class}}</td>
+                                                                  @if($subject->gradeSystem=="1")
+                                                                  <td>100 Marks</td>
+                                                                @else
+                                                                    <td>50 Marks</td>
+                                                                @endif
                                                                     <td>
                                                                     {{$subject->totalfull.' [Total] '}}
                                                                       {{$subject->wfull.' [Written] '}}
