@@ -96,7 +96,7 @@
                                         <div class="input-group">
 
                                             <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i> </span>
-                                            <input type="text" id="session" required="true" class="form-control datepicker2" name="session" value="{{$formdata->session}}"  data-date-format="yyyy">
+                                            <input value="{{date('Y')}}" type="text" id="session" required="true" class="form-control datepicker2" name="session" value="{{$formdata->session}}"  data-date-format="yyyy">
                                         </div>
                                     </div>
                                 </div>

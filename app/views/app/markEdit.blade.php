@@ -23,6 +23,8 @@
                    <form role="form" action="/mark/update" method="post">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                    <input type="hidden" name="id" value="{{$marks->id }}">
+		   <input type="hidden" name="subject" value="{{$marks->subject }}">
+		    <input type="hidden" name="class" value="{{$marks->class }}">
                    <div class="row">
                    <div class="col-md-12">
                      <div class="col-md-4">

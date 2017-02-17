@@ -21,6 +21,7 @@ class CreateTableSubject extends Migration {
 			$table->string('stdgroup',30);
 			$table->string('subgroup',30);
 			$table->string('class',100);
+			$table->string('gradeSystem',2);
 			$table->integer('totalfull')->default(0);
 			$table->integer('totalpass')->default(0);
 			$table->integer('wfull')->default(0);
@@ -31,6 +32,7 @@ class CreateTableSubject extends Migration {
 			$table->integer('spass')->default(0);
 			$table->integer('pfull')->default(0);
 			$table->integer('ppass')->default(0);
+
 			$table->timestamps();
 		});
 	}

@@ -14,17 +14,13 @@ class CreateTableAttendance extends Migration {
 	{
         Schema::create('Attendance', function(Blueprint $table)
         {
-            $table->increments('id');
-            $table->string('class');
-            $table->string('session');
-            $table->string('section');
-            $table->string('shift');
-            $table->string('subject');
 
-            $table->string('regiNo');
-            $table->date('date');
-            $table->string('status');
-            $table->timestamps();
+					$table->increments('id');
+					$table->string('regiNo',20);
+					$table->date('date');
+					$table->dateTime('created_at');
+					$table->foreign('regiNo')
+					->references('regiNo')->on('Student');
 
 
 

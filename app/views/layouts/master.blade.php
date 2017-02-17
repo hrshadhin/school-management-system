@@ -44,6 +44,16 @@
     <link href='<?php echo url();?>/css/app.css' rel='stylesheet'>
 
     @yield("style")
+    <style media="screen">
+  body {
+      color: #154d88;
+      background: rgba(233, 237, 241, 0.27);
+      font-family: "Helvetica Neue", Roboto, Arial, "Droid Sans", sans-serif;
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 1.471;
+  }
+  </style>
     <!-- jQuery -->
     <script src="<?php echo url();?>/bower_components/jquery/jquery.min.js"></script>
 
@@ -68,7 +78,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="index.html">            <span>SChool Manage</span></a>
+        <span class="iname">{{Session::get('inName')}}</span>
 
         <!-- user dropdown starts -->
         <div class="btn-group pull-right">
@@ -83,8 +93,92 @@
                 <li><a href="/users/logout"><i class="glyphicon glyphicon-log-out"></i> Logout</a></li>
             </ul>
         </div>
-       
-        
+        <!-- Addmission dropdown starts -->
+        <div class="btn-group pull-right">
+            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+
+                <i class="glyphicon glyphicon-th-large"></i><span class=""> Admission</span>
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a href="/applicants"><i class="glyphicon glyphicon-th-list"></i> Applicant List</a></li>
+                <li class="divider"></li>
+                <li><a href="/regonline" target="_blank"><i class="glyphicon glyphicon-list-alt"></i> Online Registration</a></li>
+                <li><a href="/admitcard" target="_blank"><i class="glyphicon glyphicon-print"></i> Print  Admitcard</a></li>
+
+
+
+
+
+            </ul>
+        </div>
+        <!-- admission dropdown ends -->
+
+
+
+        <!-- Library dropdown starts -->
+        <div class="btn-group pull-right">
+            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+
+                <i class="glyphicon glyphicon-book"></i><span class=""> Library</span>
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+
+                <li><a href="/library/search"><i class="glyphicon glyphicon-search"></i> Book Search</a></li>
+                <li><a href="/library/issuebook"><i class="glyphicon glyphicon-pencil"></i> Borrow Book</a></li>
+                <li><a href="/library/issuebookview"><i class="glyphicon glyphicon-list"></i> Borrowd Book List</a></li>
+                <li class="divider"></li>
+                    <li><a href="/library/view-show"><i class="glyphicon glyphicon-list"></i> Book List</a></li>
+                    <li><a href="/library/addbook"><i class="glyphicon glyphicon-pencil"></i> Book Entry</a></li>
+                    <li><a href="/library/reports"><i class="glyphicon glyphicon-print"></i> Reports</a></li>
+                    <li><a href="/library/reports/fine"><i class="glyphicon glyphicon-print"></i> Monthly Fine Reports</a></li>
+
+
+            </ul>
+        </div>
+        <!-- Library dropdown ends -->
+        <!-- Dormitory dropdown starts -->
+        <div class="btn-group pull-right">
+            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+
+                <i class="glyphicon glyphicon-home"></i><span class=""> Dormitory</span>
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+
+                <li><a href="/dormitory"><i class="glyphicon glyphicon-home"></i> Dormitory</a></li>
+                <li><a href="/dormitory/assignstd"><i class="glyphicon glyphicon-plus"></i> Assign Student</a></li>
+                <li><a href="/dormitory/assignstd/list"><i class="glyphicon glyphicon-user"></i> Student List</a></li>
+                <li class="divider"></li>
+                    <li><a href="/dormitory/fee"><i class="glyphicon glyphicon-list"></i> Fee Collection</a></li>
+                    <li><a href="/dormitory/report/std"><i class="glyphicon glyphicon-print"></i> Dormitory Report</a></li>
+                    <li><a href="/dormitory/report/fee"><i class="glyphicon glyphicon-print"></i> Fee Reports</a></li>
+
+            </ul>
+        </div>
+        <!-- Dormitory dropdown ends -->
+        <!-- fees dropdown starts-->
+        <div class="btn-group pull-right">
+            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+
+                <i class="glyphicon glyphicon-list-alt"></i><span class=""> Fees</span>
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a href="/fees/view"><i class="glyphicon glyphicon-search"></i> Student Fees</a></li>
+                <li><a href="/fee/collection"><i class="glyphicon glyphicon-pencil"></i> Fees Collection</a></li>
+
+                <li class="divider"></li>
+                <li><a href="/fees/list"><i class="glyphicon glyphicon-list"></i> Fees List</a></li>
+                <li><a href="/fees/setup"><i class="glyphicon glyphicon-cog"></i> Fees Setup</a></li>
+                <li class="divider"></li>
+                <li><a href="/fees/report"><i class="glyphicon glyphicon-print"></i> Fee Collection Report</a></li>
+
+            </ul>
+        </div>
+        <!-- fees dropdown ends -->
+
     </div>
 </div>
 <!-- topbar ends -->
@@ -126,14 +220,15 @@
                             </ul>
                         </li>
                         <li class="accordion">
-                            <a href="#"><i class="glyphicon glyphicon-pencil"></i><span> Attendance</span></a>
-                            <ul class="nav nav-pills nav-stacked">
-                                <li><a href="/attendance/create">Add</a></li>
-                                <li><a href="/attendance/list">View</a></li>
+                       <a href="#"><i class="glyphicon glyphicon-pencil"></i><span> Attendance</span></a>
+                       <ul class="nav nav-pills nav-stacked">
+                           <li><a href="/attendance/create-file">Add from file</a></li>
+                           <li><a href="/attendance/create">Add</a></li>
+                           <li><a href="/attendance/list">View</a></li>
 
 
-                            </ul>
-                        </li>
+                       </ul>
+                   </li>
                         <li class="accordion">
                             <a href="#"><i class="glyphicon glyphicon-list-alt"></i><span> Mark Manage</span></a>
                             <ul class="nav nav-pills nav-stacked">
@@ -146,6 +241,7 @@
                             <ul class="nav nav-pills nav-stacked">
                                 <li><a href="/result/generate">Generate</a></li>
                                 <li><a href="/result/search">Search</a></li>
+                                <li><a href="/results">Search Public</a></li>
 
                             </ul>
                         </li>
@@ -153,29 +249,53 @@
                             <a href="/promotion"><i class="glyphicon glyphicon-arrow-up"></i><span> Promotion</span></a>
 
                         </li>
-                  
+                        <li class="accordion">
+                            <a href="#"><i class="glyphicon  glyphicon glyphicon-list-alt"></i><span> Accounting</span></a>
+                            <ul class="nav nav-pills nav-stacked">
+                                <li><a href="/accounting/sectors">Sectors</a></li>
+                                <li><a href="/accounting/income">Add Income</a></li>
+                                <li><a href="/accounting/incomelist">View Income</a></li>
+                                <li><a href="/accounting/expence">Add Expence</a></li>
+                                <li><a href="/accounting/expencelist">View Expence</a></li>
+
+                            </ul>
+                        </li>
+                      <!--  <li class="accordion">
+
+                          <a href="#"><i class="glyphicon glyphicon-envelope"></i><span> SMS</span></a>
+                          <ul class="nav nav-pills nav-stacked">
+                              <li><a href="/sms">Bulk SMS</a></li>
+
+
+
+                          </ul>
+                      </li> -->
                         <li class="accordion">
                             <a href="#"><i class="glyphicon glyphicon-print"></i><span> Reports</span></a>
                             <ul class="nav nav-pills nav-stacked">
                                 <li><a href="/gradesheet">Marksheet</a></li>
+                                <li><a href="/attendance/report">Attendance</a></li>
                                 <li><a href="/tabulation">Tabulationsheet</a></li>
                                 <li><a href="/smslog">SMS Log</a></li>
-                                
+                                <li><a href="/accounting/report">Account By Type</a></li>
+                                <li><a href="/accounting/reportsum">Account Balance</a></li>
+                                 <li><a href="/barcode">Barcode Generate</a></li>
+
 
                             </ul>
                         </li>
+                        @if (Session::get('userRole')=="Admin")
                         <li class="accordion">
                             <a href="#"><i class="glyphicon glyphicon-cog"></i><span> Settings</span></a>
                             <ul class="nav nav-pills nav-stacked">
                                 <li><a href="/gpa">GPA Ruels</a></li>
-                                <li><a href="/sms">SMS Format</a></li>
-                                @if (Session::get('userRole')=="Admin")
 
                                 <li><a href="/users">Users</a></li>
-                                @endif
+                                <li><a href="/institute">Institute</a></li>
+
                             </ul>
                         </li>
-
+                          @endif
                     </ul>
 
                 </div>
@@ -229,7 +349,7 @@
 
     <footer class="footer">
         <hr>
-        <p class="col-md-9 col-sm-9 col-xs-12 copyright"> <a href="#" target="_blank">HR Residential Model School</a> &copy;2016</p>
+        <p class="col-md-9 col-sm-9 col-xs-12 copyright"> <a href="#" target="_blank">{{Session::get('inName')}}</a> &copy;2016</p>
 
         <p class="col-md-3 col-sm-3 col-xs-12 powered-by">Develop by: <a
                     href="http://shanixlab.com">ShanixLab</a></p>

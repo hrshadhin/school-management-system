@@ -46,7 +46,7 @@
 
         <div class="row">
             <div class="col-md-12 center login-header">
-                <h2>Welcome to "HR Residential Model School"</h2>
+                <h2>Welcome to "{{$institute->name}}"</h2>
             </div>
             <!--/span-->
         </div><!--/row-->
@@ -60,9 +60,8 @@
 
                     </div>
                 @endif
-                <div class="alert alert-info">
-                    Please login with your Username and Password.
-                </div>
+                <img src="img/logo.png" style="height:120px;">
+
                 <form class="form-horizontal" action="users/login" method="post">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <fieldset>
@@ -78,9 +77,7 @@
                         </div>
                         <div class="clearfix"></div>
 
-                        <div class="input-prepend">
-                            <label class="remember" for="remember"><input type="checkbox" id="remember"> Remember me</label>
-                        </div>
+                    
                         <div class="clearfix"></div>
                         @if (isset($error))
                                 <div class="alert alert-danger">

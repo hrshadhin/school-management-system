@@ -1,0 +1,140 @@
+.x_panel {
+    position: relative;
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 10px 17px;
+    display: inline-block;
+    background: #fff;
+    border: 1px solid #E6E9ED;
+    -webkit-column-break-inside: avoid;
+    -moz-column-break-inside: avoid;
+    column-break-inside: avoid;
+    opacity: 1;
+    transition: all .2s ease
+}
+
+.x_title {
+    border-bottom: 2px solid #E6E9ED;
+    padding: 1px 5px 6px;
+    margin-bottom: 10px
+}
+
+.x_title .filter {
+    width: 40%;
+    float: right
+}
+
+.x_title h2 {
+    margin: 5px 0 6px;
+    float: left;
+    display: block;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap
+}
+
+.x_title h2 small {
+    margin-left: 10px
+}
+
+.x_title span {
+    color: #BDBDBD
+}
+
+.x_content {
+    padding: 0 5px 6px;
+    position: relative;
+    width: 100%;
+    float: left;
+    clear: both;
+    margin-top: 5px
+}
+
+.x_content h4 {
+    font-size: 16px;
+    font-weight: 500
+}
+.tile_count {
+    margin-bottom: 20px;
+    margin-top: 20px
+}
+
+.tile_count .tile_stats_count {
+    border-bottom: 1px solid #D9DEE4;
+    padding: 0 10px 0 20px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative
+}
+
+@media (min-width: 992px) {
+    .tile_count .tile_stats_count {
+        margin-bottom: 10px;
+        border-bottom: 0;
+        padding-bottom: 10px
+    }
+}
+
+.tile_count .tile_stats_count:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    height: 65px;
+    border-left: 2px solid #ADB2B5;
+    margin-top: 10px
+}
+
+@media (min-width: 992px) {
+    .tile_count .tile_stats_count:first-child:before {
+        border-left: 0
+    }
+}
+
+.tile_count .tile_stats_count .count {
+    font-size: 30px;
+    line-height: 47px;
+    font-weight: 600
+}
+
+@media (min-width: 768px) {
+    .tile_count .tile_stats_count .count {
+        font-size: 40px
+    }
+}
+
+@media (min-width: 992px) and (max-width: 1100px) {
+    .tile_count .tile_stats_count .count {
+        font-size: 30px
+    }
+}
+
+.tile_count .tile_stats_count span {
+    font-size: 12px
+}
+
+@media (min-width: 768px) {
+    .tile_count .tile_stats_count span {
+        font-size: 13px
+    }
+}
+
+.tile_count .tile_stats_count .count_bottom i {
+    width: 12px
+}
+
+.dashboard_graph {
+    background: #fff;
+    padding: 7px 10px
+}
+
+.dashboard_graph .col-md-9,
+.dashboard_graph .col-md-3 {
+    padding: 0
+}
+.total_bal {
+    float: right !important;
+    font-size: large;
+    font-weight: bold;
+    color: #2e6da4;
+}

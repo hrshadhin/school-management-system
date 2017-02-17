@@ -82,10 +82,10 @@
                                 <div class="col-md-12">
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label for="type">Address</label>
+                                            <label for="type">Description</label>
                                             <div class="input-group">
                                                 <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                                                <textarea type="text" class="form-control" required name="address" placeholder="Address">{{$set->address}}</textarea>
+                                                <textarea type="text" readonly="true" class="form-control" required name="desc" placeholder="Description">{{$set->desc}}</textarea>
 
                                             </div>
                                         </div>

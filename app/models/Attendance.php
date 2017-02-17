@@ -1,6 +1,10 @@
 <?php
 
 class Attendance extends \Eloquent {
-    protected $table = 'Attendance';
-    protected $fillable = ['regiNo','subject','date','class','section','session','shift','status'];
+  protected $dates = ['date','created_at'];
+  protected $table = 'Attendance';
+  protected $fillable = ['student_regiNo','date','created_at'];
+  public function student(){
+    return $this->belongsTo('Student','regiNo');
+  }
 }

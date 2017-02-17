@@ -314,7 +314,7 @@
         $( "#subject" ).change(function() {
 
           $.ajax({
-                url: '/subject/getmarks/'+$('#subject').val(),
+                url: '/subject/getmarks/'+$('#subject').val()+'/'+$('#class').val(),
                 data: {
                     format: 'json'
                 },

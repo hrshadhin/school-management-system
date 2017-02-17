@@ -34,7 +34,24 @@
                          <input type="hidden" name="_token" value="{{ csrf_token() }}">
                      <div class="row">
                      <div class="col-md-12">
-                       <div class="col-md-3">
+                       <div class="col-md-4">
+                           <div class="form-group">
+                         <label for="for">Grade For[100 Marks]</label>
+                         <div class="input-group">
+                             <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                             <select name="for" class="form-control">
+                               @if($gpa->for=="1")
+                               <option value="1" selected="true">100 Marks </option>
+                               <option value="2">50 Marks </option>
+                             @else
+                               <option value="1" >100 Marks </option>
+                               <option value="2" selected="true">50 Marks </option>
+                             @endif
+                             </select>
+                         </div>
+                     </div>
+                       </div>
+                       <div class="col-md-2">
                            <div class="form-group">
                          <label for="gpa">Grade</label>
                          <div class="input-group">
@@ -43,7 +60,7 @@
                          </div>
                      </div>
                        </div>
-                       <div class="col-md-3">
+                       <div class="col-md-2">
                          <div class="form-group">
                              <label for="grade">Point</label>
                              <div class="input-group">
@@ -52,7 +69,7 @@
                              </div>
                          </div>
                        </div>
-                       <div class="col-md-3">
+                       <div class="col-md-2">
                          <div class="form-group">
                              <label for="markfrom">Mark From</label>
                              <div class="input-group">
@@ -61,7 +78,7 @@
                              </div>
                          </div>
                        </div>
-                       <div class="col-md-3">
+                       <div class="col-md-2">
                          <div class="form-group">
                              <label for="markto">Mark To</label>
                              <div class="input-group">
@@ -81,7 +98,21 @@
 
                     <div class="row">
                     <div class="col-md-12">
-                      <div class="col-md-3">
+                      <div class="col-md-4">
+                          <div class="form-group">
+                        <label for="for">Grade For</label>
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                            <select name="for" class="form-control">
+
+                              <option value="1">100 Marks </option>
+                              <option value="2">50 Marks </option>
+
+                            </select>
+                        </div>
+                    </div>
+                      </div>
+                      <div class="col-md-2">
                           <div class="form-group">
                         <label for="gpa">Grade</label>
                         <div class="input-group">
@@ -90,7 +121,7 @@
                         </div>
                     </div>
                       </div>
-                      <div class="col-md-3">
+                      <div class="col-md-2">
                         <div class="form-group">
                             <label for="grade">Point</label>
                             <div class="input-group">
@@ -99,7 +130,7 @@
                             </div>
                         </div>
                       </div>
-                      <div class="col-md-3">
+                      <div class="col-md-2">
                         <div class="form-group">
                             <label for="markfrom">Mark From</label>
                             <div class="input-group">
@@ -108,7 +139,7 @@
                             </div>
                         </div>
                       </div>
-                      <div class="col-md-3">
+                      <div class="col-md-2">
                         <div class="form-group">
                             <label for="markto">Mark To</label>
                             <div class="input-group">
@@ -136,6 +167,7 @@
                     <table id="gpaList" class="table table-striped table-bordered table-hover">
                                                                <thead>
                                                                    <tr>
+                                                                       <th>GPA For</th>
                                                                        <th>GPA Name</th>
                                                                        <th>Grade</th>
                                                                        <th>Mark From</th>
@@ -148,6 +180,11 @@
                                                                  @foreach($gpaes as $gpa)
 
                                                                    <tr>
+                                                                     @if($gpa->for=="1")
+                                                                      <td>100 Marks</td>
+                                                                      @else
+                                                                        <td>50 Marks</td>
+                                                                      @endif
                                                                       <td>{{$gpa->gpa}}</td>
                                                                      <td>{{$gpa->grade}}</td>
                                                                      <td>{{$gpa->markfrom}}</td>

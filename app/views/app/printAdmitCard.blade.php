@@ -41,26 +41,49 @@ table td{
     vertical-align:bottom;
     margin: 0px;
 }
+.logo{
+  height: 150px;
+  width: 200px;
+}
+.lefthead{
+  width: 30%;
+}
+.righthead{
+  width: 70%;
+}
+.righthead p{
+  margin: 0px;
+  padding: 0px;
+}
 </style>
 </head>
 
 <body >
 <div id="admit">
   <table class="bg">
-    <tr><td>
-     <img src="./img/logo.png">
+    <tr>
+    <td class="lefthead">
+
+     <img class="logo" src="./img/logo.png">
+    </td>
+
+   <td class="righthead">
+     <h3>{{$institute->name}}</h3><pre>
+<p><strong>Establish:</strong> {{$institute->establish}}</p>
+<p><strong>Web:</strong> {{$institute->web}}</p>
+<p><strong>Email:</strong> {{$institute->email}}</p>
+<p><strong>Phone:</strong> {{$institute->phoneNo}}</p>
+<p><strong>Address:</strong> {{$institute->address}}</p>
+     </pre>
    </td>
-   <td>&nbsp;</td>
-   <td >
-     <h3>HR Residential Model School & College</h3><p>Ranirbandar, Chirirbandar, Dinajpur. EST:2011 EIIN No:137042</p><p>Class {{$data->class}} Admission Exam(Session:{{$data->session}})</p>
-   </td>
- </tr>
+   </tr>
+
  </table>
  <table class="bg2">
    <tr><td>
     Applicant's Copy
   </td>
-  <td>&nbsp;&nbsp;&nbsp;</td>
+  <td>Class {{$data->class}} Admission Exam(Session:{{$data->session}})</td>
   <td >
     <strong>Admit Card</strong>
   </td>
@@ -118,7 +141,7 @@ table td{
   <tr>
 
     <td class="content">
-          <br>
+
     <img src="./img/signature.png">
     </td>
   </tr>
@@ -130,9 +153,8 @@ table td{
 
   </tr>
  </table>
-<p style="color:red;text-align:center">Admission test will be held on 8th January at Campus 2.</p>
-<p style="text-align:right;margin-right:10px;">Software develop by-<strong>Supersoft Corporation<strong></p>
+<p style="color:red;text-align:center">Admission test will be held on xxth XXXX at Campus 1.</p>
+<p style="text-align:right;margin-right:10px;">Software develop by-<strong>ShanixLab<strong></p>
 </div>
 </body>
 </html>
-

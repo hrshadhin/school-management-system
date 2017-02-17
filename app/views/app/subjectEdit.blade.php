@@ -67,7 +67,7 @@
 
                    <div class="row">
                      <div class="col-md-12">
-                         <div class="col-md-4">
+                         <div class="col-md-2">
                              <div class="form-group">
                                  <label class="control-label" for="stdgroup">Subject Group</label>
                                  <div class="input-group">
@@ -76,7 +76,7 @@
                                  </div>
                              </div>
                          </div>
-                   <div class="col-md-4">
+                   <div class="col-md-3">
                      <div class="form-group">
                            <label class="control-label" for="stdgroup">Student Group</label>
                            <div class="input-group">
@@ -100,6 +100,24 @@
 
                                            </div>
                                        </div>
+                     </div>
+                     <div class="col-md-3">
+                         <div class="form-group">
+                       <label for="for">Grade System</label>
+                       <div class="input-group">
+                           <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                           <select name="gradeSystem" class="form-control">
+                             @if($subject->gradeSystem=="1")
+                             <option value="1" selected>100 Marks </option>
+                             <option value="2">50 Marks </option>
+                           @else
+                             <option value="1">100 Marks </option>
+                             <option value="2" selected>50 Marks </option>
+                           @endif
+
+                           </select>
+                       </div>
+                   </div>
                      </div>
                  </div>
                </div>
@@ -261,20 +279,4 @@
     </div>
 </div>
 </div>
-@stop
-@section('script')
-
-<script type="text/javascript">
-var cl ="{{$subject->class}}";
-    $( document ).ready(function() {
-
-    $("select option").filter(function() {
-      //may want to use $.trim in here
-      return $(this).text() == cl;
-  }).prop('selected', true);
-
-
-    });
-
-</script>
 @stop
