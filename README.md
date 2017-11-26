@@ -28,7 +28,7 @@ $ php artisan serve
 #Demo
 URL: http://school.hrshadhin.me
 USER: admin
-PASS: 123456
+PASS: demo123
 
 # Screenshot
 
