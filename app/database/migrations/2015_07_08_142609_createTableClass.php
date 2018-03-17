@@ -18,6 +18,7 @@ class CreateTableClass extends Migration {
 			$table->string('code',20)->unique;
 			$table->string('name',100);
 			$table->string('description',250);
+			$table->boolean('combinePass')->default(0);
 			$table->timestamps();
 		});
 	}
