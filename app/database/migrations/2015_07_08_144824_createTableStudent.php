@@ -22,6 +22,7 @@ class CreateTableStudent extends Migration {
 			$table->string('group',15);
 			$table->string('section',2);
 			$table->string('shift',15);
+
 			$table->string('firstName',60);
 			$table->string('middleName',60);
 			$table->string('lastName',60);
@@ -43,8 +44,10 @@ class CreateTableStudent extends Migration {
       $table->string('presentAddress',500);
 			$table->string('parmanentAddress',500);
       $table->string('isActive',10);
+      $table->string('fourthSubject',255)->nullable();
 			$table->timestamps();
 			$table->index('regiNo');
+
 		});
 	}
 

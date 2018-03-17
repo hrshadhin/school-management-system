@@ -182,7 +182,7 @@ public function getList()
 		$students = DB::table('Student')
 		->join('Class', 'Student.class', '=', 'Class.code')
 		->select('Student.id', 'Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.fatherName', 'Student.motherName', 'Student.fatherCellNo', 'Student.motherCellNo', 'Student.localGuardianCell',
-		'Class.Name as class', 'Student.presentAddress', 'Student.gender', 'Student.religion')
+		'Class.Name as class', 'Student.presentAddress', 'Student.gender', 'Student.religion','Student.fourthSubject')
 		->where('isActive', '=', 'Yes')
 		->where('class',Input::get('class'))
 		->where('section',Input::get('section'))
@@ -215,7 +215,7 @@ public function view($id)
 	'Student.fatherName','Student.motherName', 'Student.fatherCellNo','Student.motherCellNo','Student.localGuardianCell',
 	'Class.Name as class','Student.presentAddress','Student.gender','Student.religion','Student.section','Student.shift','Student.session',
 	'Student.group','Student.dob','Student.bloodgroup','Student.nationality','Student.photo','Student.extraActivity','Student.remarks',
-	'Student.localGuardian','Student.parmanentAddress')
+	'Student.localGuardian','Student.parmanentAddress','Student.fourthSubject')
 	->where('Student.id','=',$id)->first();
 
 	return View::Make("app.studentView",compact('student'));
@@ -317,9 +317,9 @@ public function update()
 		$student->motherCellNo= Input::get('motherCellNo');
 		$student->localGuardian= Input::get('localGuardian');
 		$student->localGuardianCell= Input::get('localGuardianCell');
-
 		$student->presentAddress= Input::get('presentAddress');
 		$student->parmanentAddress= Input::get('parmanentAddress');
+		$student->fourthSubject= Input::get('fourthSubject');
 
 		$student->save();
 
@@ -353,7 +353,7 @@ public function delete($id)
 */
 public function getForMarks($class,$section,$shift,$session)
 {
-	$students= Student::select('regiNo','rollNo','firstName','middleName','lastName')->where('isActive','=','Yes')->where('class','=',$class)->where('section','=',$section)->where('shift','=',$shift)->where('session','=',$session)->get();
+	$students= Student::selectRaw("regiNo,CAST(rollNo AS SIGNED) as rollNo,firstName,middleName,lastName")->where('isActive','=','Yes')->where('class','=',$class)->where('section','=',$section)->where('shift','=',$shift)->where('session','=',$session)->orderBy('rollNo','asc')->get();
 	return $students;
 }
 }

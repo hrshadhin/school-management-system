@@ -1,0 +1,26 @@
+#17-03-18
+Mark and result system re-developed with everything dynamic. From now this application will use marking and grading rules from subject and class settings and student 4th subject settings.
+
+--For upgrade old system to new changes. Do below things
+    ## sql codes
+    ALTER TABLE `Class` CHANGE `created_at` `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP, CHANGE `updated_at` `updated_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP;
+    ALTER TABLE `Class` ADD `combinePass` BOOLEAN NOT NULL DEFAULT FALSE AFTER `description`;
+    ALTER TABLE `Student` CHANGE `created_at` `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP, CHANGE `updated_at` `updated_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP;
+    ALTER TABLE `Student` ADD `fourthSubject` VARCHAR(255) NULL DEFAULT NULL AFTER `isActive`;
+
+
+    1. Run the above sql codes on database.
+    2. replace all those files from "app" folder and its subfolders.
+
+--For getting correct result from this system you have to do below things:
+    1. When create/Edit a class there have a new option "Bangla/Egnlish subject combine pass?"
+       If class have combine subject like bangla and english then check this checkbox.
+
+    2. Then create/edit subject according the form input fields. Like fill up marks fields properly.
+       If subject have individual(Written,MCQ,SBA,Practical) pass not required then, leave those pass marks fields
+       (Written,MCQ,SBA,Practical) empty or fill with 0 . Because this new system will use those settings for
+       marking and result publishing.
+
+    3. For 4th/ electrives subjects, select "Type" in subject create/edit properly.
+
+    4. And for a single student 4th subject setup, go to student edit and fill "Fourth Subject Codes" input field with proper subject code
