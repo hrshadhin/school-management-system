@@ -275,6 +275,7 @@
                             <ul class="nav nav-pills nav-stacked">
                                 <li><a href="/gradesheet">Marksheet</a></li>
                                 <li><a href="/attendance/report">Attendance</a></li>
+                                <li><a href="/attendance/monthly-report">Monthly Attendance</a></li>
                                 <li><a href="/tabulation">Tabulationsheet</a></li>
                                 <li><a href="/smslog">SMS Log</a></li>
                                 <li><a href="/accounting/report">Account By Type</a></li>
