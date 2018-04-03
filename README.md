@@ -46,4 +46,4 @@ PASS: demo123
 <img src="screenshot/12.png" >
 
 # License
-SMS is open-sourced software licensed under the GPL-3.0 license. Frameworks and libraries has it own licensed
+SMS is open-sourced software licensed under the AGPL-3.0 license. Frameworks and libraries has it own licensed
