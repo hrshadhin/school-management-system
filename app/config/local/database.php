@@ -23,7 +23,7 @@ return array(
 		'mysql' => array(
 			'driver'    => 'mysql',
 			'host'      => 'localhost',
-			'database'  => 'school_attendance',
+			'database'  => 'c_school_krghs',
 			'username'  => 'root',
 			'password'  => 'toor',
 			'charset'   => 'utf8',

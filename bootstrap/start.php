@@ -26,8 +26,8 @@ $app = new Illuminate\Foundation\Application;
 
 $env = $app->detectEnvironment(array(
 
-	  'local' => array('schoo.dev',false),
-	 'production' => array('appschool.zkmahsbd.com',true),
+	  'local' => array('schoo.dev',true),
+	 'production' => array('appschool.krghsbd.com',false),
 
 ));
 

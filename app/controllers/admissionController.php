@@ -84,7 +84,7 @@ class admissionController extends \BaseController {
 		$addStd->signature=$fileName;
 		$addStd->save();
 		Input::file('signature')->move(base_path() .'/public/admission',$fileName);
-		return Redirect::to('/regonline')->with("success","Registration for admission is successfull. Please send money to this \"01711988177\" personal bKash number with this referance number \"".$refNo."\"");
+		return Redirect::to('/regonline')->with("success","Registration for admission is successfull. Please deposite money to this (Biller ID) \"2346\" DBBL Rocket account with this serial number (Bill no) \"".$refNo."\"");
 
 	}
 
@@ -106,80 +106,80 @@ private function getSeatNo($class)
 {
 	$start=0;
 	$end =0;
-	if($class=="cl1")
+	if($class=="cl01")
 	{
 		$start=1;
-		$end=300;
+		$end=2;
 	}
-	else if($class=="cl2")
+	else if($class=="cl02")
+	{
+		$start=3;
+		$end=4;
+	}
+	else if($class=="cl03")
 	{
 		$start=301;
-		$end=600;
+		$end=5301;
 	}
-	else if($class=="cl3")
+	else if($class=="cl04")
 	{
-		$start=601;
-		$end=900;
-	}
-	else if($class=="cl4")
-	{
-		$start=901;
-		$end=1200;
+		$start=6001;
+		$end=6002;
 	}
 	else if($class=="cl05")
 	{
-		$start=1201;
-		$end=1500;
+		$start=6003;
+		$end=6004;
 	}
-	else if($class=="cl6")
+	else if($class=="cl06")
 	{
-		$start=1501;
-		$end=1800;
+		$start=6005;
+		$end=6006;
 	}
-	else if($class=="cl7")
+	else if($class=="cl07")
 	{
-		$start=1801;
-		$end=2100;
+		$start=6007;
+		$end=6008;
 	}
-	else if($class=="cl8")
+	else if($class=="cl08")
 	{
-		$start=2101;
-		$end=2400;
+		$start=6009;
+		$end=6010;
 	}
-	else if($class=="cl9")
+	else if($class=="cl09")
 	{
-		$start=2401;
-		$end=2700;
+		$start=6011;
+		$end=6012;
 	}
 	else if($class=="cl10")
 	{
-		$start=2701;
-		$end=3000;
+		$start=6013;
+		$end=6014;
 	}
 	else if($class=="cl11")
 	{
-		$start=3001;
-		$end=3300;
+		$start=6015;
+		$end=6016;
 	}
 	else if($class=="cl12")
 	{
-		$start=3301;
-		$end=3600;
+		$start=6017;
+		$end=6018;
 	}
 	else if($class=="cl13")
 	{
-		$start=3601;
-		$end=3900;
+		$start=6019;
+		$end=6020;
 	}
 	else if($class=="cl14")
 	{
-		$start=3901;
-		$end=4200;
+		$start=6021;
+		$end=6222;
 	}
 	else
 	{
-		$start=5000;
-		$end=10000;
+		$start=0;
+		$end=0;
 	}
 	$randRoll =rand ($start,$end);
 

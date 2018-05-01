@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <style>
         #admit{
-            height:480px;
+            height:510px;
             background-color:#dcdcdc;
         }
         .bg{
@@ -68,8 +68,11 @@
             </td>
 
             <td class="righthead">
-                <h3>{{$institute->name}}</h3><pre>
-<p><strong>Establish:</strong> {{$institute->establish}}</p>
+			<h3>{{$institute->name}}</h3><pre>
+<p><strong>Admit card</strong></p>
+<p><strong>Admission test for class {{$data->class}}</strong></p>
+<p><strong>Session:</strong>{{$data->session}}</p>
+<p><strong>Established:</strong> {{$institute->establish}}</p>
 <p><strong>Web:</strong> {{$institute->web}}</p>
 <p><strong>Email:</strong> {{$institute->email}}</p>
 <p><strong>Phone:</strong> {{$institute->phoneNo}}</p>
@@ -79,15 +82,15 @@
         </tr>
 
     </table>
-    <table class="bg2">
+   <table class="bg2">
         <tr><td>
-                Applicant's Copy
+           <!--     Applicant's Copy-->
             </td>
-            <td>{{$data->class}} Admission Exam(Session:{{$data->session}})</td>
+         <!--    <td>{{$data->class}} Admission Exam(Session:{{$data->session}})</td>-->
             <td >
-                <strong>Admit Card</strong>
+         <!--   <strong>Admit Card</strong> -->
             </td>
-        </tr>
+        </tr> 
     </table>
 
     <table class="bg3">
@@ -95,41 +98,41 @@
             <td id="info">
                 <table width="100%">
                     <tr>
-                        <td width="30%">Roll No</td>
+                        <td width="40%">Applicant's Name </td>
                         <td width="10%">:</td>
-                        <td width="60%"> {{$data->seatNo}} </td>
+                        <td width="50%"> {{$data->stdName}} </td>
                     </tr>
 
                     <tr>
 
-                        <td width="30%">Class </td>
+                        <td width="40%">Father's Name </td>
                         <td width="10%">:</td>
-                        <td width="60%"> {{$data->class}} </td>
+                        <td width="50%"> {{$data->fatherName}} </td>
+                    </tr>
+					<tr>
+                        <td width="40%">Mother's Name</td>
+                        <td width="10%">:</td>
+                        <td width="50%"> {{$data->motherName}} </td>
+                    </tr>                    
+                    <tr>
+                        <td width="40%">Date Of Birth</td>
+                        <td width="10%">:</td>
+                        <td width="50%"> {{$data->dob}} </td>
                     </tr>
                     <tr>
-                        <td width="30%">Full Name </td>
+                        <td width="40%">Roll No </td>
                         <td width="10%">:</td>
-                        <td width="60%"> {{$data->stdName}} </td>
+                        <td width="50%"> {{$data->seatNo}} </td>
                     </tr>
                     <tr>
-                        <td width="30%">Father's Name</td>
+                        <td width="40%">Date of exam</td>
                         <td width="10%">:</td>
-                        <td width="60%"> {{$data->fatherName}} </td>
+                        <td width="50%"> --- </td>
                     </tr>
                     <tr>
-                        <td width="30%">Mother's Name</td>
-                        <td width="10%">:</td>
-                        <td width="60%"> {{$data->motherName}} </td>
-                    </tr>
-                    <tr>
-                        <td width="30%">Date Of Birth</td>
-                        <td width="10%">:</td>
-                        <td width="60%"> {{$data->dob}} </td>
-                    </tr>
-                    <tr>
-                        <td>Address</td>
+                        <td>Vanue</td>
                         <td>:</td>
-                        <td> {{$data->address}} </td>
+                        <td>St. Joseph’s High School</td>
                     </tr>
                 </table>
             </td>
@@ -141,7 +144,7 @@
         </tr>
         <tr>
             <td class="content">
-                <img  style="float:left; width:100px; height:50px;" src="./img/signature.png">
+                <img  style="float:left; width:100px; height:50px;" src="./img/head-sign.png">
             </td>
             <td class="content" style="text-align: right;">
                 <img  style="float:right; width:100px; height:50px;padding:0px 5px 0px 0px;margin: 0;" src="./admission/{{$data->signature}}">
@@ -159,6 +162,7 @@
         </tr>
     </table>
     <p style="text-align:center">This Admit Card is Electronically Produced.</p>
+	<p style="text-align:right;margin-right:10px;">Software develop by: <strong>www.scenic-software.com<strong></p>
     <p>&nbsp;</p>
 </div>
 </body>

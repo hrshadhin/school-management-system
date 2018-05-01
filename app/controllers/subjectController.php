@@ -39,6 +39,7 @@ class subjectController extends \BaseController {
 			'class' => 'required',
 			'gradeSystem' => 'required',
 			'totalfull' => 'required',
+			'totalpass' => 'required',
 			'wfull' => 'required',
 			'mfull' => 'required',
 			'sfull' => 'required',
@@ -141,7 +142,8 @@ class subjectController extends \BaseController {
 			'class' => 'required',
 			'gradeSystem' => 'required',
 			'totalfull' => 'required',
-			'wfull' => 'required',
+            'totalpass' => 'required',
+            'wfull' => 'required',
 			'mfull' => 'required',
 			'sfull' => 'required',
 			'pfull' => 'required'
