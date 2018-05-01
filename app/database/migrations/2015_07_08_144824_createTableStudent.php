@@ -22,7 +22,6 @@ class CreateTableStudent extends Migration {
 			$table->string('group',15);
 			$table->string('section',2);
 			$table->string('shift',15);
-
 			$table->string('firstName',60);
 			$table->string('middleName',60);
 			$table->string('lastName',60);
@@ -31,10 +30,12 @@ class CreateTableStudent extends Migration {
 			$table->string('bloodgroup',10);
 			$table->string('nationality',50);
 			$table->string('dob',12);
-			$table->string('photo',30);
+			$table->string('photo',30)->nullable();
 			$table->string('extraActivity',150);
 			$table->string('remarks',250);
+			$table->string('birthRegiNo',50);
 
+			$table->string('parentNid',50);
 			$table->string('fatherName',180);
 			$table->string('fatherCellNo',15);
 			$table->string('motherName',180);
@@ -44,10 +45,8 @@ class CreateTableStudent extends Migration {
       $table->string('presentAddress',500);
 			$table->string('parmanentAddress',500);
       $table->string('isActive',10);
-      $table->string('fourthSubject',255)->nullable();
 			$table->timestamps();
 			$table->index('regiNo');
-
 		});
 	}
 

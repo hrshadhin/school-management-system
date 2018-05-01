@@ -1,6 +1,5 @@
 <?php
 
-
 class Student extends \Eloquent {
 	protected $table = 'Student';
 	protected $fillable = ['regiNo',
@@ -19,15 +18,14 @@ class Student extends \Eloquent {
 	'fatherCellNo',
 	'motherName',
 	'motherCellNo',
-   'presentAddress',
-   'parmanentAddress',
-   'fourthSubject'
-	];
-	protected $primaryKey = 'id';
-	public function attendance(){
-		$this->primaryKey = "regiNo";
-    return $this->hasMany('Attendance','regiNo');
-  }
-	
+	'presentAddress',
+	'parmanentAddress'
+];
+
+protected $primaryKey = 'id';
+public function attendance(){
+	$this->primaryKey = "regiNo";
+	return $this->hasMany('Attendance','regiNo');
+}
 
 }
