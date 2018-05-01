@@ -112,7 +112,7 @@ class attendanceController extends \BaseController {
 							$response = $this->sendSMS($student->fatherCellNo,"SuperSoft", $msg);
 							$smsLog = new SMSLog();
 							$smsLog->type = "Attendance";
-							$smsLog->sender = "SuperSoft";
+							$smsLog->sender = "Scenic-Software";
 							$smsLog->message = $msg;
 							$smsLog->recipient = $student->fatherCellNo;
 							$smsLog->regiNo = $absst;
@@ -135,62 +135,120 @@ class attendanceController extends \BaseController {
 	*
 	* @return Response
 	*/
-	public function create_file()
-	{
+//	public function create_file()
+//	{
+//
+//		$file = Input::file('fileUpload');
+//		$ext = strtolower($file->getClientOriginalExtension());
+//
+//		$validator = Validator::make(array('ext' => $ext),array('ext' => 'in:xls,xlsx')
+//		);
+//		if ($validator->fails()) {
+//			return Redirect::to('/attendance/create-file')->withErrors($validator);
+//		} else {
+//			try {
+//						$toInsert = 0;
+//            $data = Excel::load(Input::file('fileUpload'), function ($reader) { })->get();
+//
+//        if(!empty($data) && $data->count()){
+//					DB::beginTransaction();
+//					try {
+//            foreach ($data->toArray() as $raw) {
+//								if($raw['date_and_time'] && $raw['personnel_id']){
+//									$attenData= [
+//										'date' => $raw['date_and_time'],
+//										'regiNo' => $raw['personnel_id'],
+//										'created_at' => Carbon::now()
+//									];
+//									Attendance::insert($attenData);
+//									$toInsert++;
+//								}
+//                }
+//								DB::commit();
+//							} catch (\Exception $e) {
+//								DB::rollback();
+//								$errorMessages = new Illuminate\Support\MessageBag;
+//								 $errorMessages->add('Error', 'Something went wrong!');
+//								return Redirect::to('/attendance/create-file')->withErrors($errorMessages);
+//
+//								// something went wrong
+//							}
+//
+//            }
+//
+//						if($toInsert){
+//                return Redirect::to('/attendance/create-file')->with("success", $toInsert.' students attendance record upload successfully.');
+//            }
+//						$errorMessages = new Illuminate\Support\MessageBag;
+//						 $errorMessages->add('Validation', 'File is empty!!!');
+//						return Redirect::to('/attendance/create-file')->withErrors($errorMessages);
+//
+//        } catch (\Exception $e) {
+//					$errorMessages = new Illuminate\Support\MessageBag;
+//					 $errorMessages->add('Error', 'Something went wrong!');
+//					return Redirect::to('/attendance/create-file')->withErrors($errorMessages);
+//        }
+//		}
+//
+//	}
+    public function create_file()
+    {
 
-		$file = Input::file('fileUpload');
-		$ext = strtolower($file->getClientOriginalExtension());
+        $file = Input::file('fileUpload');
+        $ext = strtolower($file->getClientOriginalExtension());
 
-		$validator = Validator::make(array('ext' => $ext),array('ext' => 'in:xls,xlsx')
-		);
-		if ($validator->fails()) {
-			return Redirect::to('/attendance/create-file')->withErrors($validator);
-		} else {
-			try {
-						$toInsert = 0;
-            $data = Excel::load(Input::file('fileUpload'), function ($reader) { })->get();
+        $validator = Validator::make(array('ext' => $ext),array('ext' => 'in:csv,xls,xlsx')
+        );
+        if ($validator->fails()) {
+            return Redirect::to('/attendance/create-file')->withErrors($validator);
+        } else {
+            try {
+                $toInsert = 0;
+                $data = Excel::load(Input::file('fileUpload'), function ($reader) { })->get();
 
-        if(!empty($data) && $data->count()){
-					DB::beginTransaction();
-					try {
-            foreach ($data->toArray() as $raw) {
-								if($raw['date_and_time'] && $raw['personnel_id']){
-									$attenData= [
-										'date' => $raw['date_and_time'],
-										'regiNo' => $raw['personnel_id'],
-										'created_at' => Carbon::now()
-									];
-									Attendance::insert($attenData);
-									$toInsert++;
-								}
+                if(!empty($data) && $data->count()){
+                    DB::beginTransaction();
+                    try {
+                        foreach ($data->toArray() as $raw) {
+
+                            if($raw['date_and_time'] && $raw['personnel_id']){
+                                $attenData= [
+                                    'date' => \Carbon\Carbon::createFromFormat('d-m-Y H:i:s',$raw['date_and_time']),
+                                    'regiNo' => $raw['personnel_id'],
+                                    'created_at' => Carbon::now()
+                                ];
+                                Attendance::insert($attenData);
+                                $toInsert++;
+                            }
+                        }
+                        DB::commit();
+                    } catch (\Exception $e) {
+                        DB::rollback();
+                        $errorMessages = new Illuminate\Support\MessageBag;
+                        $errorMessages->add('Error', $e->getMessage());
+                        return Redirect::to('/attendance/create-file')->withErrors($errorMessages);
+
+                        // something went wrong
+                    }
+
                 }
-								DB::commit();
-							} catch (\Exception $e) {
-								DB::rollback();
-								$errorMessages = new Illuminate\Support\MessageBag;
-								 $errorMessages->add('Error', 'Something went wrong!');
-								return Redirect::to('/attendance/create-file')->withErrors($errorMessages);
 
-								// something went wrong
-							}
+                if($toInsert){
+                    return Redirect::to('/attendance/create-file')->with("success", $toInsert.' students attendance record upload successfully.');
+                }
+                $errorMessages = new Illuminate\Support\MessageBag;
+                $errorMessages->add('Validation', 'File is empty or invalid data! Please follow help note.');
+                return Redirect::to('/attendance/create-file')->withErrors($errorMessages);
 
+            } catch (\Exception $e) {
+                $errorMessages = new Illuminate\Support\MessageBag;
+                $errorMessages->add('Error', $e->getMessage());
+                return Redirect::to('/attendance/create-file')->withErrors($errorMessages);
             }
-
-						if($toInsert){
-                return Redirect::to('/attendance/create-file')->with("success", $toInsert.' students attendance record upload successfully.');
-            }
-						$errorMessages = new Illuminate\Support\MessageBag;
-						 $errorMessages->add('Validation', 'File is empty!!!');
-						return Redirect::to('/attendance/create-file')->withErrors($errorMessages);
-
-        } catch (\Exception $e) {
-					$errorMessages = new Illuminate\Support\MessageBag;
-					 $errorMessages->add('Error', 'Something went wrong!');
-					return Redirect::to('/attendance/create-file')->withErrors($errorMessages);
         }
-		}
 
-	}
+    }
+
 	private function sendSMS($number,$sender,$msg)
 	{
 		$phonenumber = $number;
@@ -205,8 +263,8 @@ class attendanceController extends \BaseController {
 			{
 
 
-				$myaccount=urlencode("s-soft");
-				$mypasswd=urlencode("12332112");
+				$myaccount=urlencode("Mehedi.Hasan");
+				$mypasswd=urlencode("kUtU3210");
 				$sendBy=urlencode($sender);
 				$api="http://app.itsolutionbd.net/api/sendsms/plain?user=".$myaccount."&password=".$mypasswd."&sender=".$sendBy."&SMSText=".$msg."&GSM=".$phonenumber."&type=longSMS";
 				$client = new \Guzzle\Service\Client($api);

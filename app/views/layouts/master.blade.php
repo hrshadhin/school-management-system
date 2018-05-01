@@ -16,7 +16,7 @@
         ===
     -->
     <meta charset="utf-8">
-    <title>School Manage</title>
+    <title>{{Session::get('inName')}}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -95,11 +95,11 @@
         </div>
         <!-- Addmission dropdown starts -->
         <div class="btn-group pull-right">
-            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+         <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
 
-                <i class="glyphicon glyphicon-th-large"></i><span class=""> Admission</span>
-                <span class="caret"></span>
-            </button>
+            <i class="glyphicon glyphicon-th-large"></i><span class=""> Admission</span>
+             <span class="caret"></span>
+        </button>
             <ul class="dropdown-menu">
                 <li><a href="/applicants"><i class="glyphicon glyphicon-th-list"></i> Applicant List</a></li>
                 <li class="divider"></li>
@@ -111,18 +111,18 @@
 
 
             </ul>
-        </div>
+        </div> 
         <!-- admission dropdown ends -->
 
 
 
         <!-- Library dropdown starts -->
         <div class="btn-group pull-right">
-            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+      <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"> 
 
-                <i class="glyphicon glyphicon-book"></i><span class=""> Library</span>
-                <span class="caret"></span>
-            </button>
+             <i class="glyphicon glyphicon-book"></i><span class=""> Library</span> 
+               <span class="caret"></span> 
+           </button> 
             <ul class="dropdown-menu">
 
                 <li><a href="/library/search"><i class="glyphicon glyphicon-search"></i> Book Search</a></li>
@@ -139,12 +139,12 @@
         </div>
         <!-- Library dropdown ends -->
         <!-- Dormitory dropdown starts -->
-        <div class="btn-group pull-right">
-            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+        <div class="btn-group pull-right"> 
+         <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"> 
 
-                <i class="glyphicon glyphicon-home"></i><span class=""> Dormitory</span>
-                <span class="caret"></span>
-            </button>
+              <i class="glyphicon glyphicon-home"></i><span class=""> Dormitory</span> 
+               <span class="caret"></span>
+           </button> 
             <ul class="dropdown-menu">
 
                 <li><a href="/dormitory"><i class="glyphicon glyphicon-home"></i> Dormitory</a></li>
@@ -276,7 +276,6 @@
                                 <li><a href="/gradesheet">Marksheet</a></li>
                                 <li><a href="/attendance/report">Attendance</a></li>
                                 <li><a href="/tabulation">Tabulationsheet</a></li>
-                                <li><a href="/smslog">SMS Log</a></li>
                                 <li><a href="/accounting/report">Account By Type</a></li>
                                 <li><a href="/accounting/reportsum">Account Balance</a></li>
                                  <li><a href="/barcode">Barcode Generate</a></li>
@@ -351,7 +350,7 @@
         <hr>
         <p class="col-md-9 col-sm-9 col-xs-12 copyright"> <a href="#" target="_blank">{{Session::get('inName')}}</a> &copy;2016</p>
 
-        <p class="col-md-3 col-sm-3 col-xs-12 powered-by">Develop by: <a target="_blank" href="http://supersoftcorp.com">Supersoft Corp</a></p>
+        <p class="col-md-3 col-sm-3 col-xs-12 powered-by">Develop by: <a target="_blank" href="#">Supersoft</a></p>
     </footer>
 
 </div><!--/.fluid-container-->

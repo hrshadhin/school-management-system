@@ -134,6 +134,25 @@
                                 </div>
                             </div>
                         </div>
+						<div class="row">
+                            <div class="col-md-12">
+                            <div class="col-md-4">
+                              <div class="form-group">
+                              <label class="control-label" for="religion">Religion</label>
+
+                              <div class="input-group">
+                                  <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                                  <select name="campus" class="form-control" required="true">
+                                    <option value="">--Select Religion---</option>
+                                      <option value="1">Islam</option>
+                                     <option value="2">Hindu</option>
+                                     <option value="3">Buddist</option>
+
+                                  </select>
+                              </div>
+                            </div>
+                        </div>
+                        </div></div>
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="col-md-4">

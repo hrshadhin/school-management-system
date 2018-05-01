@@ -55,9 +55,9 @@ return array(
 		'mysql' => array(
 			'driver'    => 'mysql',
 			'host'      => 'localhost',
-			'database'  => 'zirischool',
-			'username'  => 'root',
-			'password'  => 'toor',
+			'database'  => 'kds_krghs',
+			'username'  => 'kds_user',
+			'password'  => '45jk3489',
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',

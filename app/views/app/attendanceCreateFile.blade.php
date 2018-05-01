@@ -16,7 +16,6 @@
             <div class="box-inner">
                 <div data-original-title="" class="box-header well">
                     <h2><i class="glyphicon glyphicon-user"></i> Attendance Entry</h2>
-
                 </div>
                 <div class="box-content">
                     @if (count($errors) > 0)
@@ -31,7 +30,16 @@
                     @endif
                     <form role="form" action="/attendance/create-file" method="post" enctype="multipart/form-data">
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
-
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="alert alert-warning">
+                                    <h5 class="text-danger"><i class="glyphicon glyphicon-hand-right"></i> Example/Sample Excel/CSV file.[<a href="/example/student_attendance.csv" target="_blank">Download CSV</a>][<a href="/example/student_attendance.xlsx" target="_blank">Download Excel</a>]
+                                    </h5>
+                                    <h5 class="text-danger"> <i class="glyphicon glyphicon-hand-right"></i> Please be care about file size.It must be less than 8MB!</h5>
+                                    <h5 class="text-danger"> <i class="glyphicon glyphicon-hand-right"></i> If it is a excel file then make sure cells value are formated as "text"!</h5>
+                                    <h5 class="text-danger"> <i class="glyphicon glyphicon-hand-right"></i> ** "personnel_id" column value is student registration number!</h5>                      </div>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-md-12">
 

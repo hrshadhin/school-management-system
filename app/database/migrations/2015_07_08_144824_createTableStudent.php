@@ -44,6 +44,7 @@ class CreateTableStudent extends Migration {
       $table->string('presentAddress',500);
 			$table->string('parmanentAddress',500);
       $table->string('isActive',10);
+      $table->string('fourthSubject',255)->nullable();
 			$table->timestamps();
 			$table->index('regiNo');
 
