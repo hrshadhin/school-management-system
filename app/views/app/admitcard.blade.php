@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Admit card - St. Joseph's High School, Khulna</title>
+    <title>School Manage</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -51,7 +51,7 @@
                     <div class="col-md-12">
                       <div class="col-md-6">
                         <div class="form-group">
-                            <label for="refNo">Serial No:</label>
+                            <label for="refNo">Referance No:</label>
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                                 <input type="text" class="form-control" required name="refNo">
@@ -60,7 +60,7 @@
                       </div>
                       <div class="col-md-6">
                         <div class="form-group">
-                            <label for="transactionNo">Bank transaction no:</label>
+                            <label for="transactionNo">bkash Transaction No:</label>
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                                 <input type="text" class="form-control" required  name="transactionNo">

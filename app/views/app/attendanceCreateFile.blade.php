@@ -16,6 +16,7 @@
             <div class="box-inner">
                 <div data-original-title="" class="box-header well">
                     <h2><i class="glyphicon glyphicon-user"></i> Attendance Entry</h2>
+
                 </div>
                 <div class="box-content">
                     @if (count($errors) > 0)
@@ -44,7 +45,7 @@
                             <div class="col-md-12">
 
                             <div class="form-group ">
-                                <label for="file">Excel File</label>
+                                <label for="file">Excel/csv File</label>
                                 <div class="input-group">
 
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-file"></i> </span>

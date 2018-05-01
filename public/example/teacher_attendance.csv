@@ -1,0 +1,5 @@
+regNo,date,vEMPNO,dIN_TIME,dOUT_TIME,nWorkingHOUR,nLATE,vSTATUS,REMARKS,vDEPT_NAME,vSECTION_NAME,vDES_NAME,vSHIFT_CODE,vWEEKLY_OFF,created_at
+565656,26-10-2017,1234,27-10-2017 08:30:50,27-10-2017 17:00:20,8.5,0,any thing,any thing,any thing,any thing,any thing,any thing,2,27-10-2017 08:30:50
+656565,26-10-2017,12341,27-10-2017 09:00:50,27-10-2017 17:00:20,8,0,any thing,any thing,any thing,any thing,any thing,any thing,0,27-10-2017 09:00:50
+565656,27-10-2017,1234,27-10-2017 08:30:50,27-10-2017 16:30:20,7.5,0,any thing,any thing,any thing,any thing,any thing,any thing,2,27-10-2017 08:30:50
+656565,27-10-2017,12341,27-10-2017 09:30:50,27-10-2017 16:00:20,6.5,1,any thing,any thing,any thing,any thing,any thing,any thing,0,27-10-2017 09:00:50

@@ -16,7 +16,7 @@
         ===
     -->
     <meta charset="utf-8">
-    <title>{{$institute->name}}</title>
+    <title>School Manage</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -46,6 +46,7 @@
 
         <div class="row">
             <div class="col-md-12 center login-header">
+                <h2>Welcome to "{{$institute->name}}"</h2>
             </div>
             <!--/span-->
         </div><!--/row-->
@@ -59,19 +60,20 @@
 
                     </div>
                 @endif
+                <img src="img/logo.png" style="height:120px;">
 
                 <form class="form-horizontal" action="users/login" method="post">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <fieldset>
                         <div class="input-group input-group-lg">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-user blue"></i></span>
-                            <input type="text" class="form-control" name="login" placeholder="UserID">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-user red"></i></span>
+                            <input type="text" class="form-control" name="login" placeholder="Username">
                         </div>
                         <div class="clearfix"></div><br>
 
                         <div class="input-group input-group-lg">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-lock blue"></i></span>
-                            <input type="password" class="form-control" name="password" placeholder="UserPass">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-lock red"></i></span>
+                            <input type="password" class="form-control" name="password" placeholder="Password">
                         </div>
                         <div class="clearfix"></div>
 

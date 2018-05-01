@@ -94,3 +94,10 @@ App::down(function()
 */
 
 require app_path().'/filters.php';
+
+require app_path().'/helpers.php';
+
+
+\Blade::extend(function($value) {
+    return preg_replace('/\@define(.+)/', '<?php ${1}; ?>', $value);
+});

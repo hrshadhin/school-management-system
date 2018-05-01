@@ -16,7 +16,7 @@ class smsController extends \BaseController {
 	{
 		$smses=SMS::all();
 		$sms = array();
-		return View::Make('app.smssender',compact('smses','sms'));
+		return View::Make('app.smsTypes',compact('smses','sms'));
 	}
 
 
@@ -61,7 +61,7 @@ class smsController extends \BaseController {
 	{
 		$sms = SMS::find($id);
 		$smses=SMS::all();
-		return View::Make('app.smsFormat',compact('smses','sms'));
+		return View::Make('app.smsTypes',compact('smses','sms'));
 	}
 
 
@@ -109,22 +109,106 @@ class smsController extends \BaseController {
 		$sms->delete();
 		return Redirect::to('/sms')->with("success","SMS Format Deleted Succesfully.");
 	}
-
+	public function getTypeInfo($id)
+	{
+		return SMS::find($id);
+	}
 	public function getsmssend()
 	{
 
-		$students=array();
-		$classes = ClassModel::lists('name','code');
-		$formdata = new formfoo;
-		$formdata->class="";
-		$formdata->section="";
-		$formdata->shift="";
-		$formdata->session="";
-		return View::Make("app.smssender",compact('students','classes','formdata'));
+		$types = SMS::all();
+		$classes = ClassModel::select('code','name')->orderby('code','asc')->get();
+
+		return View::Make("app.smssender",compact('types','classes'));
 	}
-	public function postsend()
+	public function postsmssend()
 	{
-		return "Do not mess with me";
+		$rules=[
+			'class' => 'required',
+			'session' => 'required',
+			'sender' => 'required|max:100',
+			'message' => 'required|max:160'
+		];
+		$validator = \Validator::make(Input::all(), $rules);
+		if ($validator->fails())
+		{
+			return Redirect::to('/sms-send')->withErrors($validator);
+		}
+		$inputs = Input::all();
+		$smsType = $inputs['type'];
+		if($inputs['type'] !="Custom"){
+			$smsdbtype= SMS::find($inputs['type']);
+			$smsType = $smsdbtype->type;
+		}
+		$students = Student::select('fatherCellNo','regiNo')
+		->where('class',$inputs['class'])
+		->where('session',trim($inputs['session']))->get()->toArray();
+		//return $students;
+		//$students[] = ['fatherCellNo' => '01554322707','regiNo' => '15641'];
+
+
+		if(count($students)){
+		foreach ($students as $student) {
+			Queue::push(function($job) use ($student,$inputs,$smsType)
+		 {
+
+			$regiNo = $student['regiNo'];
+			$phonenumber = $student['fatherCellNo'];
+			$sender = $inputs['sender'];
+			$msg =$inputs['message'];
+			$type =$smsType;
+
+			$apiResult="Invalid Number";
+			$phonenumber=str_replace('+','',$phonenumber);
+			if (strlen($phonenumber)=="11")
+			{
+				$phonenumber="88".$phonenumber;
+			}
+			if (strlen($phonenumber)=="13")
+			{
+				if (preg_match ("/^88017/i", "$phonenumber") or preg_match ("/^88016/i", "$phonenumber") or preg_match ("/^88015/i", "$phonenumber") or preg_match ("/^88011/i", "$phonenumber") or preg_match ("/^88018/i", "$phonenumber") or preg_match ("/^88019/i", "$phonenumber"))
+				{
+
+
+					$myaccount=urlencode("s-soft");
+					$mypasswd=urlencode("12332112");
+					$sendBy=urlencode($sender);
+					$api="http://app.itsolutionbd.net/api/sendsms/plain?user=".$myaccount."&password=".$mypasswd."&sender=".$sendBy."&SMSText=".$msg."&GSM=".$phonenumber."&type=longSMS";
+					$client = new \Guzzle\Service\Client($api);
+					//  Get your response:
+					$response = $client->get()->send();
+					$status=$response->getBody(true);
+					$apiResult = "SMS SEND";
+					if($status=="-5" || $status=="5")
+					{
+						$apiResult = $status;
+					}
+				}
+			}
+
+			$smsLog = new SMSLog();
+			$smsLog->type = $type;
+			$smsLog->sender = $sender;
+			$smsLog->message = $msg;
+			$smsLog->recipient = $phonenumber;
+			$smsLog->regiNo = $regiNo;
+			$smsLog->status = $apiResult;
+			$smsLog->save();
+		 	$job->delete();
+		});
+
+		}
+
+		return Redirect::to('/sms-send')->with("success",count($students)." sms pushed to queue.SMS will recive shortly.");
+
+	}
+	else{
+		// New MessageBag
+		$errorMessages = new Illuminate\Support\MessageBag;
+		$errorMessages->add('Not Found', 'There are no student on this session!');
+		return Redirect::to('/sms-send')->withErrors($errorMessages->all());
+	}
+
 	}
 
 	public function getsmsLog()

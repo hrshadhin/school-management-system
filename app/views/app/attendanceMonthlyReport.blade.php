@@ -105,6 +105,8 @@
                     @endforeach
                     <th>Present</th>
                     <th>Absent</th>
+                    <th>Holiday</th>
+                    <th>Class Off</th>
                     <th>ToT.DAYS</th>
                 </tr>
                 </thead>
@@ -116,13 +118,15 @@
                         $row = (array) $datum;
                         $totalP = 0;
                         $totalA = 0;
+                        $totalH = 0;
+                        $totalCO = 0;
                         $empRegNo = '';
                         ?>
                         @foreach($keys as $index=>$key)
                             @if($index==0)
                                 <td>{{$row[$key]}}</td>
                             @elseif($index==1)
-                                    <td>{{$row[$key]}}</td>
+                                <td>{{$row[$key]}}</td>
                             @else
                                 <?php
                                 $symbol = "-";
@@ -132,14 +136,20 @@
                                 @if(isset($fridays[$key]))
                                     <?php
                                     $symbol = "F";
-                                    $totalP++;
+                                    $totalH++;
                                     $color = "green";
                                     ?>
                                 @elseif(isset($holiDays[$key]))
                                     <?php
                                     $symbol = "H";
-                                    $totalP++;
+                                    $totalH++;
                                     $color = "green";
+                                    ?>
+                                @elseif(isset($offDays[$key]))
+                                    <?php
+                                    $symbol = $offDays[$key];
+                                    $totalCO++;
+                                    $color = "#9229ad";
                                     ?>
                                 @elseif($row[$key]==1)
                                     <?php
@@ -166,7 +176,9 @@
                         @endforeach
                         <td>{{$totalP}}</td>
                         <td>{{$totalA}}</td>
-                        <td>{{($totalP+$totalA)}}</td>
+                        <td>{{$totalH}}</td>
+                        <td>{{$totalCO}}</td>
+                        <td>{{($totalP+$totalA+$totalH+$totalCO)}}</td>
                     </tr>
                 @endforeach
                 </tbody>

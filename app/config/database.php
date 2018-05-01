@@ -51,17 +51,26 @@ return array(
 			'database' => __DIR__.'/../database/production.sqlite',
 			'prefix'   => '',
 		),
-
 		'mysql' => array(
 			'driver'    => 'mysql',
 			'host'      => 'localhost',
-			'database'  => 'kds_krghs',
-			'username'  => 'kds_user',
-			'password'  => '45jk3489',
+			'database'  => 'universi_app_kmdcbd',
+			'username'  => 'universi_app-usr',
+			'password'  => 'J@sR$rDx@69*b',
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',
 		),
+        /*'mysql' => array(
+			'driver'    => 'mysql',
+			'host'      => 'localhost',
+			'database'  => 'kmc',
+			'username'  => 'root',
+			'password'  => 'toor',
+			'charset'   => 'utf8',
+			'collation' => 'utf8_unicode_ci',
+			'prefix'    => '',
+		),*/
 
 		'pgsql' => array(
 			'driver'   => 'pgsql',

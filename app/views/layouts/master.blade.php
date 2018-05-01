@@ -16,7 +16,7 @@
         ===
     -->
     <meta charset="utf-8">
-    <title>{{Session::get('inName')}}</title>
+    <title>School Manage</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -95,11 +95,11 @@
         </div>
         <!-- Addmission dropdown starts -->
         <div class="btn-group pull-right">
-         <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
 
-            <i class="glyphicon glyphicon-th-large"></i><span class=""> Admission</span>
-             <span class="caret"></span>
-        </button>
+                <i class="glyphicon glyphicon-th-large"></i><span class=""> Admission</span>
+                <span class="caret"></span>
+            </button>
             <ul class="dropdown-menu">
                 <li><a href="/applicants"><i class="glyphicon glyphicon-th-list"></i> Applicant List</a></li>
                 <li class="divider"></li>
@@ -111,18 +111,18 @@
 
 
             </ul>
-        </div> 
+        </div>
         <!-- admission dropdown ends -->
 
 
 
         <!-- Library dropdown starts -->
         <div class="btn-group pull-right">
-      <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"> 
+            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
 
-             <i class="glyphicon glyphicon-book"></i><span class=""> Library</span> 
-               <span class="caret"></span> 
-           </button> 
+                <i class="glyphicon glyphicon-book"></i><span class=""> Library</span>
+                <span class="caret"></span>
+            </button>
             <ul class="dropdown-menu">
 
                 <li><a href="/library/search"><i class="glyphicon glyphicon-search"></i> Book Search</a></li>
@@ -139,12 +139,12 @@
         </div>
         <!-- Library dropdown ends -->
         <!-- Dormitory dropdown starts -->
-        <div class="btn-group pull-right"> 
-         <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"> 
+        <div class="btn-group pull-right">
+            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
 
-              <i class="glyphicon glyphicon-home"></i><span class=""> Dormitory</span> 
-               <span class="caret"></span>
-           </button> 
+                <i class="glyphicon glyphicon-home"></i><span class=""> Dormitory</span>
+                <span class="caret"></span>
+            </button>
             <ul class="dropdown-menu">
 
                 <li><a href="/dormitory"><i class="glyphicon glyphicon-home"></i> Dormitory</a></li>
@@ -178,6 +178,32 @@
             </ul>
         </div>
         <!-- fees dropdown ends -->
+      <!-- teacher dropdown starts-->
+        <div class="btn-group pull-right">
+            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+
+                <i class="glyphicon glyphicon-user"></i><span class=""> Employee</span>
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a href="/teacher/create"><i class="glyphicon glyphicon-plus"></i> Add New</a></li>
+                <li><a href="/teacher/list"><i class="glyphicon glyphicon-list-alt"></i> List</a></li>
+                <li class="divider"></li>
+                <li><a href="/leaves/create"><i class="glyphicon glyphicon-plus"></i> Add New Leave</a></li>
+                <li><a href="/leaves"><i class="glyphicon glyphicon-list-alt"></i> Leave List</a></li>
+                <li class="divider"></li>
+                <li><a href="/workoutside/create"><i class="glyphicon glyphicon-plus"></i> Add New Work Outside</a></li>
+                <li><a href="/workoutside"><i class="glyphicon glyphicon-list-alt"></i> Work Outside List</a></li>
+                <li class="divider"></li>
+                {{--<li><a href="/teacher-attendance/create"><i class="glyphicon glyphicon-plus"></i> Add Attendance</a></li>--}}
+                <li><a href="/teacher-attendance/list"><i class="glyphicon glyphicon-list-alt"></i> Attendance List</a></li>
+                <li><a href="/teacher-attendance/absenteeism-report"><i class="glyphicon glyphicon-print"></i> Absenteeism Report</a></li>
+                <li><a href="/teacher-attendance/monthly-report"><i class="glyphicon glyphicon-print"></i> Monthly Attendance Report</a></li>
+                <li><a href="/teacher-attendance/monthly-report-2"><i class="glyphicon glyphicon-print"></i> Monthly Attendance Report Two</a></li>
+
+            </ul>
+        </div>
+        <!-- teacher dropdown ends -->
 
     </div>
 </div>
@@ -260,22 +286,22 @@
 
                             </ul>
                         </li>
-                      <!--  <li class="accordion">
+                       <li class="accordion">
 
                           <a href="#"><i class="glyphicon glyphicon-envelope"></i><span> SMS</span></a>
                           <ul class="nav nav-pills nav-stacked">
-                              <li><a href="/sms">Bulk SMS</a></li>
-
-
-
+                              <li><a href="/sms">SMS types</a></li>
+                              <li><a href="/sms-send">Send Bulk SMS</a></li>
                           </ul>
-                      </li> -->
+                      </li>
                         <li class="accordion">
                             <a href="#"><i class="glyphicon glyphicon-print"></i><span> Reports</span></a>
                             <ul class="nav nav-pills nav-stacked">
                                 <li><a href="/gradesheet">Marksheet</a></li>
                                 <li><a href="/attendance/report">Attendance</a></li>
+                                <li><a href="/attendance/monthly-report">Monthly Attendance</a></li>
                                 <li><a href="/tabulation">Tabulationsheet</a></li>
+                                <li><a href="/smslog">SMS Log</a></li>
                                 <li><a href="/accounting/report">Account By Type</a></li>
                                 <li><a href="/accounting/reportsum">Account Balance</a></li>
                                  <li><a href="/barcode">Barcode Generate</a></li>
@@ -290,6 +316,8 @@
                                 <li><a href="/gpa">GPA Ruels</a></li>
 
                                 <li><a href="/users">Users</a></li>
+                                <li><a href="/holidays">Holidays</a></li>
+                                <li><a href="/class-off">Class Off Days</a></li>
                                 <li><a href="/institute">Institute</a></li>
 
                             </ul>
@@ -350,7 +378,7 @@
         <hr>
         <p class="col-md-9 col-sm-9 col-xs-12 copyright"> <a href="#" target="_blank">{{Session::get('inName')}}</a> &copy;2016</p>
 
-        <p class="col-md-3 col-sm-3 col-xs-12 powered-by">Develop by: <a target="_blank" href="#">Supersoft</a></p>
+        <p class="col-md-3 col-sm-3 col-xs-12 powered-by">Develop by: <a target="_blank" href="http://supersoftcorp.com">Supersoft Corp</a></p>
     </footer>
 
 </div><!--/.fluid-container-->
