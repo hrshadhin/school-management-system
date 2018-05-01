@@ -64,6 +64,7 @@
 
 
                                                 <select id="class" id="class" name="class" required="true" class="form-control" >
+                                                    <option value="" >--Select Class--</option>
                                                     @foreach($classes as $class)
                                                         <option value="{{$class->code}}">{{$class->name}}</option>
                                                     @endforeach

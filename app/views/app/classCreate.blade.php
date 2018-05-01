@@ -27,10 +27,10 @@
                         </div>
                     </div>
                   <div class="form-group">
-                      <label for="name">Numeric Value of Class[One=1,Six=6,Ten=10 etc]</label>
+                      <label for="name">Numeric Value</label>
                       <div class="input-group">
                           <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                          <input type="number" min="1" max="10" class="form-control" required name="code" placeholder="One=1,Six=6,Ten=10 etc">
+                          <input type="text" class="form-control" required name="code" placeholder="1,2,3 etc">
                       </div>
                   </div>
                     <div class="form-group">

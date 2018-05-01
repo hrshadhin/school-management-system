@@ -24,12 +24,12 @@ class CreateTableAdmission extends Migration {
 			$table->string('session',10);
 			$table->string('dob');
 			$table->string('photo',20);
-			$table->string('campus',50);
-			$table->string('keeping',50);
+			$table->string('signature',20);
 			$table->string('fatherName',100);
 			$table->string('fatherCellNo',20);
 			$table->string('motherName',100);
 			$table->string('motherCellNo',50);
+			$table->string('address',500);
 			$table->string('status',50);
 			$table->timestamps();
 		});

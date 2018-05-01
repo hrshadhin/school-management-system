@@ -31,15 +31,7 @@
                     @endif
                     <form role="form" action="/attendance/create-file" method="post" enctype="multipart/form-data">
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                        <div class="row">
-                            <div class="col-md-12">
-                            <div class="alert alert-warning">
-                          <h3 class="text-danger">The Excel file must have these two columns["date_and_time","personnel_id"]</h3>
-                          <h3 class="text-danger">**" date_and_time" column value must be in "dd-mm-yyyy hh:mm:ss" format</h3>
-                          <h3 class="text-danger">** "personnel_id" column value is student registration number</h3>
-                      </div>
-                        </div>
-                        </div>
+
                         <div class="row">
                             <div class="col-md-12">
 

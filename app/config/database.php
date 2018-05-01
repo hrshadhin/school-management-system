@@ -55,7 +55,7 @@ return array(
 		'mysql' => array(
 			'driver'    => 'mysql',
 			'host'      => 'localhost',
-			'database'  => 'school',
+			'database'  => 'zirischool',
 			'username'  => 'root',
 			'password'  => 'toor',
 			'charset'   => 'utf8',

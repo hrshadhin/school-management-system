@@ -41,7 +41,7 @@
                                                 <div class="input-group">
 
                                                     <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i> </span>
-                                                    <input type="text" value="{{date('Y')}}"  required="true" class="form-control datepicker2" name="year" value=""   data-date-format="yyyy">
+                                                    <input type="text"  required="true" class="form-control datepicker2" name="year" value=""   data-date-format="yyyy">
                                                 </div>
                                             </div>
                                         </div>

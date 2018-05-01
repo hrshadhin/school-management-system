@@ -34,12 +34,12 @@ class admissionController extends \BaseController {
 		'session' => 'required',
 		'class' => 'required',
 		'photo' => 'required|mimes:png,jpg,jpeg,bmp|max:204800',
+		'signature' => 'required|mimes:png,jpg,jpeg,bmp|max:204800',
 		'fatherName' => 'required',
 		'fatherCellNo' => 'required',
 		'motherName' => 'required',
 		'motherCellNo' => 'required',
-		'campus' => 'required',
-		'keeping' => 'required',
+		'address' => 'required',
 	];
 	$validator = \Validator::make(Input::all(), $rules);
 	if ($validator->fails())
@@ -68,8 +68,7 @@ class admissionController extends \BaseController {
 		$addStd->class=Input::get('class');
 		$addStd->dob=Input::get('dob');
 		$addStd->session=trim(Input::get('session'));
-		$addStd->campus=Input::get('campus');
-		$addStd->keeping=Input::get('keeping');
+		$addStd->address=Input::get('address');
 		$addStd->fatherName=Input::get('fatherName');
 		$addStd->fatherCellNo=Input::get('fatherCellNo');
 		$addStd->motherName=Input::get('motherName');
@@ -80,7 +79,12 @@ class admissionController extends \BaseController {
 		$addStd->photo=$fileName;
 		$addStd->save();
 		Input::file('photo')->move(base_path() .'/public/admission',$fileName);
-		return Redirect::to('/regonline')->with("success","Registration for admission is successfull. Please send money to this \"01554322707\" personal bKash number with this referance number \"".$refNo."\"");
+
+		$fileName=$refNo.'s.'.Input::file('signature')->getClientOriginalExtension();
+		$addStd->signature=$fileName;
+		$addStd->save();
+		Input::file('signature')->move(base_path() .'/public/admission',$fileName);
+		return Redirect::to('/regonline')->with("success","Registration for admission is successfull. Please send money to this \"01711988177\" personal bKash number with this referance number \"".$refNo."\"");
 
 	}
 
@@ -105,77 +109,77 @@ private function getSeatNo($class)
 	if($class=="cl1")
 	{
 		$start=1;
-		$end=200;
+		$end=300;
 	}
 	else if($class=="cl2")
 	{
-		$start=201;
-		$end=400;
+		$start=301;
+		$end=600;
 	}
 	else if($class=="cl3")
 	{
-		$start=401;
-		$end=600;
+		$start=601;
+		$end=900;
 	}
 	else if($class=="cl4")
 	{
-		$start=601;
-		$end=800;
+		$start=901;
+		$end=1200;
 	}
 	else if($class=="cl05")
 	{
-		$start=801;
-		$end=1000;
+		$start=1201;
+		$end=1500;
 	}
 	else if($class=="cl6")
 	{
-		$start=1001;
-		$end=1200;
+		$start=1501;
+		$end=1800;
 	}
 	else if($class=="cl7")
 	{
-		$start=1201;
-		$end=1400;
+		$start=1801;
+		$end=2100;
 	}
 	else if($class=="cl8")
 	{
-		$start=1401;
-		$end=1600;
+		$start=2101;
+		$end=2400;
 	}
 	else if($class=="cl9")
 	{
-		$start=1601;
-		$end=1800;
+		$start=2401;
+		$end=2700;
 	}
 	else if($class=="cl10")
 	{
-		$start=1801;
-		$end=2000;
+		$start=2701;
+		$end=3000;
 	}
 	else if($class=="cl11")
 	{
-		$start=2001;
-		$end=2200;
+		$start=3001;
+		$end=3300;
 	}
 	else if($class=="cl12")
 	{
-		$start=2201;
-		$end=2400;
+		$start=3301;
+		$end=3600;
 	}
 	else if($class=="cl13")
 	{
-		$start=2401;
-		$end=2600;
+		$start=3601;
+		$end=3900;
 	}
 	else if($class=="cl14")
 	{
-		$start=2601;
-		$end=2800;
+		$start=3901;
+		$end=4200;
 	}
 	else
 	{
-		$start=0;
-		$end=0;
+		$start=5000;
+		$end=10000;
 	}
 	$randRoll =rand ($start,$end);
 
@@ -209,7 +213,7 @@ public function postapplicants()
 
 		$students = DB::table('admission')
 		->join('Class', 'admission.class', '=', 'Class.code')
-		->select('admission.id', 'admission.refNo', 'admission.seatNo', 'admission.stdName','admission.transactionNo','admission.campus','admission.keeping','admission.status','admission.created_at','Class.Name as class')
+		->select('admission.id', 'admission.refNo', 'admission.seatNo', 'admission.stdName','admission.transactionNo','admission.signature','admission.address','admission.status','admission.created_at','Class.Name as class')
 		->where('session',trim(Input::get('session')))->where('class',Input::get('class'))->get();
 
 
@@ -228,7 +232,7 @@ public function applicantview($id)
 	$student = DB::table('admission')
 	->join('Class', 'admission.class', '=', 'Class.code')
 	->select('admission.id', 'admission.refNo', 'admission.seatNo', 'admission.stdName','admission.transactionNo','admission.status','admission.created_at','Class.Name as class'
-	,'admission.session','admission.nationality','admission.dob','admission.campus','admission.keeping','admission.fatherName','admission.fatherCellNo','admission.motherName','admission.motherCellNo','admission.photo'
+	,'admission.session','admission.nationality','admission.dob','admission.address','admission.signature','admission.fatherName','admission.fatherCellNo','admission.motherName','admission.motherCellNo','admission.photo'
 	)
 	->where('admission.id',$id)->first();
 
@@ -283,13 +287,15 @@ public function printAdmitCard()
 		$data = DB::table('admission')
 		->join('Class', 'admission.class', '=', 'Class.code')
 		->select('admission.id', 'admission.refNo', 'admission.seatNo', 'admission.stdName','admission.transactionNo','admission.status','admission.created_at','Class.Name as class'
-		,'admission.session','admission.nationality','admission.dob','admission.campus','admission.fatherName','admission.fatherCellNo','admission.motherName','admission.motherCellNo','admission.photo'
+		,'admission.session','admission.nationality','admission.dob','admission.address','admission.signature','admission.fatherName','admission.fatherCellNo','admission.motherName','admission.motherCellNo','admission.photo'
 		)->where('admission.refNo',Input::get('refNo'))->where('admission.transactionNo',Input::get('transactionNo'))->first();
 		if(count($data)>0)
 		{
 			//return View::Make('app.printAdmitCard');
 			$institute=Institute::select('*')->first();
-			$pdf = PDF::loadView('app.printAdmitCard',compact('data','institute'));
+//            			return View::Make('app.printAdmitCard',compact('data','institute'));
+
+            $pdf = PDF::loadView('app.printAdmitCard',compact('data','institute'));
 			return $pdf->stream('admitcard.pdf');
 		}
 		else {

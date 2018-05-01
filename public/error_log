@@ -1,0 +1,1 @@
+[11-Apr-2017 11:05:34 Asia/Dhaka] PHP Fatal error:  Call to a member function delete() on null in /home/university/public_html/app/zkmahsbd.com/app/controllers/classController.php on line 127
