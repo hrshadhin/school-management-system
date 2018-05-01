@@ -2,6 +2,6 @@
 
 class ClassModel extends \Eloquent {
 	 protected $table = 'Class';
-	protected $fillable = ['name','numValue','description'];
+	protected $fillable = ['name','code','description'];
 
 }

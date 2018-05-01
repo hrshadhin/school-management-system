@@ -81,9 +81,7 @@ class studentController extends \BaseController {
 		'section' => 'required',
 		'rollNo' => 'required',
 		'shift' => 'required',
-		'photo' => 'mimes:jpeg,jpg,png',
-		'birthRegiNo' => 'required',
-		'parentNid' => 'required',
+		'photo' => 'required|mimes:jpeg,jpg,png',
 		'fatherName' => 'required',
 		'fatherCellNo' => 'required',
 		'motherName' => 'required',
@@ -97,12 +95,7 @@ class studentController extends \BaseController {
 		return Redirect::to('/student/create')->withErrors($validator);
 	}
 	else {
-		if(Input::hasFile('photo')){
-			$fileName=Input::get('regiNo').'.'.Input::file('photo')->getClientOriginalExtension();
-		}
-		else{
-			$fileName = "avatar.png";
-		}
+		$fileName=Input::get('regiNo').'.'.Input::file('photo')->getClientOriginalExtension();
 
 		$student = new Student;
 		$student->regiNo= Input::get('regiNo');
@@ -125,7 +118,6 @@ class studentController extends \BaseController {
 		$student->nationality= Input::get('nationality');
 		$student->extraActivity= Input::get('extraActivity');
 		$student->remarks= Input::get('remarks');
-		$student->birthRegiNo= Input::get('birthRegiNo');
 
 		$student->fatherName= Input::get('fatherName');
 		$student->fatherCellNo= Input::get('fatherCellNo');
@@ -133,7 +125,6 @@ class studentController extends \BaseController {
 		$student->motherCellNo= Input::get('motherCellNo');
 		$student->localGuardian= Input::get('localGuardian');
 		$student->localGuardianCell= Input::get('localGuardianCell');
-		$student->parentNid= Input::get('parentNid');
 
 		$student->presentAddress= Input::get('presentAddress');
 		$student->parmanentAddress= Input::get('parmanentAddress');
@@ -148,9 +139,7 @@ class studentController extends \BaseController {
 		}
 		else {
 			$student->save();
-			if(Input::hasFile('photo')){
 			Input::file('photo')->move(base_path() .'/public/images',$fileName);
-		}
 			return Redirect::to('/student/create')->with("success","Student Admited Succesfully.");
 		}
 
@@ -226,7 +215,7 @@ public function view($id)
 	'Student.fatherName','Student.motherName', 'Student.fatherCellNo','Student.motherCellNo','Student.localGuardianCell',
 	'Class.Name as class','Student.presentAddress','Student.gender','Student.religion','Student.section','Student.shift','Student.session',
 	'Student.group','Student.dob','Student.bloodgroup','Student.nationality','Student.photo','Student.extraActivity','Student.remarks',
-	'Student.localGuardian','Student.parmanentAddress','Student.birthRegiNo','Student.parentNid')
+	'Student.localGuardian','Student.parmanentAddress')
 	->where('Student.id','=',$id)->first();
 
 	return View::Make("app.studentView",compact('student'));
@@ -267,8 +256,6 @@ public function update()
 		'section' => 'required',
 		'rollNo' => 'required',
 		'shift' => 'required',
-		'birthRegiNo' => 'required',
-		'parentNid' => 'required',
 		'fatherName' => 'required',
 		'fatherCellNo' => 'required',
 		'motherName' => 'required',
@@ -323,7 +310,6 @@ public function update()
 		$student->nationality= Input::get('nationality');
 		$student->extraActivity= Input::get('extraActivity');
 		$student->remarks= Input::get('remarks');
-		$student->birthRegiNo= Input::get('birthRegiNo');
 
 		$student->fatherName= Input::get('fatherName');
 		$student->fatherCellNo= Input::get('fatherCellNo');
@@ -331,7 +317,6 @@ public function update()
 		$student->motherCellNo= Input::get('motherCellNo');
 		$student->localGuardian= Input::get('localGuardian');
 		$student->localGuardianCell= Input::get('localGuardianCell');
-		$student->parentNid= Input::get('parentNid');
 
 		$student->presentAddress= Input::get('presentAddress');
 		$student->parmanentAddress= Input::get('parmanentAddress');

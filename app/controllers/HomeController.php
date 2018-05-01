@@ -22,7 +22,7 @@ class HomeController extends BaseController {
 		if(!$institute)
 		{
 			$institute=new Institute;
-			$institute->name="ionek school management system";
+			$institute->name="ShanixLab";
 		}
 		return View::make('login',compact('error','institute'));
 

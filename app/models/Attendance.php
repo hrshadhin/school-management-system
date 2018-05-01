@@ -7,4 +7,5 @@ class Attendance extends \Eloquent {
   public function student(){
     return $this->belongsTo('Student','regiNo');
   }
+
 }

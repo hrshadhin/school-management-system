@@ -28,7 +28,7 @@ class UsersController extends \BaseController {
         }
         else {
           $institute=new Institute;
-          $institute->name="Ionek";
+          $institute->name="ShanixLab";
           Session::put('inName', $institute->name);
           return Redirect::to('/institute')->with('error','Please provide institute information!');
 

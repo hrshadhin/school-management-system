@@ -63,7 +63,7 @@
                                         <div class="input-group">
 
                                             <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i> </span>
-                                            <input value="{{date('Y-m-d')}}" type="text" id="fdate" value="{{$formdata[0]}}"  class="form-control datepicker" name="fromDate"   data-date-format="yyyy-mm-dd">
+                                            <input type="text" id="fdate" value="{{$formdata[0]}}"  class="form-control datepicker" name="fromDate"   data-date-format="yyyy-mm-dd">
                                         </div>
 
 
@@ -75,7 +75,7 @@
                                         <div class="input-group">
 
                                             <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i> </span>
-                                            <input value="{{date('Y-m-d')}}" type="text" id="tdate" value="{{$formdata[1]}}"  class="form-control datepicker" name="toDate"   data-date-format="yyyy-mm-dd">
+                                            <input type="text" id="tdate" value="{{$formdata[1]}}"  class="form-control datepicker" name="toDate"   data-date-format="yyyy-mm-dd">
                                         </div>
 
 

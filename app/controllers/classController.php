@@ -67,10 +67,7 @@ class classController extends \BaseController {
 	*/
 	public function show()
 	{
-		//$Classes = ClassModel::orderby('code','asc')->get();
-		$Classes = DB::table('Class')
-		->select(DB::raw('Class.id,Class.code,Class.name,Class.description,(select count(Student.id) from Student where class=Class.code)as students'))
-		->get();
+		$Classes = ClassModel::orderby('code','asc')->get();
 		return View::Make('app.classList',compact('Classes'));
 	}
 

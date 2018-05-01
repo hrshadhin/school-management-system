@@ -14,183 +14,185 @@ class attendanceController extends \BaseController {
 	}
 
 	public function index()
-		{
-			$classes=array();
-			$classes2 = ClassModel::select('code','name')->orderby('code','asc')->get();
-			$subjects = Subject::lists('name','code');
-			$attendance=array();
-			return View::Make('app.attendanceCreate',compact('classes2','classes','subjects','attendance'));
-		}
+	{
+		$classes=array();
+		$classes2 = ClassModel::select('code','name')->orderby('code','asc')->get();
+		$subjects = Subject::lists('name','code');
+		$attendance=array();
+		return View::Make('app.attendanceCreate',compact('classes2','classes','subjects','attendance'));
+	}
 
-		public function index_file()
-		{
-			return View::Make('app.attendanceCreateFile');
-		}
+	public function index_file()
+	{
+		return View::Make('app.attendanceCreateFile');
+	}
 
-		public function create()
-		{
-			$rules = [
-				'class' => 'required',
-				'section' => 'required',
-				'shift' => 'required',
-				'session' => 'required',
-				'regiNo' => 'required',
-				'date' => 'required',
-			];
-			$validator = \Validator::make(Input::all(), $rules);
-			if ($validator->fails()) {
-				return Redirect::to('/attendance/create')->withInput(Input::all())->withErrors($validator);
-			} else {
+	public function create()
+	{
+		$rules = [
+			'class' => 'required',
+			'section' => 'required',
+			'shift' => 'required',
+			'session' => 'required',
+			'regiNo' => 'required',
+			'date' => 'required',
+		];
+		$validator = \Validator::make(Input::all(), $rules);
+		if ($validator->fails()) {
+			return Redirect::to('/attendance/create')->withInput(Input::all())->withErrors($validator);
+		} else {
 
-					$absentStudents = array();
-					$students = Input::get('regiNo');
-					$presents = Input::get('present');
-					$all = false;
-					if ($presents == null) {
-						$all = true;
-					} else {
-						$ids = array_keys($presents);
+				$absentStudents = array();
+				$students = Input::get('regiNo');
+				$presents = Input::get('present');
+				$all = false;
+				if ($presents == null) {
+					$all = true;
+				} else {
+					$ids = array_keys($presents);
 
-					}
-					$stpresent = array();
-
-					foreach ($students as $student) {
-
-						$st = array();
-						$st['regiNo'] = $student;
-						if ($all) {
-							$st['status'] = 'No';
-						} else {
-							$st['status'] = $this->checkPresent($student, $ids);
-						}
-						if ($st['status'] == "No") {
-							array_push($absentStudents, $student);
-						}
-						else {
-							array_push($stpresent, $st);
-						}
-					}
-					$presentDate = $this->parseAppDate(Input::get('date'));
-					DB::beginTransaction();
-					try {
-					foreach ($stpresent as $stp) {
-						$attenData= [
-							'date' => $presentDate,
-							'regiNo' => $stp['regiNo'],
-							'created_at' => Carbon::now()
-						];
-						Attendance::insert($attenData);
-
-					}
-					DB::commit();
-				} catch (\Exception $e) {
-					DB::rollback();
-					$errorMessages = new Illuminate\Support\MessageBag;
-					 $errorMessages->add('Error', 'Something went wrong!');
-					return Redirect::to('/attendance/create')->withErrors($errorMessages);
 				}
-					//get sms format
-					//loop absent student and get father's no and send sms
-					$isSendSMS = Input::get('isSendSMS');
-					if ($isSendSMS == null) {
+				$stpresent = array();
+
+				foreach ($students as $student) {
+
+					$st = array();
+					$st['regiNo'] = $student;
+					if ($all) {
+						$st['status'] = 'No';
+					} else {
+						$st['status'] = $this->checkPresent($student, $ids);
+					}
+					if ($st['status'] == "No") {
+						array_push($absentStudents, $student);
+					}
+					else {
+						array_push($stpresent, $st);
+					}
+				}
+				$presentDate = $this->parseAppDate(Input::get('date'));
+				DB::beginTransaction();
+				try {
+				foreach ($stpresent as $stp) {
+					$attenData= [
+						'date' => $presentDate,
+						'regiNo' => $stp['regiNo'],
+						'created_at' => Carbon::now()
+					];
+					Attendance::insert($attenData);
+
+				}
+				DB::commit();
+			} catch (\Exception $e) {
+				DB::rollback();
+				$errorMessages = new Illuminate\Support\MessageBag;
+				 $errorMessages->add('Error', 'Something went wrong!');
+				return Redirect::to('/attendance/create')->withErrors($errorMessages);
+			}
+				//get sms format
+				//loop absent student and get father's no and send sms
+				$isSendSMS = Input::get('isSendSMS');
+				if ($isSendSMS == null) {
+					return Redirect::to('/attendance/create')->with("success", "Students attendance save Succesfully.");
+
+				} else {
+
+					if(count($absentStudents) > 0) {
+
+						foreach ($absentStudents as $absst) {
+							$student=	DB::table('Student')
+							->join('Class', 'Student.class', '=', 'Class.code')
+							->select( 'Student.regiNo','Student.rollNo','Student.firstName','Student.middleName','Student.lastName','Student.fatherCellNo','Class.Name as class')
+							->where('Student.regiNo','=',$absst)
+							->where('class',Input::get('class'))
+							->first();
+							$msg = "Dear Parents your Child (Name-".$student->firstName." ".$student->middleName." ".$student->lastName.", Class- ".$student->class." , Roll- ".$student->rollNo." ) is Absent in School today.";
+							//  $fatherCellNo = Student::select('fatherCellNo','')->where('regiNo', $absst)->first();
+
+							$response = $this->sendSMS($student->fatherCellNo,"SuperSoft", $msg);
+							$smsLog = new SMSLog();
+							$smsLog->type = "Attendance";
+							$smsLog->sender = "SuperSoft";
+							$smsLog->message = $msg;
+							$smsLog->recipient = $student->fatherCellNo;
+							$smsLog->regiNo = $absst;
+							$smsLog->status = $response;
+							$smsLog->save();
+						}
+						return Redirect::to('/attendance/create')->with("success", "Students attendance saved and " . count($absentStudents) . " sms send to father numbers.");
+					}
+					else
+					{
 						return Redirect::to('/attendance/create')->with("success", "Students attendance save Succesfully.");
 
-					} else {
-
-						if(count($absentStudents) > 0) {
-
-							foreach ($absentStudents as $absst) {
-								$student=	DB::table('Student')
-								->select( 'Student.firstName','Student.middleName','Student.lastName','Student.fatherCellNo')
-								->where('Student.regiNo','=',$absst)
-								->where('class',Input::get('class'))
-								->first();
-								$text = $student->firstName." ".$student->middleName." ".$student->lastName." আজ অনুপস্থিত। আপনার সন্তানকে নিয়মিত স্কুলে পাঠান। -এ.মালেক ইন্সটিটিউশন,লাকসাম। যোগাযোগ- 01718108733";
-								$response = $this->sendSMS($student->fatherCellNo,"Ionek", $text);
-								$smsLog = new SMSLog();
-								$smsLog->type = "Attendance";
-								$smsLog->sender = "Ionek";
-								$smsLog->message = $text;
-								$smsLog->recipient = $student->fatherCellNo;
-								$smsLog->regiNo = $absst;
-								$smsLog->status = $response;
-								$smsLog->save();
-							}
-							return Redirect::to('/attendance/create')->with("success", "Students attendance saved and " . count($absentStudents) . " sms send to father numbers.");
-						}
-						else
-						{
-							return Redirect::to('/attendance/create')->with("success", "Students attendance save Succesfully.");
-
-						}
-
 					}
+
 				}
 			}
-		/**
-		* Show the form for creating a new resource.
-		*
-		* @return Response
-		*/
-		public function create_file()
-		{
-
-			$file = Input::file('fileUpload');
-			$ext = strtolower($file->getClientOriginalExtension());
-
-			$validator = Validator::make(array('ext' => $ext),array('ext' => 'in:xls,xlsx')
-			);
-			if ($validator->fails()) {
-				return Redirect::to('/attendance/create-file')->withErrors($validator);
-			} else {
-				try {
-							$toInsert = 0;
-	            $data = Excel::load(Input::file('fileUpload'), function ($reader) { })->get();
-
-	        if(!empty($data) && $data->count()){
-						DB::beginTransaction();
-						try {
-	            foreach ($data->toArray() as $raw) {
-									if($raw['date_and_time'] && $raw['personnel_id']){
-										$attenData= [
-											'date' => $raw['date_and_time'],
-											'regiNo' => $raw['personnel_id'],
-											'created_at' => Carbon::now()
-										];
-										Attendance::insert($attenData);
-										$toInsert++;
-									}
-	                }
-									DB::commit();
-								} catch (\Exception $e) {
-									DB::rollback();
-									$errorMessages = new Illuminate\Support\MessageBag;
-									 $errorMessages->add('Error', 'Something went wrong!');
-									return Redirect::to('/attendance/create-file')->withErrors($errorMessages);
-
-									// something went wrong
-								}
-
-	            }
-
-							if($toInsert){
-	                return Redirect::to('/attendance/create-file')->with("success", $toInsert.' students attendance record upload successfully.');
-	            }
-							$errorMessages = new Illuminate\Support\MessageBag;
-							 $errorMessages->add('Validation', 'File is empty!!!');
-							return Redirect::to('/attendance/create-file')->withErrors($errorMessages);
-
-	        } catch (\Exception $e) {
-						$errorMessages = new Illuminate\Support\MessageBag;
-						 $errorMessages->add('Error', 'Something went wrong!');
-						return Redirect::to('/attendance/create-file')->withErrors($errorMessages);
-	        }
-			}
-
 		}
+	/**
+	* Show the form for creating a new resource.
+	*
+	* @return Response
+	*/
+	public function create_file()
+	{
+
+		$file = Input::file('fileUpload');
+		$ext = strtolower($file->getClientOriginalExtension());
+
+		$validator = Validator::make(array('ext' => $ext),array('ext' => 'in:xls,xlsx')
+		);
+		if ($validator->fails()) {
+			return Redirect::to('/attendance/create-file')->withErrors($validator);
+		} else {
+			try {
+						$toInsert = 0;
+            $data = Excel::load(Input::file('fileUpload'), function ($reader) { })->get();
+
+        if(!empty($data) && $data->count()){
+					DB::beginTransaction();
+					try {
+            foreach ($data->toArray() as $raw) {
+								if($raw['date_and_time'] && $raw['personnel_id']){
+									$attenData= [
+										'date' => $raw['date_and_time'],
+										'regiNo' => $raw['personnel_id'],
+										'created_at' => Carbon::now()
+									];
+									Attendance::insert($attenData);
+									$toInsert++;
+								}
+                }
+								DB::commit();
+							} catch (\Exception $e) {
+								DB::rollback();
+								$errorMessages = new Illuminate\Support\MessageBag;
+								 $errorMessages->add('Error', 'Something went wrong!');
+								return Redirect::to('/attendance/create-file')->withErrors($errorMessages);
+
+								// something went wrong
+							}
+
+            }
+
+						if($toInsert){
+                return Redirect::to('/attendance/create-file')->with("success", $toInsert.' students attendance record upload successfully.');
+            }
+						$errorMessages = new Illuminate\Support\MessageBag;
+						 $errorMessages->add('Validation', 'File is empty!!!');
+						return Redirect::to('/attendance/create-file')->withErrors($errorMessages);
+
+        } catch (\Exception $e) {
+					$errorMessages = new Illuminate\Support\MessageBag;
+					 $errorMessages->add('Error', 'Something went wrong!');
+					return Redirect::to('/attendance/create-file')->withErrors($errorMessages);
+        }
+		}
+
+	}
 	private function sendSMS($number,$sender,$msg)
 	{
-		//need to change for production
 		$phonenumber = $number;
 		$phonenumber=str_replace('+','',$phonenumber);
 		if (strlen($phonenumber)=="11")
@@ -203,18 +205,17 @@ class attendanceController extends \BaseController {
 			{
 
 
-				$myaccount=urlencode("i-onek");
-				$mypasswd=urlencode("ionek#321");
+				$myaccount=urlencode("s-soft");
+				$mypasswd=urlencode("12332112");
 				$sendBy=urlencode($sender);
-				$msg = urlencode($msg);
-				$api="http://app.itsolutionbd.net/api/sendsms/plain?user=".$myaccount."&password=".$mypasswd."&sender=".$sendBy."&SMSText=".$msg."&GSM=".$phonenumber."&type=longSMS&datacoding=8";
+				$api="http://app.itsolutionbd.net/api/sendsms/plain?user=".$myaccount."&password=".$mypasswd."&sender=".$sendBy."&SMSText=".$msg."&GSM=".$phonenumber."&type=longSMS";
 				$client = new \Guzzle\Service\Client($api);
 				//  Get your response:
 				$response = $client->get()->send();
 				$status=$response->getBody(true);
-				if($status=="-2" || $status=="2")
+				if($status=="-5" || $status=="5")
 				{
-					return "NOT_ENOUGH_CREDITS";
+					return $status;
 				}
 
 				return "SMS SEND";
