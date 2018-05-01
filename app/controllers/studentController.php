@@ -215,7 +215,7 @@ public function view($id)
 	'Student.fatherName','Student.motherName', 'Student.fatherCellNo','Student.motherCellNo','Student.localGuardianCell',
 	'Class.Name as class','Student.presentAddress','Student.gender','Student.religion','Student.section','Student.shift','Student.session',
 	'Student.group','Student.dob','Student.bloodgroup','Student.nationality','Student.photo','Student.extraActivity','Student.remarks',
-	'Student.localGuardian','Student.parmanentAddress','Student.fourthSubject')
+	'Student.localGuardian','Student.parmanentAddress','Student.fourthSubject','Student.cphsSubject')
 	->where('Student.id','=',$id)->first();
 
 	return View::Make("app.studentView",compact('student'));
@@ -270,6 +270,50 @@ public function update()
 	}
 	else {
 
+	    $isValid = true;
+        $messages = $validator->errors();
+	    //checking for 4th and exchange subject
+        $fourthSub = Input::get('fourthSubject');
+        $cphsSub = Input::get('cphsSubject');
+
+        if(mb_strlen($cphsSub)) {
+            if(!mb_strlen($fourthSub)){
+                $messages->add('Notvalid!', 'Entered 4th subject code!');
+                $isValid = false;
+            }
+            else {
+                $cphsSubjectInfo = Subject::where('class', '=', Input::get('class'))
+                    ->where('code', '=', $cphsSub)
+                    ->first();
+                if (!count($cphsSubjectInfo)) {
+                    $messages->add('Notvalid!', 'Entered alternative subject code not found!');
+                    $isValid = false;
+                }
+            }
+        }
+
+        if(mb_strlen($fourthSub)) {
+            //now get subject info for 4th subject
+            $fSubjectInfo = Subject::where('class', '=', Input::get('class'))
+                ->where('code', '=', $fourthSub)
+                ->first();
+
+            if (!count($fSubjectInfo)) {
+                $messages->add('Notvalid!', 'Entered 4th subject code not found!');
+                $isValid = false;
+            }
+
+            if ($fSubjectInfo->type != "Electives" && !mb_strlen($cphsSub)) {
+                $messages->add('Notvalid!', 'Please enter alternative subject code!');
+                $isValid = false;
+            }
+        }
+
+        if(!$isValid){
+            return Redirect::to('/student/edit/'.Input::get('id'))->withErrors($messages);
+        }
+        //validation code ends heare
+
 		$student = Student::find(Input::get('id'));
 
 		if(Input::hasFile('photo'))
@@ -320,6 +364,7 @@ public function update()
 		$student->presentAddress= Input::get('presentAddress');
 		$student->parmanentAddress= Input::get('parmanentAddress');
 		$student->fourthSubject= Input::get('fourthSubject');
+		$student->cphsSubject= Input::get('cphsSubject');
 
 		$student->save();
 
@@ -353,7 +398,13 @@ public function delete($id)
 */
 public function getForMarks($class,$section,$shift,$session)
 {
-	$students= Student::selectRaw("regiNo,CAST(rollNo AS SIGNED) as rollNo,firstName,middleName,lastName")->where('isActive','=','Yes')->where('class','=',$class)->where('section','=',$section)->where('shift','=',$shift)->where('session','=',$session)->orderBy('rollNo','asc')->get();
+	$students= Student::selectRaw("regiNo,CAST(rollNo AS SIGNED) as rollNo,firstName,middleName,lastName")
+        ->where('isActive','=','Yes')
+        ->where('class','=',$class)
+        ->where('section','=',$section)
+        ->where('shift','=',$shift)
+        ->where('session','=',$session)
+        ->orderBy('rollNo','asc')->get();
 	return $students;
 }
 }

@@ -104,4 +104,21 @@ Route::filter('userAccess', function()
     }
 });
 
+Route::filter('admin_or_management', function()
+{
+    if (Auth::user()) {
+        if (Auth::user()->group != "Admin" && Auth::user()->group != "Management") {
+            return Redirect::to('/dashboard')->with("accessdined", "You don't have permission to do that!!!");
+        }
+    }
+});
+Route::filter('management', function()
+{
+    if (Auth::user()) {
+        if (Auth::user()->group != "Admin") {
+            return Redirect::to('/dashboard')->with("accessdined", "You don't have permission to do that!!!");
+        }
+    }
+});
+
 

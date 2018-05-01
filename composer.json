@@ -9,7 +9,8 @@
 		"guzzle/guzzle": "~3.0",
 		"barryvdh/laravel-dompdf": "0.4.*",
 		"pda/pheanstalk":"~2.0",
-		"picqer/php-barcode-generator": "^0.2.0"		
+		"picqer/php-barcode-generator": "^0.2.0",
+		"davelip/laravel-database-queue": ">0.5"	
 	},
 	"require-dev": {
     "way/generators": "~2.0"

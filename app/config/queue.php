@@ -15,7 +15,7 @@ return array(
 	|
 	*/
 
-	'default' => 'sync',
+	'default' => 'database',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -62,6 +62,12 @@ return array(
 			'driver' => 'redis',
 			'queue'  => 'default',
 		),
+
+		'database' => array(
+        'driver' => 'database',
+        'queue' => 'queue-name', // optional, can be null or any string
+        'lock_type' => 0, // optional, can be 0, 1 or 2
+    ),
 
 	),
 

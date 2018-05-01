@@ -123,20 +123,6 @@ img.result-bg{
 .btmcontainer{margin:20px 0 0}
 .markTitle{
     line-height:24px;
-    font-size:20px;
-    font-family:"Times New Roman", Times, serif;
-    text-align:center;
-    font-weight:bold;
-    text-align:center;
-    text-transform:uppercase;
-    padding:0;
-    margin:0;
-    color:#000;
-    /*background:url(../images/hdrtitle.gif) no-repeat;*/
-    border-bottom:3px solid #000;
-}
-.achievementTitle{
-    line-height:24px;
     font-size:16px;
     font-family:"Times New Roman", Times, serif;
     text-align:center;

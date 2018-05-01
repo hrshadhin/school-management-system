@@ -1,8 +1,0 @@
-[18-Mar-2017 14:51:33 Asia/Dhaka] PHP Fatal error:  Allowed memory size of 268435456 bytes exhausted (tried to allocate 32 bytes) in /home/university/public_html/app/krghsbd.com/vendor/dompdf/dompdf/include/style.cls.php on line 1436
-[10-Jul-2017 16:50:26 Asia/Dhaka] PHP Fatal error:  Call to a member function delete() on null in /home/university/public_html/app/krghsbd.com/app/controllers/accountingController.php on line 341
-[21-Sep-2017 10:49:30 Asia/Dhaka] PHP Fatal error:  Call to a member function delete() on null in /home/m4343/public_html/app/krghs/app/controllers/subjectController.php on line 191
-[21-Sep-2017 10:51:26 Asia/Dhaka] PHP Fatal error:  Call to a member function delete() on null in /home/m4343/public_html/app/krghs/app/controllers/subjectController.php on line 191
-[21-Sep-2017 10:52:11 Asia/Dhaka] PHP Fatal error:  Call to a member function delete() on null in /home/m4343/public_html/app/krghs/app/controllers/subjectController.php on line 191
-[21-Sep-2017 10:57:35 Asia/Dhaka] PHP Fatal error:  Call to a member function delete() on null in /home/m4343/public_html/app/krghs/app/controllers/subjectController.php on line 191
-[21-Sep-2017 11:12:12 Asia/Dhaka] PHP Fatal error:  Call to a member function delete() on null in /home/m4343/public_html/app/krghs/app/controllers/subjectController.php on line 191
-[06-Jan-2018 17:22:04 Asia/Dhaka] PHP Fatal error:  Call to a member function delete() on null in /home/m4343/public_html/app/krghs/app/controllers/subjectController.php on line 191

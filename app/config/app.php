@@ -13,7 +13,7 @@ return array(
 	|
 	*/
 
-	'debug' => true,
+	'debug' => false,
 
 	/*
 	|--------------------------------------------------------------------------
@@ -26,7 +26,7 @@ return array(
 	|
 	*/
 
-	'url' => 'http://school.shanixlab.com',
+	'url' => 'http://app.kmdc.edu.bd',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -124,6 +124,7 @@ return array(
 		'Way\Generators\GeneratorsServiceProvider',
     'Maatwebsite\Excel\ExcelServiceProvider',
 		'Barryvdh\DomPDF\ServiceProvider',
+		'Davelip\Queue\DatabaseServiceProvider',
 
 	),
 

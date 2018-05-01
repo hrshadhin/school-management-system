@@ -97,15 +97,29 @@ class subjectController extends \BaseController {
 	*/
 	public function show()
 	{
+	    $selectedClass = Input::get('class',0);
 
-		$Subjects=	DB::table('Subject')
-		->join('Class', 'Subject.class', '=', 'Class.code')
-		->select('Subject.id', 'Subject.code','Subject.name','Subject.type', 'Subject.subgroup','Subject.stdgroup','Subject.totalfull',
-		'Subject.totalpass','Subject.gradeSystem','Subject.wfull', 'Subject.wpass','Subject.mfull','Subject.mpass','Class.Name as class','Subject.sfull','Subject.spass',
-		'Subject.pfull','Subject.ppass')
-		->get();
+        $classes =['0'=>'All']+ClassModel::lists('name','code');
+        if($selectedClass){
+            $Subjects=	DB::table('Subject')
+                ->join('Class', 'Subject.class', '=', 'Class.code')
+                ->select('Subject.id', 'Subject.code','Subject.name','Subject.type', 'Subject.subgroup','Subject.stdgroup','Subject.totalfull',
+                    'Subject.totalpass','Subject.gradeSystem','Subject.wfull', 'Subject.wpass','Subject.mfull','Subject.mpass','Class.Name as class','Subject.sfull','Subject.spass',
+                    'Subject.pfull','Subject.ppass')
+                ->where('Subject.class',$selectedClass)
+                ->get();
+        }
+        else{
+            $Subjects=	DB::table('Subject')
+                ->join('Class', 'Subject.class', '=', 'Class.code')
+                ->select('Subject.id', 'Subject.code','Subject.name','Subject.type', 'Subject.subgroup','Subject.stdgroup','Subject.totalfull',
+                    'Subject.totalpass','Subject.gradeSystem','Subject.wfull', 'Subject.wpass','Subject.mfull','Subject.mpass','Class.Name as class','Subject.sfull','Subject.spass',
+                    'Subject.pfull','Subject.ppass')
+                ->get();
+        }
 
-		return View::Make('app.subjectList',compact('Subjects'));
+
+		return View::Make('app.subjectList',compact('Subjects','classes','selectedClass'));
 	}
 
 

@@ -21,7 +21,8 @@ class Student extends \Eloquent {
 	'motherCellNo',
    'presentAddress',
    'parmanentAddress',
-   'fourthSubject'
+   'fourthSubject',
+   'cphsSubject'
 	];
 	protected $primaryKey = 'id';
 	public function attendance(){
