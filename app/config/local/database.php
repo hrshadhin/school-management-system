@@ -23,7 +23,7 @@ return array(
 		'mysql' => array(
 			'driver'    => 'mysql',
 			'host'      => 'localhost',
-			'database'  => 'school',
+			'database'  => 'school_ionek',
 			'username'  => 'root',
 			'password'  => 'toor',
 			'charset'   => 'utf8',

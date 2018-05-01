@@ -67,7 +67,6 @@ Route::post('/attendance/update','attendanceController@update');
 Route::get('/attendance/printlist/{class}/{section}/{shift}/{session}/{date}','attendanceController@printlist');
 Route::get('/attendance/report','attendanceController@report');
 Route::post('/attendance/report','attendanceController@getReport');
-Route::get('/attendance/monthly-report','attendanceController@monthlyReport');
 
 
 

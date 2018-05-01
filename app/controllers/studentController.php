@@ -81,7 +81,9 @@ class studentController extends \BaseController {
 		'section' => 'required',
 		'rollNo' => 'required',
 		'shift' => 'required',
-		'photo' => 'required|mimes:jpeg,jpg,png',
+		'photo' => 'mimes:jpeg,jpg,png',
+		'birthRegiNo' => 'required',
+		'parentNid' => 'required',
 		'fatherName' => 'required',
 		'fatherCellNo' => 'required',
 		'motherName' => 'required',
@@ -95,7 +97,12 @@ class studentController extends \BaseController {
 		return Redirect::to('/student/create')->withErrors($validator);
 	}
 	else {
-		$fileName=Input::get('regiNo').'.'.Input::file('photo')->getClientOriginalExtension();
+		if(Input::hasFile('photo')){
+			$fileName=Input::get('regiNo').'.'.Input::file('photo')->getClientOriginalExtension();
+		}
+		else{
+			$fileName = "avatar.png";
+		}
 
 		$student = new Student;
 		$student->regiNo= Input::get('regiNo');
@@ -118,6 +125,7 @@ class studentController extends \BaseController {
 		$student->nationality= Input::get('nationality');
 		$student->extraActivity= Input::get('extraActivity');
 		$student->remarks= Input::get('remarks');
+		$student->birthRegiNo= Input::get('birthRegiNo');
 
 		$student->fatherName= Input::get('fatherName');
 		$student->fatherCellNo= Input::get('fatherCellNo');
@@ -125,6 +133,7 @@ class studentController extends \BaseController {
 		$student->motherCellNo= Input::get('motherCellNo');
 		$student->localGuardian= Input::get('localGuardian');
 		$student->localGuardianCell= Input::get('localGuardianCell');
+		$student->parentNid= Input::get('parentNid');
 
 		$student->presentAddress= Input::get('presentAddress');
 		$student->parmanentAddress= Input::get('parmanentAddress');
@@ -139,7 +148,9 @@ class studentController extends \BaseController {
 		}
 		else {
 			$student->save();
+			if(Input::hasFile('photo')){
 			Input::file('photo')->move(base_path() .'/public/images',$fileName);
+		}
 			return Redirect::to('/student/create')->with("success","Student Admited Succesfully.");
 		}
 
@@ -182,7 +193,7 @@ public function getList()
 		$students = DB::table('Student')
 		->join('Class', 'Student.class', '=', 'Class.code')
 		->select('Student.id', 'Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.fatherName', 'Student.motherName', 'Student.fatherCellNo', 'Student.motherCellNo', 'Student.localGuardianCell',
-		'Class.Name as class', 'Student.presentAddress', 'Student.gender', 'Student.religion','Student.fourthSubject')
+		'Class.Name as class', 'Student.presentAddress', 'Student.gender', 'Student.religion')
 		->where('isActive', '=', 'Yes')
 		->where('class',Input::get('class'))
 		->where('section',Input::get('section'))
@@ -215,7 +226,7 @@ public function view($id)
 	'Student.fatherName','Student.motherName', 'Student.fatherCellNo','Student.motherCellNo','Student.localGuardianCell',
 	'Class.Name as class','Student.presentAddress','Student.gender','Student.religion','Student.section','Student.shift','Student.session',
 	'Student.group','Student.dob','Student.bloodgroup','Student.nationality','Student.photo','Student.extraActivity','Student.remarks',
-	'Student.localGuardian','Student.parmanentAddress','Student.fourthSubject')
+	'Student.localGuardian','Student.parmanentAddress','Student.birthRegiNo','Student.parentNid')
 	->where('Student.id','=',$id)->first();
 
 	return View::Make("app.studentView",compact('student'));
@@ -256,6 +267,8 @@ public function update()
 		'section' => 'required',
 		'rollNo' => 'required',
 		'shift' => 'required',
+		'birthRegiNo' => 'required',
+		'parentNid' => 'required',
 		'fatherName' => 'required',
 		'fatherCellNo' => 'required',
 		'motherName' => 'required',
@@ -310,6 +323,7 @@ public function update()
 		$student->nationality= Input::get('nationality');
 		$student->extraActivity= Input::get('extraActivity');
 		$student->remarks= Input::get('remarks');
+		$student->birthRegiNo= Input::get('birthRegiNo');
 
 		$student->fatherName= Input::get('fatherName');
 		$student->fatherCellNo= Input::get('fatherCellNo');
@@ -317,9 +331,10 @@ public function update()
 		$student->motherCellNo= Input::get('motherCellNo');
 		$student->localGuardian= Input::get('localGuardian');
 		$student->localGuardianCell= Input::get('localGuardianCell');
+		$student->parentNid= Input::get('parentNid');
+
 		$student->presentAddress= Input::get('presentAddress');
 		$student->parmanentAddress= Input::get('parmanentAddress');
-		$student->fourthSubject= Input::get('fourthSubject');
 
 		$student->save();
 
@@ -353,7 +368,7 @@ public function delete($id)
 */
 public function getForMarks($class,$section,$shift,$session)
 {
-	$students= Student::selectRaw("regiNo,CAST(rollNo AS SIGNED) as rollNo,firstName,middleName,lastName")->where('isActive','=','Yes')->where('class','=',$class)->where('section','=',$section)->where('shift','=',$shift)->where('session','=',$session)->orderBy('rollNo','asc')->get();
+	$students= Student::select('regiNo','rollNo','firstName','middleName','lastName')->where('isActive','=','Yes')->where('class','=',$class)->where('section','=',$section)->where('shift','=',$shift)->where('session','=',$session)->get();
 	return $students;
 }
 }

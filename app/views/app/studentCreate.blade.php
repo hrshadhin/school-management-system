@@ -273,7 +273,7 @@
             <div class="col-md-4">
               <div class="form-group ">
                 <label for="photo">Photo</label>
-                <input id="photo" name="photo" required type="file">
+                <input id="photo" name="photo" type="file">
               </div>
             </div>
 
@@ -281,7 +281,15 @@
         </div>
         <div class="row">
           <div class="col-md-12">
-
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="birthRegiNo">Birth Registration Number </label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                  <input type="text" class="form-control"  name="birthRegiNo" placeholder="" required>
+                </div>
+              </div>
+            </div>
 
             <div class="col-md-4">
               <div class="form-group">
@@ -375,6 +383,21 @@
             </div>
           </div>
         </div>
+
+        <div class="row">
+          <div class="col-md-12">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="parentNid">Parents NID </label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                <input type="text" class="form-control"  name="parentNid" placeholder="" required>
+              </div>
+            </div>
+            </div>
+          </div>
+        </div>
+
         <div class="row">
           <div class="col-md-12">
             <h3 class="text-info"> Address Detail</h3>
@@ -425,26 +448,26 @@
 @section('script')
 <script src="<?php echo url();?>/js/bootstrap-datepicker.js"></script>
 <script type="text/javascript">
- var getStdRegiRollNo = function(){
-   var aclass = $('#class').val();
-   var session = $('#session').val().trim();
-   var section=$('#section').val().trim();
-   $.ajax({
-     url: '/student/getRegi/'+aclass+'/'+session+'/'+section,
-     data: {
-       format: 'json'
-     },
-     error: function(error) {
-       alert(error);
-     },
-     dataType: 'json',
-     success: function(data) {
-       $('#regiNo').val(data[0]);
-       $('#rollNo').val(data[1]);
-     },
-     type: 'GET'
-   });
- };
+var getStdRegiRollNo = function(){
+  var aclass = $('#class').val();
+  var session = $('#session').val().trim();
+  var section=$('#section').val().trim();
+  $.ajax({
+    url: '/student/getRegi/'+aclass+'/'+session+'/'+section,
+    data: {
+      format: 'json'
+    },
+    error: function(error) {
+      alert(error);
+    },
+    dataType: 'json',
+    success: function(data) {
+      $('#regiNo').val(data[0]);
+      $('#rollNo').val(data[1]);
+    },
+    type: 'GET'
+  });
+};
 $( document ).ready(function() {
   getStdRegiRollNo();
   $('.datepicker').datepicker({autoclose:true});
