@@ -192,9 +192,11 @@ class attendanceController extends \BaseController {
         }
 
     }
-    private function sendSMS($number,$sender,$msg)
+   
+
+ private function sendSMS($number,$sender,$msg)
     {
-        return "SMS SEND";
+
         //need to change for production
         $phonenumber = $number;
         $phonenumber=str_replace('+','',$phonenumber);
@@ -208,10 +210,10 @@ class attendanceController extends \BaseController {
             {
 
 
-                $myaccount=urlencode("shanixLab");
-                $mypasswd=urlencode("1234");
-                $sendBy=urlencode($sender);
-                $api="http://api-link?user=".$myaccount."&password=".$mypasswd."&sender=".$sendBy."&SMSText=".$msg."&GSM=".$phonenumber."&type=longSMS";
+                $myaccount=urlencode("user");
+				$mypasswd=urlencode("password");
+				$sendBy=urlencode($sender);
+                $api="http://api.zaman-it.com/api/v3/sendsms/plain?user=".$myaccount."&password=".$mypasswd."&sender=".$sendBy."&SMSText=".$msg."&GSM=".$phonenumber."&type=longSMS";
                 $client = new \Guzzle\Service\Client($api);
                 //  Get your response:
                 $response = $client->get()->send();
@@ -234,6 +236,7 @@ class attendanceController extends \BaseController {
             return "Invalid Number";
         }
     }
+
     private function  parseAppDate($datestr)
     {
         $date = explode('-', $datestr);
