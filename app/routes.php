@@ -71,7 +71,6 @@ Route::get('/attendance/monthly-report', 'attendanceController@monthlyReport');
 
 
 
-
 //GPA Routes
 Route::get('/gpa', 'gpaController@index');
 Route::post('/gpa/create', 'gpaController@create');
@@ -96,6 +95,8 @@ Route::post('/sms/send', 'smsController@postsmssend');
 Route::get('/smslog', 'smsController@getsmsLog');
 Route::post('/smslog', 'smsController@postsmsLog');
 Route::get('/smslog/delete/{id}', 'smsController@deleteLog');
+Route::get('/sms-type-info/{id}', 'smsController@getTypeInfo');
+
 
 //Mark routes
 Route::get('/mark/create', 'markController@index');
@@ -270,3 +271,159 @@ Route::get('/dormitory/report/fee/{dormId}/{month}', 'dormitoryController@report
 //barcode generate
 Route::get('/barcode', 'barcodeController@index');
 Route::post('/barcode', 'barcodeController@generate');
+
+
+//teacher routes
+Route::get('/teacher/create', 'teacherController@index');
+Route::post('/teacher/create', 'teacherController@create');
+Route::get('/teacher/list', 'teacherController@show');
+Route::get('/teacher/view/{id}', 'teacherController@view');
+Route::get('/teacher/edit/{id}', 'teacherController@edit');
+Route::post('/teacher/update', 'teacherController@update');
+Route::get('/teacher/delete/{id}', 'teacherController@delete');
+
+//teacher attendance
+//Route::get('/teacher-attendance/create','teacherController@createAttendance');
+//Route::post('/teacher-attendance/create','teacherController@postCreateAttendance');
+Route::get('/teacher-attendance/list', 'teacherController@attenaceList');
+Route::get(
+    '/teacher-attendance/absenteeism-report', 
+    'teacherController@absenteeismReport'
+);
+Route::get(
+    '/teacher-attendance/monthly-report',
+    'teacherController@monthlyAttendanceReport'
+);
+Route::get(
+    '/teacher-attendance/monthly-report-2',
+    'teacherController@monthlyAttendanceReport2'
+);
+
+//holyday Routes
+Route::get('/holidays', 'teacherController@holidayIndex');
+Route::post('/holidays/create', 'teacherController@holidayCreate');
+Route::get('/holidays/delete/{id}', 'teacherController@holidayDelete');
+
+
+//Leave Routes
+Route::get('/leaves', 'teacherController@leaveIndex');
+Route::get('/leaves/create', 'teacherController@leaveCreate');
+Route::post('/leaves/store', 'teacherController@leaveStore');
+Route::get('/leaves/update/{id}/{status}', 'teacherController@leaveUpdate');
+Route::get('/leaves/delete/{id}', 'teacherController@leaveDelete');
+
+
+//Work outside Routes
+Route::get('/workoutside', 'teacherController@workOutsideIndex');
+Route::get('/workoutside/create', 'teacherController@workOutsideCreate');
+Route::post('/workoutside/store', 'teacherController@workOutsideStore');
+Route::get('/workoutside/delete/{id}', 'teacherController@workOutsideDelete');
+
+//class off Routes
+Route::get('/class-off', 'attendanceController@classOffIndex');
+Route::post('/class-off/store', 'attendanceController@classOffStore');
+Route::get('/class-off/delete/{id}', 'attendanceController@classOffDelete');
+
+
+//fire attendance command
+Route::get(
+    '/auto-attendance-teacher/{key?}',  array('as' => 'attendanceTeacher', function ($key = null) {
+        if ($key == "hr799") {
+            try {
+                echo '<br>init teacher attendance seeder...<br>';
+                Artisan::call('attendance:seedTeacher');
+                echo '<br>done teacher attendance seeding.<br>';
+                echo 'you can find log in app/storage/logs/teacherAttendance-year-month-date.log.';
+
+
+            } catch (Exception $e) {
+                Response::make($e->getMessage(), 500);
+            }
+        } else {
+            App::abort(404);
+        }
+    })
+);
+
+
+//trigger create
+Route::get(
+    '/hrs-trigger/{key?}', function ($key=null) {
+        if ($key == "hr799") {
+            try {
+                //book addd trigger
+                DB::unprepared(
+                    "
+CREATE TRIGGER `afterBookAdd` AFTER INSERT ON `Books` 
+FOR EACH ROW BEGIN insert into bookStock set code = new.code,
+quantity = new.quantity; 
+END"
+                );
+
+                //after book delete
+                DB::unprepared(
+                    '
+  CREATE TRIGGER `afterBookDelete` AFTER DELETE ON `Books` FOR EACH ROW
+  BEGIN
+  delete from issueBook where code = old.code;
+  delete from bookStock where code = old.code;
+  END
+  '
+                );
+                //afeter book update
+                DB::unprepared(
+                    '
+  CREATE TRIGGER `afterBookUpdate` AFTER UPDATE ON `Books` FOR EACH ROW
+  BEGIN
+  UPDATE bookStock
+  set
+  quantity = new.quantity-(old.quantity-quantity)
+  WHERE code=old.code;
+  END
+  '
+                );
+                //after borrow book add
+                DB::unprepared(
+                    '
+  CREATE TRIGGER `afterBorrowBookAdd` AFTER INSERT ON `issueBook` FOR EACH ROW
+  BEGIN
+  UPDATE bookStock
+  set quantity = quantity-new.quantity
+  where code=new.code;
+  END
+  '
+                );
+                //after borrow book delete
+                DB::unprepared(
+                    "
+  CREATE TRIGGER `afterBorrowBookDelete` AFTER DELETE ON `issueBook` FOR EACH ROW
+  IF (old.Status='Borrowed') THEN
+  UPDATE bookStock
+  set quantity = quantity+old.quantity
+  WHERE code=old.code;
+  END IF
+  "
+                );
+                //after borrow book update
+                DB::unprepared(
+                    "
+  CREATE TRIGGER `afterBorrowBookUpdate` AFTER UPDATE ON `issueBook` FOR EACH ROW
+  IF (new.Status='Returned') THEN
+  UPDATE bookStock
+  set quantity = quantity+new.quantity
+  WHERE code=new.code;
+  END IF
+  "
+                );
+       
+                return "Done man!";
+    
+            } catch (Exception $e) {
+                Response::make($e->getMessage(), 500);
+            }
+        } else {
+            App::abort(404);
+        }
+    }
+);
+
