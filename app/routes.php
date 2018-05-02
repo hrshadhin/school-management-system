@@ -263,10 +263,22 @@ Route::get('/dormitory/fee', 'dormitoryController@feeindex');
 Route::post('/dormitory/fee', 'dormitoryController@feeadd');
 Route::get('/dormitory/fee/info/{regiNo}', 'dormitoryController@feeinfo');
 
-Route::get('/dormitory/report/std', 'dormitoryController@reportstd');
-Route::get('/dormitory/report/std/{dormId}', 'dormitoryController@reportstdprint');
-Route::get('/dormitory/report/fee', 'dormitoryController@reportfee');
-Route::get('/dormitory/report/fee/{dormId}/{month}', 'dormitoryController@reportfeeprint');
+Route::get(
+    '/dormitory/report/std', 
+    'dormitoryController@reportstd'
+);
+Route::get(
+    '/dormitory/report/std/{dormId}', 
+    'dormitoryController@reportstdprint'
+);
+Route::get(
+    '/dormitory/report/fee', 
+    'dormitoryController@reportfee'
+);
+Route::get(
+    '/dormitory/report/fee/{dormId}/{month}', 
+    'dormitoryController@reportfeeprint'
+);
 
 //barcode generate
 Route::get('/barcode', 'barcodeController@index');
