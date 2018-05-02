@@ -109,6 +109,6 @@ class tabulationController extends \BaseController {
 
 			});
 
-		})->export('xls');
+		})->download('xlsx');
 	}
 }

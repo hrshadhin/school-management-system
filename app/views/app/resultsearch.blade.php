@@ -22,7 +22,7 @@
         <div class="box col-md-12">
             <div class="box-inner">
                 <div data-original-title="" class="box-header well">
-                    <h2><i class="glyphicon glyphicon-book"></i> Result Search</h2>
+                    <h2><i class="glyphicon glyphicon-book"></i>Result Search</h2>
 
                 </div>
                 <div class="box-content">
@@ -57,6 +57,16 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-md-3">
+                                    <div class="form-group ">
+                                        <label for="session">Regi No</label>
+                                        <div class="input-group">
+
+                                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i> </span>
+                                            <input type="text" id="regiNo" required="true" class="form-control" name="regiNo">
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <div class="col-md-3">
                                     <div class="form-group">
@@ -74,16 +84,6 @@
                                             {{ Form::select('exam',$data,$formdata->exam,['class'=>'form-control','required'=>'true'])}}
 
 
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group ">
-                                        <label for="session">Regi No</label>
-                                        <div class="input-group">
-
-                                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i> </span>
-                                            <input type="text" id="regiNo" required="true" class="form-control" name="regiNo">
                                         </div>
                                     </div>
                                 </div>

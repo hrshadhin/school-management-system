@@ -91,7 +91,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-2">
                                         <div class="form-group">
                                             <label class="control-label" for="section">Section</label>
 
@@ -116,14 +116,9 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="col-md-4">
+                                    <div class="col-md-2">
                                         <div class="form-group">
                                             <label class="control-label" for="shift">Shift</label>
-
                                             <div class="input-group">
                                                 <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                                                 <?php  $data=[
@@ -136,13 +131,45 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-8">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h3 class="text-warning">Attention!!!</h3>
+                                    <div class="alert alert-warning">
+                                        <h5 class="text-danger">
+                                            <i class="glyphicon glyphicon-hand-right"></i>
+                                             In fourth subject code field put correct 4th subject code.
+                                        </h5>
+                                        <h5 class="text-danger">
+                                            <i class="glyphicon glyphicon-hand-right"></i>
+                                            If student change 4th subject with other subject,<br>
+                                            then put the 4th subject code in fourth subject code feild and alternate subject code <br>
+                                            in alternate subject code field.
+                                        </h5>
+                                        <h5 class="text-danger">
+                                            <i class="glyphicon glyphicon-hand-right"></i>
+                                            If student doesn't change 4th subject with other subject,<br>
+                                            then leave the alternate subject code field empty.
+                                        </h5>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="col-md-3">
                                         <div class="form-group">
-                                            <label class="control-label" for="fourthSubject">Fourth Subject Codes <span class="text-danger">* leave empty if not have 4th subject</span></label>
+                                            <label class="control-label" for="fourthSubject">Fourth Subject Code<br><span class="text-danger">* leave empty if not have 4th subject</span></label>
                                             <div class="input-group">
                                                 <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                                                 <input type="text" class="form-control" value="{{$student->fourthSubject}}"  name="fourthSubject" placeholder="">
-
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="control-label" for="fourthSubject">Alternate Subject Code<br><span class="text-danger">* leave empty if not exchange subjects</span></label>
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                                                <input type="text" class="form-control" value="{{$student->cphsSubject}}"  name="cphsSubject" placeholder="">
                                             </div>
                                         </div>
                                     </div>

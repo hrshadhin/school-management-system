@@ -192,9 +192,11 @@ class attendanceController extends \BaseController {
         }
 
     }
-    private function sendSMS($number,$sender,$msg)
+   
+
+ private function sendSMS($number,$sender,$msg)
     {
-        return "SMS SEND";
+
         //need to change for production
         $phonenumber = $number;
         $phonenumber=str_replace('+','',$phonenumber);
@@ -208,10 +210,10 @@ class attendanceController extends \BaseController {
             {
 
 
-                $myaccount=urlencode("shanixLab");
-                $mypasswd=urlencode("1234");
-                $sendBy=urlencode($sender);
-                $api="http://api-link?user=".$myaccount."&password=".$mypasswd."&sender=".$sendBy."&SMSText=".$msg."&GSM=".$phonenumber."&type=longSMS";
+                $myaccount=urlencode("user");
+				$mypasswd=urlencode("password");
+				$sendBy=urlencode($sender);
+                $api="http://api.zaman-it.com/api/v3/sendsms/plain?user=".$myaccount."&password=".$mypasswd."&sender=".$sendBy."&SMSText=".$msg."&GSM=".$phonenumber."&type=longSMS";
                 $client = new \Guzzle\Service\Client($api);
                 //  Get your response:
                 $response = $client->get()->send();
@@ -234,6 +236,7 @@ class attendanceController extends \BaseController {
             return "Invalid Number";
         }
     }
+
     private function  parseAppDate($datestr)
     {
         $date = explode('-', $datestr);
@@ -463,6 +466,11 @@ class attendanceController extends \BaseController {
                 ->whereDate('holiDate','>=',$firstDate)
                 ->whereDate('holiDate','<=',$lastDate)
                 ->lists('status','holiDate');
+            //get holidays of request month
+            $offDays = ClassOff::where('status',1)
+                ->whereDate('offDate','>=',$firstDate)
+                ->whereDate('offDate','<=',$lastDate)
+                ->lists('oType','offDate');
 
             //find fridays of requested month
             $fridays = [];
@@ -479,8 +487,8 @@ class attendanceController extends \BaseController {
 
 
             $SelectCol = self::getSelectColumns($myPart[0],$myPart[1]);
-            $fullSql ="SELECT CONCAT(ANY_VALUE(s.firstName),' ',ANY_VALUE(s.middleName),' ',ANY_VALUE(s.lastName)) as name,
-CAST(ANY_VALUE(s.rollNo) as UNSIGNED) as rollNo,".$SelectCol." FROM Attendance as sa left join Student as s ON sa.regiNo=s.regiNo";
+            $fullSql ="SELECT CONCAT(MAX(s.firstName),' ',MAX(s.middleName),' ',MAX(s.lastName)) as name,
+CAST(MAX(s.rollNo) as UNSIGNED) as rollNo,".$SelectCol." FROM Attendance as sa left join Student as s ON sa.regiNo=s.regiNo";
             $fullSql .=" WHERE sa.regiNo IN(".implode(',',$students).") GROUP BY sa.regiNo ORDER BY rollNo;";
             $data = DB::select($fullSql);
 //            return $data;
@@ -493,7 +501,7 @@ CAST(ANY_VALUE(s.rollNo) as UNSIGNED) as rollNo,".$SelectCol." FROM Attendance a
                 return Redirect::to('/attendance/monthly-report')->withErrors($errorMessages);
             }
 
-            return View::Make('app.attendanceMonthlyReport',compact('institute','data','keys','yearMonth','fridays','holiDays','className','section','session','shift'));
+            return View::Make('app.attendanceMonthlyReport',compact('institute','data','keys','yearMonth','fridays','holiDays','className','section','session','shift','offDays'));
 
         }
         return View::Make('app.attendanceMonthly',compact('yearMonth','classes2'));
@@ -515,6 +523,143 @@ CAST(ANY_VALUE(s.rollNo) as UNSIGNED) as rollNo,".$SelectCol." FROM Attendance a
         }
 
         return $selectCol;
+    }
+
+    /*
+    * class off day manage codes gores below
+    *
+    */
+    /**
+     * Display a listing of the resource.
+     *
+     * @return Response
+     */
+    public function classOffIndex()
+    {
+
+        $offdays = ClassOff::where('status',1)->get();
+        return View::Make('app.class_off_days',compact('offdays'));
+    }
+
+
+
+
+    /**
+     * Store the form for creating a new resource.
+     *
+     * @return Response
+     */
+    public function classOffStore()
+    {
+
+        $rules=[
+            'offDate' => 'required',
+            'oType' => 'required',
+
+        ];
+        $validator = \Validator::make(Input::all(), $rules);
+        if ($validator->fails())
+        {
+            return Redirect::to('/class-off')->withErrors($validator);
+        }
+        else {
+
+            $offDateStart = \Carbon\Carbon::createFromFormat('d/m/Y',Input::get('offDate'));
+            $offDateEnd = null;
+            if(strlen(Input::get('offDateEnd'))) {
+                $offDateEnd = \Carbon\Carbon::createFromFormat('d/m/Y', Input::get('offDateEnd'));
+            }
+
+            $offList = [];
+            $desc = Input::get('description');
+            $oType = Input::get('oType');
+
+
+
+            if($offDateEnd){
+                if($offDateEnd<$offDateStart){
+                    $messages = $validator->errors();
+                    $messages->add('Wrong Input!', 'Date End can\'t be less than start date!');
+                    return Redirect::to('/class-off')->withErrors($messages)->withInput();
+                }
+
+                $start_time = strtotime($offDateStart);
+                $end_time = strtotime($offDateEnd);
+                for($i=$start_time; $i<=$end_time; $i+=86400)
+                {
+                    $offList[] = [
+                        'offDate' => date('Y-m-d', $i),
+                        'created_at' => \Carbon\Carbon::now(),
+                        'updated_at' => \Carbon\Carbon::now(),
+                        'description' => $desc,
+                        'oType' => $oType,
+                        'status'  => 1
+                    ];
+
+                }
+
+            }
+            else{
+                $offList[] =  [
+                    'offDate' => $offDateStart->format('Y-m-d'),
+                    'created_at' => \Carbon\Carbon::now(),
+                    'updated_at' => \Carbon\Carbon::now(),
+                    'description' => $desc,
+                    'oType' => $oType,
+                    'status'  => 1
+                ];
+            }
+
+            ClassOff::insert($offList);
+
+            return Redirect::to('/class-off')->with("success","Class off entry added.");
+
+
+        }
+    }
+
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  int  $id
+     * @return Response
+     */
+//    public function workOutsideUpdate($id,$status)
+//    {
+//
+//        $leave = Leaves::where('status',1)->where('id',$id)->first();
+//        if(!$leave){
+//            return Redirect::to('/leaves')->with("error","Leave not found!");
+//
+//        }
+//        $leave->status= $status;
+//        $leave->save();
+//
+//        return Redirect::to('/leaves')->with("success","Leave updated succesfully.");
+//
+//
+//    }
+
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    public function classOffDelete($id)
+    {
+        $classOff = ClassOff::where('status',1)->where('id',$id)->first();
+
+        if(!$classOff){
+            return Redirect::to('/class-off')->with("error","Class off entry not found!");
+
+        }
+        $classOff->status= 0;
+        $classOff->save();
+
+        return Redirect::to('/class-off')->with("success","Class off entry deleted successfully.");
     }
 
 }

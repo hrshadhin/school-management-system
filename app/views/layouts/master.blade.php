@@ -45,15 +45,15 @@
 
     @yield("style")
     <style media="screen">
-  body {
-      color: #154d88;
-      background: rgba(233, 237, 241, 0.27);
-      font-family: "Helvetica Neue", Roboto, Arial, "Droid Sans", sans-serif;
-      font-size: 13px;
-      font-weight: 400;
-      line-height: 1.471;
-  }
-  </style>
+   body {
+       color: #154d88;
+       background: rgba(233, 237, 241, 0.27);
+       font-family: "Helvetica Neue", Roboto, Arial, "Droid Sans", sans-serif;
+       font-size: 13px;
+       font-weight: 400;
+       line-height: 1.471;
+   }
+   </style>
     <!-- jQuery -->
     <script src="<?php echo url();?>/bower_components/jquery/jquery.min.js"></script>
 
@@ -178,6 +178,32 @@
             </ul>
         </div>
         <!-- fees dropdown ends -->
+      <!-- teacher dropdown starts-->
+        <div class="btn-group pull-right">
+            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+
+                <i class="glyphicon glyphicon-user"></i><span class=""> Employee</span>
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a href="/teacher/create"><i class="glyphicon glyphicon-plus"></i> Add New</a></li>
+                <li><a href="/teacher/list"><i class="glyphicon glyphicon-list-alt"></i> List</a></li>
+                <li class="divider"></li>
+                <li><a href="/leaves/create"><i class="glyphicon glyphicon-plus"></i> Add New Leave</a></li>
+                <li><a href="/leaves"><i class="glyphicon glyphicon-list-alt"></i> Leave List</a></li>
+                <li class="divider"></li>
+                <li><a href="/workoutside/create"><i class="glyphicon glyphicon-plus"></i> Add New Work Outside</a></li>
+                <li><a href="/workoutside"><i class="glyphicon glyphicon-list-alt"></i> Work Outside List</a></li>
+                <li class="divider"></li>
+                {{--<li><a href="/teacher-attendance/create"><i class="glyphicon glyphicon-plus"></i> Add Attendance</a></li>--}}
+                <li><a href="/teacher-attendance/list"><i class="glyphicon glyphicon-list-alt"></i> Attendance List</a></li>
+                <li><a href="/teacher-attendance/absenteeism-report"><i class="glyphicon glyphicon-print"></i> Absenteeism Report</a></li>
+                <li><a href="/teacher-attendance/monthly-report"><i class="glyphicon glyphicon-print"></i> Monthly Attendance Report</a></li>
+                <li><a href="/teacher-attendance/monthly-report-2"><i class="glyphicon glyphicon-print"></i> Monthly Attendance Report Two</a></li>
+
+            </ul>
+        </div>
+        <!-- teacher dropdown ends -->
 
     </div>
 </div>
@@ -220,15 +246,15 @@
                             </ul>
                         </li>
                         <li class="accordion">
-                       <a href="#"><i class="glyphicon glyphicon-pencil"></i><span> Attendance</span></a>
-                       <ul class="nav nav-pills nav-stacked">
-                           <li><a href="/attendance/create-file">Add from file</a></li>
-                           <li><a href="/attendance/create">Add</a></li>
-                           <li><a href="/attendance/list">View</a></li>
+                            <a href="#"><i class="glyphicon glyphicon-pencil"></i><span> Attendance</span></a>
+                            <ul class="nav nav-pills nav-stacked">
+                                <li><a href="/attendance/create-file">Add from file</a></li>
+                                <li><a href="/attendance/create">Add</a></li>
+                                <li><a href="/attendance/list">View</a></li>
 
 
-                       </ul>
-                   </li>
+                            </ul>
+                        </li>
                         <li class="accordion">
                             <a href="#"><i class="glyphicon glyphicon-list-alt"></i><span> Mark Manage</span></a>
                             <ul class="nav nav-pills nav-stacked">
@@ -260,16 +286,14 @@
 
                             </ul>
                         </li>
-                      <!--  <li class="accordion">
+                       <li class="accordion">
 
                           <a href="#"><i class="glyphicon glyphicon-envelope"></i><span> SMS</span></a>
                           <ul class="nav nav-pills nav-stacked">
-                              <li><a href="/sms">Bulk SMS</a></li>
-
-
-
+                              <li><a href="/sms">SMS types</a></li>
+                              <li><a href="/sms-send">Send Bulk SMS</a></li>
                           </ul>
-                      </li> -->
+                      </li>
                         <li class="accordion">
                             <a href="#"><i class="glyphicon glyphicon-print"></i><span> Reports</span></a>
                             <ul class="nav nav-pills nav-stacked">
@@ -292,6 +316,8 @@
                                 <li><a href="/gpa">GPA Ruels</a></li>
 
                                 <li><a href="/users">Users</a></li>
+                                <li><a href="/holidays">Holidays</a></li>
+                                <li><a href="/class-off">Class Off Days</a></li>
                                 <li><a href="/institute">Institute</a></li>
 
                             </ul>
@@ -352,8 +378,7 @@
         <hr>
         <p class="col-md-9 col-sm-9 col-xs-12 copyright"> <a href="#" target="_blank">{{Session::get('inName')}}</a> &copy;2016</p>
 
-        <p class="col-md-3 col-sm-3 col-xs-12 powered-by">Developed by: <a
-                    href="http://shanixlab.com">ShanixLab</a></p>
+        <p class="col-md-3 col-sm-3 col-xs-12 powered-by">Develop by: <a target="_blank" href="http://supersoftcorp.com">Supersoft Corp</a></p>
     </footer>
 
 </div><!--/.fluid-container-->
