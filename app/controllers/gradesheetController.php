@@ -147,7 +147,7 @@ class gradesheetController extends \BaseController {
             ->join('Class', 'Student.class', '=', 'Class.code')
             ->select( 'Student.regiNo','Student.rollNo','Student.dob', 'Student.firstName','Student.middleName','Student.lastName','Student.fatherName',
                 'Student.motherName', 'Student.group','Student.shift','Student.class as classcode','Class.Name as class','Student.section','Student.session',
-                'Student.extraActivity','Student.fourthSubject')
+                'Student.extraActivity','Student.fourthSubject','Student.cphsSubject')
             ->where('Student.regiNo','=',$regiNo)
             ->where('Student.class','=',$class)
             ->where('Student.isActive', '=', 'Yes')
@@ -279,9 +279,12 @@ class gradesheetController extends \BaseController {
 
                     }
                     else {
+
                         //check if 4th subject
                         if ($subject->type === "Electives") {
-                            if($student->fourthSubject == $subject->code){
+
+                            //if this is student 4th subject or student main subject by exchange
+                            if($student->fourthSubject == $subject->code || $student->cphsSubject == $subject->code ){
                                 $totalHighest += $maxMarks->highest;
                                 array_push($subcollection, $submarks);
                             }
@@ -622,6 +625,9 @@ class gradesheetController extends \BaseController {
 //
                                         } else {
 
+                                            //subject counter for final grade calculation
+                                            $subcounter++;
+
                                             //check if 4th subject
                                             if (in_array($mark->subject,$fourthsubjectCodes)) {
                                                 //check if it is student fourth subject and have more point
@@ -629,36 +635,56 @@ class gradesheetController extends \BaseController {
                                                     // add point above 2.00
                                                     $totalpoint += ($mark->point - 2);
 
+                                                    //subject counter for final grade calculation
+                                                    $subcounter--;
+
+                                                }
+                                                //check if it is student exchange main subject
+                                                if ($mark->subject == $student->cphsSubject) {
+                                                    //check if fail
+                                                    if($mark->grade=="F")
+                                                    {
+                                                        $isfail = true;
+                                                    }
+                                                    $totalpoint += $mark->point;
+
                                                 }
 
                                                 $totalmarks += $mark->total;
 
-                                                //subject counter for final grade calculation
-                                                $subcounter--;
 
                                             } else {
 
-                                                //check if fail
-                                                if($mark->grade=="F")
-                                                {
-                                                    $isfail = true;
+                                                //check if it is student fourth subject and have more point
+                                                if ($mark->subject == $student->fourthSubject) {
+                                                    if($mark->point >= 2.00) {
+                                                        // add point above 2.00
+                                                        $totalpoint += ($mark->point - 2);
+                                                    }
+                                                    //subject counter for final grade calculation
+                                                    $subcounter--;
+                                                }
+                                                else{
+                                                    //check if fail
+                                                    if($mark->grade=="F")
+                                                    {
+                                                        $isfail = true;
+                                                    }
+                                                    $totalpoint += $mark->point;
                                                 }
 
                                                 $totalmarks += $mark->total;
-                                                $totalpoint += $mark->point;
+
 
                                             }
 
                                         }
 
-                                        //subject counter for final grade calculation
-                                        $subcounter++;
-
                                     }
 
                                     if($requestedClass->combinePass){
-                                        //two combine subject so minus 2
-                                        $subcounter = $subcounter - 2;
+                                        //two combine subjects from 4 subject. so add 2
+                                        $subcounter = $subcounter + 2;
 
                                         if ($banglamark > 0) {
                                             //let's do calculation for bangla

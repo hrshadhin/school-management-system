@@ -124,6 +124,7 @@ return array(
         'Way\Generators\GeneratorsServiceProvider',
     'Maatwebsite\Excel\ExcelServiceProvider',
         'Barryvdh\DomPDF\ServiceProvider',
+        'Davelip\Queue\DatabaseServiceProvider',
 
     ),
 

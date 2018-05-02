@@ -62,7 +62,7 @@
                                             <div class="input-group">
 
                                                 <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i> </span>
-                                                <input type="text" value="{{date('d/m/Y')}}"  class="form-control datepicker" name="date[{{$sector->id}}]"   data-date-format="dd/mm/yyyy">
+                                                <input type="text"   class="form-control datepicker" name="date[{{$sector->id}}]"   data-date-format="dd/mm/yyyy">
                                             </div>
 
 

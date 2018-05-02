@@ -119,6 +119,19 @@
               </div>
             </div>
             @endif
+                @if($student->cphsSubject && strlen($student->cphsSubject))
+            <div class="row">
+              <div class="col-md-12">
+                <div class="col-md-2"></div>
+                <div class="col-md-3">
+                  <strong class="text-info font-16" >Alternate subject code :</strong>
+                </div>
+                <div class="col-md-7">
+                  <label>{{$student->cphsSubject}} </label>
+                </div>
+              </div>
+            </div>
+            @endif
 
 
             <div class="row">

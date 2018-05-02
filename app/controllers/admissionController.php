@@ -80,7 +80,7 @@ class admissionController extends \BaseController {
 		$addStd->photo=$fileName;
 		$addStd->save();
 		Input::file('photo')->move(base_path() .'/public/admission',$fileName);
-		return Redirect::to('/regonline')->with("success","Registration for admission is successfull. Please send money to this \"01554322707\" personal bKash number with this referance number \"".$refNo."\"");
+		return Redirect::to('/regonline')->with("success","Registration for admission is successfull. Please send money to this \"01686305346\" personal bKash number with this referance number \"".$refNo."\"");
 
 	}
 

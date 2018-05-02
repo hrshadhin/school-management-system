@@ -154,7 +154,7 @@ table td{
   </tr>
  </table>
 <p style="color:red;text-align:center">Admission test will be held on xxth XXXX at Campus 1.</p>
-<p style="text-align:right;margin-right:10px;">Software develop by-<strong>ShanixLab<strong></p>
+<p style="text-align:right;margin-right:10px;">Software develop by-<strong>Supersoft Corp<strong></p>
 </div>
 </body>
 </html>

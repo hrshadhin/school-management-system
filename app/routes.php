@@ -70,7 +70,6 @@ Route::post('/attendance/report', 'attendanceController@getReport');
 Route::get('/attendance/monthly-report', 'attendanceController@monthlyReport');
 
 
-
 //GPA Routes
 Route::get('/gpa', 'gpaController@index');
 Route::post('/gpa/create', 'gpaController@create');
@@ -96,6 +95,7 @@ Route::get('/smslog', 'smsController@getsmsLog');
 Route::post('/smslog', 'smsController@postsmsLog');
 Route::get('/smslog/delete/{id}', 'smsController@deleteLog');
 Route::get('/sms-type-info/{id}', 'smsController@getTypeInfo');
+
 
 
 //Mark routes
@@ -345,7 +345,8 @@ Route::get(
                 echo '<br>init teacher attendance seeder...<br>';
                 Artisan::call('attendance:seedTeacher');
                 echo '<br>done teacher attendance seeding.<br>';
-                echo 'you can find log in app/storage/logs/teacherAttendance-year-month-date.log.';
+                echo 'you can find log in 
+                app/storage/logs/teacherAttendance-year-month-date.log.';
 
 
             } catch (Exception $e) {
@@ -379,8 +380,7 @@ END"
   BEGIN
   delete from issueBook where code = old.code;
   delete from bookStock where code = old.code;
-  END
-  '
+  END'
                 );
                 //afeter book update
                 DB::unprepared(
@@ -392,7 +392,7 @@ END"
   quantity = new.quantity-(old.quantity-quantity)
   WHERE code=old.code;
   END
-  '
+  ' 
                 );
                 //after borrow book add
                 DB::unprepared(
@@ -438,4 +438,3 @@ END"
         }
     }
 );
-
