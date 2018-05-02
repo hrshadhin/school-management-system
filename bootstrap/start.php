@@ -24,12 +24,14 @@ $app = new Illuminate\Foundation\Application;
 |
 */
 
-$env = $app->detectEnvironment(array(
+$env = $app->detectEnvironment(
+    array(
 
-	  'local' => array('schoo.dev',true),
-	 'production' => array('school.shanixlab.com',false),
+      'local' => array('l4.school.test',true),
+     'production' => array('school.hrshadhin.me',false),
 
-));
+    )
+);
 
 /*
 |--------------------------------------------------------------------------

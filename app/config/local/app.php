@@ -14,6 +14,6 @@ return array(
 	*/
 
 	'debug' => true,
-		'url' => 'http://school.dev',
+		'url' => 'http://l4.school.test',
 
 );
