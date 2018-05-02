@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "fe6571c89c8614e24b08f477af665b97",
+    "content-hash": "a4b7a394c64246df8e2e67206e8fa990",
     "packages": [
         {
             "name": "barryvdh/laravel-dompdf",
@@ -136,6 +136,44 @@
             ],
             "description": "A tiny, but robust REPL (Read-Evaluate-Print-Loop) for PHP.",
             "time": "2015-03-01T08:05:19+00:00"
+        },
+        {
+            "name": "davelip/laravel-database-queue",
+            "version": "0.5.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/davelip/laravel-database-queue.git",
+                "reference": "c8724a1adc90b01e67246ba8065704956cd65eaf"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/davelip/laravel-database-queue/zipball/c8724a1adc90b01e67246ba8065704956cd65eaf",
+                "reference": "c8724a1adc90b01e67246ba8065704956cd65eaf",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/console": "~4.0",
+                "illuminate/support": "~4.0",
+                "php": ">=5.3.0",
+                "symfony/process": "~2.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Davelip\\Queue\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "David Lippi",
+                    "email": "lippi.david@gmail.com"
+                }
+            ],
+            "time": "2017-02-17T09:21:33+00:00"
         },
         {
             "name": "dompdf/dompdf",

@@ -1,3 +1,3 @@
 # Contribution Guidelines
 
-Please submit all issues and pull requests to the [laravel/framework](http://github.com/laravel/framework) repository!
+Please submit all issues and pull requests to the [hrshadhin/school-management-system](https://github.com/hrshadhin/school-management-system) repository!
