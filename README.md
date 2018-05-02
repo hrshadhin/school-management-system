@@ -27,10 +27,17 @@ $ php artisan serve
 USER: admin
 PASS: demo123
 
-#Demo
+#Demo Live Link
 URL: http://school.hrshadhin.me
 USER: admin
 PASS: demo123
+
+**About SMS Sending**
+- If you configure api link here() then sms will be send to the number.
+- If you want to send bulk sms from the menu you have to congifure api link
+    also in here(). Bulk sms will not send currently it store in queue inside the database
+    so you have process that queue. For that you can set a cron job with below command:
+    `php artisan queue:listen`
 
 # Screenshot
 

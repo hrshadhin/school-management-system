@@ -134,7 +134,7 @@ class smsController extends \BaseController
         ];
         $validator = \Validator::make(Input::all(), $rules);
         if ($validator->fails()) {
-            return Redirect::to('/sms-send')->withErrors($validator);
+            return Redirect::to('/sms-bulk/send')->withErrors($validator);
         }
         $inputs = Input::all();
         $smsType = $inputs['type'];
@@ -202,7 +202,7 @@ class smsController extends \BaseController
 
             }
 
-            return Redirect::to('/sms-send')->with(
+            return Redirect::to('/sms-bulk/send')->with(
                 "success", 
                 count($students)." sms pushed to queue.SMS will recive shortly."
             );
@@ -211,7 +211,7 @@ class smsController extends \BaseController
             // New MessageBag
             $errorMessages = new Illuminate\Support\MessageBag;
             $errorMessages->add('Not Found', 'There are no student on this session!');
-            return Redirect::to('/sms-send')->withErrors($errorMessages->all());
+            return Redirect::to('/sms-bulk/send')->withErrors($errorMessages->all());
         }
 
     }
