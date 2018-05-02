@@ -290,8 +290,10 @@
 
                           <a href="#"><i class="glyphicon glyphicon-envelope"></i><span> SMS</span></a>
                           <ul class="nav nav-pills nav-stacked">
-                              <li><a href="/sms">SMS types</a></li>
-                              <li><a href="/sms-send">Send Bulk SMS</a></li>
+                              <li><a href="/sms">SMS Formats</a></li>
+                              <li><a href="/sms-bulk">Send Bulk SMS</a></li>
+                              <li><a href="/smslog">SMS Log</a></li>
+
                           </ul>
                       </li>
                         <li class="accordion">
@@ -301,7 +303,6 @@
                                 <li><a href="/attendance/report">Attendance</a></li>
                                 <li><a href="/attendance/monthly-report">Monthly Attendance</a></li>
                                 <li><a href="/tabulation">Tabulationsheet</a></li>
-                                <li><a href="/smslog">SMS Log</a></li>
                                 <li><a href="/accounting/report">Account By Type</a></li>
                                 <li><a href="/accounting/reportsum">Account Balance</a></li>
                                  <li><a href="/barcode">Barcode Generate</a></li>
@@ -376,9 +377,9 @@
 
     <footer class="footer">
         <hr>
-        <p class="col-md-9 col-sm-9 col-xs-12 copyright"> <a href="#" target="_blank">{{Session::get('inName')}}</a> &copy;2016</p>
+        <p class="col-md-9 col-sm-9 col-xs-12 copyright"> <a href="#" target="_blank">{{Session::get('inName')}}</a> &copy;{{date('Y')}}</p>
 
-        <p class="col-md-3 col-sm-3 col-xs-12 powered-by">Develop by: <a target="_blank" href="http://supersoftcorp.com">Supersoft Corp</a></p>
+        <p class="col-md-3 col-sm-3 col-xs-12 powered-by">Develop by: <a target="_blank" href="http://shanixlab.com">ShanixLab</a></p>
     </footer>
 
 </div><!--/.fluid-container-->

@@ -158,11 +158,17 @@ $( document ).ready(function() {
     $('#typing').html(text_remaining + ' characters remaining');
   });
   $('#type').on('change',function(e) {
-    var url = "/sms-type-info/"+$('#type').val();
+    var optionValue = $('#type').val()
+    if( optionValue != "Custom"){
+    var url = "/sms-type-info/"+ optionValue;
     $.getJSON(url, function(result){
       $('#sender').val(result['sender']);
       $('#message').val(result['message']);
     });
+    } else {
+      $('#sender').val('');
+      $('#message').val('');
+    }
   });
 });
 </script>

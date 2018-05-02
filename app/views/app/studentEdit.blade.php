@@ -8,7 +8,7 @@
         <div class="box col-md-12">
             <div class="box-inner">
                 <div data-original-title="" class="box-header well">
-                    <h2><i class="glyphicon glyphicon-user"></i> Student New Admission</h2>
+                    <h2><i class="glyphicon glyphicon-user"></i> Student Information Edit</h2>
 
                 </div>
                 <div class="box-content">
@@ -40,7 +40,7 @@
                                             <label for="regiNo">Registration No</label>
                                             <div class="input-group">
                                                 <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                                                <input type="text" class="form-control" readyonly="true" required name="regiNo" value="{{$student->regiNo}}" placeholder="">
+                                                <input type="text" class="form-control" readonly name="regiNo" value="{{$student->regiNo}}" placeholder="">
                                             </div>
                                         </div>
                                     </div>

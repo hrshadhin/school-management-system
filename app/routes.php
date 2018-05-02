@@ -88,9 +88,8 @@ Route::get('/sms/edit/{id}', 'smsController@edit');
 Route::post('/sms/update', 'smsController@update');
 Route::get('/sms/delete/{id}', 'smsController@delete');
 
-Route::get('/sms', 'smsController@getsmssend');
-Route::post('/sms/send', 'smsController@postsmssend');
-
+Route::get('/sms-bulk', 'smsController@getsmssend');
+Route::post('/sms-bulk/send', 'smsController@postsmssend');
 Route::get('/smslog', 'smsController@getsmsLog');
 Route::post('/smslog', 'smsController@postsmsLog');
 Route::get('/smslog/delete/{id}', 'smsController@deleteLog');

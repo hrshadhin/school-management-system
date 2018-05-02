@@ -4,7 +4,8 @@ use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 
-class SeedTeacherAttendance extends Command {
+class SeedTeacherAttendance extends Command
+{
 
     /**
      * The console command name.
@@ -41,7 +42,7 @@ class SeedTeacherAttendance extends Command {
         \Log::useDailyFiles(storage_path().'/logs/teacherAttendance.log');
 
         //now fetch the file from web link and read it
-        $fileUrl = "http://app.kmdc.edu.bd/attendance.txt";
+        $fileUrl = "http://l4.school.test/attendance.txt";
         $errorMSG = null;
         $rawString=null;
 
@@ -55,7 +56,7 @@ class SeedTeacherAttendance extends Command {
         }
 
 
-        $rawAtdnData = mb_split('\n',$rawString);
+        $rawAtdnData = mb_split('\n', $rawString);
         //check if file has content of not
         if(count($rawAtdnData)) {
 
@@ -105,10 +106,10 @@ class SeedTeacherAttendance extends Command {
 
             //ready to insert data to db
             //fetch all teacher
-            $allTeachers = \Teachers::where('isActive',1)->lists('regNo', 'regNo');
+            $allTeachers = \Teachers::where('isActive', 1)->lists('regNo', 'regNo');
             $totalTeacherInSystem = count($allTeachers);
 
-            if($totalTeacherInSystem){
+            if($totalTeacherInSystem) {
                 foreach ($dateWiseData as $date => $employees) {
                     $atd = new \DateTime(date('Ymd', strtotime($date)));
                     $atndDate = $atd->format('Y-m-d');
@@ -156,7 +157,7 @@ class SeedTeacherAttendance extends Command {
 
                         //write log in more entry found rather than db teachear list
                         $totalTeacherInFile = count($employees);
-                        if($totalTeacherInSystem<$totalTeacherInFile){
+                        if($totalTeacherInSystem<$totalTeacherInFile) {
                             $msg =   "Date '".$atd->format('d/m/Y')."' > ".($totalTeacherInFile-$totalTeacherInSystem)." teacher not found in db but found in attendance.txt file!";
                             \Log::warning($msg);
                         }

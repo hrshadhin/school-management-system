@@ -338,7 +338,7 @@ public function update()
 
 		}
 		//$student->regiNo=Input::get('regiNo');
-		//$student->rollNo=Input::get('rollNo');
+		$student->rollNo=Input::get('rollNo');
 		$student->firstName= Input::get('fname');
 		$student->middleName= Input::get('mname');
 		$student->lastName= Input::get('lname');

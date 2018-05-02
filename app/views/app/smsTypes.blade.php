@@ -51,7 +51,7 @@
                                             <label for="sender">Sender</label>
                                             <div class="input-group">
                                                 <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                                                <input type="text" class="form-control" value="{{$sms->sender}}" required name="sender" placeholder="school name,supersoft">
+                                                <input type="text" class="form-control" value="{{$sms->sender}}" required name="sender" placeholder="school name,ShanixLab">
                                             </div>
                                         </div>
                                     </div>
@@ -90,7 +90,7 @@
                                             <label for="sender">Sender</label>
                                             <div class="input-group">
                                                 <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                                                <input type="text" class="form-control" required name="sender" placeholder="school name,supersoft">
+                                                <input type="text" class="form-control" required name="sender" placeholder="school name,ShanixLab">
                                             </div>
                                         </div>
                                     </div>
