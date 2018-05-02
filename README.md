@@ -38,9 +38,9 @@ PASS: demo123
 
 :information_desk_person:
 **About SMS Sending**
-- If you configure api link here() then sms will be send to the number.
+- If you configure api link [here](https://github.com/hrshadhin/school-management-system/blob/master/app/controllers/attendanceController.php#L221) then sms will be send to the number.
 - If you want to send bulk sms from the menu you have to congifure api link
-    also in here(). Bulk sms will not send currently it store in queue inside the database
+    also in [here](https://github.com/hrshadhin/school-management-system/blob/master/app/controllers/smsController.php#L179). Bulk sms will not send currently it store in queue inside the database
     so you have process that queue. For that you can set a cron job with below command:
     ```
     php artisan queue:listen
