@@ -1,25 +1,28 @@
 <?php
-Class formfoo{
+Class formfoo
+{
 
 }
 use Illuminate\Support\Collection;
 use Carbon\Carbon;
-class attendanceController extends \BaseController {
+class attendanceController extends \BaseController
+{
 
-    public function __construct() {
+    public function __construct() 
+    {
         $this->beforeFilter('csrf', array('on'=>'post'));
         $this->beforeFilter('auth');
-        $this->beforeFilter('userAccess',array('only'=> array('delete')));
+        $this->beforeFilter('userAccess', array('only'=> array('delete')));
 
     }
 
     public function index()
     {
         $classes=array();
-        $classes2 = ClassModel::select('code','name')->orderby('code','asc')->get();
-        $subjects = Subject::lists('name','code');
+        $classes2 = ClassModel::select('code', 'name')->orderby('code', 'asc')->get();
+        $subjects = Subject::lists('name', 'code');
         $attendance=array();
-        return View::Make('app.attendanceCreate',compact('classes2','classes','subjects','attendance'));
+        return View::Make('app.attendanceCreate', compact('classes2', 'classes', 'subjects', 'attendance'));
     }
 
     public function index_file()
@@ -100,19 +103,19 @@ class attendanceController extends \BaseController {
                 if(count($absentStudents) > 0) {
 
                     foreach ($absentStudents as $absst) {
-                        $student=	DB::table('Student')
+                        $student=    DB::table('Student')
                             ->join('Class', 'Student.class', '=', 'Class.code')
-                            ->select( 'Student.regiNo','Student.rollNo','Student.firstName','Student.middleName','Student.lastName','Student.fatherCellNo','Class.Name as class')
-                            ->where('Student.regiNo','=',$absst)
-                            ->where('class',Input::get('class'))
+                            ->select('Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.fatherCellNo', 'Class.Name as class')
+                            ->where('Student.regiNo', '=', $absst)
+                            ->where('class', Input::get('class'))
                             ->first();
                         $msg = "Dear Parents your Child (Name-".$student->firstName." ".$student->middleName." ".$student->lastName.", Class- ".$student->class." , Roll- ".$student->rollNo." ) is Absent in School today.";
                         //  $fatherCellNo = Student::select('fatherCellNo','')->where('regiNo', $absst)->first();
 
-                        $response = $this->sendSMS($student->fatherCellNo,"ShanixLab", $msg);
+                        $response = $this->sendSMS($student->fatherCellNo, "ShanixLab", $msg);
                         $smsLog = new SMSLog();
                         $smsLog->type = "Attendance";
-                        $smsLog->sender = "SuperSoft";
+                        $smsLog->sender = "ShanixLab";
                         $smsLog->message = $msg;
                         $smsLog->recipient = $student->fatherCellNo;
                         $smsLog->regiNo = $absst;
@@ -141,23 +144,27 @@ class attendanceController extends \BaseController {
         $file = Input::file('fileUpload');
         $ext = strtolower($file->getClientOriginalExtension());
 
-        $validator = Validator::make(array('ext' => $ext),array('ext' => 'in:csv,xls,xlsx')
+        $validator = Validator::make(
+            array('ext' => $ext), array('ext' => 'in:csv,xls,xlsx')
         );
         if ($validator->fails()) {
             return Redirect::to('/attendance/create-file')->withErrors($validator);
         } else {
             try {
                 $toInsert = 0;
-                $data = Excel::load(Input::file('fileUpload'), function ($reader) { })->get();
+                $data = Excel::load(
+                    Input::file('fileUpload'), function ($reader) { 
+                    }
+                )->get();
 
-                if(!empty($data) && $data->count()){
+                if(!empty($data) && $data->count()) {
                     DB::beginTransaction();
                     try {
                         foreach ($data->toArray() as $raw) {
 
-                            if($raw['date_and_time'] && $raw['personnel_id']){
+                            if($raw['date_and_time'] && $raw['personnel_id']) {
                                 $attenData= [
-                                    'date' => \Carbon\Carbon::createFromFormat('d-m-Y H:i:s',$raw['date_and_time']),
+                                    'date' => \Carbon\Carbon::createFromFormat('d-m-Y H:i:s', $raw['date_and_time']),
                                     'regiNo' => $raw['personnel_id'],
                                     'created_at' => Carbon::now()
                                 ];
@@ -177,7 +184,7 @@ class attendanceController extends \BaseController {
 
                 }
 
-                if($toInsert){
+                if($toInsert) {
                     return Redirect::to('/attendance/create-file')->with("success", $toInsert.' students attendance record upload successfully.');
                 }
                 $errorMessages = new Illuminate\Support\MessageBag;
@@ -194,32 +201,29 @@ class attendanceController extends \BaseController {
     }
    
 
- private function sendSMS($number,$sender,$msg)
+    private function sendSMS($number,$sender,$msg)
     {
+        return '[Configure SMS api link !!]';
 
         //need to change for production
         $phonenumber = $number;
-        $phonenumber=str_replace('+','',$phonenumber);
-        if (strlen($phonenumber)=="11")
-        {
+        $phonenumber=str_replace('+', '', $phonenumber);
+        if (strlen($phonenumber)=="11") {
             $phonenumber="88".$phonenumber;
         }
-        if (strlen($phonenumber)=="13")
-        {
-            if (preg_match ("/^88017/i", "$phonenumber") or preg_match ("/^88016/i", "$phonenumber") or preg_match ("/^88015/i", "$phonenumber") or preg_match ("/^88011/i", "$phonenumber") or preg_match ("/^88018/i", "$phonenumber") or preg_match ("/^88019/i", "$phonenumber"))
-            {
+        if (strlen($phonenumber)=="13") {
+            if (preg_match("/^88017/i", "$phonenumber") or preg_match("/^88016/i", "$phonenumber") or preg_match("/^88015/i", "$phonenumber") or preg_match("/^88011/i", "$phonenumber") or preg_match("/^88018/i", "$phonenumber") or preg_match("/^88019/i", "$phonenumber")) {
 
 
                 $myaccount=urlencode("user");
-				$mypasswd=urlencode("password");
-				$sendBy=urlencode($sender);
-                $api="http://api.zaman-it.com/api/v3/sendsms/plain?user=".$myaccount."&password=".$mypasswd."&sender=".$sendBy."&SMSText=".$msg."&GSM=".$phonenumber."&type=longSMS";
+                $mypasswd=urlencode("password");
+                $sendBy=urlencode($sender);
+                $api="http://api_link_here?user=".$myaccount."&password=".$mypasswd."&sender=".$sendBy."&SMSText=".$msg."&GSM=".$phonenumber."&type=longSMS";
                 $client = new \Guzzle\Service\Client($api);
                 //  Get your response:
                 $response = $client->get()->send();
                 $status=$response->getBody(true);
-                if($status=="-5" || $status=="5")
-                {
+                if($status=="-5" || $status=="5") {
                     return $status;
                 }
 
@@ -237,20 +241,18 @@ class attendanceController extends \BaseController {
         }
     }
 
-    private function  parseAppDate($datestr)
+    private function parseAppDate($datestr)
     {
         $date = explode('-', $datestr);
         return $date[2].'-'.$date[1].'-'.$date[0];
     }
     private  function checkPresent($regiNo,$ids)
-
     {
 
         for($i=0;$i<count($ids);$i++)
         {
 
-            if($regiNo==$ids[$i])
-            {
+            if($regiNo==$ids[$i]) {
                 return 'Yes';
             }
         }
@@ -260,7 +262,7 @@ class attendanceController extends \BaseController {
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return Response
      */
     public function show()
@@ -271,13 +273,13 @@ class attendanceController extends \BaseController {
         $formdata->shift="";
         $formdata->session=date('Y');
         $formdata->date=date('d-m-Y');
-        $classes = ClassModel::select('code','name')->orderby('code','asc')->get();
+        $classes = ClassModel::select('code', 'name')->orderby('code', 'asc')->get();
 
         $attendance=array();
 
 
         //$formdata["class"]="";
-        return View::Make('app.attendanceList',compact('classes','attendance','formdata'));
+        return View::Make('app.attendanceList', compact('classes', 'attendance', 'formdata'));
     }
 
     public function getlist()
@@ -292,19 +294,20 @@ class attendanceController extends \BaseController {
 
         ];
         $validator = \Validator::make(Input::all(), $rules);
-        if ($validator->fails())
-        {
+        if ($validator->fails()) {
             return Redirect::to('/attendance/list/')->withErrors($validator);
         }
         else {
             $date = $this->parseAppDate(Input::get('date'));
-            $attendance = Student::with(['attendance' => function($query) use($date){
-                $query->where('date','=',$date);
-            }])
-                ->where('class','=',Input::get('class'))
-                ->where('section','=',Input::get('section'))
-                ->Where('shift','=',Input::get('shift'))
-                ->where('session','=',trim(Input::get('session')))
+            $attendance = Student::with(
+                ['attendance' => function ($query) use ($date) {
+                    $query->where('date', '=', $date);
+                }]
+            )
+                ->where('class', '=', Input::get('class'))
+                ->where('section', '=', Input::get('section'))
+                ->Where('shift', '=', Input::get('shift'))
+                ->where('session', '=', trim(Input::get('session')))
                 ->where('isActive', '=', 'Yes')
                 ->get();
             $formdata = new formfoo;
@@ -313,40 +316,39 @@ class attendanceController extends \BaseController {
             $formdata->shift=Input::get('shift');
             $formdata->session=Input::get('session');
             $formdata->date=Input::get('date');
-            $classes2 = ClassModel::select('code','name')->orderby('code','asc')->lists('name','code');
+            $classes2 = ClassModel::select('code', 'name')->orderby('code', 'asc')->lists('name', 'code');
 
-            return View::Make('app.attendanceList',compact('classes2','attendance','formdata'));
+            return View::Make('app.attendanceList', compact('classes2', 'attendance', 'formdata'));
         }
     }
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return Response
      */
     public function edit($id)
     {
         $attendance=DB::table('Attendance')
             ->join('Student', 'Attendance.regiNo', '=', 'Student.regiNo')
-            ->select('Attendance.id','Attendance.regiNo','Student.rollNo', 'Student.firstName','Student.middleName','Student.lastName', 'Attendance.status')
-            ->where('Attendance.id','=',$id)
+            ->select('Attendance.id', 'Attendance.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Attendance.status')
+            ->where('Attendance.id', '=', $id)
             ->first();
-        return View::Make('app.attendanceEdit',compact('attendance'));
+        return View::Make('app.attendanceEdit', compact('attendance'));
     }
 
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return Response
      */
     public function update()
     {
         $attd = Attendance::find(Input::get('id'));
         $ispresent = Input::get('ispresent');
-        if($ispresent==null)
-        {
+        if($ispresent==null) {
             $attd->status="No";
 
         }
@@ -363,29 +365,35 @@ class attendanceController extends \BaseController {
     public  function printlist($class,$section,$shift,$session,$date)
     {
         if($class!="" && $section !="" && $shift !="" && $date) {
-            $className = ClassModel::select('name')->where('code',$class)->first();
+            $className = ClassModel::select('name')->where('code', $class)->first();
             $date = $this->parseAppDate($date);
-            $attendance = Student::with(['attendance' => function($query) use($date){
-                $query->where('date','=',$date);
-            }])
-                ->where('class','=',$class)
-                ->where('section','=',$section)
-                ->Where('shift','=',$shift)
-                ->where('session','=',trim($session))
+            $attendance = Student::with(
+                ['attendance' => function ($query) use ($date) {
+                    $query->where('date', '=', $date);
+                }]
+            )
+                ->where('class', '=', $class)
+                ->where('section', '=', $section)
+                ->Where('shift', '=', $shift)
+                ->where('session', '=', trim($session))
                 ->where('isActive', '=', 'Yes')
                 ->get();
             $date = $this->parseAppDate($date);
             $input =array($className->name,$section,$shift,$session,$date);
             $fileName=$className->name.'-'.$section.'-'.$shift.'-'.$section.'-'.$date;
-            Excel::create($fileName, function($excel) use($input,$attendance) {
+            Excel::create(
+                $fileName, function ($excel) use ($input,$attendance) {
 
-                $excel->sheet('New sheet', function($sheet) use ($input,$attendance) {
+                    $excel->sheet(
+                        'New sheet', function ($sheet) use ($input,$attendance) {
 
-                    $sheet->loadView('app.attendanceExcel',compact('attendance','input'));
+                            $sheet->loadView('app.attendanceExcel', compact('attendance', 'input'));
 
-                });
+                        }
+                    );
 
-            })->download('xlsx');
+                }
+            )->download('xlsx');
             // return "true";
         }
         else
@@ -400,58 +408,60 @@ class attendanceController extends \BaseController {
     }
     public function getReport()
     {
-        $student= Student::where('regiNo','=',Input::get('regiNo'))
+        $student= Student::where('regiNo', '=', Input::get('regiNo'))
             ->where('Student.isActive', '=', 'Yes')
             ->first();
 
-        if(count($student)>0){
+        if(count($student)>0) {
             $student = Student::with('attendance')
-                ->where('regiNo','=',Input::get('regiNo'))
+                ->where('regiNo', '=', Input::get('regiNo'))
                 ->where('isActive', '=', 'Yes')
                 ->first();
-            $class = ClassModel::where('code','=',$student->class)->first();
-            if(count($student->attendance)>0)
-                return View::make('app.stdattendance',compact('student','class'));
-            return  Redirect::back()->with('noresult','Attendance Not Found!');
+            $class = ClassModel::where('code', '=', $student->class)->first();
+            if(count($student->attendance)>0) {
+                return View::make('app.stdattendance', compact('student', 'class'));
+            }
+            return  Redirect::back()->with('noresult', 'Attendance Not Found!');
 
         }
-        return  Redirect::back()->with('noresult','Student Not Found!');
+        return  Redirect::back()->with('noresult', 'Student Not Found!');
 
 
     }
 
 
-    public function monthlyReport(){
+    public function monthlyReport()
+    {
 
-        $class = Input::get('class',null);
-        $section = Input::get('section',null);
-        $session = trim(Input::get('session',date('Y')));
-        $shift = Input::get('shift',null);
-        $isPrint = Input::get('print_view',null);
-        $yearMonth = Input::get('yearMonth',date('Y-m'));
+        $class = Input::get('class', null);
+        $section = Input::get('section', null);
+        $session = trim(Input::get('session', date('Y')));
+        $shift = Input::get('shift', null);
+        $isPrint = Input::get('print_view', null);
+        $yearMonth = Input::get('yearMonth', date('Y-m'));
 
-        $classes2 = ClassModel::select('code','name')->orderby('code','asc')->get();
+        $classes2 = ClassModel::select('code', 'name')->orderby('code', 'asc')->get();
 
 
-        if($isPrint){
+        if($isPrint) {
 
-            $myPart = mb_split('-',$yearMonth);
-            if(count($myPart)!=2){
+            $myPart = mb_split('-', $yearMonth);
+            if(count($myPart)!=2) {
                 $errorMessages = new Illuminate\Support\MessageBag;
-                $errorMessages->add('Error','Please don\'t mess with inputs!!!');
+                $errorMessages->add('Error', 'Please don\'t mess with inputs!!!');
                 return Redirect::to('/attendance/monthly-report')->withErrors($errorMessages);
             }
 
 
-            $students = Student::where('class',$class)
-                ->where('isActive','Yes')
-                ->where('session',$session)
-                ->where('shift',$shift)
-                ->where('section',$section)
+            $students = Student::where('class', $class)
+                ->where('isActive', 'Yes')
+                ->where('session', $session)
+                ->where('shift', $shift)
+                ->where('section', $section)
                 ->lists('regiNo');
-            if(!count($students)){
+            if(!count($students)) {
                 $errorMessages = new Illuminate\Support\MessageBag;
-                $errorMessages->add('Error','Students not found!');
+                $errorMessages->add('Error', 'Students not found!');
                 return Redirect::to('/attendance/monthly-report')->withErrors($errorMessages);
             }
 
@@ -459,18 +469,18 @@ class attendanceController extends \BaseController {
             //find request month first and last date
             $firstDate = $yearMonth."-01";
             $oneMonthEnd = strtotime("+1 month", strtotime($firstDate));
-            $lastDate = date('Y-m-d',strtotime("-1 day",$oneMonthEnd));
+            $lastDate = date('Y-m-d', strtotime("-1 day", $oneMonthEnd));
 
             //get holidays of request month
-            $holiDays = Holidays::where('status',1)
-                ->whereDate('holiDate','>=',$firstDate)
-                ->whereDate('holiDate','<=',$lastDate)
-                ->lists('status','holiDate');
+            $holiDays = Holidays::where('status', 1)
+                ->whereDate('holiDate', '>=', $firstDate)
+                ->whereDate('holiDate', '<=', $lastDate)
+                ->lists('status', 'holiDate');
             //get holidays of request month
-            $offDays = ClassOff::where('status',1)
-                ->whereDate('offDate','>=',$firstDate)
-                ->whereDate('offDate','<=',$lastDate)
-                ->lists('oType','offDate');
+            $offDays = ClassOff::where('status', 1)
+                ->whereDate('offDate', '>=', $firstDate)
+                ->whereDate('offDate', '<=', $lastDate)
+                ->lists('oType', 'offDate');
 
             //find fridays of requested month
             $fridays = [];
@@ -482,32 +492,33 @@ class attendanceController extends \BaseController {
             }
 
             //get class info
-            $classInfo = ClassModel::where('code',$class)->first();
+            $classInfo = ClassModel::where('code', $class)->first();
             $className = $classInfo->name;
 
 
-            $SelectCol = self::getSelectColumns($myPart[0],$myPart[1]);
+            $SelectCol = self::getSelectColumns($myPart[0], $myPart[1]);
             $fullSql ="SELECT CONCAT(MAX(s.firstName),' ',MAX(s.middleName),' ',MAX(s.lastName)) as name,
 CAST(MAX(s.rollNo) as UNSIGNED) as rollNo,".$SelectCol." FROM Attendance as sa left join Student as s ON sa.regiNo=s.regiNo";
-            $fullSql .=" WHERE sa.regiNo IN(".implode(',',$students).") GROUP BY sa.regiNo ORDER BY rollNo;";
+            $fullSql .=" WHERE sa.regiNo IN(".implode(',', $students).") GROUP BY sa.regiNo ORDER BY rollNo;";
             $data = DB::select($fullSql);
-//            return $data;
+            //            return $data;
             $keys = array_keys((array)$data[0]);
-//            return $data;
+            //            return $data;
             $institute=Institute::select('*')->first();
-            if(!count($institute)){
+            if(!count($institute)) {
                 $errorMessages = new Illuminate\Support\MessageBag;
-                $errorMessages->add('Error','Please setup institute information!');
+                $errorMessages->add('Error', 'Please setup institute information!');
                 return Redirect::to('/attendance/monthly-report')->withErrors($errorMessages);
             }
 
-            return View::Make('app.attendanceMonthlyReport',compact('institute','data','keys','yearMonth','fridays','holiDays','className','section','session','shift','offDays'));
+            return View::Make('app.attendanceMonthlyReport', compact('institute', 'data', 'keys', 'yearMonth', 'fridays', 'holiDays', 'className', 'section', 'session', 'shift', 'offDays'));
 
         }
-        return View::Make('app.attendanceMonthly',compact('yearMonth','classes2'));
+        return View::Make('app.attendanceMonthly', compact('yearMonth', 'classes2'));
     }
 
-    private static function getSelectColumns($year,$month){
+    private static function getSelectColumns($year,$month)
+    {
         $start_date = "01-".$month."-".$year;
         $start_time = strtotime($start_date);
 
@@ -518,8 +529,8 @@ CAST(MAX(s.rollNo) as UNSIGNED) as rollNo,".$SelectCol." FROM Attendance as sa l
             $d = date('Y-m-d', $i);
             $selectCol .= "MAX(IF(date = '".$d."', 1, 0)) AS '".$d."',";
         }
-        if(strlen($selectCol)){
-            $selectCol = substr($selectCol,0,-1);
+        if(strlen($selectCol)) {
+            $selectCol = substr($selectCol, 0, -1);
         }
 
         return $selectCol;
@@ -537,8 +548,8 @@ CAST(MAX(s.rollNo) as UNSIGNED) as rollNo,".$SelectCol." FROM Attendance as sa l
     public function classOffIndex()
     {
 
-        $offdays = ClassOff::where('status',1)->get();
-        return View::Make('app.class_off_days',compact('offdays'));
+        $offdays = ClassOff::where('status', 1)->get();
+        return View::Make('app.class_off_days', compact('offdays'));
     }
 
 
@@ -558,13 +569,12 @@ CAST(MAX(s.rollNo) as UNSIGNED) as rollNo,".$SelectCol." FROM Attendance as sa l
 
         ];
         $validator = \Validator::make(Input::all(), $rules);
-        if ($validator->fails())
-        {
+        if ($validator->fails()) {
             return Redirect::to('/class-off')->withErrors($validator);
         }
         else {
 
-            $offDateStart = \Carbon\Carbon::createFromFormat('d/m/Y',Input::get('offDate'));
+            $offDateStart = \Carbon\Carbon::createFromFormat('d/m/Y', Input::get('offDate'));
             $offDateEnd = null;
             if(strlen(Input::get('offDateEnd'))) {
                 $offDateEnd = \Carbon\Carbon::createFromFormat('d/m/Y', Input::get('offDateEnd'));
@@ -576,8 +586,8 @@ CAST(MAX(s.rollNo) as UNSIGNED) as rollNo,".$SelectCol." FROM Attendance as sa l
 
 
 
-            if($offDateEnd){
-                if($offDateEnd<$offDateStart){
+            if($offDateEnd) {
+                if($offDateEnd<$offDateStart) {
                     $messages = $validator->errors();
                     $messages->add('Wrong Input!', 'Date End can\'t be less than start date!');
                     return Redirect::to('/class-off')->withErrors($messages)->withInput();
@@ -612,7 +622,7 @@ CAST(MAX(s.rollNo) as UNSIGNED) as rollNo,".$SelectCol." FROM Attendance as sa l
 
             ClassOff::insert($offList);
 
-            return Redirect::to('/class-off')->with("success","Class off entry added.");
+            return Redirect::to('/class-off')->with("success", "Class off entry added.");
 
 
         }
@@ -625,41 +635,41 @@ CAST(MAX(s.rollNo) as UNSIGNED) as rollNo,".$SelectCol." FROM Attendance as sa l
      * @param  int  $id
      * @return Response
      */
-//    public function workOutsideUpdate($id,$status)
-//    {
-//
-//        $leave = Leaves::where('status',1)->where('id',$id)->first();
-//        if(!$leave){
-//            return Redirect::to('/leaves')->with("error","Leave not found!");
-//
-//        }
-//        $leave->status= $status;
-//        $leave->save();
-//
-//        return Redirect::to('/leaves')->with("success","Leave updated succesfully.");
-//
-//
-//    }
+    //    public function workOutsideUpdate($id,$status)
+    //    {
+    //
+    //        $leave = Leaves::where('status',1)->where('id',$id)->first();
+    //        if(!$leave){
+    //            return Redirect::to('/leaves')->with("error","Leave not found!");
+    //
+    //        }
+    //        $leave->status= $status;
+    //        $leave->save();
+    //
+    //        return Redirect::to('/leaves')->with("success","Leave updated succesfully.");
+    //
+    //
+    //    }
 
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return Response
      */
     public function classOffDelete($id)
     {
-        $classOff = ClassOff::where('status',1)->where('id',$id)->first();
+        $classOff = ClassOff::where('status', 1)->where('id', $id)->first();
 
-        if(!$classOff){
-            return Redirect::to('/class-off')->with("error","Class off entry not found!");
+        if(!$classOff) {
+            return Redirect::to('/class-off')->with("error", "Class off entry not found!");
 
         }
         $classOff->status= 0;
         $classOff->save();
 
-        return Redirect::to('/class-off')->with("success","Class off entry deleted successfully.");
+        return Redirect::to('/class-off')->with("success", "Class off entry deleted successfully.");
     }
 
 }
