@@ -24,6 +24,8 @@ $ php artisan db:seed
 $ php artisan serve
 ```
 **  http://localhost:8000 **
+USER: admin
+PASS: demo123
 
 #Demo
 URL: http://school.hrshadhin.me
