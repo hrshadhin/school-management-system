@@ -195,7 +195,7 @@ return array(
         'View'            => 'Illuminate\Support\Facades\View',
         'Excel'           => 'Maatwebsite\Excel\Facades\Excel',
         'PDF'             => 'Barryvdh\DomPDF\Facade',
-        'SmsHelper'       => 'App\Helpers\AppHelper::class',
+        'SmsHelper'       => 'App\Helpers\AppHelper',
 
 
     ),
