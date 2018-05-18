@@ -125,6 +125,7 @@ return array(
     'Maatwebsite\Excel\ExcelServiceProvider',
         'Barryvdh\DomPDF\ServiceProvider',
         'Davelip\Queue\DatabaseServiceProvider',
+        'SMS\Composers\ComposerServiceProvider',
 
     ),
 
@@ -192,8 +193,10 @@ return array(
         'URL'             => 'Illuminate\Support\Facades\URL',
         'Validator'       => 'Illuminate\Support\Facades\Validator',
         'View'            => 'Illuminate\Support\Facades\View',
-    'Excel' => 'Maatwebsite\Excel\Facades\Excel',
-        'PDF' => 'Barryvdh\DomPDF\Facade'
+        'Excel'           => 'Maatwebsite\Excel\Facades\Excel',
+        'PDF'             => 'Barryvdh\DomPDF\Facade',
+        'SmsHelper'       => 'App\Helpers\AppHelper::class',
+
 
     ),
 

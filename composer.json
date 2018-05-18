@@ -1,20 +1,23 @@
 {
 	"name": "laravel/laravel",
 	"description": "The Laravel Framework.",
-	"keywords": ["framework", "laravel"],
+	"keywords": [
+		"framework",
+		"laravel"
+	],
 	"license": "MIT",
 	"require": {
 		"laravel/framework": "4.2.*",
-        	 "maatwebsite/excel": "~1.3",
+		"maatwebsite/excel": "~1.3",
 		"guzzle/guzzle": "~3.0",
 		"barryvdh/laravel-dompdf": "0.4.*",
-		"pda/pheanstalk":"~2.0",
+		"pda/pheanstalk": "~2.0",
 		"picqer/php-barcode-generator": "^0.2.0",
-		"davelip/laravel-database-queue": ">0.5"	
+		"davelip/laravel-database-queue": ">0.5"
 	},
 	"require-dev": {
-    "way/generators": "~2.0"
-},
+		"way/generators": "~2.0"
+	},
 	"autoload": {
 		"classmap": [
 			"app/commands",
@@ -22,7 +25,9 @@
 			"app/models",
 			"app/database/migrations",
 			"app/database/seeds",
-			"app/tests/TestCase.php"
+			"app/tests/TestCase.php",
+			"app/composers",
+			"app/helpers"
 		]
 	},
 	"scripts": {

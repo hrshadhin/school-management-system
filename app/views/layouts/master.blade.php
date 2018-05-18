@@ -16,32 +16,32 @@
         ===
     -->
     <meta charset="utf-8">
-    <title>School Manage</title>
+    <title>{{Session::get('inNameShort')}} | School Manage</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
 
     <!-- The styles -->
-    <link id="bs-css" href="<?php echo url();?>/css/bootstrap-cerulean.min.css" rel="stylesheet">
+    <link id="bs-css" href="<?php echo url(); ?>/css/bootstrap-cerulean.min.css" rel="stylesheet">
 
-    <link href="<?php echo url();?>/css/charisma-app.css" rel="stylesheet">
-    <link href='<?php echo url();?>/bower_components/fullcalendar/dist/fullcalendar.css' rel='stylesheet'>
-    <link href='<?php echo url();?>/bower_components/fullcalendar/dist/fullcalendar.print.css' rel='stylesheet' media='print'>
-    <link href='<?php echo url();?>/bower_components/chosen/chosen.min.css' rel='stylesheet'>
-    <link href='<?php echo url();?>/bower_components/colorbox/example3/colorbox.css' rel='stylesheet'>
+    <link href="<?php echo url(); ?>/css/charisma-app.css" rel="stylesheet">
+    <link href='<?php echo url(); ?>/bower_components/fullcalendar/dist/fullcalendar.css' rel='stylesheet'>
+    <link href='<?php echo url(); ?>/bower_components/fullcalendar/dist/fullcalendar.print.css' rel='stylesheet' media='print'>
+    <link href='<?php echo url(); ?>/bower_components/chosen/chosen.min.css' rel='stylesheet'>
+    <link href='<?php echo url(); ?>/bower_components/colorbox/example3/colorbox.css' rel='stylesheet'>
 
-    <link href='  <?php echo url();?>/bower_components/datatables/media/css/jquery.dataTables.css' rel='stylesheet'>
+    <link href='  <?php echo url(); ?>/bower_components/datatables/media/css/jquery.dataTables.css' rel='stylesheet'>
 
-    <link href='<?php echo url();?>/bower_components/responsive-tables/responsive-tables.css' rel='stylesheet'>
+    <link href='<?php echo url(); ?>/bower_components/responsive-tables/responsive-tables.css' rel='stylesheet'>
 
-    <link href='<?php echo url();?>/css/jquery.noty.css' rel='stylesheet'>
-    <link href='<?php echo url();?>/css/noty_theme_default.css' rel='stylesheet'>
-    <link href='<?php echo url();?>/css/elfinder.min.css' rel='stylesheet'>
-    <link href='<?php echo url();?>/css/elfinder.theme.css' rel='stylesheet'>
-    <link href='<?php echo url();?>/css/jquery.iphone.toggle.css' rel='stylesheet'>
-    <link href='<?php echo url();?>/css/uploadify.css' rel='stylesheet'>
-    <link href='<?php echo url();?>/css/animate.min.css' rel='stylesheet'>
-    <link href='<?php echo url();?>/css/app.css' rel='stylesheet'>
+    <link href='<?php echo url(); ?>/css/jquery.noty.css' rel='stylesheet'>
+    <link href='<?php echo url(); ?>/css/noty_theme_default.css' rel='stylesheet'>
+    <link href='<?php echo url(); ?>/css/elfinder.min.css' rel='stylesheet'>
+    <link href='<?php echo url(); ?>/css/elfinder.theme.css' rel='stylesheet'>
+    <link href='<?php echo url(); ?>/css/jquery.iphone.toggle.css' rel='stylesheet'>
+    <link href='<?php echo url(); ?>/css/uploadify.css' rel='stylesheet'>
+    <link href='<?php echo url(); ?>/css/animate.min.css' rel='stylesheet'>
+    <link href='<?php echo url(); ?>/css/app.css' rel='stylesheet'>
 
     @yield("style")
     <style media="screen">
@@ -55,7 +55,7 @@
    }
    </style>
     <!-- jQuery -->
-    <script src="<?php echo url();?>/bower_components/jquery/jquery.min.js"></script>
+    <script src="<?php echo url(); ?>/bower_components/jquery/jquery.min.js"></script>
 
     <!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -63,7 +63,10 @@
     <![endif]-->
 
     <!-- The fav icon -->
-    <link rel="shortcut icon" href="img/favicon.ico">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    <script>
+      var hash = '{{Session::get('user_session_sha1')}}';
+    </script>
 
 </head>
 
@@ -374,48 +377,42 @@
 
     </div>
 
-
-    <footer class="footer">
-        <hr>
-        <p class="col-md-9 col-sm-9 col-xs-12 copyright"> <a href="#" target="_blank">{{Session::get('inName')}}</a> &copy;{{date('Y')}}</p>
-
-        <p class="col-md-3 col-sm-3 col-xs-12 powered-by">Develop by: <a target="_blank" href="http://shanixlab.com">ShanixLab</a></p>
-    </footer>
+@include('layouts.footer')
 
 </div><!--/.fluid-container-->
 
 <!-- external javascript -->
 
-<script src="<?php echo url();?>/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="<?php echo url(); ?>/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 
 <!-- library for cookie management -->
-<script src="<?php echo url();?>/js/jquery.cookie.js"></script>
+<script src="<?php echo url(); ?>/js/jquery.cookie.js"></script>
 <!-- calender plugin -->
-<script src='<?php echo url();?>/bower_components/moment/min/moment.min.js'></script>
-<script src='<?php echo url();?>/bower_components/fullcalendar/dist/fullcalendar.min.js'></script>
+<script src='<?php echo url(); ?>/bower_components/moment/min/moment.min.js'></script>
+<script src='<?php echo url(); ?>/bower_components/fullcalendar/dist/fullcalendar.min.js'></script>
 <!-- data table plugin -->
-<script src='<?php echo url();?>/bower_components/datatables/media/js/jquery.dataTables.js'></script>
+<script src='<?php echo url(); ?>/bower_components/datatables/media/js/jquery.dataTables.js'></script>
 
 <!-- select or dropdown enhancer -->
-<script src="<?php echo url();?>/bower_components/chosen/chosen.jquery.min.js"></script>
+<script src="<?php echo url(); ?>/bower_components/chosen/chosen.jquery.min.js"></script>
 <!-- plugin for gallery image view -->
-<script src="<?php echo url();?>/bower_components/colorbox/jquery.colorbox-min.js"></script>
+<script src="<?php echo url(); ?>/bower_components/colorbox/jquery.colorbox-min.js"></script>
 <!-- notification plugin -->
-<script src="<?php echo url();?>/js/jquery.noty.js"></script>
+<script src="<?php echo url(); ?>/js/jquery.noty.js"></script>
 <!-- library for making tables responsive -->
-<script src="<?php echo url();?>/bower_components/responsive-tables/responsive-tables.js"></script>
+<script src="<?php echo url(); ?>/bower_components/responsive-tables/responsive-tables.js"></script>
 
 <!-- star rating plugin -->
-<script src="<?php echo url();?>/js/jquery.raty.min.js"></script>
+<script src="<?php echo url(); ?>/js/jquery.raty.min.js"></script>
 <!-- for iOS style toggle switch -->
-<script src="<?php echo url();?>/js/jquery.iphone.toggle.js"></script>
+<script src="<?php echo url(); ?>/js/jquery.iphone.toggle.js"></script>
 <!-- autogrowing textarea plugin -->
-<script src="<?php echo url();?>/js/jquery.autogrow-textarea.js"></script>
+<script src="<?php echo url(); ?>/js/jquery.autogrow-textarea.js"></script>
 <!-- multiple file upload plugin -->
 
-<script src="<?php echo url();?>/js/jquery.history.js"></script>
+<script src="<?php echo url(); ?>/js/jquery.history.js"></script>
 <!-- application script for Charisma demo -->
-<script src="<?php echo url();?>/js/charisma.js"></script>
+<script src="<?php echo url(); ?>/js/charisma.js"></script>
 
 @yield('script')
 </body>
