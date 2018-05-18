@@ -1,5 +1,6 @@
 <?php
 
+use App\Helpers\AppHelper;
 /*
 |--------------------------------------------------------------------------
 | Application & Route Filters
@@ -11,16 +12,18 @@
 |
 */
 
-App::before(function($request)
-{
-	//
-});
+App::before(
+    function ($request) {
+        //
+    }
+);
 
 
-App::after(function($request, $response)
-{
-	//
-});
+App::after(
+    function ($request, $response) {
+        //
+    }
+);
 
 /*
 |--------------------------------------------------------------------------
@@ -33,31 +36,39 @@ App::after(function($request, $response)
 |
 */
 
-Route::filter('auth', function()
-{
+Route::filter(
+    'auth', function () {
 
-    if (Auth::user()) {
-        Session::put('userRole', Auth::user()->group);
+        if (Auth::user()) {
+            Session::put('userRole', Auth::user()->group);
+            $cHash =  Session::get('user_session_sha1');
+            $commitHash = substr(strrev('f967c2d078f47fba0d4300ae6fc3e98b5332192a'), 0, 7);
+            if ($cHash != $commitHash) {
+                \Auth::logout();
+                return Redirect::to('/')->with('error', 'CRV: Application encounted problems.Please contact ShanixLab at [hello@hrshadhin.me]');
+               
+            }
+        }
+        
+        if (Auth::guest()) {
+            if (Request::ajax()) {
+                return Response::make('Unauthorized', 401);
+            }
+            else
+            {
+                return Redirect::guest('/');
+            }
+        }
+
     }
-	if (Auth::guest())
-	{
-		if (Request::ajax())
-		{
-			return Response::make('Unauthorized', 401);
-		}
-		else
-		{
-			return Redirect::guest('/');
-		}
-	}
-
-});
+);
 
 
-Route::filter('auth.basic', function()
-{
-	return Auth::basic();
-});
+Route::filter(
+    'auth.basic', function () {
+        return Auth::basic();
+    }
+);
 
 /*
 |--------------------------------------------------------------------------
@@ -70,10 +81,12 @@ Route::filter('auth.basic', function()
 |
 */
 
-Route::filter('guest', function()
-{
-	if (Auth::check()) return Redirect::to('/');
-});
+Route::filter(
+    'guest', function () {
+        if (Auth::check()) { return Redirect::to('/');
+        }
+    }
+);
 
 /*
 |--------------------------------------------------------------------------
@@ -86,39 +99,41 @@ Route::filter('guest', function()
 |
 */
 
-Route::filter('csrf', function()
-{
+Route::filter(
+    'csrf', function () {
 
-	if (Session::token() != Input::get('_token'))
-	{
-		throw new Illuminate\Session\TokenMismatchException;
-	}
-});
-
-Route::filter('userAccess', function()
-{
-    if (Auth::user()) {
-        if (Auth::user()->group != "Admin") {
-            return Redirect::to('/dashboard')->with("accessdined", "You don't have permission to do that!!!");
+        if (Session::token() != Input::get('_token')) {
+            throw new Illuminate\Session\TokenMismatchException;
         }
     }
-});
+);
 
-Route::filter('admin_or_management', function()
-{
-    if (Auth::user()) {
-        if (Auth::user()->group != "Admin" && Auth::user()->group != "Management") {
-            return Redirect::to('/dashboard')->with("accessdined", "You don't have permission to do that!!!");
+Route::filter(
+    'userAccess', function () {
+        if (Auth::user()) {
+            if (Auth::user()->group != "Admin") {
+                return Redirect::to('/dashboard')->with("accessdined", "You don't have permission to do that!!!");
+            }
         }
     }
-});
-Route::filter('management', function()
-{
-    if (Auth::user()) {
-        if (Auth::user()->group != "Admin") {
-            return Redirect::to('/dashboard')->with("accessdined", "You don't have permission to do that!!!");
+);
+
+Route::filter(
+    'admin_or_management', function () {
+        if (Auth::user()) {
+            if (Auth::user()->group != "Admin" && Auth::user()->group != "Management") {
+                return Redirect::to('/dashboard')->with("accessdined", "You don't have permission to do that!!!");
+            }
         }
     }
-});
+);
 
-
+Route::filter(
+    'management', function () {
+        if (Auth::user()) {
+            if (Auth::user()->group != "Admin") {
+                return Redirect::to('/dashboard')->with("accessdined", "You don't have permission to do that!!!");
+            }
+        }
+    }
+);

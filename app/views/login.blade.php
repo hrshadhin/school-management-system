@@ -27,8 +27,6 @@
     <link href="css/charisma-app.css" rel="stylesheet">
 
 
-    <!-- jQuery -->
-    <script src="bower_components/jquery/jquery.min.js"></script>
 
     <!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -55,7 +53,6 @@
             <div class="well col-md-5 center login-box">
                 @if (Session::get('message'))
                     <div class="alert alert-success text-center">
-                        <button data-dismiss="alert" class="close" type="button">×</button>
                         <strong> {{ Session::get('message')}} </strong>
 
                     </div>
@@ -81,14 +78,13 @@
                         <div class="clearfix"></div>
                         @if (isset($error))
                                 <div class="alert alert-danger">
-                                <button data-dismiss="alert" class="close" type="button">×</button>
-                                <strong>{{ $error }}.</strong>
+                                <strong>{{ $error }}</strong>
                             </div>
                         @endif
 
 
                         <p class="center col-md-5">
-                            <button type="submit" class="btn btn-primary">Login</button>
+                            <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-log-in"></span> Login</button>
                         </p>
                     </fieldset>
                 </form>
@@ -100,12 +96,6 @@
 </div><!--/.fluid-container-->
 
 <!-- external javascript -->
-
-<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-
-
-<script src="js/charisma.js"></script>
-
 
 </body>
 </html>
