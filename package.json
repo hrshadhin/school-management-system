@@ -1,6 +1,7 @@
 {
     "private": true,
     "scripts": {
+        "predev": "rm -rf public/css public/js public/fonts public/images/vendor",
         "dev": "npm run development",
         "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
         "watch": "npm run development -- --watch",
@@ -11,8 +12,32 @@
     },
     "devDependencies": {
         "axios": "^0.18",
+        "browser-sync": "^2.24.4",
+        "browser-sync-webpack-plugin": "^2.2.2",
         "cross-env": "^5.1",
         "laravel-mix": "^2.0",
-        "lodash": "^4.17.4"
+        "lodash": "^4.17.4",
+        "purify-css": "^1.2.5",
+        "purifycss-webpack": "^0.7.0"
+    },
+    "dependencies": {
+        "bootstrap": "^3.3.7",
+        "bootstrap-datepicker": "^1.7.0",
+        "bootstrap-daterangepicker": "^2.1.25",
+        "datatables.net": "^1.10.15",
+        "datatables.net-bs": "^1.10.15",
+        "datatables.net-responsive-bs": "^2.2.1",
+        "font-awesome": "^4.7.0",
+        "icheck": "^1.0.2",
+        "inputmask": "^3.3.7",
+        "jquery": "^3.3.1",
+        "jquery-ui": "^1.12.1",
+        "jszip": "^3.1.5",
+        "moment": "^2.18.1",
+        "pace": "0.0.4",
+        "pdfmake": "^0.1.36",
+        "popper.js": "^1.14.3",
+        "select2": "^4.0.3",
+        "slimscroll": "^0.9.1"
     }
 }
