@@ -10,6 +10,11 @@
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
 
+        <link href="{{ mix('/css/vendor.css') }}" rel="stylesheet" type="text/css">
+        <link href="{{ mix('/css/theme.css') }}" rel="stylesheet" type="text/css">
+        <link href="{{ mix('/css/app.css') }}" rel="stylesheet" type="text/css">
+
+
         <!-- Styles -->
         <style>
             html, body {
@@ -78,7 +83,7 @@
             @endif
 
             <div class="content">
-                <div class="title m-b-md">
+                <div class="title m-b-md tgreen">
                     @lang('laravel')
                 </div>
 
@@ -91,5 +96,15 @@
                 </div>
             </div>
         </div>
+
+
+    <script src="{{ mix('/js/manifest.js') }}"></script>
+    <script src="{{ mix('/js/vendor.js') }}"></script>
+    <script src="{{ mix('/js/app.js') }}"></script>
+    <script type="text/javascript">
+     $( document ).ready(function() {
+            console.log( "ready!" );
+        });
+</script>
     </body>
 </html>

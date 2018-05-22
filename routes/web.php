@@ -18,6 +18,11 @@ Route::get(
     }
 );
 Route::get(
+    '/login', function () {       
+        return view('user.login');
+    }
+);
+Route::get(
     '/set-locale/{lang}', function ($lang) {
         //set user wanted locale to session
         session('user_locale', $lang);

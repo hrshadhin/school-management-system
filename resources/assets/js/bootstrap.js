@@ -1,6 +1,6 @@
 
-window._ = require('lodash');
-window.Popper = require('popper.js').default;
+// window._ = require('lodash');
+// window.Popper = require('popper.js').default;
 
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
@@ -12,7 +12,7 @@ try {
     window.$ = window.jQuery = require('jquery');
 
     require('bootstrap');
-} catch (e) {}
+} catch (e) { }
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
@@ -54,3 +54,24 @@ if (token) {
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     encrypted: true
 // });
+
+require('icheck');
+// require( 'moment');
+// require( 'bootstrap-datepicker');
+// require( 'bootstrap-daterangepicker');
+// require( 'font-awesome');
+// require( 'inputmask');
+// require( 'pace');
+// require( 'select2');
+// require( 'slimscroll');
+// require( 'jszip' );
+// require( 'jszip' );
+// require( 'pdfmake' );
+// require( 'datatables.net-bs' )();
+// require( 'datatables.net-buttons-bs' )();
+// require( 'datatables.net-buttons/js/buttons.colVis.js' )();
+// require( 'datatables.net-buttons/js/buttons.flash.js' )();
+// require( 'datatables.net-buttons/js/buttons.html5.js' )();
+// require( 'datatables.net-buttons/js/buttons.print.js' )();
+// require( 'datatables.net-responsive-bs' )();
+
