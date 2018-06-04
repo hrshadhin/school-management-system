@@ -56,6 +56,9 @@ if (token) {
 // });
 
 require('icheck');
+require('jquery-validation');
+require('slimscroll');
+require('fastclick');
 // require( 'moment');
 // require( 'bootstrap-datepicker');
 // require( 'bootstrap-daterangepicker');
