@@ -11,6 +11,8 @@
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <!-- Favicon png -->
+    <link rel="icon" href="{{ asset('images/favicon.png') }}" type="image/png">
     <!-- vendor libraries CSS -->
     <link href="{{ mix('/css/vendor.css') }}" rel="stylesheet" type="text/css">
     <!-- theme CSS -->
