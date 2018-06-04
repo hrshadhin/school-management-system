@@ -1,0 +1,39 @@
+.login-page{
+    background: #e6e2e1;
+    height: auto;
+}
+
+.login-box {
+    background: #fff;
+    width: 320px;
+}
+.login-logo{
+    max-width: 320px;
+    max-height: 70px;
+    margin-bottom: 0;
+    padding-top: 5px;
+}
+
+.login-box-msg{
+    font-weight: 600;
+    padding: 0 0 20px 0;
+}
+
+.forgot-link{
+    display: block;
+    padding-top: 10px;
+    text-align: right;
+}
+.login-link{
+    display: block;
+    padding-top: 10px;
+    text-align: left;
+}
+.login-button{
+    background: #008967;
+    color:#fff;
+}
+.login-button:hover{
+    color:#fff;
+    background: #11a27e;
+}

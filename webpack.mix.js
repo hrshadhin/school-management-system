@@ -11,15 +11,15 @@ let mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/assets/js/app.js', 'public/js')
-    .extract(['jquery', 'bootstrap', 'icheck'])
-    .sass('resources/assets/sass/app.scss', 'public/css')
-    .sass('resources/assets/sass/vendor.scss', 'public/css')
+mix.js('resources/assets/backend/js/app.js', 'public/js')
+    .extract(['jquery', 'bootstrap', 'icheck', 'jquery-validation', 'slimscroll', 'fastclick'])
+    .sass('resources/assets/backend/sass/app.scss', 'public/css')
+    .sass('resources/assets/backend/sass/vendor.scss', 'public/css')
     .styles([
-        'resources/assets/css/AdminLTE.css',
-        'resources/assets/css/_all-skins.css',
+        'resources/assets/backend/css/AdminLTE.css',
+        'resources/assets/backend/css/_all-skins.css',
     ], 'public/css/theme.css')
-    .scripts(['resources/assets/js/adminlte.js'], 'public/js/theme.js')
+    .js(['resources/assets/backend/js/adminlte.js'], 'public/js/theme.js')
     .autoload({
         jquery: ['$', 'window.jQuery', 'jQuery', 'jquery']
     });
@@ -35,7 +35,7 @@ mix.options({
 
 
 // copy non processing files to public path
-mix.copyDirectory('resources/assets/images', 'public/images');
+mix.copyDirectory('resources/assets/backend/images', 'public/images');
 
 
 
