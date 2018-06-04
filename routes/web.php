@@ -15,7 +15,7 @@ Route::get(
     '/', function () {
         return view('welcome');
     }
-);
+)->name('home');
 
 Route::group(
     ['namespace' => 'backend', 'middleware' => ['web','guest']], function () {

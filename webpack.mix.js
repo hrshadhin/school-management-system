@@ -19,7 +19,10 @@ mix.js('resources/assets/backend/js/app.js', 'public/js')
         'resources/assets/backend/css/AdminLTE.css',
         'resources/assets/backend/css/_all-skins.css',
     ], 'public/css/theme.css')
-    .js(['resources/assets/backend/js/adminlte.js'], 'public/js/theme.js')
+    .js([
+        'resources/assets/backend/js/adminlte.js',
+        'resources/assets/backend/js/theme_settings.js'
+    ], 'public/js/theme.js')
     .autoload({
         jquery: ['$', 'window.jQuery', 'jQuery', 'jquery']
     });

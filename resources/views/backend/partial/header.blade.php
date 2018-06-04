@@ -1,10 +1,14 @@
 <header class="main-header">
     <!-- Logo -->
-    <a href="../../index2.html" class="logo">
+<a href="{{ URL::route('user.dashboard') }}" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><b>A</b>LT</span>
+      <span class="logo-mini">
+      <img src="{{ asset('images/logo-sm.png') }}" alt="logo-mini">
+      </span>
       <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><b>Admin</b>LTE</span>
+      <span class="logo-lg">
+        <img src="{{ asset('images/logo-md.png') }}" alt="logo-md">
+      </span>
     </a>
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top">
@@ -17,132 +21,150 @@
       </a>
 
       <div class="navbar-custom-menu">
-        <ul class="nav navbar-nav">
-          <!-- Messages: style can be found in dropdown.less-->
-          <li class="dropdown messages-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <i class="fa fa-envelope-o"></i>
-              <span class="label label-success">4</span>
+        <ul class="nav navbar-nav">    
+          <li class="clock-menu hidden-xs">
+            <a href="#0">
+                <p class="smsclock"><span id="date"></span> || <span id="clock"></span></p>
             </a>
+          </li>     
+          <!-- Site Start -->
+        <li class="dropdown site-menu">
+        <a target="_blank" title="Site" href="{{ URL::route('home') }}" class="dropdown-toggle" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="Visit Site">
+                <i class="fa fa-globe"></i>
+            </a>
+        </li>
+        <!-- Site Close -->
+         <!-- Notifications: style can be found in dropdown.less-->
+         <li class="dropdown messages-menu">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <i class="fa fa-bell-o"></i>
+                <span class="label label-danger"><lable class="alert-image">15</lable></span> </a>
             <ul class="dropdown-menu">
-              <li class="header">You have 4 messages</li>
-              <li>
-                <!-- inner menu: contains the actual data -->
-                <ul class="menu">
-                  <li><!-- start message -->
-                    <a href="#">
-                      <div class="pull-left">
-                        <img src="../../dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
-                      </div>
-                      <h4>
-                        Support Team
-                        <small><i class="fa fa-clock-o"></i> 5 mins</small>
-                      </h4>
-                      <p>Why not buy a new awesome theme?</p>
-                    </a>
-                  </li>
-                  <!-- end message -->
-                </ul>
-              </li>
-              <li class="footer"><a href="#">See All Messages</a></li>
+                <li class="header">You have 5 recent notifications</li>
+                <li>
+                        <ul class="menu notification">
+                            <li>
+                                <a href="#">
+                                    <div class="pull-left">
+                                    <img class="img-circle" src="{{ asset('images/notification.png') }}"></div>
+                                    <h4>Praesentium comm..<small><i class="fa fa-clock-o"></i> 5 min</small></h4>
+                                    <p>Blanditiis quia distinctio rep..</p>
+                                </a>
+                            </li>                           
+                            <li>
+                                <a href="#">
+                                    <div class="pull-left"><img class="img-circle" src="{{ asset('images/notification.png') }}"></div>
+                                    <h4>Autem modi aliqu..<small><i class="fa fa-clock-o"></i> 2 days</small></h4>
+                                    <p>Necessitatibus omnis voluptate..</p>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <div class="pull-left">
+                                    <img class="img-circle" src="{{ asset('images/notification.png') }}"></div>
+                                    <h4>Praesentium comm..<small><i class="fa fa-clock-o"></i> 5 days</small></h4>
+                                    <p>Blanditiis quia distinctio rep..</p>
+                                </a>
+                            </li>                           
+                            <li>
+                                <a href="#">
+                                    <div class="pull-left"><img class="img-circle" src="{{ asset('images/notification.png') }}"></div>
+                                    <h4>Autem modi aliqu..<small><i class="fa fa-clock-o"></i> 5 days</small></h4>
+                                    <p>Necessitatibus omnis voluptate..</p>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <div class="pull-left">
+                                    <img class="img-circle" src="{{ asset('images/notification.png') }}"></div>
+                                    <h4>Praesentium comm..<small><i class="fa fa-clock-o"></i> 20 days</small></h4>
+                                    <p>Blanditiis quia distinctio rep..</p>
+                                </a>
+                            </li>                         
+                           
+                        </ul>
+                      
+                </li>
+                <li class="footer"><a href="#">See All Notifications</a></li>
             </ul>
-          </li>
-          <!-- Notifications: style can be found in dropdown.less -->
-          <li class="dropdown notifications-menu">
+        </li>                                                  
+          
+        <li class="dropdown lang-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <i class="fa fa-bell-o"></i>
-              <span class="label label-warning">10</span>
+                <img class="language-img" src="{{ asset('images/lang/english.png') }}"> 
+                <span class="label label-warning">3</span>
             </a>
             <ul class="dropdown-menu">
-              <li class="header">You have 10 notifications</li>
-              <li>
-                <!-- inner menu: contains the actual data -->
-                <ul class="menu">
-                  <li>
+                <li class="header"> Language</li>            
+                <li class="language" id="bangla">
                     <a href="#">
-                      <i class="fa fa-users text-aqua"></i> 5 new members joined today
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li class="footer"><a href="#">View all</a></li>
-            </ul>
-          </li>
-          <!-- Tasks: style can be found in dropdown.less -->
-          <li class="dropdown tasks-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <i class="fa fa-flag-o"></i>
-              <span class="label label-danger">9</span>
-            </a>
-            <ul class="dropdown-menu">
-              <li class="header">You have 9 tasks</li>
-              <li>
-                <!-- inner menu: contains the actual data -->
-                <ul class="menu">
-                  <li><!-- Task item -->
-                    <a href="#">
-                      <h3>
-                        Design some buttons
-                        <small class="pull-right">20%</small>
-                      </h3>
-                      <div class="progress xs">
-                        <div class="progress-bar progress-bar-aqua" style="width: 20%" role="progressbar"
-                             aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                          <span class="sr-only">20% Complete</span>
+                        <div class="pull-left">
+                            <img src="{{ asset('images/lang/bangla.png') }}">
                         </div>
-                      </div>
+                        <h4>
+                            Bangla
+                        </h4>
                     </a>
-                  </li>
-                  <!-- end task item -->
-                </ul>
-              </li>
-              <li class="footer">
-                <a href="#">View all tasks</a>
-              </li>
+                </li>                     
+                <li class="language" id="english">
+                    <a href="#">
+                        <div class="pull-left">
+                            <img src="{{ asset('images/lang/english.png') }}">
+                        </div>
+                        <h4>
+                            English  <i class="glyphicon glyphicon-ok green pull-right"></i>  
+                        </h4>
+                    </a>
+                </li>
+                <li class="language" id="hindi">
+                    <a href="#">
+                        <div class="pull-left">
+                            <img src="{{ asset('images/lang/hindi.png') }}">
+                        </div>
+                        <h4>
+                          Hindi
+                        </h4>
+                    </a>
+                </li>               
+                <li class="footer"></li>
             </ul>
-          </li>
-          <!-- User Account: style can be found in dropdown.less -->
-          <li class="dropdown user user-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <img src="../../dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
-              <span class="hidden-xs">Alexander Pierce</span>
-            </a>
-            <ul class="dropdown-menu">
-              <!-- User image -->
-              <li class="user-header">
-                <img src="../../dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+        </li>                   
+<!-- User Account: style can be found in dropdown.less -->
+<li class="dropdown user user-menu">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+        <i class="fa fa-user"></i>
+        <span>Admin <i class="caret"></i></span>
+    </a>
 
-                <p>
-                  Alexander Pierce - Web Developer
-                  <small>Member since Nov. 2012</small>
-                </p>
-              </li>
-              <!-- Menu Body -->
-              <li class="user-body">
-                <div class="row">
-                  <div class="col-xs-4 text-center">
-                    <a href="#">Followers</a>
-                  </div>
-                  <div class="col-xs-4 text-center">
-                    <a href="#">Sales</a>
-                  </div>
-                  <div class="col-xs-4 text-center">
-                    <a href="#">Friends</a>
-                  </div>
-                </div>
-                <!-- /.row -->
-              </li>
-              <!-- Menu Footer-->
-              <li class="user-footer">
-                <div class="pull-left">
-                  <a href="#" class="btn btn-default btn-flat">Profile</a>
-                </div>
-                <div class="pull-right">
-                  <a href="#" class="btn btn-default btn-flat">Sign out</a>
-                </div>
-              </li>
-            </ul>
-          </li>
+    <ul class="dropdown-menu">
+        <!-- Menu Body -->
+        <li class="user-body">
+            <div class="col-xs-6 text-center">
+                <a href="#">
+                    <div><i class="fa fa-briefcase"></i></div>
+                    Profile
+                </a>
+            </div>
+            <div class="col-xs-6 text-center password">
+                <a href="#">
+                    <div><i class="fa fa-lock"></i></div>
+                   Password
+                </a>
+            </div>
+        </li>
+
+        <!-- Menu Footer-->
+        <li class="user-footer">
+
+            <div class="text-center">
+            <a href="{{ URL::route('logout') }}">
+                    <div><i class="fa fa-power-off"></i></div>
+                    Log out
+                </a>
+            </div>
+        </li>
+    </ul>
+</li>         
           <!-- Control Sidebar Toggle Button -->
           <li>
             <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
