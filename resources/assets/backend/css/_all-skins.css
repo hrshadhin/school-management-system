@@ -1,3 +1,62 @@
+
+/*
+ * Skin: light green 2
+ * ----------
+ */
+
+.light-geen2 .main-header .navbar {
+  background-color: #c7e4df;
+}
+
+.light-geen2 .main-header .navbar .sidebar-toggle, .light-geen2 .main-header .navbar .nav > li > a {
+  color: #000;
+}
+
+.light-geen2 .main-header .navbar .nav > li > a > p.smsclock {
+  color: #008a68;
+}
+.light-geen2 .wrapper,
+.light-geen2 .main-sidebar,
+.light-geen2 .left-side {
+background-color: #132035;
+}
+.light-geen2 .sidebar-menu > li.header {
+  color: #4b646f;
+  background: #1a2226;
+}
+.light-geen2 .sidebar .sidebar-menu .treeview-menu > li {
+  background-color: #101b2d;
+  margin: 0;
+}
+.light-geen2 .treeview-menu > li > a {
+  color: #999999;
+}
+.light-geen2 .sidebar .sidebar-menu .treeview-menu > li > a:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: #FFFFFF;
+}
+
+.light-geen2 .sidebar-menu > li.active > a {
+  background: #2196f3;
+  border-left-color: none;
+}
+
+.light-geen2 .sidebar-menu > li:hover > a, .light-geen2 .sidebar-menu > li.menu-open > a {
+  color: #ffffff;
+  background: #2196f3;
+}
+.light-geen2 .control-sidebar-dark, .light-geen2 .control-sidebar-dark + .control-sidebar-bg {
+  background: #132035;
+}
+.light-geen2 .sidebar a {
+  color: #b8c7ce;
+}
+
+.light-geen2 .sidebar-menu > li:hover > a, .light-geen2 .sidebar-menu > li.active > a, .light-geen2 .sidebar-menu > li.menu-open > a {
+  color: #ffffff;
+}
+
+
 /*
  * Skin: Blue
  * ----------

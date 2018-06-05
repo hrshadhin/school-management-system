@@ -68,12 +68,47 @@ $(function () {
     /**
      * Toggles layout classes
      *
-     * @param String cls the layout class to toggle
+     * @param String cls the class to toggle
      * @returns void
      */
-    function toggleFeature(cls) {
-        $('.' + cls).toggleClass('hide');
-        //todo: need to implement localstorage
+    function toggleFeature(cls, isChecked) {
+        if (isChecked) {
+            $('.' + cls).removeClass('hide');
+        }
+        else {
+            $('.' + cls).addClass('hide');
+        }
+        var isHidden = $('.' + cls).hasClass('hide');
+        store(cls, isHidden);
+    }
+
+    /**
+     * setup user specific feature hide/show
+     * 
+     * @returns void
+     */
+    function featureVisibility() {
+        var features = [
+            'clock-menu',
+            'site-menu',
+            'messages-menu',
+            'lang-menu'
+        ];
+        features.forEach(function (feature) {
+            var isHidden = get(feature);
+            if (isHidden == 'true') {
+                $('.' + feature).addClass('hide');
+                $('[data-feature="' + feature + '"]').prop("checked", false);
+                // console.log(feature, isHidden, 'hide');
+
+            }
+            else {
+                $('.' + feature).removeClass('hide');
+                $('[data-feature="' + feature + '"]').prop("checked", true);
+                // console.log(feature, isHidden, 'show');
+
+            }
+        });
     }
 
     /**
@@ -141,6 +176,9 @@ $(function () {
         if (tmp && $.inArray(tmp, mySkins))
             changeSkin(tmp)
 
+        //setup feature hide/show
+        featureVisibility();
+
         // Add the change skin listener
         $('[data-skin]').on('click', function (e) {
             if ($(this).hasClass('knob'))
@@ -151,7 +189,7 @@ $(function () {
 
         // Add the layout manager
         $('[data-feature]').on('click', function () {
-            toggleFeature($(this).data('feature'))
+            toggleFeature($(this).data('feature'), $(this).prop('checked'))
         })
 
         // $('[data-controlsidebar]').on('click', function () {
@@ -222,28 +260,28 @@ $(function () {
         // clock 
         + '<div class="form-group">'
         + '<label class="control-sidebar-subheading">'
-        + '<input type="checkbox"data-feature="clock-menu"class="pull-right"/> '
+        + '<input type="checkbox"data-feature="clock-menu"class="pull-right" checked/> '
         + 'Clock'
         + '</label>'
         + '</div>'
         // Site link
         + '<div class="form-group">'
         + '<label class="control-sidebar-subheading">'
-        + '<input type="checkbox"data-feature="site-menu"class="pull-right"/> '
+        + '<input type="checkbox"data-feature="site-menu"class="pull-right" checked/> '
         + 'Site Link'
         + '</label>'
         + '</div>'
         // Notification
         + '<div class="form-group">'
         + '<label class="control-sidebar-subheading">'
-        + '<input type="checkbox"data-feature="messages-menu"class="pull-right"/> '
+        + '<input type="checkbox"data-feature="messages-menu"class="pull-right" checked/> '
         + 'Notification'
         + '</label>'
         + '</div>'
         // Language
         + '<div class="form-group">'
         + '<label class="control-sidebar-subheading">'
-        + '<input type="checkbox"data-feature="lang-menu"class="pull-right"/> '
+        + '<input type="checkbox"data-feature="lang-menu"class="pull-right" checked/> '
         + 'Language'
         + '</label>'
         + '</div>'
