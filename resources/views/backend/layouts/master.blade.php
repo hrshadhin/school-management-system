@@ -34,7 +34,7 @@
 
 </head>
 
-<body class="hold-transition hold-transition skin-blue sidebar-mini @yield('bodyCssClass')">
+<body class="hold-transition hold-transition light-geen2 sidebar-mini @yield('bodyCssClass')">
     <!-- Site wrapper -->
     <div class="wrapper">
         <!-- page header -->

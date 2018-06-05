@@ -1,0 +1,180 @@
+@font-face {
+    font-family: 'icomoon';
+    src:  url('../fonts_icomoon/icomoon.eot?wpuwy3');
+    src:  url('../fonts_icomoon/icomoon.eot?wpuwy3#iefix') format('embedded-opentype'),
+      url('../fonts_icomoon/icomoon.ttf?wpuwy3') format('truetype'),
+      url('../fonts_icomoon/icomoon.woff?wpuwy3') format('woff'),
+      url('../fonts_icomoon/icomoon.svg?wpuwy3#icomoon') format('svg');
+    font-weight: normal;
+    font-style: normal;
+  }
+  
+  [class^="icon-"], [class*=" icon-"] {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'icomoon' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+  
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  .icon-syllabus:before {
+    content: "\e903";
+  }
+  .icon-studentreport:before {
+    content: "\e904";
+  }
+  .icon-role:before {
+    content: "\e905";
+  }
+  .icon-permission:before {
+    content: "\e906";
+  }
+  .icon-noticemain:before {
+    content: "\e907";
+  }
+  .icon-markpercentage:before {
+    content: "\e908";
+  }
+  .icon-markmain:before {
+    content: "\e909";
+  }
+  .icon-mark2:before {
+    content: "\e90a";
+  }
+  .icon-classreport:before {
+    content: "\e90b";
+  }
+  .icon-attendancereport:before {
+    content: "\e90c";
+  }
+  .icon-assignment:before {
+    content: "\e90d";
+  }
+  .icon-administrator:before {
+    content: "\e90e";
+  }
+  .icon-academicmain:before {
+    content: "\e90f";
+  }
+  .icon-holiday:before {
+    content: "\e900";
+  }
+  .icon-visitorinfo:before {
+    content: "\e901";
+  }
+  .icon-reset_password:before {
+    content: "\e902";
+  }
+  .icon-systemadmin:before {
+    content: "\e800";
+  }
+  .icon-school:before {
+    content: "\e801";
+  }
+  .icon-account:before {
+    content: "\e600";
+  }
+  .icon-attendance:before {
+    content: "\e601";
+  }
+  .icon-bus:before {
+    content: "\e602";
+  }
+  .icon-eattendance:before {
+    content: "\e603";
+  }
+  .icon-exam:before {
+    content: "\e604";
+  }
+  .icon-expense:before {
+    content: "\e605";
+  }
+  .icon-feetypes:before {
+    content: "\e606";
+  }
+  .icon-fine:before {
+    content: "\e607";
+  }
+  .icon-hhostel:before {
+    content: "\e608";
+  }
+  .icon-hostel:before {
+    content: "\e609";
+  }
+  .icon-invoice:before {
+    content: "\e60a";
+  }
+  .icon-issue:before {
+    content: "\e60b";
+  }
+  .icon-lbooks:before {
+    content: "\e60c";
+  }
+  .icon-library:before {
+    content: "\e60d";
+  }
+  .icon-mailandsms:before {
+    content: "\e60e";
+  }
+  .icon-mailandsmstop:before {
+    content: "\e60f";
+  }
+  .icon-member:before {
+    content: "\e610";
+  }
+  .icon-message:before {
+    content: "\e611";
+  }
+  .icon-payment:before {
+    content: "\e612";
+  }
+  .icon-paymentsettings:before {
+    content: "\e613";
+  }
+  .icon-phistory:before {
+    content: "\e614";
+  }
+  .icon-promotion:before {
+    content: "\e615";
+  }
+  .icon-routine:before {
+    content: "\e616";
+  }
+  .icon-sattendance:before {
+    content: "\e617";
+  }
+  .icon-sbus:before {
+    content: "\e618";
+  }
+  .icon-setfee:before {
+    content: "\e619";
+  }
+  .icon-student:before {
+    content: "\e61a";
+  }
+  .icon-subject:before {
+    content: "\e61b";
+  }
+  .icon-tattendance:before {
+    content: "\e61c";
+  }
+  .icon-teacher:before {
+    content: "\e61d";
+  }
+  .icon-template:before {
+    content: "\e61e";
+  }
+  .icon-key-new:before {
+    content: "\e98d";
+  }
+  .icon-lock-new:before {
+    content: "\e98f";
+  }
+  
