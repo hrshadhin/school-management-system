@@ -4,7 +4,7 @@ Another School Management System build with laravel and PHP 7.
 
 :loudspeaker:
 **Notic:** This branch is under development all features are not complete yet! so don't use it in production.
-if you need production use please wait for completion of the project or use "master" branch.
+if you need production use please wait for completion of the project or use version [v1.0](https://github.com/hrshadhin/school-management-system/releases/tag/v1.0).
 
 # Features
 - Application
@@ -34,7 +34,7 @@ if you need production use please wait for completion of the project or use "mas
 - Ctype PHP Extension
 - JSON PHP Extension
 - [hrshadhin/laravel-userstamps](https://github.com/hrshadhin/laravel-userstamps.git)
-- NodeJs, npm, webpack
+- NodeJS, npm, webpack
 
 
 ```
@@ -44,7 +44,7 @@ $ git clone https://github.com/hrshadhin/school-management-system.git -b v2.0-de
 $ cd school-management-system
 ```
 
-**Change configuration according your need and create Database**
+**Change configuration according to your need and create Database**
 ```
 $ composer install
 ```
