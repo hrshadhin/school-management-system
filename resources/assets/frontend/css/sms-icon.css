@@ -1,0 +1,61 @@
+@charset "UTF-8";
+
+@font-face {
+  font-family: "sms-font";
+  src:url("/frontend/fonts/sms-font.eot");
+  src:url("/frontend/fonts/sms-font.eot?#iefix") format("embedded-opentype"),
+    url("/frontend/fonts/sms-font.woff") format("woff"),
+    url("/frontend/fonts/sms-font.ttf") format("truetype"),
+    url("/frontend/fonts/sms-font.svg#sms-font") format("svg");
+  font-weight: normal;
+  font-style: normal;
+
+}
+
+/* [data-icon]:before {
+  font-family: "sms-font" !important;
+  content: attr(data-icon);
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-variant: normal !important;
+  text-transform: none !important;
+  speak: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+[class^="sms-icon-"]:before,
+[class*=" sms-icon-"]:before {
+  font-family: "sms-font" !important;
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-variant: normal !important;
+  text-transform: none !important;
+  speak: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+} */
+
+[class^="sms-icon-"], [class*=" sms-icon-"]{
+	display: inline-block;
+	line-height: 0.9;
+}
+[class^="sms-icon-"]:before, [class*=" sms-icon-"]:before,
+[class^="sms-icon-"]:after, [class*=" sms-icon-"]:after {   
+	font-family: sms-font;
+    font-size: 1em;
+    line-height: 1;
+	font-style: normal;
+}
+
+.sms-icon-bus:before {
+  content: "\61";
+}
+.sms-icon-group:before {
+  content: "\62";
+}
+.sms-icon-person:before {
+  content: "\63";
+}
