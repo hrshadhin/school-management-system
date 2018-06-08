@@ -5,37 +5,70 @@
       <!-- sidebar menu -->
       <ul class="sidebar-menu" data-widget="tree">
         <li class="active">
-          <a href="{{ URL::route('user.dashboard') }}">
+          <a href="{{ URL::route('site.dashboard') }}">
             <i class="fa fa-dashboard"></i> <span>Dashboard</span>          
           </a>          
         </li>      
         <li class="treeview">
           <a href="#">
             <i class="fa fa-home"></i>
-            <span>Class</span>
+            <span>Home</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> Add New</a></li>
-            <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> List</a></li>
+            <li><a href="#"><i class="fa fa-picture-o text-aqua"></i> Sliders</a></li>
+            <li><a href="#"><i class="fa fa-info text-aqua"></i> About Us</a></li>
+            <li><a href="#"><i class="fa fa-file-text text-aqua"></i> Our Services</a></li>
+            <li><a href="#"><i class="fa fa-bars"></i> Statistic</a></li>
+            <li><a href="#"><i class="fa fa-comments"></i> Testimonials</a></li>
+            <li><a href="#"><i class="fa fa-users"></i> Subscribers</a></li>            
           </ul>
         </li>      
      
-        <li class="treeview">
+        <li>
           <a href="#">
-            <i class="fa fa-book"></i>
-            <span>Subject</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
+            <i class="fa fa-building"></i>
+            <span>Class</span>           
+          </a>         
+        </li>
+
+        <li>
+          <a href="#">
+            <i class="fa icon-teacher"></i>
+            <span>Teachers</span>           
+          </a>         
+        </li>   
+        <li>
+          <a href="#">
+            <i class="fa fa-bullhorn"></i>
+            <span>Events</span>           
+          </a>         
+        </li>   
+        <li>
+          <a href="#">
+            <i class="fa fa-camera"></i>
+            <span>Gallery</span>           
+          </a>         
+        </li>   
+        <li>
+          <a href="#">
+            <i class="fa fa-map-marker"></i>
+            <span>Contact Us</span>           
+          </a>         
+        </li>   
+        <li>
+          <a href="#">
+            <i class="fa fa-question-circle"></i>
+            <span>FAQ</span>
           </a>
-          <ul class="treeview-menu">
-            <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> Add New</a></li>
-            <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> List</a></li>
-          </ul>
-        </li>      
+          </li>
+        <li>
+          <a href="#"><i class="fa fa-clock-o"></i>
+            <span>Timeline</span>
+        </a>
+        </li>
      
       </ul>
     </section>
