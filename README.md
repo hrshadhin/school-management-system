@@ -3,7 +3,7 @@ Many School Mangers and Principal have been lacking the opportunity to manage th
 
 
 :loudspeaker:
-**New theme, new features, more dynamic with support of PHP 7.2 and Laravel 5.6 is comming soon!!!**
+**New application with php7, laravel 5.6 and new theme is [here](https://github.com/hrshadhin/school-management-system/tree/v2.0-dev)**
 
 ## Installation and use
 # SMS is build using Laravel 4.2
