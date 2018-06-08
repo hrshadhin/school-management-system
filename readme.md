@@ -67,12 +67,12 @@ $ npm run development
 ```
 $ php artisan serve
 ```
-Now visit and login: http://localhost:8000\
+Now visit and login: http://localhost:8000 \
 username: admin\
 password: demo123
 
 # Demo Live Link
-url: http://sms.hrshadhin.me\
+url: http://sms.hrshadhin.me \
 username: admin\
 password: demo123
 
