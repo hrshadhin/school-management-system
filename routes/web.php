@@ -41,6 +41,8 @@ Route::group(
         Route::get('/lock', 'UserController@lock')->name('lockscreen');
         Route::resource('user', 'UserController');
         Route::get('/dashboard', 'UserController@dashboard')->name('user.dashboard');
+        Route::get('/site-dashboard', 'SiteController@dashboard')
+        ->name('site.dashboard');
     }
 );
 
