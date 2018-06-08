@@ -1,0 +1,110 @@
+@font-face {
+	font-family: "Flaticon";
+	src: url("/frontend/fonts/flaticon.eot");
+	src: url("/frontend/fonts/flaticon.eot#iefix") format("embedded-opentype"),
+	url("/frontend/fonts/flaticon.woff") format("woff"),
+	url("/frontend/fonts/flaticon.ttf") format("truetype"),
+	url("/frontend/fonts/flaticon.svg") format("svg");
+	font-weight: normal;
+	font-style: normal;
+}
+[class^="flaticon-"], [class*=" flaticon-"]{
+	display: inline-block;
+	line-height: 0.9;
+}
+[class^="flaticon-"]:before, [class*=" flaticon-"]:before,
+[class^="flaticon-"]:after, [class*=" flaticon-"]:after {   
+	font-family: Flaticon;
+    font-size: 1em;
+    line-height: 1;
+	font-style: normal;
+}.flaticon-award:before {
+	content: "\e000";
+}
+.flaticon-award1:before {
+	content: "\e001";
+}
+.flaticon-book1:before {
+	content: "\e002";
+}
+.flaticon-book:before {
+	content: "\e003";
+}
+.flaticon-calendar:before {
+	content: "\e004";
+}
+.flaticon-camera:before {
+	content: "\e005";
+}
+.flaticon-clipboard:before {
+	content: "\e006";
+}
+.flaticon-college:before {
+	content: "\e007";
+}
+.flaticon-computer:before {
+	content: "\e008";
+}
+.flaticon-configuration:before {
+	content: "\e009";
+}
+.flaticon-graduate:before {
+	content: "\e00a";
+}
+.flaticon-hotel:before {
+	content: "\e00b";
+}
+.flaticon-keyboard:before {
+	content: "\e00c";
+}
+.flaticon-magnifier:before {
+	content: "\e00d";
+}
+.flaticon-medical:before {
+	content: "\e00e";
+}
+.flaticon-multiple:before {
+	content: "\e00f";
+}
+.flaticon-pencil:before {
+	content: "\e010";
+}
+.flaticon-people:before {
+	content: "\e011";
+}
+.flaticon-pie:before {
+	content: "\e012";
+}
+.flaticon-pin:before {
+	content: "\e013";
+}
+.flaticon-restaurant:before {
+	content: "\e014";
+}
+.flaticon-shopping:before {
+	content: "\e015";
+}
+.flaticon-sign:before {
+	content: "\e016";
+}
+.flaticon-smartphone:before {
+	content: "\e017";
+}
+.flaticon-speech:before {
+	content: "\e018";
+}
+.flaticon-twitter:before {
+	content: "\e019";
+}
+.flaticon-university:before {
+	content: "\e01a";
+}
+.flaticon-users:before {
+	content: "\e01b";
+}
+.flaticon-web-programming:before {
+	content: "\e01c";
+}
+.flaticon-website:before {
+	content: "\e01d";
+}

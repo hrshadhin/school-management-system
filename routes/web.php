@@ -11,25 +11,32 @@
 |
 */
 
-Route::get(
-    '/', function () {
-        return redirect('login');
-    }
-)->name('home');
 
 Route::group(
-    ['namespace' => 'backend', 'middleware' => ['web','guest']], function () {
+    ['namespace' => 'Frontend', 'middleware' => ['web']], function () {
+        Route::get('/', 'HomeController@home')->name('home');
+    }
+);
+
+/**
+ * Admin panel routes goes below
+ */
+Route::group(
+    ['namespace' => 'Backend', 'middleware' => ['web','guest']], function () {
         Route::get('/login', 'UserController@login')->name('login');
         Route::post('/login', 'UserController@authenticate');        
         Route::get('/forgot', 'UserController@forgot')->name('forgot');        
-        Route::post('/forgot', 'UserController@forgotPost')->name('forgot_post');        
-        Route::get('/reset/{token}', 'UserController@reset')->name('reset');        
-        Route::post('/reset/{token}', 'UserController@resetPost')->name('reset_post');        
+        Route::post('/forgot', 'UserController@forgotPost')
+        ->name('forgot_post');        
+        Route::get('/reset/{token}', 'UserController@reset')
+        ->name('reset');        
+        Route::post('/reset/{token}', 'UserController@resetPost')
+        ->name('reset_post');        
     }
 );
 
 Route::group(
-    ['namespace' => 'backend', 'middleware' => 'auth'], function () {
+    ['namespace' => 'Backend', 'middleware' => 'auth'], function () {
         Route::get('/logout', 'UserController@logout')->name('logout');
         Route::get('/lock', 'UserController@lock')->name('lockscreen');
         Route::resource('user', 'UserController');

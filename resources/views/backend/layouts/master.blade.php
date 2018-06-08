@@ -14,11 +14,11 @@
     <!-- Favicon png -->
     <link rel="icon" href="{{ asset('images/favicon.png') }}" type="image/png">
     <!-- vendor libraries CSS -->
-    <link href="{{ mix('/css/vendor.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset(mix('/css/vendor.css')) }}" rel="stylesheet" type="text/css">
     <!-- theme CSS -->
-    <link href="{{ mix('/css/theme.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset(mix('/css/theme.css')) }}" rel="stylesheet" type="text/css">
     <!-- app CSS -->
-    <link href="{{ mix('/css/app.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset(mix('/css/app.css')) }}" rel="stylesheet" type="text/css">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -64,13 +64,13 @@
     </div>
     <!-- ./wrapper -->
     <!-- webpack menifest js -->
-    <script src="{{ mix('/js/manifest.js') }}"></script>
+    <script src="{{ asset(mix('/js/manifest.js')) }}"></script>
      <!-- vendor libaries js -->
-    <script src="{{ mix('/js/vendor.js') }}"></script>
+    <script src="{{ asset(mix('/js/vendor.js')) }}"></script>
      <!-- theme js -->
-     <script src="{{ mix('/js/theme.js') }}"></script>
+     <script src="{{ asset(mix('/js/theme.js')) }}"></script>
      <!-- app js -->
-    <script src="{{ mix('/js/app.js') }}"></script>
+    <script src="{{ asset(mix('/js/app.js')) }}"></script>
 
      <!-- Extra js from child page -->
      @yield("extraScript")
