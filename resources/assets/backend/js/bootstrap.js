@@ -10,8 +10,9 @@
 
 try {
     window.$ = window.jQuery = require('jquery');
-
     require('bootstrap');
+    require( 'datatables.net-bs' )(window, $);
+    require( 'datatables.net-responsive-bs' )();
 } catch (e) { }
 
 /**
@@ -62,6 +63,7 @@ require('fastclick');
 require('chart.js');
 require('moment');
 require('fullcalendar');
+
 // require( 'bootstrap-datepicker');
 // require( 'bootstrap-daterangepicker');
 // require( 'font-awesome');
@@ -72,7 +74,7 @@ require('fullcalendar');
 // require( 'jszip' );
 // require( 'jszip' );
 // require( 'pdfmake' );
-// require( 'datatables.net-bs' )();
+
 // require( 'datatables.net-buttons-bs' )();
 // require( 'datatables.net-buttons/js/buttons.colVis.js' )();
 // require( 'datatables.net-buttons/js/buttons.flash.js' )();

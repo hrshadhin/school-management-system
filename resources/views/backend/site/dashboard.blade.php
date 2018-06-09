@@ -101,7 +101,7 @@
 @section('extraScript')
     <script type="text/javascript">
         $(document).ready(function () {
-            
+
         });
 
     </script>

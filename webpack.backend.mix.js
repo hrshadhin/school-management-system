@@ -14,7 +14,10 @@ let mix = require('laravel-mix');
 
 
 mix.js('resources/assets/backend/js/app.js', 'public/js')
-    .extract(['jquery', 'bootstrap', 'icheck', 'jquery-validation', 'slimscroll', 'fastclick', 'chart.js', 'fullcalendar'])
+    .extract([
+        'jquery', 'bootstrap', 'icheck', 'jquery-validation', 'slimscroll', 'fastclick',
+        'chart.js', 'fullcalendar', 'datatables.net', 'datatables.net-bs', 'datatables.net-responsive-bs'
+    ])
     .sass('resources/assets/backend/sass/app.scss', 'public/css')
     .sass('resources/assets/backend/sass/vendor.scss', 'public/css')
     .styles([

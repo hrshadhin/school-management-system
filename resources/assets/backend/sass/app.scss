@@ -272,3 +272,10 @@
     font-weight: bold;
     color: #317eac;
 }
+.custom_alert{
+        padding: 5px;
+        margin-bottom: 0;
+}
+.custom_alert .alert-dismissable .close, .alert-dismissible .close {
+    padding-right: 25px;
+}
