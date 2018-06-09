@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 class SiteController extends Controller
 {
     /**
-     * Handle an authentication attempt.
+     * Show site dashboard.
      *
      * @return Response
      */
@@ -16,6 +16,7 @@ class SiteController extends Controller
     {
         return view('backend.site.dashboard');
     }
+
 
     
 }

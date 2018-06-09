@@ -84,7 +84,7 @@ $(function () {
 
     /**
      * setup user specific feature hide/show
-     * 
+     *
      * @returns void
      */
     function featureVisibility() {
@@ -128,7 +128,7 @@ $(function () {
 
     /**
      * Clock initializer
-     * 
+     *
      * @returns void
      */
     function clockRun() {
@@ -395,9 +395,15 @@ $(function () {
 
 
 
-    setup()
+    setup();
 
-    $('[data-toggle="tooltip"]').tooltip()
+    $('[data-toggle="tooltip"]').tooltip();
+    /**
+     * Alert message auto hide
+     */
+    $(".alert").delay(4000).slideUp(200, function() {
+        $(this).alert('close');
+    });
 
     clockRun();
 })

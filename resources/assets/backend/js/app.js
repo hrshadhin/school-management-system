@@ -8,3 +8,6 @@ require('./bootstrap');
 
 import Login from './Login';
 window.Login = Login;
+
+import Site from './Site';
+window.Site = Site;

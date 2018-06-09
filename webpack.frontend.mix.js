@@ -1,12 +1,6 @@
 let mixFrontend = require('laravel-mix');
-const fs = require('file-system');
-// const del = require('del');
-const _ = require('lodash');
-const jsonfile = require('jsonfile');
 
-const filesPublicPath = "public";
-const subDirectoryPath = '/frontend'
-const fullPublicPath = filesPublicPath + subDirectoryPath;
+const fullPublicPath = "public/frontend";
 const mixManifest = fullPublicPath + '/mix-manifest.json';
 /*
  |--------------------------------------------------------------------------
