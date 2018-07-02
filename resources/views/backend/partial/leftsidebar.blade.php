@@ -4,7 +4,7 @@
     <section class="sidebar">    
       <!-- sidebar menu -->
       <ul class="sidebar-menu" data-widget="tree">
-        <li class="active">
+        <li>
           <a href="{{ URL::route('site.dashboard') }}">
             <i class="fa fa-dashboard"></i> <span>Dashboard</span>          
           </a>          

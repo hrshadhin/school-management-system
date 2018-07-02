@@ -11,8 +11,8 @@
 try {
     window.$ = window.jQuery = require('jquery');
     require('bootstrap');
-    require( 'datatables.net-bs' )(window, $);
-    require( 'datatables.net-responsive-bs' )();
+    require('datatables.net-bs')(window, $);
+    require('datatables.net-responsive-bs')();
 } catch (e) { }
 
 /**
@@ -63,6 +63,7 @@ require('fastclick');
 require('chart.js');
 require('moment');
 require('fullcalendar');
+window.swal = require('sweetalert2');
 
 // require( 'bootstrap-datepicker');
 // require( 'bootstrap-daterangepicker');
