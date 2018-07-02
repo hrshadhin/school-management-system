@@ -393,15 +393,27 @@ $(function () {
 
     $('#rightSideBarContent').append($demoSettings);
 
+    //sidebar menu active setter 
+    var getUrl = window.location;
+    var baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
+    var fullUrl = getUrl.href;
+    $(".sidebar-menu li a").each(function () {
+        if ($(this).attr("href") == fullUrl || $(this).attr("href") == baseUrl || $(this).attr("href") == '') {
+            $(".sidebar-menu li").removeClass('active');
+            $(this).parent().parent().parents('li').addClass("active");
+            $(this).parent().addClass("active");
+        }
 
+    });
 
+    //start setup startup page settings
     setup();
 
     $('[data-toggle="tooltip"]').tooltip();
     /**
      * Alert message auto hide
      */
-    $(".alert").delay(4000).slideUp(200, function() {
+    $(".alert").delay(4000).slideUp(200, function () {
         $(this).alert('close');
     });
 

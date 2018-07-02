@@ -37,40 +37,52 @@
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
-                        <table id="sliders" class="table table-bordered table-striped">
+                        <table id="sliders" class="table table-bordered table-striped list_view_table">
                             <thead>
                             <tr>
                                 <th width="30%">Image</th>
                                 <th width="30%">Title</th>
-                                <th width="30%">Subtitle</th>
+                                <th width="25%">Subtitle</th>
+                                <th width="5%">Order</th>
                                 <th width="10%">Action</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td>Trident</td>
-                                <td>Internet
-                                    Explorer 4.0
-                                </td>
-                                <td>Win 95+</td>
-                                <td> 4</td>
-                            </tr>
-                            <tr>
-                                <td>Trident</td>
-                                <td>Internet
-                                    Explorer 5.0
-                                </td>
-                                <td>Win 95+</td>
-                                <td>5</td>
-                            </tr>
+                            @foreach($sliders as $slider)
+                                <tr>
+                                    <td>
+                                        <img class="img-responsive" style="max-height: 200px;" src="{{ asset('storage/sliders')}}/{{ $slider->image }}" alt="">
+                                    </td>
+                                    <td>{{ $slider->title }}</td>
+                                    <td> {{ $slider->subtitle }}</td>
+                                    <td> {{ $slider->order }}</td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <a title="Edit" href="{{URL::route('slider.edit',$slider->id)}}" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
 
+                                            </a>
+                                        </div>
+                                        <div class="btn-group">
+                                            <form class="myAction" method="POST" action="{{URL::route('slider.destroy',$slider->id)}}">
+                                                {{ method_field('DELETE') }}
+                                                @csrf
+                                                <button type="submit" class="btn btn-danger btn-sm" title="Delete">
+                                                    <i class="fa fa-fw fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+
+                                    </td>
+                                </tr>
+                            @endforeach
 
                             </tbody>
                             <tfoot>
                             <tr>
                                 <th width="30%">Image</th>
                                 <th width="30%">Title</th>
-                                <th width="30%">Subtitle</th>
+                                <th width="25%">Subtitle</th>
+                                <th width="5%">Order</th>
                                 <th width="10%">Action</th>
                             </tr>
                             </tfoot>
@@ -91,8 +103,8 @@
     <script type="text/javascript">
         $(document).ready(function () {
             Site.sliderInit();
+            initDeleteDialog();
         });
-
     </script>
 @endsection
 <!-- END PAGE JS-->

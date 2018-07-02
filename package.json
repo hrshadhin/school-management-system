@@ -46,6 +46,7 @@
         "popper.js": "^1.14.3",
         "remove": "^0.1.5",
         "select2": "^4.0.3",
-        "slimscroll": "^0.9.1"
+        "slimscroll": "^0.9.1",
+        "sweetalert2": "^7.24.1"
     }
 }
