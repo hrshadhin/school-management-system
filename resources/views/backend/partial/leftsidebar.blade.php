@@ -19,7 +19,7 @@
           </a>
           <ul class="treeview-menu">
             <li><a href="{{URL::route('slider.index')}}"><i class="fa fa-picture-o text-aqua"></i> Sliders</a></li>
-            <li><a href="#"><i class="fa fa-info text-aqua"></i> About Us</a></li>
+            <li><a href="{{URL::route('site.about_content')}}"><i class="fa fa-info text-aqua"></i> About Us</a></li>
             <li><a href="#"><i class="fa fa-file-text text-aqua"></i> Our Services</a></li>
             <li><a href="#"><i class="fa fa-bars"></i> Statistic</a></li>
             <li><a href="#"><i class="fa fa-comments"></i> Testimonials</a></li>

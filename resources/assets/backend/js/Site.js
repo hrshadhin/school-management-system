@@ -106,6 +106,90 @@ export default class Site {
             }
         });
     }
+    static aboutInit() {
+        // bootstrap WYSIHTML5 - text editor
+        $('.textarea').each(function (index, elem) {
+            $(elem).wysihtml5();
+        });
+        $("#AboutContentForm").validate({
+            ignore: ":hidden:not(textarea)",
+            rules: {
+                why_content: {
+                    required: true,
+                    minlength: 5,
+                    maxlength: 500
+                },
+                key_point_1_title: {
+                    required: true,
+                    minlength: 5,
+                    maxlength: 100
+                },
+                key_point_1_content: {
+                    required: true,
+                    minlength: 5
+                },
+                key_point_2_title: {
+                    minlength: 5,
+                    maxlength: 100
+                },
+                key_point_2_content: {
+                    minlength: 5
+                },
+                key_point_3_title: {
+                    minlength: 5,
+                    maxlength: 100
+                },
+                key_point_3_content: {
+                    minlength: 5
+                },
+                key_point_4_title: {
+                    minlength: 5,
+                    maxlength: 100
+                },
+                key_point_4_content: {
+                    minlength: 5
+                },
+                key_point_5_title: {
+                    minlength: 5,
+                    maxlength: 100
+                },
+                key_point_5_content: {
+                    minlength: 5
+                },
+                about_us: {
+                    required: true,
+                    maxlength: 500,
+                    minlength: 50
+                },
+                who_we_are: {
+                    required: true,
+                    maxlength: 1000,
+                    minlength: 100
+                },
+                intro_video_embed_code: {
+                    required: true
+                },
+                video_site_link: {
+                    maxlength: 500,
+                }
+            },
+            messages: {
 
+            },
+            errorElement: "em",
+            errorPlacement: function (error, element) {
+                // Add the `help-block` class to the error element
+                error.addClass("help-block");
+                error.insertAfter(element);
+
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).parents(".form-group").addClass("has-error").removeClass("has-success");
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).parents(".form-group").addClass("has-success").removeClass("has-error");
+            }
+        });
+    }
 
 }

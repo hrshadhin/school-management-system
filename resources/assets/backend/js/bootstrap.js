@@ -10,6 +10,7 @@
 
 try {
     window.$ = window.jQuery = require('jquery');
+    jQuery = window.$;
     require('bootstrap');
     require('datatables.net-bs')(window, $);
     require('datatables.net-responsive-bs')();
