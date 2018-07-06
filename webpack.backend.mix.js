@@ -24,6 +24,7 @@ mix.js('resources/assets/backend/js/app.js', 'public/js')
     .styles([
         'resources/assets/backend/css/AdminLTE.css',
         'resources/assets/backend/css/_all-skins.css',
+        'resources/assets/backend/css/bootstrap3-wysihtml5.min.css'
     ], 'public/css/theme.css')
     .js([
         'resources/assets/backend/js/adminlte.js',
@@ -44,6 +45,7 @@ mix.options({
 
 
 // copy non processing files to public path
+mix.copy('resources/assets/backend/js/bootstrap3-wysihtml5.all.min.js', 'public/js/editor.js');
 mix.copyDirectory('resources/assets/backend/images', 'public/images');
 
 

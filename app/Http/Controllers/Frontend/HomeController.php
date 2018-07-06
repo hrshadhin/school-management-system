@@ -9,7 +9,7 @@ class HomeController extends Controller
 {
     public function home()
     {
-        $sliders = Slider::get()->take(10);
+        $sliders = Slider::orderBy('order','asc')->get()->take(10);
         return view('frontend.home', compact('sliders'));
     }
 }

@@ -14,8 +14,8 @@
 
 Route::group(
     ['namespace' => 'Frontend', 'middleware' => ['web']], function () {
-        Route::get('/', 'HomeController@home')->name('home');
-    }
+    Route::get('/', 'HomeController@home')->name('home');
+}
 );
 
 /**
@@ -23,34 +23,38 @@ Route::group(
  */
 Route::group(
     ['namespace' => 'Backend', 'middleware' => ['web','guest']], function () {
-        Route::get('/login', 'UserController@login')->name('login');
-        Route::post('/login', 'UserController@authenticate');        
-        Route::get('/forgot', 'UserController@forgot')->name('forgot');        
-        Route::post('/forgot', 'UserController@forgotPost')
-        ->name('forgot_post');        
-        Route::get('/reset/{token}', 'UserController@reset')
-        ->name('reset');        
-        Route::post('/reset/{token}', 'UserController@resetPost')
-        ->name('reset_post');        
-    }
+    Route::get('/login', 'UserController@login')->name('login');
+    Route::post('/login', 'UserController@authenticate');
+    Route::get('/forgot', 'UserController@forgot')->name('forgot');
+    Route::post('/forgot', 'UserController@forgotPost')
+        ->name('forgot_post');
+    Route::get('/reset/{token}', 'UserController@reset')
+        ->name('reset');
+    Route::post('/reset/{token}', 'UserController@resetPost')
+        ->name('reset_post');
+}
 );
 
 Route::group(
     ['namespace' => 'Backend', 'middleware' => 'auth'], function () {
-        Route::get('/logout', 'UserController@logout')->name('logout');
-        Route::get('/lock', 'UserController@lock')->name('lockscreen');
-        Route::resource('user', 'UserController');
-        Route::get('/dashboard', 'UserController@dashboard')->name('user.dashboard');
+    Route::get('/logout', 'UserController@logout')->name('logout');
+    Route::get('/lock', 'UserController@lock')->name('lockscreen');
+    Route::resource('user', 'UserController');
+    Route::get('/dashboard', 'UserController@dashboard')->name('user.dashboard');
 
 
     /**
      * Website contents routes
      */
-        Route::get('/site-dashboard', 'SiteController@dashboard')
+    Route::get('/site/dashboard', 'SiteController@dashboard')
         ->name('site.dashboard');
-        Route::resource('slider','SliderController');
+    Route::resource('slider','SliderController');
+    Route::get('/site/about-content', 'SiteController@aboutContent')
+        ->name('site.about_content');
+    Route::post('/site/about-content', 'SiteController@aboutContent')
+        ->name('site.about_content');
 
-    }
+}
 );
 
 //
