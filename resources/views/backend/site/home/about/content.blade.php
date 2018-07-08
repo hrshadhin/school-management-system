@@ -134,7 +134,7 @@
                         <!-- /.box-body -->
                         <div class="box-footer">
                             <a href="{{URL::route('site.dashboard')}}" class="btn btn-default">Cancel</a>
-                            <button type="submit" class="btn btn-info pull-right"><i class="fa fa-plus-circle"></i> Save</button>
+                            <button type="submit" class="btn btn-info pull-right"><i class="fa fa-check-circle"></i> Save</button>
 
                         </div>
                     </form>

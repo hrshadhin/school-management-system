@@ -3,13 +3,10 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Hrshadhin\Userstamps\UserstampsTrait;
 
-
-class Slider extends Model
+class SiteMeta extends Model
 {
-    use SoftDeletes;
     use UserstampsTrait;
 
     /**
@@ -17,8 +14,5 @@ class Slider extends Model
      *
      * @var array
      */
-    protected $fillable = [
-        'title', 'subtitle', 'image', 'order',
-    ];
-
+    protected $fillable = ['meta_key','meta_value'];
 }

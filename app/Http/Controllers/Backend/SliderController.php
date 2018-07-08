@@ -13,6 +13,9 @@ class SliderController extends Controller
     public function index()
     {
         $sliders = Slider::orderBy('order', 'asc')->paginate(25);
+        if(count($sliders)>10){
+            Session::flash('warning','Don\'t add more than 10 slider for better site performance!');
+        }
         return view('backend.site.home.slider.list', compact('sliders'));
     }
 

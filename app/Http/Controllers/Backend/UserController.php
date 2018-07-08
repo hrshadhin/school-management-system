@@ -45,7 +45,7 @@ class UserController extends Controller
         $remember=$request->has('remember');
 
         if (Auth::attempt(['username' => $username, 'password' => $password], $remember)) {
-            return redirect()->intended('site-dashboard')->with('success', 'Welcome to admin panel.');
+            return redirect()->intended('site/dashboard')->with('success', 'Welcome to admin panel.');
 
         }
 

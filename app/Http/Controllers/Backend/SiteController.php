@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Backend;
 
 use App\AboutContent;
 use App\AboutSlider;
+use App\SiteMeta;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Psy\Util\Json;
 
@@ -85,7 +87,10 @@ class SiteController extends Controller
         }
 
         //for get request
-        $images = AboutSlider::orderBy('order', 'asc')->get()->take(10);
+        $images = AboutSlider::orderBy('order', 'asc')->get();
+        if(count($images)>10){
+            Session::flash('warning','Don\'t add more than 10 image for better site performance!');
+        }
         return view('backend.site.home.about.image', compact('images'));
     }
 
@@ -106,6 +111,75 @@ class SiteController extends Controller
         ];
     }
 
+    /**
+     * service content manage
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function serviceContent(Request $request)
+    {
+        //for save on POST request
+        if ($request->isMethod('post')) {//
+            $this->validate($request, [
+                'meta_value' => 'required|min:5|max:500'
 
+            ]);
+
+            //now crate or update model
+            $content = SiteMeta::updateOrCreate(
+                ['meta_key' => 'our_service_text'],
+                $request->all()
+            );
+            return redirect()->route('site.service')->with('success', 'Contents saved!');
+        }
+
+        //for get request
+        $content = SiteMeta::where('meta_key', 'our_service_text')->first();
+        return view('backend.site.home.service', compact('content'));
+    }
+
+    /**
+     * service content manage
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function statisticContent(Request $request)
+    {
+        //for save on POST request
+        if ($request->isMethod('post')) {//
+            $this->validate($request, [
+                'student' => 'required|numeric|min:1',
+                'teacher' => 'required|numeric|min:1',
+                'graduate' => 'required|numeric|min:1',
+                'books' => 'required|numeric|min:1'
+
+            ]);
+
+
+
+            $values = $request->get('student').','.$request->get('teacher').','.$request->get('graduate').','.$request->get('books');
+
+
+
+            //now crate or update model
+            $content = SiteMeta::updateOrCreate(
+                ['meta_key' => 'statistic'],
+                ['meta_value' => $values]
+            );
+            return redirect()->route('site.statistic')->with('success', 'Contents saved!');
+        }
+
+        //for get request
+        $statistic = SiteMeta::where('meta_key', 'statistic')->first();
+        $content = null;
+        if($statistic){
+            $content = new \stdClass();
+            $data = explode(',', $statistic->meta_value);
+            $content->student = $data[0];
+            $content->teacher = $data[1];
+            $content->graduate = $data[2];
+            $content->books = $data[3];
+        }
+
+        return view('backend.site.home.statistic', compact('content'));
+    }
     
 }

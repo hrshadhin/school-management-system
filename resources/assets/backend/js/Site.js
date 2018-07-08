@@ -189,6 +189,7 @@ export default class Site {
                 $(element).parents(".form-group").addClass("has-success").removeClass("has-error");
             }
         });
+
         $('.thumbnail .remove-image').on('click', function () {
             var that = this;
             swal({
@@ -200,15 +201,12 @@ export default class Site {
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Yes, delete it!',
                 cancelButtonText: 'No, keep it'
-            }).then((result) = > {
-                if(result.value
-        )
-            {
-                deleteThumnailImage(that);
+            }).then((result) => {
+                if(result.value) {
+                    Site.deleteThumnailImage(that);
 
-            }
-        })
-            ;
+                }
+            });
 
         });
 
@@ -218,27 +216,27 @@ export default class Site {
         postUrl = postUrl.replace(/\.?0+$/,id);
         axios.post(postUrl,{})
             .then((response)=>{
-            if(response.data.success){
-            $(that).parent('div.thumbnail').remove();
-        }
-    else{
-            var status = response.statusText;
+                if(response.data.success){
+                    $(that).parents('div.thumbnail').remove();
+                }
+                else{
+                    var status = response.statusText;
+                    swal({
+                        type: 'error',
+                        title: 'Oops...',
+                        text: status,
+                        footer: ''
+                    });
+                }
+            }).catch((error)=>{
+            var status = error.statusText;
             swal({
                 type: 'error',
                 title: 'Oops...',
                 text: status,
                 footer: ''
             })
-        }
-    }).catch((error)=>{
-            var status = error.statusText;
-        swal({
-            type: 'error',
-            title: 'Oops...',
-            text: status,
-            footer: ''
-        })
-    });
-    });
-}
+        });
+
+    }
 }
