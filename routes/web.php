@@ -53,6 +53,12 @@ Route::group(
         ->name('site.about_content');
     Route::post('/site/about-content', 'SiteController@aboutContent')
         ->name('site.about_content');
+    Route::get('site/about-content/images','SiteController@aboutContentImage')
+        ->name('site.about_content_image');
+    Route::post('site/about-content/images','SiteController@aboutContentImage')
+        ->name('site.about_content_image');
+    Route::post('site/about-content/images/{id}','SiteController@aboutContentImageDelete')
+        ->name('site.about_content_image_delete');
 
 }
 );
