@@ -1,7 +1,7 @@
 @extends('frontend.layouts.master')
 
 @section('extraStyle')
-    <link type="text/css" rel="stylesheet" href="{{ asset('/frontend/rs-plugin/css/settings.css') }}" />
+	<link type="text/css" rel="stylesheet" href="{{ asset('/frontend/rs-plugin/css/settings.css') }}" />
 @endsection
 
 @section('pageContent')
@@ -75,85 +75,118 @@
 		<section class="fullwidth-background padding-section">
 			<div class="grid-row clear-fix">
 				<h2 class="center-text">About Us</h2>
-				<div class="grid-col-row">
-					<div class="grid-col grid-col-6">
-						<h3>Why We Are Better</h3>
-						<p>Donec sollicitudin lacus in felis luctus blandit. Ut hendrerit mattis justo at suscipit. Vivamus orci urna, ornare
-							vitae tellus in.</p>
-						<!-- accordions -->
-						<div class="accordions">
-							<!-- content-title -->
-							<div class="content-title active">Donec sollicitudin lacus?</div>
-							<!--/content-title -->
-							<!-- accordions content -->
-							<div class="content">Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue.</div>
-							<!--/accordions content -->
-							<!-- content-title -->
-							<div class="content-title">Lorem ipsum dolor sit amet?</div>
-							<!--/content-title -->
-							<!-- accordions content -->
-							<div class="content">Nullam elementum tristique risus nec pellentesque. Pellentesque bibendum nunc eget nunc hendrerit auctor. Cum sociis
-								natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Curabitur gravida urna nisl</div>
-							<!--/accordions content -->
-							<!-- content-title -->
-							<div class="content-title">Aenean commodo ligula eget dolor?</div>
-							<!--/content-title -->
-							<!-- accordions content -->
-							<div class="content">Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue.</div>
-							<!--/accordions content -->
-							<!-- content-title -->
-							<div class="content-title">Moreno gotro ja pisit amet?</div>
-							<!--/content-title -->
-							<!-- accordions content -->
-							<div class="content">Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue.</div>
-							<!--/accordions content -->
-						</div>
-						<!--/accordions -->
+				@if($aboutContent)
+					<div class="grid-col-row">
+						<div class="grid-col grid-col-6">
+							<h3>Why We Are Better</h3>
+							<p>{{ $aboutContent->why_content }}</p>
+							<!-- accordions -->
+							<div class="accordions">
+							@if($aboutContent->key_point_1_title)
+								<!-- content-title -->
+									<div class="content-title active">{{$aboutContent->key_point_1_title}}</div>
+									<!--/content-title -->
+									<!-- accordions content -->
+									<div class="content">{!! $aboutContent->key_point_1_content !!}</div>
+									<!--/accordions content -->
+							@endif
+							@if($aboutContent->key_point_2_title)
+								<!-- content-title -->
+									<div class="content-title">{{$aboutContent->key_point_2_title}}</div>
+									<!--/content-title -->
+									<!-- accordions content -->
+									<div class="content">{!! $aboutContent->key_point_2_content !!}</div>
+									<!--/accordions content -->
+							@endif
+							@if($aboutContent->key_point_3_title)
+								<!-- content-title -->
+									<div class="content-title">{{$aboutContent->key_point_3_title}}</div>
+									<!--/content-title -->
+									<!-- accordions content -->
+									<div class="content">{!! $aboutContent->key_point_3_content !!}</div>
+									<!--/accordions content -->
+							@endif
+							@if($aboutContent->key_point_4_title)
+								<!-- content-title -->
+									<div class="content-title">{{$aboutContent->key_point_4_title}}</div>
+									<!--/content-title -->
+									<!-- accordions content -->
+									<div class="content">{!! $aboutContent->key_point_4_content !!}</div>
+									<!--/accordions content -->
+							@endif
+							@if($aboutContent->key_point_5_title)
+								<!-- content-title -->
+									<div class="content-title">{{$aboutContent->key_point_5_title}}</div>
+									<!--/content-title -->
+									<!-- accordions content -->
+									<div class="content">{!! $aboutContent->key_point_5_content !!}</div>
+									<!--/accordions content -->
+								@endif
 
-					</div>
-					<div class="grid-col grid-col-6">
-						<div class="owl-carousel full-width-slider">
-							<div class="gallery-item picture">
-								<img src="/frontend/uploads/570x380-img-2.jpg" data-at2x="/frontend/uploads/570x380-img-2@2x.jpg" alt>
 							</div>
-							<div class="gallery-item picture">
-								<img src="/frontend/uploads/570x380-img-1.jpg" data-at2x="/frontend/uploads/570x380-img-1@2x.jpg" alt>
-							</div>
+							<!--/accordions -->
+
+						</div>
+						<div class="grid-col grid-col-6">
+							@if($aboutImages)
+								<div class="owl-carousel full-width-slider">
+									@foreach($aboutImages as $slider)
+										<div class="gallery-item picture">
+											<img src="{{asset('storage/about/'.$slider->image)}}"  alt>
+										</div>
+									@endforeach
+
+								</div>
+							@else
+								<div class="alert alert-warning">
+									<span>Please add about images</span>
+								</div>
+							@endif
 						</div>
 					</div>
-				</div>
+				@else
+					<div class="alert alert-warning">
+						<span>Please add content from admin panel</span>
+					</div>
+				@endif
 			</div>
 		</section>
 
 		<hr class="divider-color" />
+	@if($aboutContent)
 		<!-- section -->
-		<section class="padding-section">
-			<div class="grid-row clear-fix">
-				<div class="grid-col-row">
-					<div class="grid-col grid-col-6">
-						<div class="video-player">
-							<iframe src="https://www.youtube.com/embed/rZsH88zNxRw"></iframe>
+			<section class="padding-section">
+				<div class="grid-row clear-fix">
+					<div class="grid-col-row">
+						<div class="grid-col grid-col-6">
+							<div class="video-player">
+								{!! $aboutContent->intro_video_embed_code !!}
+							</div>
+						</div>
+						<div class="grid-col grid-col-6 clear-fix">
+							<h2>Learn More About Us From Video</h2>
+							<p>
+								{{ $aboutContent->who_we_are }}
+							</p>
+							@if($aboutContent->video_site_link)
+								<br/>
+								<br/>
+								<br/>
+								<br/>
+								<a href="{{$aboutContent->video_site_link}}m" class="cws-button bt-color-3 border-radius alt icon-right float-right">Watch More
+									<i class="fa fa-angle-right"></i>
+								</a>
+							@endif
 						</div>
 					</div>
-					<div class="grid-col grid-col-6 clear-fix">
-						<h2>Learn More About Us From Video</h2>
-						<p>Donec sollicitudin lacus in felis luctus blandit. Ut hendrerit mattis justo at susp. Vivamus orci urna, ornare vitae
-							tellus in, condimentum imperdiet eros. Maecea accumsan, massa nec vulputate congue.</p>
-						<p>Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque
-							rutrum.
-						</p>
-						<br/>
-						<br/>
-						<br/>
-						<br/>
-						<a href="https://www.youtube.com" class="cws-button bt-color-3 border-radius alt icon-right float-right">Watch More
-							<i class="fa fa-angle-right"></i>
-						</a>
-					</div>
 				</div>
+			</section>
+			<!-- / section -->
+		@else
+			<div class="alert alert-warning">
+				<span>Please add intro video link</span>
 			</div>
-		</section>
-		<!-- / section -->
+		@endif
 		<hr class="divider-color" />
 		<!-- section -->
 		<section class="fullwidth-background padding-section">
@@ -188,9 +221,7 @@
 					</div>
 					<div class="grid-col grid-col-6 clear-fix">
 						<h2>Our Services</h2>
-						<p>Donec sollicitudin lacus in felis luctus blandit. Ut hendrerit mattis justo at susp. Vivamus orci urna, ornare vitae
-							tellus in, condimentum imperdiet eros. Maecea accumsan, massa nec vulputate congue. Maecenas nec odio et ante tincidunt
-							creptus alarimus tempus.</p>
+						<p>{{$ourService->meta_value}}</p>
 
 					</div>
 				</div>
@@ -209,14 +240,14 @@
 					<div class="grid-col grid-col-3 alt">
 						<div class="counter-block">
 							<i class="flaticon-multiple"></i>
-							<div class="counter" data-count="4781">0</div>
+							<div class="counter" data-count="{{$statistic->student}}">0</div>
 							<div class="counter-name">Students Enrolled</div>
 						</div>
 					</div>
 					<div class="grid-col grid-col-3 alt">
 						<div class="counter-block">
 							<i class="sms-icon-group"></i>
-							<div class="counter" data-count="356">0</div>
+							<div class="counter" data-count="{{$statistic->teacher}}">0</div>
 							<div class="counter-name">Teachers
 							</div>
 						</div>
@@ -224,14 +255,14 @@
 					<div class="grid-col grid-col-3 alt">
 						<div class="counter-block">
 							<i class="flaticon-college"></i>
-							<div class="counter" data-count="1500">0</div>
+							<div class="counter" data-count="{{$statistic->graduate}}">0</div>
 							<div class="counter-name">Passing to College</div>
 						</div>
 					</div>
 					<div class="grid-col grid-col-3 alt">
 						<div class="counter-block">
 							<i class="flaticon-book1 last"></i>
-							<div class="counter" data-count="17030">0</div>
+							<div class="counter" data-count="{{$statistic->books}}">0</div>
 							<div class="counter-name">Books</div>
 						</div>
 					</div>
@@ -310,13 +341,13 @@
 		</div>
 		<!-- parallax section -->
 	</div>
-    <!-- / content -->
-    
+	<!-- / content -->
+
 @endsection
-    
+
 @section('extraScript')
-    <script src="{{ asset('/frontend/rs-plugin/js/jquery.themepunch.tools.min.js') }}"></script>
-    <script src="{{ asset('/frontend/rs-plugin/js/jquery.themepunch.revolution.min.js') }}"></script>
+	<script src="{{ asset('/frontend/rs-plugin/js/jquery.themepunch.tools.min.js') }}"></script>
+	<script src="{{ asset('/frontend/rs-plugin/js/jquery.themepunch.revolution.min.js') }}"></script>
 @endsection
 
 

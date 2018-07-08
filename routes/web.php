@@ -59,6 +59,14 @@ Route::group(
         ->name('site.about_content_image');
     Route::post('site/about-content/images/{id}','SiteController@aboutContentImageDelete')
         ->name('site.about_content_image_delete');
+    Route::get('site/service','SiteController@serviceContent')
+        ->name('site.service');
+    Route::post('site/service','SiteController@statisticContent')
+        ->name('site.service');
+    Route::get('site/statistic','SiteController@statisticContent')
+        ->name('site.statistic');
+    Route::post('site/statistic','SiteController@statisticContent')
+        ->name('site.statistic');
 
 }
 );

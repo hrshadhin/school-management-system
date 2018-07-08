@@ -92,14 +92,17 @@
                         </div>
                         <hr>
                         <div class="row">
-                            @foreach($images as $image)
-                                <div class="col-xs-6 col-md-3 thumbnail">
+                            <div class="col-md-12">
+                                @foreach($images as $image)
+                                    <div class="col-xs-6 col-md-3 thumbnail">
                                         <img src="{{asset('storage/about/'.$image->image)}}" alt="image">
                                         <div class="middle">
                                             <a href="#0" data-id="{{$image->id}}" class="remove-image" title="Delete Image" ><i class="fa fa-5x fa-remove"></i> </a>
                                         </div>
-                                </div>
-                            @endforeach
+                                    </div>
+                                @endforeach
+                            </div>
+
                         </div>
                     </div>
                     <!-- /.box-body -->
