@@ -6,6 +6,8 @@ use App\AboutContent;
 use App\AboutSlider;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
+use Psy\Util\Json;
 
 class SiteController extends Controller
 {
@@ -52,8 +54,56 @@ class SiteController extends Controller
 
         //for get request
         $content = AboutContent::first();
-        $images = AboutSlider::orderBy('order', 'asc')->get()->take(10);
         return view('backend.site.home.about.content', compact('content', 'images'));
+    }
+
+  /**
+     * About section content manage
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function aboutContentImage(Request $request)
+    {
+        //for save on POST request
+        if ($request->isMethod('post')) {
+            //validate form
+            $messages = [
+                'image.max' => 'The :attribute size must be under 2MB.',
+                'image.dimensions' => 'The :attribute dimensions must be minimum 570 X 380.',
+            ];
+            $this->validate($request, [
+                'image' => 'mimes:jpeg,jpg,png|max:2048|dimensions:min_width=570,min_height=380',
+            ]);
+
+            $storagepath = $request->file('image')->store('public/about');
+            $fileName = basename($storagepath);
+
+            $data = $request->all();
+            $data['image'] = $fileName;
+            AboutSlider::create($data);
+
+            return redirect()->route('site.about_content_image')->with('success', 'Image uploaded');
+        }
+
+        //for get request
+        $images = AboutSlider::orderBy('order', 'asc')->get()->take(10);
+        return view('backend.site.home.about.image', compact('images'));
+    }
+
+    /**
+     * About section content image delete
+     * @return array
+     */
+    public function aboutContentImageDelete($id)
+    {
+
+        $image = AboutSlider::findOrFail($id);
+        Storage::delete('/public/about/' . $image->image);
+        $image->delete();
+
+        return [
+            'success' => true,
+            'message' => 'Image deleted!'
+        ];
     }
 
 

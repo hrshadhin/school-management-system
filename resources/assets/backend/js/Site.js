@@ -4,12 +4,12 @@ export default class Site {
      */
     static sliderInit() {
         $('#sliders').DataTable({
-            'paging'      : false,
+            'paging': false,
             'lengthChange': false,
-            'searching'   : true,
-            'ordering'    : true,
-            'info'        : false,
-            'autoWidth'   : false
+            'searching': true,
+            'ordering': true,
+            'info': false,
+            'autoWidth': false
         });
 
         $("#sliderAddForm").validate({
@@ -106,6 +106,7 @@ export default class Site {
             }
         });
     }
+
     static aboutInit() {
         // bootstrap WYSIHTML5 - text editor
         $('.textarea').each(function (index, elem) {
@@ -173,9 +174,7 @@ export default class Site {
                     maxlength: 500,
                 }
             },
-            messages: {
-
-            },
+            messages: {},
             errorElement: "em",
             errorPlacement: function (error, element) {
                 // Add the `help-block` class to the error element
@@ -190,6 +189,56 @@ export default class Site {
                 $(element).parents(".form-group").addClass("has-success").removeClass("has-error");
             }
         });
-    }
+        $('.thumbnail .remove-image').on('click', function () {
+            var that = this;
+            swal({
+                title: 'Are you sure?',
+                text: 'You will not be able to recover this record!',
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'No, keep it'
+            }).then((result) = > {
+                if(result.value
+        )
+            {
+                deleteThumnailImage(that);
 
+            }
+        })
+            ;
+
+        });
+
+    }
+    static deleteThumnailImage(that) {
+        var id = $(that).attr('data-id');
+        postUrl = postUrl.replace(/\.?0+$/,id);
+        axios.post(postUrl,{})
+            .then((response)=>{
+            if(response.data.success){
+            $(that).parent('div.thumbnail').remove();
+        }
+    else{
+            var status = response.statusText;
+            swal({
+                type: 'error',
+                title: 'Oops...',
+                text: status,
+                footer: ''
+            })
+        }
+    }).catch((error)=>{
+            var status = error.statusText;
+        swal({
+            type: 'error',
+            title: 'Oops...',
+            text: status,
+            footer: ''
+        })
+    });
+    });
+}
 }

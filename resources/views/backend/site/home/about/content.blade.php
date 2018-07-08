@@ -32,7 +32,7 @@
                         <div class="box-header">
                             <h3 class="box-title">Content <span class="text-danger"> * Marks are required feild</span></h3>
                             <div class="box-tools pull-right">
-                                <a class="btn btn-info btn-sm" href="{{ URL::route('slider.create') }}"><i class="fa fa-photo"></i> Images</a>
+                                <a class="btn btn-info btn-sm" href="{{ URL::route('site.about_content_image') }}"><i class="fa fa-photo"></i> Images</a>
                             </div>
                         </div>
 
