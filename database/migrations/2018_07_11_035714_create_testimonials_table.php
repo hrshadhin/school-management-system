@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSiteMetasTable extends Migration
+class CreateTestimonialsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,15 @@ class CreateSiteMetasTable extends Migration
      */
     public function up()
     {
-        Schema::create('site_metas', function (Blueprint $table) {
+        Schema::create('testimonials', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('meta_key');
-            $table->longText('meta_value');
+            $table->string('writer');
+            $table->text('comments');
+            $table->string('avatar');
+            $table->integer('order')->default(0);
             $table->timestamps();
             $table->softDeletes();
             $table->userstamps();
-
         });
     }
 
@@ -31,6 +32,6 @@ class CreateSiteMetasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('site_metas');
+        Schema::dropIfExists('testimonials');
     }
 }

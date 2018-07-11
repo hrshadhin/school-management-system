@@ -68,6 +68,15 @@ Route::group(
     Route::post('site/statistic','SiteController@statisticContent')
         ->name('site.statistic');
 
+    Route::get('site/testimonial','SiteController@testimonialIndex')
+        ->name('site.testimonial');
+    Route::post('site/testimonial','SiteController@testimonialIndex')
+        ->name('site.testimonial');
+    Route::get('site/testimonial/create','SiteController@testimonialCreate')
+        ->name('site.testimonial_create');
+    Route::post('site/testimonial/create','SiteController@testimonialCreate')
+        ->name('site.testimonial_create');
+
 }
 );
 

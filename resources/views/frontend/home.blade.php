@@ -153,7 +153,7 @@
 		</section>
 
 		<hr class="divider-color" />
-	@if($aboutContent)
+	@if($aboutContent && $aboutContent->intro_video_embed_code)
 		<!-- section -->
 			<section class="padding-section">
 				<div class="grid-row clear-fix">
@@ -182,12 +182,8 @@
 				</div>
 			</section>
 			<!-- / section -->
-		@else
-			<div class="alert alert-warning">
-				<span>Please add intro video link</span>
-			</div>
-		@endif
-		<hr class="divider-color" />
+			<hr class="divider-color" />
+	@endif
 		<!-- section -->
 		<section class="fullwidth-background padding-section">
 			<div class="grid-row clear-fix">
@@ -277,42 +273,16 @@
 			<div class="grid-row">
 				<h2 class="center-text">Testimonials</h2>
 				<div class="owl-carousel testimonials-carousel">
+					@foreach($testimonials as $test)
 					<div class="gallery-item">
 						<div class="quote-avatar-author clear-fix">
-							<img src="/frontend/uploads/94x94-img-1.jpg" data-at2x="/frontend/uploads/94x94-img-1@2x.jpg" alt="">
-							<div class="author-info">Karl Doe
-								<br>
-								<span>Writer</span>
-							</div>
+							<img src="@if($test->photo ){{ asset('storage/testimonials')}}/{{ $test->photo }} @else {{ asset('images/avatar.jpg')}} @endif" alt="">
+							<div class="author-info">{{$test->writer}}</div>
 						</div>
-						<p>Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat
-							vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla
-							ut metus varius laoreet. </p>
+						<p>{{$test->comments}}</p>
 					</div>
-					<div class="gallery-item">
-						<div class="quote-avatar-author clear-fix">
-							<img src="/frontend/uploads/94x94-img-1.jpg" data-at2x="/frontend/uploads/94x94-img-1@2x.jpg" alt="">
-							<div class="author-info">Karl Doe
-								<br>
-								<span>Writer</span>
-							</div>
-						</div>
-						<p>Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat
-							vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla
-							ut metus varius laoreet. </p>
-					</div>
-					<div class="gallery-item">
-						<div class="quote-avatar-author clear-fix">
-							<img src="/frontend/uploads/94x94-img-1.jpg" data-at2x="/frontend/uploads/94x94-img-1@2x.jpg" alt="">
-							<div class="author-info">Karl Doe
-								<br>
-								<span>Writer</span>
-							</div>
-						</div>
-						<p>Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat
-							vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla
-							ut metus varius laoreet. </p>
-					</div>
+						@endforeach
+
 				</div>
 			</div>
 		</section>
@@ -325,16 +295,15 @@
 		<!-- parallax section -->
 		<div class="parallaxed">
 			<div class="parallax-image" data-parallax-left="0.5" data-parallax-top="0.3" data-parallax-scroll-speed="0.5">
-				<img src="/frontend/img/parallax.png" alt="">
+				<img src="{{asset('frontend/img/parallax.png')}}" alt="">
 			</div>
 			<div class="them-mask bg-color-4"></div>
 			<div class="grid-row center-text">
 				<div class="font-style-1 margin-none">Get In Touch With Us</div>
 				<div class="divider-mini"></div>
-				<p class="parallax-text">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis
-					natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
-				<form class="subscribe">
-					<input type="text" name="email" value="" size="40" placeholder="Enter your email" aria-required="true">
+				<p class="parallax-text">Drop your email here to get latest updates from us.</p>
+				<form id="subscribeFrom" class="subscribe" action="{{URL::route('site.subscribe')}}" method="POST" enctype="multipart/form-data" >
+					<input type="email" name="email" value="" size="40" placeholder="Enter your email" aria-required="true">
 					<input type="submit" value="Subscribe">
 				</form>
 			</div>
