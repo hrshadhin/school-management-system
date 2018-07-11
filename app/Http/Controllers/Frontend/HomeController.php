@@ -28,6 +28,15 @@ class HomeController extends Controller
             $statistic->graduate = $data[2];
             $statistic->books = $data[3];
         }
-        return view('frontend.home', compact('sliders', 'aboutContent', 'aboutImages', 'ourService', 'statistic'));
+        $testimonials = Testimonial::orderBy('order','asc')->get();
+
+        return view('frontend.home', compact(
+            'sliders',
+            'aboutContent',
+            'aboutImages',
+            'ourService',
+            'statistic',
+            'testimonials'
+        ));
     }
 }

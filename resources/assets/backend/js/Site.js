@@ -106,6 +106,50 @@ export default class Site {
             }
         });
     }
+    static testimonialInit() {
+        $('#testimonials').DataTable({
+            'paging': false,
+            'lengthChange': false,
+            'searching': true,
+            'ordering': true,
+            'info': false,
+            'autoWidth': false
+        });
+        $("#testimonialAddForm").validate({
+            rules: {
+                writer: {
+                    required: true,
+                    minlength: 5,
+                    maxlength: 255,
+                },
+                comments: {
+                    required: true
+                },
+                order: {
+                    required: true,
+                    min: 0,
+                    number: true
+                }
+            },
+            messages: {
+
+
+            },
+            errorElement: "em",
+            errorPlacement: function (error, element) {
+                // Add the `help-block` class to the error element
+                error.addClass("help-block");
+                error.insertAfter(element);
+
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).parents(".form-group").addClass("has-error").removeClass("has-success");
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).parents(".form-group").addClass("has-success").removeClass("has-error");
+            }
+        });
+    }
 
     static aboutInit() {
         // bootstrap WYSIHTML5 - text editor

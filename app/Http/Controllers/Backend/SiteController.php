@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\AboutContent;
 use App\AboutSlider;
 use App\SiteMeta;
+use App\Testimonial;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Session;
@@ -180,6 +181,84 @@ class SiteController extends Controller
         }
 
         return view('backend.site.home.statistic', compact('content'));
+    }
+
+
+
+    /**
+     * testimonials  manage
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function testimonialIndex(Request $request)
+    {
+        //for save on POST request
+        if ($request->isMethod('post')) {//
+            $this->validate($request, [
+                'student' => 'required|numeric|min:1',
+                'teacher' => 'required|numeric|min:1',
+                'graduate' => 'required|numeric|min:1',
+                'books' => 'required|numeric|min:1'
+
+            ]);
+
+
+
+            $values = $request->get('student').','.$request->get('teacher').','.$request->get('graduate').','.$request->get('books');
+
+
+
+            //now crate or update model
+            $content = SiteMeta::updateOrCreate(
+                ['meta_key' => 'statistic'],
+                ['meta_value' => $values]
+            );
+            return redirect()->route('site.statistic')->with('success', 'Contents saved!');
+        }
+
+        //for get request
+        $testimonials = Testimonial::all();
+
+
+        return view('backend.site.home.testimonial.list', compact('testimonials'));
+    }
+
+    /**
+     * testimonials  manage
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function testimonialCreate(Request $request)
+    {
+        //for save on POST request
+        if ($request->isMethod('post')) {
+            $messages = [
+                'photo.max' => 'The :attribute size must be under 2MB.',
+                'photo.dimensions' => 'The :attribute dimensions must be minimum 94 X 94.',
+            ];
+            $this->validate($request, [
+                'writer' => 'required|min:5|max:255',
+                'comments' => 'required',
+                'photo' => 'required|mimes:jpeg,jpg,png|max:2048|dimensions:min_width=94,min_height=94',
+
+
+            ]);
+            $data = $request->all();
+            if($request->hasFile('photo')){
+                $storagepath = $request->file('photo')->store('public/testimonials');
+                $fileName = basename($storagepath);
+                $data['photo'] = $fileName;
+
+            }
+
+            Testimonial::create($data);
+
+            return redirect()->route('site.testimonial_create')->with('success', 'Testimonial added!');
+        }
+
+        //for get request
+        $testimonials = Testimonial::all();
+
+
+        return view('backend.site.home.testimonial.list', compact('testimonials'));
     }
     
 }
