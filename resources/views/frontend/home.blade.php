@@ -303,7 +303,8 @@
 				<div class="divider-mini"></div>
 				<p class="parallax-text">Drop your email here to get latest updates from us.</p>
 				<form id="subscribeFrom" class="subscribe" action="{{URL::route('site.subscribe')}}" method="POST" enctype="multipart/form-data" >
-					<input type="email" name="email" value="" size="40" placeholder="Enter your email" aria-required="true">
+					@csrf
+					<input type="email" name="email" size="40" required placeholder="Enter your email" aria-required="true">
 					<input type="submit" value="Subscribe">
 				</form>
 			</div>

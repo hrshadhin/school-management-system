@@ -15,6 +15,8 @@
 Route::group(
     ['namespace' => 'Frontend', 'middleware' => ['web']], function () {
     Route::get('/', 'HomeController@home')->name('home');
+    Route::post('site/subscribe','HomeController@subscribe')
+        ->name('site.subscribe');
 }
 );
 
@@ -61,7 +63,7 @@ Route::group(
         ->name('site.about_content_image_delete');
     Route::get('site/service','SiteController@serviceContent')
         ->name('site.service');
-    Route::post('site/service','SiteController@statisticContent')
+    Route::post('site/service','SiteController@serviceContent')
         ->name('site.service');
     Route::get('site/statistic','SiteController@statisticContent')
         ->name('site.statistic');
@@ -75,7 +77,10 @@ Route::group(
     Route::get('site/testimonial/create','SiteController@testimonialCreate')
         ->name('site.testimonial_create');
     Route::post('site/testimonial/create','SiteController@testimonialCreate')
-        ->name('site.testimonial_create');
+    ->name('site.testimonial_create');
+
+    Route::get('site/subscribe','SiteController@subscribe')
+        ->name('site.subscribe');
 
 }
 );

@@ -194,25 +194,15 @@ class SiteController extends Controller
         //for save on POST request
         if ($request->isMethod('post')) {//
             $this->validate($request, [
-                'student' => 'required|numeric|min:1',
-                'teacher' => 'required|numeric|min:1',
-                'graduate' => 'required|numeric|min:1',
-                'books' => 'required|numeric|min:1'
+                'hiddenId' => 'required|integer',
 
             ]);
 
+            $test = Testimonial::findOrFail($request->get('hiddenId'));
+            $test->delete();
 
 
-            $values = $request->get('student').','.$request->get('teacher').','.$request->get('graduate').','.$request->get('books');
-
-
-
-            //now crate or update model
-            $content = SiteMeta::updateOrCreate(
-                ['meta_key' => 'statistic'],
-                ['meta_value' => $values]
-            );
-            return redirect()->route('site.statistic')->with('success', 'Contents saved!');
+            return redirect()->route('site.testimonial')->with('success', 'Contents deleted!');
         }
 
         //for get request
@@ -237,7 +227,7 @@ class SiteController extends Controller
             $this->validate($request, [
                 'writer' => 'required|min:5|max:255',
                 'comments' => 'required',
-                'photo' => 'required|mimes:jpeg,jpg,png|max:2048|dimensions:min_width=94,min_height=94',
+                'photo' => 'mimes:jpeg,jpg,png|max:2048|dimensions:min_width=94,min_height=94',
 
 
             ]);
@@ -245,7 +235,7 @@ class SiteController extends Controller
             if($request->hasFile('photo')){
                 $storagepath = $request->file('photo')->store('public/testimonials');
                 $fileName = basename($storagepath);
-                $data['photo'] = $fileName;
+                $data['avatar'] = $fileName;
 
             }
 
@@ -258,7 +248,18 @@ class SiteController extends Controller
         $testimonials = Testimonial::all();
 
 
-        return view('backend.site.home.testimonial.list', compact('testimonials'));
+        return view('backend.site.home.testimonial.add', compact('testimonials'));
+    }
+
+    /**
+     * subscriber  manage
+     * @return mixed
+     */
+    public function subscribe(Request $request)
+    {
+        //for get request
+        $subscribers = SiteMeta::where('meta_key', 'subscriber')->get();
+        return view('backend.site.home.subscribers', compact('subscribers'));
     }
     
 }

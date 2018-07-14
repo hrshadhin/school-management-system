@@ -9285,3 +9285,39 @@ and (max-device-width : 1023px) {
 .text-info{
 	color: #4bbcd7;
 }
+
+.alert-success {
+	color: #3c763d;
+	background-color: #dff0d8;
+	border-color: #d6e9c6;
+}
+.alert-dismissable, .alert-dismissible {
+	padding-right: 35px;
+}
+.alert {
+	padding: 15px;
+	margin-bottom: 20px;
+	border: 1px solid transparent;
+	border-radius: 4px;
+}
+.alert-dismissible .close {
+	position: relative;
+	top: -2px;
+	right: -21px;
+	color: inherit;
+}
+a.close {
+	text-decoration: none !important;
+	font-size: 18px !important;
+	line-height: 1.2;
+}
+.close {
+	float: left;
+	font-size: 21px;
+	font-weight: 700;
+	line-height: 1;
+	color: #000;
+	text-shadow: 0 1px 0 #fff;
+	filter: alpha(opacity=20);
+	opacity: .2;
+}
