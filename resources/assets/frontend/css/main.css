@@ -4928,7 +4928,7 @@ section.widget-instructor article:last-child{
 	color: #4bbcd7;
 }
 .banner-offer .banner-icon:first-child {
-	width: 115px;
+	width: 90px;
 }
 .banner-offer .banner-text {
 	font-size: 40px;
@@ -4947,7 +4947,7 @@ section.widget-instructor article:last-child{
 	font-weight: 500;
 }
 .banner-offer .banner-text p {
-	font-size: 24px;
+	font-size: 20px;
 	text-align: right;
 	line-height: 0.8;
 }
@@ -9320,4 +9320,10 @@ a.close {
 	text-shadow: 0 1px 0 #fff;
 	filter: alpha(opacity=20);
 	opacity: .2;
+}
+
+.trim-text {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
