@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\ClassProfile;
+use App\Event;
 use App\Http\Controllers\Controller;
 use App\SiteMeta;
 use App\Slider;
@@ -116,6 +117,18 @@ class HomeController extends Controller
         $profiles = TeacherProfile::paginate(env('MAX_RECORD_PER_PAGE',25));
 
         return view('frontend.teacher', compact('profiles'));
+
+    }
+
+    /* Event  manage
+     * @return mixed
+     */
+    public function event()
+    {
+
+        $events = Event::paginate(env('MAX_RECORD_PER_PAGE',25));
+
+        return view('frontend.event', compact('events'));
 
     }
 }
