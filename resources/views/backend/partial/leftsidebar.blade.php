@@ -41,7 +41,7 @@
           </a>         
         </li>   
         <li>
-          <a href="#">
+          <a href="{{ URL::route('event.index') }}">
             <i class="fa fa-bullhorn"></i>
             <span>Events</span>           
           </a>         

@@ -46,6 +46,8 @@ mix.options({
 
 // copy non processing files to public path
 mix.copy('resources/assets/backend/js/bootstrap3-wysihtml5.all.min.js', 'public/js/editor.js');
+mix.copy('resources/assets/backend/css/bootstrap-datetimepicker-standalone.css', 'public/css/datetimepicker.css');
+mix.copy('resources/assets/backend/js/bootstrap-datetimepicker.min.js', 'public/js/datetimepicker.js');
 mix.copyDirectory('resources/assets/backend/images', 'public/images');
 
 

@@ -77,7 +77,7 @@
 							<a href="{{URL::route('site.teacher_profile')}}">Teachers</a>
 						</li>
 						<li>
-							<a href="events.html">Events</a>
+							<a href="{{URL::route('site.event')}}">Events</a>
 
 						</li>
 						<li>
