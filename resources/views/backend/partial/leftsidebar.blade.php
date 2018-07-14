@@ -28,7 +28,7 @@
         </li>      
      
         <li>
-          <a href="#">
+          <a href="{{ URL::route('class_profile.index') }}">
             <i class="fa fa-building"></i>
             <span>Class</span>           
           </a>         

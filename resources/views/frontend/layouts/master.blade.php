@@ -2,7 +2,7 @@
 <html lang="{{ app()->getLocale() }}">
 
 <head>
-	<title>HRHS | Home</title>
+	<title>HRHS | @yield('pageTitle')</title>
 	<meta charset="utf-8">
 	<meta name="description" content="School Website.">
     <meta name="keywords" content="school,college,management,result,exam,attendace,hostel,admission,events">

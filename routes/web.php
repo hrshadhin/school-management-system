@@ -17,6 +17,8 @@ Route::group(
     Route::get('/', 'HomeController@home')->name('home');
     Route::post('site/subscribe','HomeController@subscribe')
         ->name('site.subscribe');
+    Route::get('/class', 'HomeController@classProfile')->name('site.class_profile');
+    Route::get('/class-details/{name}', 'HomeController@classDetails')->name('site.class_details');
 }
 );
 
@@ -48,6 +50,7 @@ Route::group(
     /**
      * Website contents routes
      */
+
     Route::get('/site/dashboard', 'SiteController@dashboard')
         ->name('site.dashboard');
     Route::resource('slider','SliderController');
@@ -81,6 +84,9 @@ Route::group(
 
     Route::get('site/subscribe','SiteController@subscribe')
         ->name('site.subscribe');
+
+    Route::resource('class_profile','ClassProfileController');
+
 
 }
 );

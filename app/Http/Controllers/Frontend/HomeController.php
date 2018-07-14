@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use App\ClassProfile;
 use App\Http\Controllers\Controller;
 use App\SiteMeta;
 use App\Slider;
@@ -75,6 +76,33 @@ class HomeController extends Controller
 
         return $response;
 
+
+    }
+
+    /* subscriber  manage
+     * @return mixed
+     */
+    public function classProfile()
+    {
+
+        $profiles = ClassProfile::all();
+
+        return view('frontend.class', compact('profiles'));
+
+    }
+    /* subscriber  manage
+     * @return mixed
+     */
+    public function classDetails($name)
+    {
+
+        $profile = ClassProfile::where('slug',$name)->first();
+
+        if(! $profile){
+            aboart(404);
+        }
+
+        return view('frontend.class_details', compact('profile'));
 
     }
 }
