@@ -1157,7 +1157,44 @@ $(document).ready(function () {
    */
   select2_init();
 
-})
+    /**
+     * Subscribe email form
+     */
+    $('#subscribeFrom').submit(function (e) {
+        e.preventDefault();
+        var email = $('input[name="email"]').val();
+        if(!email.length){
+          alert('Enter email address!');
+        }
+        var data = $(this).serialize();
+        var url = $(this).attr('action');
+        var that = this;
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: data,
+            cache: false,
+            success: function (res) {
+               if(res.success){
+                 var msg = "<div class='alert alert-success emailmsg'>";
+                     msg += "<strong>";
+                      msg   += res.message + "</strong></div>";
+                 $(that).append(msg);
+
+
+               }
+               else{
+                   alert(res.message);
+               }
+            },
+            error: function (error) {
+                alert(error.statusText);
+            }
+        });
+
+    });
+
+});
 
 $(window).resize(function () {
 

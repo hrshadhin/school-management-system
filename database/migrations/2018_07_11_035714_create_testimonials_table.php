@@ -17,7 +17,7 @@ class CreateTestimonialsTable extends Migration
             $table->increments('id');
             $table->string('writer');
             $table->text('comments');
-            $table->string('avatar');
+            $table->string('avatar')->nullable();
             $table->integer('order')->default(0);
             $table->timestamps();
             $table->softDeletes();

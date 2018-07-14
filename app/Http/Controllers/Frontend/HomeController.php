@@ -7,6 +7,10 @@ use App\SiteMeta;
 use App\Slider;
 use App\AboutContent;
 use App\AboutSlider;
+use App\Testimonial;
+use Validator;
+use Illuminate\Http\Request;
+
 
 class HomeController extends Controller
 {
@@ -38,5 +42,39 @@ class HomeController extends Controller
             'statistic',
             'testimonials'
         ));
+    }
+
+    /**
+     * subscriber  manage
+     * @return mixed
+     */
+    public function subscribe(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+        ]);
+
+        if ($validator->fails()) {
+            $response = [
+                'success' => false,
+                'message' => 'Emails is invalid!'
+            ];
+
+            return $response;
+        }
+
+        $subscriber = SiteMeta::create([
+            'meta_key' => 'subscriber',
+            'meta_value' => $request->get('email')
+            ]);
+        $response = [
+            'success' => true,
+            'message' => 'Thank your for subscribing us.'
+        ];
+
+        return $response;
+
+
     }
 }

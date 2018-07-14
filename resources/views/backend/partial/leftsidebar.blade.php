@@ -22,8 +22,8 @@
             <li><a href="{{URL::route('site.about_content')}}"><i class="fa fa-info text-aqua"></i> About Us</a></li>
             <li><a href="{{ URL::route('site.service') }}"><i class="fa fa-file-text text-aqua"></i> Our Services</a></li>
             <li><a href="{{ URL::route('site.statistic') }}"><i class="fa fa-bars"></i> Statistic</a></li>
-            <li><a href="#"><i class="fa fa-comments"></i> Testimonials</a></li>
-            <li><a href="#"><i class="fa fa-users"></i> Subscribers</a></li>            
+            <li><a href="{{ URL::route('site.testimonial') }}"><i class="fa fa-comments"></i> Testimonials</a></li>
+            <li><a href="{{ URL::route('site.subscribe') }}"><i class="fa fa-users"></i> Subscribers</a></li>
           </ul>
         </li>      
      

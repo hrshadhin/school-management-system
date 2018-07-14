@@ -29,7 +29,7 @@
             <div class="col-md-12">
                 <div class="box box-info">
                     <div class="box-header">
-                        <h3 class="box-title">All sliders</h3>
+                        <h3 class="box-title">All Testimonials</h3>
 
                         <div class="box-tools pull-right">
                             <a class="btn btn-info btn-sm" href="{{ URL::route('site.testimonial_create') }}"><i class="fa fa-plus-circle"></i> Add New</a>
@@ -51,17 +51,16 @@
                             @foreach($testimonials as $test)
                                 <tr>
                                     <td>
-                                        <img class="img-responsive" style="max-height: 200px;" src="@if($test->photo ){{ asset('storage/testimonials')}}/{{ $test->photo }} @else {{ asset('images/avatar.jpg')}} @endif" alt="">
+                                        <img class="img-responsive center" style="max-height: 200px;" src="@if($test->photo ){{ asset('storage/testimonials')}}/{{ $test->photo }} @else {{ asset('images/avatar.jpg')}} @endif" alt="">
                                     </td>
                                     <td>{{ $test->writer }}</td>
                                     <td> {{ $test->comments }}</td>
                                     <td> {{ $test->order }}</td>
                                     <td>
                                         <div class="btn-group">
-                                            <form class="myAction" method="POST" action="{{URL::route('site.testimonial')}}">
-                                                {{ method_field('DELETE') }}
+                                            <form  class="myAction" method="POST" action="{{URL::route('site.testimonial')}}">
                                                 @csrf
-                                                <input type="hidden" value="{{$test->id}}">
+                                                <input type="hidden" name="hiddenId" value="{{$test->id}}">
                                                 <button type="submit" class="btn btn-danger btn-sm" title="Delete">
                                                     <i class="fa fa-fw fa-trash"></i>
                                                 </button>
