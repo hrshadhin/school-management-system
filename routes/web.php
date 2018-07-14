@@ -19,6 +19,8 @@ Route::group(
         ->name('site.subscribe');
     Route::get('/class', 'HomeController@classProfile')->name('site.class_profile');
     Route::get('/class-details/{name}', 'HomeController@classDetails')->name('site.class_details');
+    Route::get('/teacherProfile', 'HomeController@teacherProfile')->name('site.teacher_profile');
+
 }
 );
 
@@ -86,6 +88,7 @@ Route::group(
         ->name('site.subscribe');
 
     Route::resource('class_profile','ClassProfileController');
+    Route::resource('teacher_profile','TeacherProfileController');
 
 
 }

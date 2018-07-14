@@ -8,6 +8,7 @@ use App\SiteMeta;
 use App\Slider;
 use App\AboutContent;
 use App\AboutSlider;
+use App\TeacherProfile;
 use App\Testimonial;
 use Validator;
 use Illuminate\Http\Request;
@@ -103,6 +104,18 @@ class HomeController extends Controller
         }
 
         return view('frontend.class_details', compact('profile'));
+
+    }
+
+    /* Teacher  manage
+     * @return mixed
+     */
+    public function teacherProfile()
+    {
+
+        $profiles = TeacherProfile::paginate(env('MAX_RECORD_PER_PAGE',25));
+
+        return view('frontend.teacher', compact('profiles'));
 
     }
 }
