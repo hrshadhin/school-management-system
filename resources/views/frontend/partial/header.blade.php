@@ -17,16 +17,16 @@
 						<i class="share-icon fa fa-share-alt"></i>
 					</div>
 					<div class="cws_social_links">
-						<a href="@if($siteInfo['google']){{$siteInfo['google']}}@else #@endif" class="cws_social_link" title="Google +">
+						<a target="_blank" href="@if($siteInfo['google']){{$siteInfo['google']}}@else #@endif" class="cws_social_link" title="Google +">
 							<i class="share-icon fa fa-google-plus" style="transform: matrix(0, 0, 0, 0, 0, 0);"></i>
 						</a>
-						<a href="@if($siteInfo['twitter']){{$siteInfo['twitter']}}@else #@endif" class="cws_social_link" title="Twitter">
+						<a target="_blank" href="@if($siteInfo['twitter']){{$siteInfo['twitter']}}@else #@endif" class="cws_social_link" title="Twitter">
 							<i class="share-icon fa fa-twitter"></i>
 						</a>
-						<a href="@if($siteInfo['facebook']){{$siteInfo['facebook']}}@else #@endif" class="cws_social_link" title="Facebook">
+						<a target="_blank" href="@if($siteInfo['facebook']){{$siteInfo['facebook']}}@else #@endif" class="cws_social_link" title="Facebook">
 							<i class="share-icon fa fa-facebook"></i>
 						</a>
-						<a href="@if($siteInfo['youtube']){{$siteInfo['youtube']}}@else #@endif" class="cws_social_link" title="Youtube">
+						<a target="_blank" href="@if($siteInfo['youtube']){{$siteInfo['youtube']}}@else #@endif" class="cws_social_link" title="Youtube">
 							<i class="share-icon fa fa-youtube"></i>
 						</a>
 					</div>

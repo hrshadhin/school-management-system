@@ -18,6 +18,17 @@ class ComposerServiceProvider extends ServiceProvider
         View::composer(
             'frontend.layouts.master', 'App\Http\ViewComposers\FrontendMasterComposer'
         );
+        View::composer(
+            [
+                'backend.layouts.master',
+                'backend.layouts.front_master',
+                'backend.user.login',
+                'backend.user.forgot',
+                'backend.user.reset'
+            ],
+            'App\Http\ViewComposers\BackendMasterComposer'
+        );
+
 
 
     }

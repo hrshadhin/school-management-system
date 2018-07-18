@@ -4,15 +4,16 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="School Management System">
+    <meta name="description" content="{{$siteInfo['name']}}">
     <meta name="keywords" content="school,college,management,result,exam,attendace,hostel,admission,events">
     <meta name="author" content="H.R.Shadhin">
-    <title>{{ config('app.name') }} | @yield('pageTitle')</title>
+    <title>@if($siteInfo['short_name']){{$siteInfo['short_name']}} @else{{ config('app.name') }}@endif | @yield('pageTitle')</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Favicon png -->
-    <link rel="icon" href="{{ asset('images/favicon.png') }}" type="image/png">
+    <link rel="shortcut icon" href="@if($siteInfo['favicon']){{asset('storage/site/'.$siteInfo['favicon'])}} @else{{ asset('images/favicon.png') }}@endif">
+
     <!-- vendor libraries CSS -->
     <link href="{{ asset(mix('/css/vendor.css')) }}" rel="stylesheet" type="text/css">
     <!-- theme CSS -->
