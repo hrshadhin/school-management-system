@@ -145,4 +145,14 @@ class HomeController extends Controller
         return view('frontend.event_details', compact('event'));
 
     }
+    /* Gallery
+     * @return mixed
+     */
+    public function gallery()
+    {
+        //for get request
+        $images = SiteMeta::where('meta_key','gallery')->paginate(env('MAX_RECORD_PER_PAGE_FRONT',10));
+        return view('frontend.gallery', compact('images'));
+
+    }
 }

@@ -4,9 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Hrshadhin\Userstamps\UserstampsTrait;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 
 class SiteMeta extends Model
 {
+    use SoftDeletes;
     use UserstampsTrait;
 
     /**

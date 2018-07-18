@@ -386,4 +386,26 @@ export default class Site {
         });
 
     }
+    static galleryInit() {
+        $('.thumbnail .remove-image').on('click', function () {
+            var that = this;
+            swal({
+                title: 'Are you sure?',
+                text: 'You will not be able to recover this record!',
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'No, keep it'
+            }).then((result) => {
+                if(result.value) {
+                    Site.deleteThumnailImage(that);
+
+                }
+            });
+
+        });
+
+    }
 }

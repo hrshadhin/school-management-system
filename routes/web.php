@@ -22,6 +22,7 @@ Route::group(
     Route::get('/teachers', 'HomeController@teacherProfile')->name('site.teacher_profile');
     Route::get('/events', 'HomeController@event')->name('site.event');
     Route::get('/events-details/{slug}', 'HomeController@eventDetails')->name('site.event_details');
+    Route::get('/gallery', 'HomeController@gallery')->name('site.gallery_view');
 
 
 }
@@ -93,6 +94,14 @@ Route::group(
     Route::resource('class_profile','ClassProfileController');
     Route::resource('teacher_profile','TeacherProfileController');
     Route::resource('event','EventController');
+    Route::get('site/gallery','SiteController@gallery')
+        ->name('site.gallery');
+    Route::get('site/gallery/add-image','SiteController@galleryAdd')
+        ->name('site.gallery_image');
+    Route::post('site/gallery/add-image','SiteController@galleryAdd')
+        ->name('site.gallery_image');
+    Route::post('site/gallery/delete-images/{id}','SiteController@galleryDelete')
+        ->name('site.gallery_image_delete');
 
 
 }
