@@ -21,7 +21,7 @@
   
               <div class="info-box-content">
                 <span class="info-box-text">Subscribers</span>
-                <span class="info-box-number">1,200<small></small></span>
+                <span class="info-box-number">{{$subscribers}}<small></small></span>
               </div>
               <!-- /.info-box-content -->
             </div>
@@ -34,7 +34,7 @@
   
               <div class="info-box-content">
                 <span class="info-box-text">Events</span>
-                <span class="info-box-number">80</span>
+                <span class="info-box-number">{{$events}}</span>
               </div>
               <!-- /.info-box-content -->
             </div>
@@ -51,7 +51,7 @@
   
               <div class="info-box-content">
                 <span class="info-box-text">Photograph</span>
-                <span class="info-box-number">510</span>
+                <span class="info-box-number">{{$photos}}</span>
               </div>
               <!-- /.info-box-content -->
             </div>

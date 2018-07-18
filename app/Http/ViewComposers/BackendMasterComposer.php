@@ -5,18 +5,12 @@ use App\Event;
 use App\SiteMeta;
 use Illuminate\Contracts\View\View;
 
-class FrontendMasterComposer
+class BackendMasterComposer
 {
     public function compose(View $view)
     {
-        //for get request
-        $address = SiteMeta::where('meta_key', 'contact_address')->first();
-        $phone = SiteMeta::where('meta_key', 'contact_phone')->first();
-        $email = SiteMeta::where('meta_key', 'contact_email')->first();
+
         $siteInfo = [
-            'address' => $address->meta_value,
-            'phone' => $phone->meta_value,
-            'email' => $email->meta_value,
             'name' => '',
             'logo' => '',
             'logo2x' => '',
@@ -26,7 +20,6 @@ class FrontendMasterComposer
             'twitter' => '',
             'youtube' => '',
         ];
-        $upComingEvent = Event::whereDate('event_time','>=', date('Y-m-d'))->orderBy('event_time','asc')->take(1)->first();
         $settings = SiteMeta::where('meta_key','settings')->first();
         $info = null;
         if($settings){
@@ -51,6 +44,5 @@ class FrontendMasterComposer
         $view->with('maintainer', 'ShanixLab');
         $view->with('maintainer_url', 'http://shanixlab.com');
         $view->with('siteInfo', $siteInfo);
-        $view->with('event', $upComingEvent);
     }
 }

@@ -32,7 +32,7 @@
     <div class="login-box">
         <div class="login-logo">
             <a href="/">
-                <img src="{{ asset('images/logo.png') }}" alt="">
+                <img src="@if($siteInfo['logo']){{asset('storage/site/'.$siteInfo['logo'])}} @else{{ asset('images/logo.png') }}@endif" alt="">
             </a>
         </div>
         <div class="login-box-body">

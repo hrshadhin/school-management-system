@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\AboutContent;
 use App\AboutSlider;
+use App\Event;
 use App\SiteMeta;
 use App\Testimonial;
 use Illuminate\Http\Request;
@@ -21,7 +22,15 @@ class SiteController extends Controller
      */
     public function dashboard()
     {
-        return view('backend.site.dashboard');
+        $subscribers = SiteMeta::where('meta_key', 'subscriber')->count();
+        $photos = SiteMeta::where('meta_key', 'gallery')->count();
+        $events = Event::count();
+
+        return view('backend.site.dashboard', compact(
+            'subscribers',
+            'photos',
+            'events'
+        ));
     }
 
     /**
