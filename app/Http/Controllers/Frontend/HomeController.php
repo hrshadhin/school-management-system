@@ -213,4 +213,25 @@ class HomeController extends Controller
         return view('frontend.contact_us', compact('address', 'phone', 'email', 'latlong'));
 
     }
+
+    /* FAQ
+     * @return mixed
+     */
+    public function faq()
+    {
+
+        $faqs = SiteMeta::where('meta_key','faq')->get();
+        return view('frontend.faq', compact('faqs'));
+
+    }
+    /* Timeline
+     * @return mixed
+     */
+    public function timeline()
+    {
+
+        $timeline = SiteMeta::where('meta_key','timeline')->orderBy('id','desc')->get();
+        return view('frontend.timeline', compact('timeline'));
+
+    }
 }

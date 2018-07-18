@@ -59,13 +59,13 @@
           </a>         
         </li>   
         <li>
-          <a href="#">
+          <a href="{{ URL::route('site.faq') }}">
             <i class="fa fa-question-circle"></i>
             <span>FAQ</span>
           </a>
           </li>
         <li>
-          <a href="#"><i class="fa fa-clock-o"></i>
+          <a href="{{ URL::route('site.timeline') }}"><i class="fa fa-clock-o"></i>
             <span>Timeline</span>
         </a>
         </li>

@@ -429,4 +429,70 @@ export default class Site {
         });
 
     }
+    static faqInit() {
+
+        // bootstrap WYSIHTML5 - text editor
+        $('.textarea').each(function (index, elem) {
+            $(elem).wysihtml5();
+        });
+        $('#faqList').DataTable({
+            'paging': false,
+            'lengthChange': false,
+            'searching': true,
+            'ordering': true,
+            'info': false,
+            'autoWidth': false
+        });
+
+        $("#faqForm").validate({
+            ignore: ":hidden:not(textarea)",
+            rules: {},
+            messages: {},
+            errorElement: "em",
+            errorPlacement: function (error, element) {
+                // Add the `help-block` class to the error element
+                error.addClass("help-block");
+                error.insertAfter(element);
+
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).parents(".form-group").addClass("has-error").removeClass("has-success");
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).parents(".form-group").addClass("has-success").removeClass("has-error");
+            }
+        });
+
+    }
+    static timeLineInit() {
+
+        $('#timeLineList').DataTable({
+            'paging': false,
+            'lengthChange': false,
+            'searching': true,
+            'ordering': true,
+            'info': false,
+            'autoWidth': false
+        });
+
+        $("#timelineForm").validate({
+            ignore: ":hidden:not(textarea)",
+            rules: {},
+            messages: {},
+            errorElement: "em",
+            errorPlacement: function (error, element) {
+                // Add the `help-block` class to the error element
+                error.addClass("help-block");
+                error.insertAfter(element);
+
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).parents(".form-group").addClass("has-error").removeClass("has-success");
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).parents(".form-group").addClass("has-success").removeClass("has-error");
+            }
+        });
+
+    }
 }
