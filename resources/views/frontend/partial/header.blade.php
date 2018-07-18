@@ -68,16 +68,16 @@
 				<nav class="main-nav">
 					<ul class="clear-fix">
 						<li>
-							<a href="{{URL::route('home')}}" class="active">Home</a>
+							<a href="{{URL::route('home')}}" @if(Route::current()->getName() == "home") class="active" @endif>Home</a>
 						</li>
 						<li>
-							<a href="{{URL::route('site.class_profile')}}">Class</a>
+							<a href="{{URL::route('site.class_profile')}}" @if(Route::current()->getName() == "site.class_profile" || Route::current()->getName() == "site.class_details" ) class="active" @endif>Class</a>
 						</li>
 						<li>
-							<a href="{{URL::route('site.teacher_profile')}}">Teachers</a>
+							<a href="{{URL::route('site.teacher_profile')}}" @if(Route::current()->getName() == "site.teacher_profile") class="active" @endif>Teachers</a>
 						</li>
 						<li>
-							<a href="{{URL::route('site.event')}}">Events</a>
+							<a href="{{URL::route('site.event')}}" @if(Route::current()->getName() == "site.event" || Route::current()->getName() == "site.event_details" ) class="active" @endif>Events</a>
 
 						</li>
 						<li>

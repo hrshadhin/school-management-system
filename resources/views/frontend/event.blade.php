@@ -22,249 +22,74 @@
 		<div class="grid-row">
 			<main>
 				<div class=" grid-col-row clear-fix">
+
+					@foreach($events as $event)
 					<div class="grid-col grid-col-4">
 						<!-- blog post -->
 						<div class="blog-post">
 							<article>
 								<div class="post-info event">
 									<div class="date-post">
-										<div class="time">10:30 AM</div>
+										<div class="time">{{$event->event_time->format('h:i a')}}</div>
 									</div>
 									<div class="post-info-main">
 										<div class="event-info">
-											26 Aug,2018
+											{{$event->event_time->format('d M,Y')}}
 										</div>
 									</div>
 
 								</div>
+								@if($event->cover_photo)
 								<div class="blog-media picture">
 									<div class="hover-effect"></div>
 									<div class="link-cont">
-										<a href="event-details.html" class="cws-left fancy fa fa-link"></a>
-										<a href="/frontend/uploads/events/370x270-img-5%402x.jpg" class="fancy fa fa-search"></a>
-									</div>
-									<img src="/frontend/uploads/events/370x270-img-5.jpg" data-at2x="/frontend/uploads/events/370x270-img-5@2x.jpg" class="columns-col-12"
-										 alt>
-								</div>
-								<h3>Donec mollis magna quis</h3>
-								<p>Donec sollicitudin lacus in felis luctus blandit. Ut hendrerit mattis justo at suscipit
-									<a href="event-details.html">More</a>
-								</p>
-								<div class="tags-post">
-									<a href="#" rel="tag">Materials</a>
-									<!--
-                                         -->
-									<a href="#" rel="tag">Featured</a>
-								</div>
-							</article>
-						</div>
-						<!-- / blog post -->
-					</div>
-
-					<div class="grid-col grid-col-4">
-						<!-- blog post -->
-						<div class="blog-post">
-							<article>
-								<div class="post-info event">
-									<div class="date-post">
-										<div class="time">06:15 PM</div>
-									</div>
-									<div class="post-info-main">
-										<div class="event-info">
-											15 Jul,2018
-										</div>
+										<a href="{{URL::route('site.event_details',$event->slug)}}" class="cws-left fancy fa fa-link"></a>
 									</div>
 
-								</div>
-								<h3>Vestibulum volutpat est neque</h3>
-								<p>Praesent ornare sollicitudin magna. Vestibulum volutpat est neque, in rutrum mi interdum
-									quis. Praesent dictum rhoncus luctus.
-									<a href="event-details.html">More</a>
-								</p>
-								<div class="tags-post">
-									<a href="#" rel="tag">Arts</a>
-									<!--
-                                     -->
-									<a href="#" rel="tag">Design</a>
-								</div>
-							</article>
-						</div>
-						<!-- /blog post -->
-					</div>
-
-					<div class="grid-col grid-col-4">
-						<!-- blog post -->
-						<div class="blog-post">
-							<article>
-								<div class="post-info event">
-									<div class="date-post">
-										<div class="time">03:30 PM</div>
-									</div>
-									<div class="post-info-main">
-										<div class="event-info">
-											26 Feb,2018
-										</div>
-									</div>
+									<img src="{{asset('storage/events/'.$event->cover_photo)}}"  class="columns-col-12" alt>
 
 								</div>
+								@endif
+								@if($event->cover_video)
 								<div class="video-player">
-									<iframe src="https://www.youtube.com/embed/PvoUgT1mlfA"></iframe>
+									{!! $event->cover_video !!}
 								</div>
-								<h3>Class aptent taciti sociosqu ad litora.</h3>
-								<p>Donec sollicitudin lacus in felis luctus blandit. Ut hendrerit mattis justo at suscipit.
-									Praesent sagittis magna nec neque viverra lobortis.
-									<a href="event-details.html">More</a>
+								@endif
+								<h3>{{$event->title}}</h3>
+								<p>
+									{!! substr($event->description,0,80) !!}
+									<a class="more" href="{{URL::route('site.event_details',$event->slug)}}">....<i class="fa fa-link"></i>More</a>
 								</p>
+								@if($event->tags)
 								<div class="tags-post">
-									<a href="#" rel="tag">Caltural</a>
-									<!--
-                                     -->
-									<a href="#" rel="tag">Fun</a>
+									@foreach(explode(',', $event->tags) as $tag)
+									<a href="#" rel="tag">{{$tag}}</a>
+									@endforeach
 								</div>
+									@endif
 							</article>
 						</div>
 						<!-- / blog post -->
 					</div>
+					@endforeach
+
+
 				</div>
-				<div class=" grid-col-row clear-fix">
-					<div class="grid-col grid-col-4">
-						<!-- blog post -->
-						<div class="blog-post">
-							<article>
-								<div class="post-info event">
-									<div class="date-post">
-										<div class="time">10:30 AM</div>
-									</div>
-									<div class="post-info-main">
-										<div class="event-info">
-											12 Feb,2018
-										</div>
-									</div>
 
-								</div>
-								<div class="blog-media picture">
-									<div class="hover-effect"></div>
-									<div class="link-cont">
-										<a href="event-details.html" class="cws-left fancy fa fa-link"></a>
-										<a href="/frontend/uploads/events/370x270-img-5%402x.jpg" class="fancy fa fa-search"></a>
-									</div>
-									<img src="/frontend/uploads/events/370x270-img-5.jpg" data-at2x="/frontend/uploads/events/370x270-img-5@2x.jpg" class="columns-col-12"
-										 alt>
-								</div>
-								<h3>Donec mollis magna quis</h3>
-								<p>Donec sollicitudin lacus in felis luctus blandit. Ut hendrerit mattis justo at suscipit
-									<a href="event-details.html">More</a>
-								</p>
-								<div class="tags-post">
-									<a href="#" rel="tag">Materials</a>
-									<!--
-                                             -->
-									<a href="#" rel="tag">Featured</a>
-								</div>
-							</article>
-						</div>
-						<!-- / blog post -->
-					</div>
-
-					<div class="grid-col grid-col-4">
-						<!-- blog post -->
-						<div class="blog-post">
-							<article>
-								<div class="post-info event">
-									<div class="date-post">
-										<div class="time">04:00 PM</div>
-									</div>
-									<div class="post-info-main">
-										<div class="event-info">
-											15 Jan,2018
-										</div>
-									</div>
-
-								</div>
-								<div class="blog-media picture">
-									<div class="hover-effect"></div>
-									<div class="link-cont">
-										<a href="event-details.html" class="cws-left fancy fa fa-link"></a>
-										<a href="/frontend/uploads/events/370x270-img-5%402x.jpg" class="fancy fa fa-search"></a>
-									</div>
-									<img src="/frontend/uploads/events/370x270-img-5.jpg" data-at2x="/frontend/uploads/events/370x270-img-5@2x.jpg" class="columns-col-12"
-										 alt>
-								</div>
-								<h3>Vestibulum volutpat est neque</h3>
-								<p>Praesent ornare sollicitudin magna. Vestibulum volutpat est neque, in rutrum mi interdum
-									quis. Praesent dictum rhoncus luctus.
-									<a href="event-details.html">More</a>
-								</p>
-								<div class="tags-post">
-									<a href="#" rel="tag">Arts</a>
-									<!--
-                                         -->
-									<a href="#" rel="tag">Design</a>
-								</div>
-							</article>
-						</div>
-						<!-- /blog post -->
-					</div>
-
-					<div class="grid-col grid-col-4">
-						<!-- blog post -->
-						<div class="blog-post">
-							<article>
-								<div class="post-info event">
-									<div class="date-post">
-										<div class="time">07:30 AM</div>
-									</div>
-									<div class="post-info-main">
-										<div class="event-info">
-											16 Dec,2017
-										</div>
-									</div>
-
-								</div>
-								<div class="blog-media picture">
-									<div class="hover-effect"></div>
-									<div class="link-cont">
-										<a href="event-details.html" class="cws-left fancy fa fa-link"></a>
-										<a href="/frontend/uploads/events/370x270-img-5%402x.jpg" class="fancy fa fa-search"></a>
-									</div>
-									<img src="/frontend/uploads/events/370x270-img-5.jpg" data-at2x="/frontend/uploads/events/370x270-img-5@2x.jpg" class="columns-col-12"
-										 alt>
-								</div>
-								<h3>Class aptent taciti sociosqu ad litora.</h3>
-								<p>Donec sollicitudin lacus in felis luctus blandit. Ut hendrerit mattis justo at suscipit.
-									Praesent sagittis magna nec neque viverra lobortis.
-									<a href="event-details.html">More</a>
-								</p>
-								<div class="tags-post">
-									<a href="#" rel="tag">Caltural</a>
-									<!--
-                                         -->
-									<a href="#" rel="tag">Fun</a>
-								</div>
-							</article>
-						</div>
-						<!-- / blog post -->
-					</div>
-				</div>
 				<!-- pagination -->
 				<div class="page-pagination clear-fix">
-					<a href="#">
+
+					<a title="prev"  @if($events->previousPageUrl()) href="{{$events->previousPageUrl()}}" @else href="#"  class="disabled" @endif>
 						<i class="fa fa-angle-double-left"></i>
 					</a>
-					<!--
-                            -->
-					<a href="#" class="active">1</a>
-					<!--
-                            -->
-					<a href="#">2</a>
-					<!--
-                            -->
-					<a href="#">3</a>
-					<!--
-                            -->
-					<a href="#">
+					<a href="#" class="active">
+						{{$events->currentPage()}}
+					</a>
+					<a title="next" @if($events->nextPageUrl()) href="{{$events->nextPageUrl()}}" @else href="#"  class="disabled" @endif>
 						<i class="fa fa-angle-double-right"></i>
 					</a>
+
+
 				</div>
 				<!-- / pagination -->
 			</main>

@@ -24,11 +24,13 @@ mix.js('resources/assets/backend/js/app.js', 'public/js')
     .styles([
         'resources/assets/backend/css/AdminLTE.css',
         'resources/assets/backend/css/_all-skins.css',
-        'resources/assets/backend/css/bootstrap3-wysihtml5.min.css'
+        'resources/assets/backend/css/bootstrap3-wysihtml5.min.css',
+        'resources/assets/backend/css/bootstrap-datetimepicker.min.css'
     ], 'public/css/theme.css')
     .js([
         'resources/assets/backend/js/adminlte.js',
-        'resources/assets/backend/js/theme_settings.js'
+        'resources/assets/backend/js/theme_settings.js',
+        'resources/assets/backend/js/bootstrap-datetimepicker.min.js'
     ], 'public/js/theme.js')
     .autoload({
         jquery: ['$', 'window.jQuery', 'jQuery', 'jquery']
@@ -46,8 +48,8 @@ mix.options({
 
 // copy non processing files to public path
 mix.copy('resources/assets/backend/js/bootstrap3-wysihtml5.all.min.js', 'public/js/editor.js');
-mix.copy('resources/assets/backend/css/bootstrap-datetimepicker-standalone.css', 'public/css/datetimepicker.css');
-mix.copy('resources/assets/backend/js/bootstrap-datetimepicker.min.js', 'public/js/datetimepicker.js');
+// mix.copy('resources/assets/backend/css/bootstrap-datetimepicker-standalone.css', 'public/css/datetimepicker.css');
+// mix.copy('resources/assets/backend/js/bootstrap-datetimepicker.min.js', 'public/js/datetimepicker.js');
 mix.copyDirectory('resources/assets/backend/images', 'public/images');
 
 

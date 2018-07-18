@@ -17,6 +17,7 @@ class CreateEventsTable extends Migration
             $table->increments('id');
             $table->dateTime('event_time');
             $table->string('title');
+            $table->string('slug',500);
             $table->string('cover_photo')->nullable();
             $table->string('cover_video')->nullable();
             $table->string('tags')->nullable();

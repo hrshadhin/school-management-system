@@ -9338,3 +9338,9 @@ a.close {
 .disabled {
 	pointer-events:none;
 }
+
+.more {
+	color: #f27c66;
+	font-weight: 600;
+	font-style: italic;
+}
