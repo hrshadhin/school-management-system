@@ -122,6 +122,10 @@ Route::group(
         ->name('site.timeline');
     Route::post('site/timeline/{id}','SiteController@timelineDelete')
         ->name('site.timeline_delete');
+    Route::get('site/settings','SiteController@settings')
+        ->name('site.settings');
+    Route::post('site/settings','SiteController@settings')
+        ->name('site.settings');
 
 }
 );

@@ -468,4 +468,69 @@ class SiteController extends Controller
         return redirect()->route('site.timeline')->with('success', 'Record Deleted!');
     }
 
+
+    /**
+     * timeline section content manage
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function settings(Request $request)
+    {
+        //for save on POST request
+        if ($request->isMethod('post')) {
+            //validate form
+            $messages = [
+                'logo.max' => 'The :attribute size must be under 1MB.',
+                'logo.dimensions' => 'The :attribute dimensions must be 82 X 72.',
+                'logo2x.max' => 'The :attribute size must be under 1MB.',
+                'logo2x.dimensions' => 'The :attribute dimensions must be 162 X 142.',
+                'favicon.max' => 'The :attribute size must be under 1MB.',
+                'favicon.dimensions' => 'The :attribute dimensions must be 32 X 32.',
+            ];
+            $this->validate($request, [
+                'name' => 'required|min:5|max:255',
+                'logo' => 'required|mimes:jpeg,jpg,png|max:1024|dimensions:min_width=82,min_height=72,max_width=82,max_height=72',
+                'logo2x' => 'required|mimes:jpeg,jpg,png|max:1024|dimensions:min_width=162,min_height=142,max_width=162,max_height=142',
+                'favicon' => 'required|mimes:png|max:512|dimensions:min_width=32,min_height=32,max_width=32,max_height=32',
+                'facebook' => 'max:255',
+                'google' => 'max:255',
+                'twitter' => 'max:255',
+                'youtube' => 'max:255',
+            ]);
+
+
+            $storagepath = $request->file('logo')->store('public/site');
+            $fileName = basename($storagepath);
+            $data['logo'] = $fileName;
+            $storagepath = $request->file('logo2x')->store('public/site');
+            $fileName = basename($storagepath);
+            $data['logo2x'] = $fileName;
+            $storagepath = $request->file('favicon')->store('public/site');
+            $fileName = basename($storagepath);
+            $data['favicon'] = $fileName;
+
+            $data['name'] = $request->get('name');
+            $data['facebook'] = $request->get('facebook');
+            $data['google'] = $request->get('google');
+            $data['twitter'] = $request->get('twitter');
+            $data['youtube'] = $request->get('youtube');
+
+            //now crate
+            SiteMeta::updateOrCreate(
+                ['meta_key' => 'settings'],
+                ['meta_value' => json_encode($data)]
+            );
+            return redirect()->route('site.settings')->with('success', 'Record updated!');
+        }
+
+        //for get request
+        $settings = SiteMeta::where('meta_key','settings')->first();
+        $info = null;
+        if($settings){
+            $info = json_decode($settings->meta_value);
+        }
+
+        return view('backend.site.settings', compact('info'));
+    }
+
+
 }

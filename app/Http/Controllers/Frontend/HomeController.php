@@ -21,6 +21,7 @@ class HomeController extends Controller
 {
     public function home()
     {
+
         $sliders = Slider::orderBy('order','asc')->get()->take(10);
 
         $aboutContent = AboutContent::first();
@@ -38,6 +39,7 @@ class HomeController extends Controller
             $statistic->books = $data[3];
         }
         $testimonials = Testimonial::orderBy('order','asc')->get();
+
 
         return view('frontend.home', compact(
             'sliders',

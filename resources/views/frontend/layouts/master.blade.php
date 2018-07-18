@@ -9,7 +9,7 @@
     <meta name="author" content="H.R.Shadhin">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 	<!-- style -->
-	<link rel="shortcut icon" href="{{ asset('/frontend/img/favicon.png') }}">
+	<link rel="shortcut icon" href="{{asset('storage/site/'.$siteInfo['favicon'])}}">
    <link rel="stylesheet" href="{{ asset(mix('/css/libs.css', 'frontend')) }}">
     <!--styles -->
 

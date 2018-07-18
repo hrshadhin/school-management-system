@@ -34,7 +34,6 @@ mixFrontend.copyDirectory('resources/assets/frontend/img', 'public/frontend/img'
 mixFrontend.copyDirectory('resources/assets/frontend/fonts', 'public/frontend/fonts');
 mixFrontend.copyDirectory('resources/assets/frontend/flags', 'public/frontend/flags');
 mixFrontend.copyDirectory('resources/assets/frontend/rs-plugin', 'public/frontend/rs-plugin');
-mixFrontend.copyDirectory('resources/assets/frontend/uploads', 'public/frontend/uploads');
 
 if (mixFrontend.inProduction()) {
     mixFrontend.version();
