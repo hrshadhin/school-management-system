@@ -83,9 +83,8 @@
 						<li>
 							<a href="{{URL::route('site.gallery_view')}}" @if(Route::current()->getName() == "site.gallery_view" ) class="active" @endif>Gallery</a>
 						</li>
-
 						<li>
-							<a href="contact-us.html">Contact Us</a>
+							<a href="{{URL::route('site.contact_us_view')}}" @if(Route::current()->getName() == "site.contact_us_view" ) class="active" @endif>Contact Us</a>
 						</li>
 					</ul>
 				</nav>

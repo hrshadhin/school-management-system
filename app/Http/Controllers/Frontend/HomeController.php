@@ -13,6 +13,8 @@ use App\TeacherProfile;
 use App\Testimonial;
 use Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+
 
 
 class HomeController extends Controller
@@ -153,6 +155,62 @@ class HomeController extends Controller
         //for get request
         $images = SiteMeta::where('meta_key','gallery')->paginate(env('MAX_RECORD_PER_PAGE_FRONT',10));
         return view('frontend.gallery', compact('images'));
+
+    }
+
+    /* Contact Us
+     * @return mixed
+     */
+    public function contactUs(Request $request)
+    {
+        //for save on POST request
+        if ($request->isMethod('post')) {//
+
+            $validator = Validator::make($request->all(), [
+                'email' => 'required|email',
+                'name' => 'required|min:2|max:255',
+                'message' => 'required|min:5|max:500',
+            ]);
+
+            if ($validator->fails()) {
+                $response = [
+                    'info' => 'error',
+                    'message' => 'Input is invalid! Check it again!'
+                ];
+
+                return response()->json($response);
+            }
+
+            //now send mail
+            $data = [
+                'from' =>  $request->get('email'),
+                'to'  => env('MAIL_RECEIVER','webmaster@hrshadhin.me'),
+                'subject' => "[".$request->get('name')."]".$request->get('subject'),
+                'body' => $request->get('message')
+            ];
+
+          Mail::send(array(), array(), function ($message) use ($data) {
+                $message->to($data['to'])
+                ->subject($data['subject'])
+                ->from($data['from'])
+                ->setBody($data['body']);
+            });
+
+            $response = [
+                'info' => 'success',
+                'message' => 'Mail delivered to receiver. Will contact you soon.'
+            ];
+
+            return response()->json($response);
+
+
+        }
+        //for get request
+        $address = SiteMeta::where('meta_key', 'contact_address')->first();
+        $phone = SiteMeta::where('meta_key', 'contact_phone')->first();
+        $email = SiteMeta::where('meta_key', 'contact_email')->first();
+        $latlong = SiteMeta::where('meta_key', 'contact_latlong')->first();
+        return view('frontend.contact_us', compact('address', 'phone', 'email', 'latlong'));
 
     }
 }

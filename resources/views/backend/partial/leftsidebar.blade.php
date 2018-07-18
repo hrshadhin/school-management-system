@@ -53,7 +53,7 @@
           </a>         
         </li>   
         <li>
-          <a href="#">
+          <a href="{{ URL::route('site.contact_us') }}">
             <i class="fa fa-map-marker"></i>
             <span>Contact Us</span>           
           </a>         

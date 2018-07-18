@@ -138,6 +138,7 @@ class SiteController extends Controller
         return view('backend.site.home.service', compact('content'));
     }
 
+
     /**
      * service content manage
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -326,5 +327,51 @@ class SiteController extends Controller
             'message' => 'Image deleted!'
         ];
     }
-    
+
+
+    /**
+     * contact us manage
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function contactUs(Request $request)
+    {
+        //for save on POST request
+        if ($request->isMethod('post')) {//
+            $this->validate($request, [
+                'address' => 'required|min:5|max:500',
+                'phone_no' => 'required|min:5|max:500',
+                'email' => 'required|email|min:5|max:500',
+                'latlong' => 'required|min:5|max:500',
+
+            ]);
+
+            //now crate or update model
+            $content = SiteMeta::updateOrCreate(
+                ['meta_key' => 'contact_address'],
+                [ 'meta_value' => $request->get('address')]
+            );
+            $content = SiteMeta::updateOrCreate(
+                ['meta_key' => 'contact_phone'],
+                [ 'meta_value' => $request->get('phone_no')]
+            );
+            $content = SiteMeta::updateOrCreate(
+                ['meta_key' => 'contact_email'],
+                [ 'meta_value' => $request->get('email')]
+            );
+            $content = SiteMeta::updateOrCreate(
+                ['meta_key' => 'contact_latlong'],
+                [ 'meta_value' => $request->get('latlong')]
+            );
+            return redirect()->route('site.contact_us')->with('success', 'Information saved!');
+        }
+
+        //for get request
+        $address = SiteMeta::where('meta_key', 'contact_address')->first();
+        $phone = SiteMeta::where('meta_key', 'contact_phone')->first();
+        $email = SiteMeta::where('meta_key', 'contact_email')->first();
+        $latlong = SiteMeta::where('meta_key', 'contact_latlong')->first();
+        return view('backend.site.contact_us', compact('address', 'phone', 'email', 'latlong'));
+    }
+
+
 }
