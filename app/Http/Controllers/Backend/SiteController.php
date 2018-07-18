@@ -261,5 +261,70 @@ class SiteController extends Controller
         $subscribers = SiteMeta::where('meta_key', 'subscriber')->get();
         return view('backend.site.home.subscribers', compact('subscribers'));
     }
+
+
+    /**
+     * About gallery content manage
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function gallery()
+    {
+
+
+        //for get request
+        $images = SiteMeta::where('meta_key','gallery')->paginate(env('MAX_RECORD_PER_PAGE',25));
+
+        return view('backend.site.gallery.content', compact('images'));
+    }
+    /**
+     * About gallery content add
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function galleryAdd(Request $request)
+    {
+
+        //for save on POST request
+        if ($request->isMethod('post')) {
+            //validate form
+            $messages = [
+                'image.max' => 'The :attribute size must be under 2MB.',
+            ];
+            $this->validate($request, [
+                'image' => 'mimes:jpeg,jpg,png|max:2048',
+            ]);
+
+            $storagepath = $request->file('image')->store('public/gallery');
+            $fileName = basename($storagepath);
+
+            //now crate
+            SiteMeta::create(
+                [
+                    'meta_key' => 'gallery',
+                    'meta_value' => $fileName
+                ]
+            );
+
+            return redirect()->route('site.gallery_image')->with('success', 'Image uploaded');
+        }
+
+        return view('backend.site.gallery.image');
+    }
+
+    /**
+     * About gallery content image delete
+     * @return array
+     */
+    public function galleryDelete($id)
+    {
+
+        $image = SiteMeta::findOrFail($id);
+        Storage::delete('/public/gallery/' . $image->meta_value);
+        $image->delete();
+
+        return [
+            'success' => true,
+            'message' => 'Image deleted!'
+        ];
+    }
     
 }

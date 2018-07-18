@@ -47,7 +47,7 @@
           </a>         
         </li>   
         <li>
-          <a href="#">
+          <a href="{{ URL::route('site.gallery') }}">
             <i class="fa fa-camera"></i>
             <span>Gallery</span>           
           </a>         

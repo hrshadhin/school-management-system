@@ -81,7 +81,7 @@
 
 						</li>
 						<li>
-							<a href="gallery.html">Gallery</a>
+							<a href="{{URL::route('site.gallery_view')}}" @if(Route::current()->getName() == "site.gallery_view" ) class="active" @endif>Gallery</a>
 						</li>
 
 						<li>
