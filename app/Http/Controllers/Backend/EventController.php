@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Backend;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
@@ -25,86 +26,157 @@ class EventController extends Controller
     {
         //validate form
         $messages = [
-            'image.max' => 'The :attribute size must be under 2MB.',
-            'image.dimensions' => 'The :attribute dimensions must be minimum 210 X 220.',
+            'slider_1.max' => 'The :attribute size must be under 2MB.',
+            'slider_1.dimensions' => 'The :attribute dimensions must be minimum 1170 X 580.',
+            'slider_2.max' => 'The :attribute size must be under 2MB.',
+            'slider_2.dimensions' => 'The :attribute dimensions must be minimum 1170 X 580.',
+            'slider_3.max' => 'The :attribute size must be under 2MB.',
+            'slider_3.dimensions' => 'The :attribute dimensions must be minimum 1170 X 580.',
+            'cover_photo.max' => 'The :attribute size must be under 2MB.',
+            'cover_photo.dimensions' => 'The :attribute dimensions must be minimum 370 X 270.',
         ];
         $this->validate($request, [
-            'name' => 'required|min:5|max:255',
-            'image' => 'mimes:jpeg,jpg,png|max:2048|dimensions:min_width=210,min_height=220',
-            'designation' => 'required|min:5|max:255',
-            'description' => 'max:255',
-            'facebook' => 'max:255',
-            'google' => 'max:255',
-            'twitter' => 'max:255',
+            'title' => 'required|min:5|max:255',
+            'event_time' => 'required|min:5|max:255',
+            'cover_photo' => 'mimes:jpeg,jpg,png|max:2048|dimensions:min_width=370,min_height=270',
+            'slider_1' => 'mimes:jpeg,jpg,png|max:2048|dimensions:min_width=1170,min_height=580',
+            'slider_2' => 'mimes:jpeg,jpg,png|max:2048|dimensions:min_width=1170,min_height=580',
+            'slider_3' => 'mimes:jpeg,jpg,png|max:2048|dimensions:min_width=1170,min_height=580',
+            'description' => 'required',
+            'tags' => 'max:255',
+            'tagcover_videos' => 'max:255'
         ], $messages);
-
-        $fileName = null;
-        if($request->hasFile('image')) {
-            $storagepath = $request->file('image')->store('public/teacher_profile');
-            $fileName = basename($storagepath);
-        }
 
 
         $data = $request->all();
-        $data['image'] = $fileName;
+        $datetime = Carbon::createFromFormat('d/m/Y h:i a',$data['event_time']);
+        $data['event_time'] = $datetime;
+        $data['slug'] = strtolower(str_replace(' ','-', $data['title']));
 
-        TeacherProfile::create($data);
+        $fileName = null;
+        if($request->hasFile('cover_photo')) {
+            $storagepath = $request->file('cover_photo')->store('public/events');
+            $fileName = basename($storagepath);
+            $data['cover_photo'] = $fileName;
 
-        return redirect()->back()->with('success', 'New teacher profile created.');
+        }
+        $fileName = null;
+        if($request->hasFile('slider_1')) {
+            $storagepath = $request->file('slider_1')->store('public/events');
+            $fileName = basename($storagepath);
+            $data['slider_1'] = $fileName;
+
+        }
+        if($request->hasFile('slider_2')) {
+            $storagepath = $request->file('slider_2')->store('public/events');
+            $fileName = basename($storagepath);
+            $data['slider_2'] = $fileName;
+
+        }
+        if($request->hasFile('slider_3')) {
+            $storagepath = $request->file('slider_3')->store('public/events');
+            $fileName = basename($storagepath);
+            $data['slider_3'] = $fileName;
+
+        }
+
+        Event::create($data);
+
+        return redirect()->back()->with('success', 'New event added.');
     }
 
     public function edit($id)
     {
-        $profile = TeacherProfile::findOrFail($id);
-        return view('backend.site.teacher.add', compact('profile'));
+        $event = Event::findOrFail($id);
+        return view('backend.site.event.add', compact('event'));
     }
 
     public function update(Request $request, $id)
     {
         //validate form
         $messages = [
-            'image.max' => 'The :attribute size must be under 2MB.',
-            'image.dimensions' => 'The :attribute dimensions must be minimum 210 X 220.',
+            'slider_1.max' => 'The :attribute size must be under 2MB.',
+            'slider_1.dimensions' => 'The :attribute dimensions must be minimum 1170 X 580.',
+            'slider_2.max' => 'The :attribute size must be under 2MB.',
+            'slider_2.dimensions' => 'The :attribute dimensions must be minimum 1170 X 580.',
+            'slider_3.max' => 'The :attribute size must be under 2MB.',
+            'slider_3.dimensions' => 'The :attribute dimensions must be minimum 1170 X 580.',
+            'cover_photo.max' => 'The :attribute size must be under 2MB.',
+            'cover_photo.dimensions' => 'The :attribute dimensions must be minimum 370 X 270.',
         ];
         $this->validate($request, [
-            'name' => 'required|min:5|max:255',
-            'image' => 'mimes:jpeg,jpg,png|max:2048|dimensions:min_width=210,min_height=220',
-            'designation' => 'required|min:5|max:255',
-            'description' => 'max:255',
-            'facebook' => 'max:255',
-            'google' => 'max:255',
-            'twitter' => 'max:255',
+            'title' => 'required|min:5|max:255',
+            'event_time' => 'required|min:5|max:255',
+            'cover_photo' => 'mimes:jpeg,jpg,png|max:2048|dimensions:min_width=370,min_height=270',
+            'slider_1' => 'mimes:jpeg,jpg,png|max:2048|dimensions:min_width=1170,min_height=580',
+            'slider_2' => 'mimes:jpeg,jpg,png|max:2048|dimensions:min_width=1170,min_height=580',
+            'slider_3' => 'mimes:jpeg,jpg,png|max:2048|dimensions:min_width=1170,min_height=580',
+            'description' => 'required',
+            'tags' => 'max:255',
+            'tagcover_videos' => 'max:255'
         ], $messages);
 
 
-        $profile = TeacherProfile::findOrFail($id);
         $data = $request->all();
-        $fileName = $profile->image;
-        if($request->hasFile('image')) {
+        $datetime = Carbon::createFromFormat('d/m/Y h:i a',$data['event_time']);
+        $data['event_time'] = $datetime;
+        $data['slug'] = strtolower(str_replace(' ','-', $data['title']));
+        $event = Event::findOrFail($id);
 
-            if($profile->image){
-                $file_path = "public/teacher_profile/".$profile->image;
+        $fileName = null;
+        if($request->hasFile('cover_photo')) {
+
+            if($event->cover_photo){
+                $file_path = "public/events/".$event->cover_photo;
                 Storage::delete($file_path);
             }
-
-            $storagepath = $request->file('image')->store('public/teacher_profile');
+            $storagepath = $request->file('cover_photo')->store('public/events');
             $fileName = basename($storagepath);
+            $data['cover_photo'] = $fileName;
 
+        }
+        $fileName = null;
+        if($request->hasFile('slider_1')) {
+            if($event->slider_1){
+                $file_path = "public/events/".$event->slider_1;
+                Storage::delete($file_path);
+            }
+            $storagepath = $request->file('slider_1')->store('public/events');
+            $fileName = basename($storagepath);
+            $data['slider_1'] = $fileName;
+
+        }
+        if($request->hasFile('slider_2')) {
+            if($event->slider_2){
+                $file_path = "public/events/".$event->slider_2;
+                Storage::delete($file_path);
+            }
+            $storagepath = $request->file('slider_2')->store('public/events');
+            $fileName = basename($storagepath);
+            $data['slider_2'] = $fileName;
+
+        }
+        if($request->hasFile('slider_3')) {
+            if($event->slider_3){
+                $file_path = "public/events/".$event->slider_3;
+                Storage::delete($file_path);
+            }
+            $storagepath = $request->file('slider_3')->store('public/events');
+            $fileName = basename($storagepath);
+            $data['slider_3'] = $fileName;
 
         }
 
-        $data['image'] = $fileName;
+        $event->fill($data);
+        $event->save();
 
-        $profile->fill($data);
-        $profile->save();
-
-        return redirect()->route('teacher_profile.index')->with('success', 'Teacher profile updated.');
+        return redirect()->route('event.index')->with('success', 'Event information updated.');
     }
 
     public function destroy($id)
     {
-        $profile = TeacherProfile::findOrFail($id);
-        $profile->delete();
-        return redirect()->route('teacher_profile.index')->with('success', 'Teacher profile deleted.');
+        $event = Event::findOrFail($id);
+        $event->delete();
+        return redirect()->route('event.index')->with('success', 'Event deleted.');
     }
 }

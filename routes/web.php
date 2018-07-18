@@ -21,6 +21,8 @@ Route::group(
     Route::get('/class-details/{name}', 'HomeController@classDetails')->name('site.class_details');
     Route::get('/teachers', 'HomeController@teacherProfile')->name('site.teacher_profile');
     Route::get('/events', 'HomeController@event')->name('site.event');
+    Route::get('/events-details/{slug}', 'HomeController@eventDetails')->name('site.event_details');
+
 
 }
 );

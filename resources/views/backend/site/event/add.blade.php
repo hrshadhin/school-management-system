@@ -49,12 +49,10 @@
                             </div>
                             <div class="form-group has-feedback">
                                 <label for="event_time">Event Time<span class="text-danger">*</span></label>
-                                    <input type='text' class="form-control"  name="event_time" placeholder="title" value="@if($event){{ $event->event_time }}@else{{ old('event_time') }} @endif" required minlength="5" maxlength="255" />
+                                    <input type='text' class="form-control event_time"  readonly name="event_time" placeholder="title" value="@if($event){{ $event->event_time->format('d/m/Y h:i a') }}@else{{ old('event_time',date('d/m/Y h:i a')) }} @endif" required minlength="5" maxlength="255" />
                                     <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
                                     <span class="text-danger">{{ $errors->first('event_time') }}</span>
-
                             </div>
-
                             <div class="form-group has-feedback">
                                 <label for="cover_photo">Cover Photo<span class="text-danger">[370 X 270 min size and max 2MB]</span></label>
                                 <input  type="file" class="form-control" accept=".jpeg, .jpg, .png" name="cover_photo"  >
@@ -62,27 +60,21 @@
                                 <span class="text-danger">{{ $errors->first('cover_photo') }}</span>
                             </div>
                             <div class="form-group has-feedback">
-                                <label for="cover_video">Cover Video Embed Code<span class="text-danger">*</span> </label>
-                                <input  type="text" class="form-control" name="cover_video"  placeholder="codes" value="@if($event) {{ $event->cover_video }}@else{{ old('cover_video') }}  @endif" required>
+                                <label for="cover_video">Cover Video Embed Code</label>
+                                <input  type="text" class="form-control" name="cover_video"  placeholder="codes" value="@if($event) {{ $event->cover_video }}@else{{ old('cover_video') }}  @endif">
                                 <span class="glyphicon glyphicon-info form-control-feedback"></span>
                                 <span class="text-danger">{{ $errors->first('cover_video') }}</span>
                             </div>
 
                             <div class="form-group has-feedback">
-                                <label for="designation">Designation/Education Qualification<span class="text-danger">*</span></label>
-                                <input  type="text" class="form-control" name="designation" placeholder="write here" value="@if($event){{ $event->designation }}@else{{ old('designation') }} @endif" required minlength="5" maxlength="255">
-                                <span class="glyphicon glyphicon-info form-control-feedback"></span>
-                                <span class="text-danger">{{ $errors->first('designation') }}</span>
-                            </div>
-                            <div class="form-group has-feedback">
                                 <label for="description">Description<span class="text-danger">*</span></label>
-                                <textarea  name="description" class="form-control textarea" >@if($event){{ $event->description }}@else{{ old('description') }} @endif</textarea>
+                                <textarea  name="description" class="form-control textarea" required minlength="5" >@if($event){{ $event->description }}@else{{ old('description') }} @endif</textarea>
                                 <span class="glyphicon glyphicon-info form-control-feedback"></span>
                                 <span class="text-danger">{{ $errors->first('description') }}</span>
                             </div>
                             <div class="form-group has-feedback">
                                 <label for="tags">Tags</label>
-                                <input  type="url" class="form-control" name="tags" placeholder="event,art,mela" value="@if($event){{ $event->tags }}@else{{ old('tags') }} @endif" maxlength="255">
+                                <input  type="text" class="form-control" name="tags" placeholder="event,art,mela" value="@if($event){{ $event->tags }}@else{{ old('tags') }} @endif"  maxlength="255">
                                 <span class="glyphicon glyphicon-info form-control-feedback"></span>
                                 <span class="text-danger">{{ $errors->first('tags') }}</span>
                             </div>
@@ -144,6 +136,8 @@
     <script type="text/javascript">
         $(document).ready(function () {
             Site.EventInit();
+
+
 
         });
     </script>

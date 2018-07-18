@@ -320,6 +320,13 @@ export default class Site {
             }
         });
 
+        $(".event_time").datetimepicker({
+            format: "dd/mm/yyyy HH:ii P",
+            showMeridian: true,
+            autoclose: true,
+            todayBtn: true
+        });
+
     }
     static teacherProfileInit() {
         $('#profiles').DataTable({

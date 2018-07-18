@@ -114,7 +114,7 @@ class HomeController extends Controller
     public function teacherProfile()
     {
 
-        $profiles = TeacherProfile::paginate(env('MAX_RECORD_PER_PAGE',25));
+        $profiles = TeacherProfile::paginate(env('MAX_RECORD_PER_PAGE_FRONT',10));
 
         return view('frontend.teacher', compact('profiles'));
 
@@ -126,9 +126,23 @@ class HomeController extends Controller
     public function event()
     {
 
-        $events = Event::paginate(env('MAX_RECORD_PER_PAGE',25));
+        $events = Event::paginate(env('MAX_RECORD_PER_PAGE_FRONT',10));
 
         return view('frontend.event', compact('events'));
+
+    }
+    /* Event  manage
+     * @return mixed
+     */
+    public function eventDetails($slug)
+    {
+
+        $event = Event::where('slug',$slug)->first();
+        if(!$event){
+            abort(404);
+        }
+
+        return view('frontend.event_details', compact('event'));
 
     }
 }

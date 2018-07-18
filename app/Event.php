@@ -23,7 +23,7 @@ class Event extends Model
      */
     protected $fillable = [
         'event_time',
-        'tile',
+        'title',
         'description',
         'cover_photo',
         'cover_video',
@@ -31,5 +31,6 @@ class Event extends Model
         'slider_1',
         'slider_2',
         'slider_3',
+        'slug',
     ];
 }
