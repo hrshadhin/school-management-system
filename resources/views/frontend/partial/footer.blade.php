@@ -2,55 +2,35 @@
 		<div class="grid-row">
 			<div class="grid-col-row clear-fix">
 				<section class="grid-col grid-col-4 footer-about">
-					<h2 class="corner-radius">About Us</h2>
-					<div>
-						<h3>Sed aliquet dui auctor blandit ipsum tincidunt</h3>
-						<p>Quis rhoncus lorem dolor eu sem. Aenean enim risus, convallis id ultrices eget.</p>
-					</div>
+					<h2 class="corner-radius">Contact Us</h2>
 					<address>
 						<p></p>
-						<a href="tel:+8801123456789" class="phone-number">+8801123456789</a>
+						<a href="tel:{{$siteInfo['phone']}}" class="phone-number">{{$siteInfo['phone']}}</a>
 						<br />
-						<a href="mailto:info@shanixlab.com" class="email">
-							<span class="">info@shanixlab.com</span>
+						<a href="mailto:{{$siteInfo['email']}}" class="email">
+							<span class="">{{$siteInfo['email']}}</span>
 						</a>
 						<br />
-						<a href="http://shanixlab.com" class="site">www.shanixlab.com</a>
-						<br />
-						<a href="/contact" class="address">25/C Block 74. (North) 11st Floor
-							<br/>Dhaka, BD</a>
+						<a href="{{URL::route('site.contact_us_view')}}" class="address">{{$siteInfo['address']}}</a>
 					</address>
 
 				</section>
 				<section class="grid-col grid-col-4 footer-latest">
 					<h2 class="corner-radius">Upcoming Event</h2>
 					<article>
-						<img src="/frontend/uploads/83x83-img-2.jpg" data-at2x="/frontend/uploads/83x83-img-2@2x.jpg" alt>
+						<img src="{{asset('frontend/img/event.png')}}" alt>
 						<h3>
-							<a href="event-details.html">Vestibulum volutpat est neque</a>
+							<a href="{{URL::route('site.event_details',$event->slug)}}">{{$event->title}}</a>
 						</h3>
+						<br>
 						<div class="course-date">
-							<div>10
-								<sup>30</sup>
-								<sub>AM</sub>
+							<div>
+								<sub>{{$event->event_time->format('h:i a')}}</sub>
 							</div>
-							<div>15.07.15</div>
+							<div>{{$event->event_time->format('d.m.y')}}</div>
 						</div>
-						<p>Sed pharetra lorem ut dolor dignissim, sit amet pretium tortor mattis.</p>
+
 					</article>
-					<article>
-						<img src="/frontend/uploads/83x83-img-1.jpg" data-at2x="/frontend/uploads/83x83-img-1@2x.jpg" alt>
-						<h3>
-							<a href="event-details.html">Donec mollis magna quis</a>
-						</h3>
-						<div class="course-date">
-							<div>06
-								<sup>15</sup>
-								<sub>PM</sub>
-							</div>
-							<div>26.08.15</div>
-						</div>
-						<p>Sed pharetra lorem ut dolor dignissim, sit amet pretium tortor mattis.</p>
 					</article>
 				</section>
 				<section class="grid-col grid-col-4 footer-links">
@@ -67,6 +47,8 @@
 						<li>
 							<a href="#">Results</a>
 						</li>
+					</ul>
+					<ul class="clear-fix">
 						<li>
 							<a href="{{URL::route('site.timeline_view')}}">Timeline</a>
 
@@ -89,14 +71,14 @@
 				</div>
 
 				<div class="footer-social">
-					<a href="#" class="fa fa-google-plus"></a>
-					<a href="#" class="fa fa-twitter"></a>
-					<a href="#" class="fa fa-facebook"></a>
-					<a href="#" class="fa fa-youtube"></a>
+					<a href="@if($siteInfo['google']){{$siteInfo['google']}}@else #@endif" class="fa fa-google-plus"></a>
+					<a href="@if($siteInfo['twitter']){{$siteInfo['twitter']}}@else #@endif" class="fa fa-twitter"></a>
+					<a href="@if($siteInfo['facebook']){{$siteInfo['facebook']}}@else #@endif" class="fa fa-facebook"></a>
+					<a href="@if($siteInfo['youtube']){{$siteInfo['youtube']}}@else #@endif" class="fa fa-youtube"></a>
 				</div>
 
 				<div class="maintainedby">Maintained by
-					<a href="http://shanixlab.com" class="site">ShanixLab</a>
+					<a href="{{$maintainer_url}}" class="site">{{$maintainer}}</a>
 				</div>
 			</div>
 		</div>

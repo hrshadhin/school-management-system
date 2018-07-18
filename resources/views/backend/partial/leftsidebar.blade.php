@@ -68,6 +68,10 @@
           <a href="{{ URL::route('site.timeline') }}"><i class="fa fa-clock-o"></i>
             <span>Timeline</span>
         </a>
+        <li>
+          <a href="{{ URL::route('site.settings') }}"><i class="fa fa-cogs"></i>
+            <span>Settings</span>
+        </a>
         </li>
      
       </ul>
