@@ -23,6 +23,8 @@ Route::group(
     Route::get('/events', 'HomeController@event')->name('site.event');
     Route::get('/events-details/{slug}', 'HomeController@eventDetails')->name('site.event_details');
     Route::get('/gallery', 'HomeController@gallery')->name('site.gallery_view');
+    Route::get('/contact-us', 'HomeController@contactUs')->name('site.contact_us_view');
+    Route::post('/contact-us', 'HomeController@contactUs')->name('site.contact_us_form');
 
 
 }
@@ -102,6 +104,10 @@ Route::group(
         ->name('site.gallery_image');
     Route::post('site/gallery/delete-images/{id}','SiteController@galleryDelete')
         ->name('site.gallery_image_delete');
+    Route::get('site/contact-us','SiteController@contactUs')
+        ->name('site.contact_us');
+    Route::post('site/contact-us','SiteController@contactUs')
+        ->name('site.contact_us');
 
 
 }

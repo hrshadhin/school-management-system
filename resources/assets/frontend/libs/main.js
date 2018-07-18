@@ -1483,14 +1483,14 @@ function is_mobile() {
   }
 }
 /* \mobile menu */
-if ($(".contact-form").length) {
+if ($(".supportForm").length) {
   /**/
   /* contact form */
   /**/
 
   /* validate the contact form fields */
-  $(".contact-form").each(function () {
-
+  $(".supportForm").each(function () {
+    // console.log('hi form');
     $(this).validate(  /*feedback-form*/{
       onkeyup: false,
       onfocusout: false,
@@ -1534,12 +1534,14 @@ if ($(".contact-form").length) {
 
       },
       submitHandler: function (form) {
+          $(form).children('.cws-button').hide();
         $(form).parent().children(".alert-boxes.error-alert").slideUp('fast');
-        var $form = $(form).ajaxSubmit();
-        submit_handler($form, $(form).parent().children(".email_server_responce"));
+        // var $form = $(form).ajaxSubmit();
+        submit_handler(form, $(form).parent().children(".email_server_responce"));
+
       }
     });
-  })
+  });
 
   /* Ajax, Server response */
   var submit_handler = function (form, wrapper) {
@@ -1547,13 +1549,10 @@ if ($(".contact-form").length) {
     var $wrapper = $(wrapper); //this class should be set in HTML code
 
     $wrapper.css("display", "block");
-    var data = {
-      action: "email_server_responce",
-      values: $(form).serialize()
-    };
+    var data =  $(form).serialize();
+    var postUrl = $(form).attr('action');
     //send data to server
-    $.post("php/contacts-process.php", data, function (s_response) {
-      s_response = $.parseJSON(s_response);
+    $.post(postUrl, data, function (s_response) {
       if (s_response.info == 'success') {
         $wrapper.addClass("message message-success").append("<div class='info-boxes confirmation-message' id='feedback-form-success'><strong>Success!</strong><br><p>Your message was successfully delivered.</p></div>");
         $wrapper.delay(5000).hide(500, function () {
@@ -1561,8 +1560,9 @@ if ($(".contact-form").length) {
           $wrapper.css("display", "none");
         });
         $(form)[0].reset();
+          $(form).children('.cws-button').attr('pointer-events', 'all');
       } else {
-        $wrapper.addClass("message message-error").append("<div class='message_box error-box'><div class='message_box_header'>Error Box</div><p>Server fail! Please try again later!</p></div>");
+        $wrapper.addClass("message message-error").append("<div class='message_box error-box'><div class='message_box_header'>Error Box</div><p>"+s_response.message+"</p></div>");
         $wrapper.delay(5000).hide(500, function () {
           $(this).removeClass("message message-success").text("").fadeIn(500);
           $wrapper.css("display", "none");
