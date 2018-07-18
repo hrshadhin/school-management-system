@@ -373,5 +373,99 @@ class SiteController extends Controller
         return view('backend.site.contact_us', compact('address', 'phone', 'email', 'latlong'));
     }
 
+    /**
+     * fqa section content manage
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function faq(Request $request)
+    {
+        //for save on POST request
+        if ($request->isMethod('post')) {
+            //validate form
+            $this->validate($request, [
+                'question' => 'required|min:5|max:255',
+                'answer' => 'required|min:5',
+            ]);
+
+            $data = [
+                'q' => $request->get('question'),
+                'a' => $request->get('answer')
+            ];
+            //now crate
+            SiteMeta::create(
+                [
+                    'meta_key' => 'faq',
+                    'meta_value' => json_encode($data)
+                ]
+            );
+            return redirect()->route('site.faq')->with('success', 'Record added!');
+        }
+
+        //for get request
+        //for get request
+        $faqs = SiteMeta::where('meta_key','faq')->paginate(env('MAX_RECORD_PER_PAGE',25));
+        return view('backend.site.faq', compact('faqs'));
+    }
+
+    /**
+     * Faq section content image delete
+     * @return array
+     */
+    public function faqDelete($id)
+    {
+
+        $faq = SiteMeta::findOrFail($id);
+        $faq->delete();
+
+        return redirect()->route('site.faq')->with('success', 'Record Deleted!');
+    }
+
+    /**
+     * timeline section content manage
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function timeline(Request $request)
+    {
+        //for save on POST request
+        if ($request->isMethod('post')) {
+            //validate form
+            $this->validate($request, [
+                'title' => 'required|min:5|max:255',
+                'description' => 'required|min:5|max:500',
+                'year' => 'required|min:4|max:4',
+            ]);
+
+            $data = [
+                't' => $request->get('title'),
+                'd' => $request->get('description'),
+                'y' => $request->get('year')
+            ];
+            //now crate
+            SiteMeta::create(
+                [
+                    'meta_key' => 'timeline',
+                    'meta_value' => json_encode($data)
+                ]
+            );
+            return redirect()->route('site.timeline')->with('success', 'Record added!');
+        }
+
+        //for get request
+        $timeline = SiteMeta::where('meta_key','timeline')->get();
+        return view('backend.site.timeline', compact('timeline'));
+    }
+
+    /**
+     * timeline section content image delete
+     * @return array
+     */
+    public function timelineDelete($id)
+    {
+
+        $timeline = SiteMeta::findOrFail($id);
+        $timeline->delete();
+
+        return redirect()->route('site.timeline')->with('success', 'Record Deleted!');
+    }
 
 }

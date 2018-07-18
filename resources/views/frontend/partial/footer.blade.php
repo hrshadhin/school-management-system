@@ -59,24 +59,24 @@
 					</h2>
 					<ul class="clear-fix">
 						<li>
-							<a href="faq.html">FAQ</a>
+							<a href="{{URL::route('site.faq_view')}}">FAQ</a>
 						</li>
 						<li>
-							<a href="admission.html">Admission</a>
+							<a href="#">Admission</a>
 						</li>
 						<li>
-							<a href="results.html">Results</a>
+							<a href="#">Results</a>
 						</li>
 						<li>
-							<a href="timeline.html">Timeline</a>
+							<a href="{{URL::route('site.timeline_view')}}">Timeline</a>
 
 						</li>
 						<li>
-							<a href="gallery.html">Gallery</a>
+							<a href="{{URL::route('site.gallery_view')}}">Gallery</a>
 						</li>
 
 						<li>
-							<a href="contact-us.html">Contact Us</a>
+							<a href="{{URL::route('site.contact_us_view')}}">Contact Us</a>
 						</li>
 					</ul>
 				</section>

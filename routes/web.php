@@ -25,6 +25,8 @@ Route::group(
     Route::get('/gallery', 'HomeController@gallery')->name('site.gallery_view');
     Route::get('/contact-us', 'HomeController@contactUs')->name('site.contact_us_view');
     Route::post('/contact-us', 'HomeController@contactUs')->name('site.contact_us_form');
+    Route::get('/faq', 'HomeController@faq')->name('site.faq_view');
+    Route::get('/timeline', 'HomeController@timeline')->name('site.timeline_view');
 
 
 }
@@ -108,7 +110,18 @@ Route::group(
         ->name('site.contact_us');
     Route::post('site/contact-us','SiteController@contactUs')
         ->name('site.contact_us');
-
+    Route::get('site/fqa','SiteController@faq')
+        ->name('site.faq');
+    Route::post('site/fqa','SiteController@faq')
+        ->name('site.faq');
+    Route::post('site/faq/{id}','SiteController@faqDelete')
+        ->name('site.faq_delete');
+    Route::get('site/timeline','SiteController@timeline')
+        ->name('site.timeline');
+    Route::post('site/timeline','SiteController@timeline')
+        ->name('site.timeline');
+    Route::post('site/timeline/{id}','SiteController@timelineDelete')
+        ->name('site.timeline_delete');
 
 }
 );
