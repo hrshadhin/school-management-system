@@ -218,7 +218,11 @@
 					</div>
 					<div class="grid-col grid-col-6 clear-fix">
 						<h2>Our Services</h2>
+						@if($ourService)
 						<p>{{$ourService->meta_value}}</p>
+							@else
+						<p>Add text from admin panel</p>
+							@endif
 
 					</div>
 				</div>
@@ -234,6 +238,7 @@
 			<div class="them-mask bg-color-1"></div>
 			<div class="grid-row">
 				<div class="grid-col-row clear-fix statistic">
+					@if($statistic)
 					<div class="grid-col grid-col-3 alt">
 						<div class="counter-block">
 							<i class="flaticon-multiple"></i>
@@ -263,6 +268,11 @@
 							<div class="counter-name">Books</div>
 						</div>
 					</div>
+						@else
+						<div class="grid-col grid-col-3 alt">
+							<p>Add content from admin panel</p>
+						</div>
+						@endif
 				</div>
 			</div>
 		</div>

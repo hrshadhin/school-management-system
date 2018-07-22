@@ -4,6 +4,7 @@
 				<section class="grid-col grid-col-4 footer-about">
 					<h2 class="corner-radius">Contact Us</h2>
 					<address>
+						@if(isset($siteInfo['phone']) && isset($siteInfo['email']) && isset($siteInfo['address']))
 						<p></p>
 						<a href="tel:{{$siteInfo['phone']}}" class="phone-number">{{$siteInfo['phone']}}</a>
 						<br />
@@ -12,11 +13,15 @@
 						</a>
 						<br />
 						<a href="{{URL::route('site.contact_us_view')}}" class="address">{{$siteInfo['address']}}</a>
+							@else
+							<p>Add content from admin panel</p>
+						@endif
 					</address>
 
 				</section>
 				<section class="grid-col grid-col-4 footer-latest">
 					<h2 class="corner-radius">Upcoming Event</h2>
+					@if($event)
 					<article>
 						<img src="{{asset('frontend/img/event.png')}}" alt>
 						<h3>
@@ -31,7 +36,7 @@
 						</div>
 
 					</article>
-					</article>
+					@endif
 				</section>
 				<section class="grid-col grid-col-4 footer-links">
 					<h2 class="corner-radius">Help Links
