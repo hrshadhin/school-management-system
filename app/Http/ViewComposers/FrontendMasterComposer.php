@@ -52,5 +52,6 @@ class FrontendMasterComposer
         $view->with('maintainer_url', 'http://shanixlab.com');
         $view->with('siteInfo', $siteInfo);
         $view->with('event', $upComingEvent);
+        $view->with('GA_TRACKING_ID', env('GA_TRACKING_ID',null));
     }
 }
