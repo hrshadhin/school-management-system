@@ -44,6 +44,6 @@ class BackendMasterComposer
         $view->with('maintainer', 'ShanixLab');
         $view->with('maintainer_url', 'http://shanixlab.com');
         $view->with('siteInfo', $siteInfo);
-        $view->with('idc', '62fac2afbe6c1720b9d1f0ec03003bd418984b06');
+        $view->with('idc', 'fa63573e454f8fd86fe6a2c49eb60a1d2691b8fe');
     }
 }
