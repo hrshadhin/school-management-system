@@ -81,12 +81,17 @@ export default class Login {
     static reset() {
         $("#resetForm").validate({
             rules: {
+                email: {
+                    required: true,
+                    email: true,
+                    maxlength: 255
+                },
                 password: {
                     required: true,
                     minlength: 5,
                     maxlength: 255
                 },
-                repassword: {
+                password_confirmation: {
                     required: true,
                     minlength: 5,
                     maxlength: 255,
@@ -99,6 +104,15 @@ export default class Login {
                 password: {
                     required: "Please enter your password",
                     maxlength: "Your password must not greater than 255 characters"
+                },
+                email: {
+                    required: "Please enter your email",
+                    maxlength: "Your password must not greater than 255 characters"
+                },
+                password_confirmation: {
+                    required: "Please enter your password",
+                    maxlength: "Your password must not greater than 255 characters",
+                    equalTo: "Password didn't match!"
                 },
 
             },

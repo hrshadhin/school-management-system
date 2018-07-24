@@ -40,12 +40,12 @@ Route::group(
     Route::get('/login', 'UserController@login')->name('login');
     Route::post('/login', 'UserController@authenticate');
     Route::get('/forgot', 'UserController@forgot')->name('forgot');
-    Route::post('/forgot', 'UserController@forgotPost')
-        ->name('forgot_post');
+    Route::post('/forgot', 'UserController@forgot')
+        ->name('forgot');
     Route::get('/reset/{token}', 'UserController@reset')
         ->name('reset');
-    Route::post('/reset/{token}', 'UserController@resetPost')
-        ->name('reset_post');
+    Route::post('/reset/{token}', 'UserController@reset')
+        ->name('reset');
 }
 );
 

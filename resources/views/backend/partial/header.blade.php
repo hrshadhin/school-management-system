@@ -155,11 +155,16 @@
 
         <!-- Menu Footer-->
         <li class="user-footer">
-
-            <div class="text-center">
-            <a href="{{ URL::route('logout') }}">
+            <div class="col-xs-6 text-center">
+                <a href="{{ URL::route('logout') }}">
                     <div><i class="fa fa-power-off"></i></div>
                     Log out
+                </a>
+            </div>
+            <div class="col-xs-6 text-center password">
+                <a href="{{ URL::route('lockscreen') }}">
+                    <div><i class="fa fa-lock"></i></div>
+                    Lock Screen
                 </a>
             </div>
         </li>
