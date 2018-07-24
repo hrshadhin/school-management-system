@@ -36,7 +36,7 @@
             </a>
         </div>        
         <div class="login-box-body">        
-            <p class="login-box-msg">Use your email to get reset password link</p>
+            <p class="login-box-msg text-danger">Use your email to get reset password link</p>
             <form novalidate id="forgotForm" action="{{URL::Route('forgot')}}" method="post" enctype="multipart/form-data">
             @csrf
                 <div class="form-group has-feedback">

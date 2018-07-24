@@ -36,7 +36,7 @@
             </a>
         </div>
         <div class="login-box-body">
-            <p class="login-box-msg">Use your username and password to Login</p>
+            <p class="login-box-msg text-danger">Use your username and password to Login</p>
             <form novalidate id="loginForm" action="{{URL::Route('login')}}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="form-group has-feedback">
