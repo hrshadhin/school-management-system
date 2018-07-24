@@ -140,13 +140,13 @@
         <!-- Menu Body -->
         <li class="user-body">
             <div class="col-xs-6 text-center">
-                <a href="#">
+                <a href="{{ URL::route('profile') }}">
                     <div><i class="fa fa-briefcase"></i></div>
                     Profile
                 </a>
             </div>
             <div class="col-xs-6 text-center password">
-                <a href="#">
+                <a href="{{ URL::route('change_password') }}">
                     <div><i class="fa fa-lock"></i></div>
                    Password
                 </a>
@@ -163,7 +163,7 @@
             </div>
             <div class="col-xs-6 text-center password">
                 <a href="{{ URL::route('lockscreen') }}">
-                    <div><i class="fa fa-lock"></i></div>
+                    <div><i class="fa fa-eye-slash"></i></div>
                     Lock Screen
                 </a>
             </div>

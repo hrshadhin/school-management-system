@@ -8,8 +8,10 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Contracts\Hashing\Hasher as HasherContract;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -155,7 +157,7 @@ class UserController extends Controller
             $this->validate($request, [
                 'token' => 'required',
                 'email' => 'required|email',
-                'password' => 'required|confirmed|min:6',
+                'password' => 'required|confirmed|min:6|max:50',
             ]);
 
             $token = $request->get('token');
@@ -173,7 +175,7 @@ class UserController extends Controller
                     $user->save();
                     $reset->delete();
 
-                    return redirect()->route('login')->with('success', 'Password succesfully reset. Login now :)');
+                    return redirect()->route('login')->with('success', 'Password successfully reset. Login now :)');
 
                 }
             }
@@ -194,5 +196,96 @@ class UserController extends Controller
     public function dashboard()
     {
         return view('backend.user.dashboard');
+    }
+
+    /**
+     * Handle an authentication attempt.
+     *
+     * @return Response
+     */
+    public function profile(Request $request)
+    {
+
+        $isPost = false;
+        $user = auth()->user();
+
+        if ($request->isMethod('post')) {
+            $isPost = true;
+            //validate form
+            $this->validate($request, [
+                'username' => 'required|min:5',
+                'email' => 'required|email',
+                'name' => 'required|min:5|max:255',
+            ]);
+            $isExists = false;
+            $oldUsername = $user->username;
+            $oldEmail = $user->email;
+            $newUserName = $request->get('username');
+            $newEmail = $request->get('email');
+            if($oldUsername != $newUserName){
+                $existUsers = User::where('username',$newUserName)->count();
+                if($existUsers){
+                    session()->flash('error', 'Username already exists for another account!');
+                    $isExists = true;
+                }
+
+            }
+
+            if($oldEmail != $newEmail){
+                $existUsers = User::where('email',$newEmail)->count();
+                if($existUsers){
+                    session()->flash('error', 'Email already exists for another account!');
+                    $isExists = true;
+                }
+
+            }
+
+            if(!$isExists){
+                $user->name = $request->get('name');
+                $user->email = $newEmail;
+                $user->username = $newUserName;
+                $user->save();
+
+                return redirect()->route('profile')->with('success', 'Profile updated.');
+
+            }
+
+        }
+
+        return view('backend.user.profile', compact('user','isPost'));
+    }/**
+
+
+     * Handle an authentication attempt.
+     *
+     * @return Response
+     */
+    public function changePassword(Request $request)
+    {
+
+        if ($request->isMethod('post')) {
+            Validator::extend('old_password', function ($attribute, $value, $parameters, $validator) {
+                return Hash::check($value, current($parameters));
+            });
+            $messages = [
+                'old_password.old_password' => 'Old passord doesn\'t match!',
+
+            ];
+
+            $user = auth()->user();
+            //validate form
+            $this->validate($request, [
+                'old_password' => 'required|min:6|max:50|old_password:'.$user->password,
+                'password' => 'required|confirmed|min:6|max:50',
+            ], $messages);
+
+            $user->password = bcrypt($request->get('password'));
+            $user->save();
+            Auth::logout();
+            return redirect()->route('login')->with('success', 'Password successfully change. Login now :)');
+
+
+        }
+        return view('backend.user.change_password');
     }
 }

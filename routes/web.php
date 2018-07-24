@@ -46,6 +46,7 @@ Route::group(
         ->name('reset');
     Route::post('/reset/{token}', 'UserController@reset')
         ->name('reset');
+
 }
 );
 
@@ -55,6 +56,14 @@ Route::group(
     Route::get('/lock', 'UserController@lock')->name('lockscreen');
     Route::resource('user', 'UserController');
     Route::get('/dashboard', 'UserController@dashboard')->name('user.dashboard');
+    Route::get('/profile', 'UserController@profile')
+        ->name('profile');
+    Route::post('/profile', 'UserController@profile')
+        ->name('profile');
+    Route::get('/change-password', 'UserController@changePassword')
+        ->name('change_password');
+    Route::post('/change-password', 'UserController@changePassword')
+        ->name('change_password');
 
 
     /**
