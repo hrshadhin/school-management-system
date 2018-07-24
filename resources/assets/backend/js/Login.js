@@ -88,12 +88,12 @@ export default class Login {
                 },
                 password: {
                     required: true,
-                    minlength: 5,
+                    minlength: 6,
                     maxlength: 255
                 },
                 password_confirmation: {
                     required: true,
-                    minlength: 5,
+                    minlength: 6,
                     maxlength: 255,
                     equalTo: "#password"
 
@@ -110,10 +110,95 @@ export default class Login {
                     maxlength: "Your password must not greater than 255 characters"
                 },
                 password_confirmation: {
-                    required: "Please enter your password",
+                    required: "Please enter confirm password",
                     maxlength: "Your password must not greater than 255 characters",
                     equalTo: "Password didn't match!"
                 },
+
+            },
+            errorElement: "em",
+            errorPlacement: function (error, element) {
+                // Add the `help-block` class to the error element
+                error.addClass("help-block");
+                error.insertAfter(element);
+
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).parents(".form-group").addClass("has-error").removeClass("has-success");
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).parents(".form-group").addClass("has-success").removeClass("has-error");
+            }
+        });
+    }
+    static changePassword() {
+        $("#changePasswordForm").validate({
+            rules: {
+                old_password: {
+                    required: true,
+                    minlength: 6,
+                    maxlength: 255
+                },
+                password: {
+                    required: true,
+                    minlength: 6,
+                    maxlength: 255
+                },
+                password_confirmation: {
+                    required: true,
+                    minlength: 6,
+                    maxlength: 255,
+                    equalTo: "#password"
+
+                },
+
+            },
+            messages: {
+                password: {
+                    required: "Please enter your new password",
+                    maxlength: "Your password must not greater than 255 characters"
+                },
+                old_password: {
+                    required: "Please enter your old password",
+                    maxlength: "Your password must not greater than 255 characters"
+                },
+                password_confirmation: {
+                    required: "Please confirm your password",
+                    maxlength: "Your password must not greater than 255 characters",
+                    equalTo: "Password didn't match!"
+                },
+
+            },
+            errorElement: "em",
+            errorPlacement: function (error, element) {
+                // Add the `help-block` class to the error element
+                error.addClass("help-block");
+                error.insertAfter(element);
+
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).parents(".form-group").addClass("has-error").removeClass("has-success");
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).parents(".form-group").addClass("has-success").removeClass("has-error");
+            }
+        });
+    }
+    static profileUpdate() {
+
+        $('.btnUpdate').click(function (e) {
+            e.preventDefault();
+            $('#profileUpdate').show();
+        });
+        $('.btnCancel').click(function (e) {
+            e.preventDefault();
+            $('#profileUpdate').hide();
+        });
+        $("#profileUpdateForm").validate({
+            rules: {
+
+            },
+            messages: {
 
             },
             errorElement: "em",
