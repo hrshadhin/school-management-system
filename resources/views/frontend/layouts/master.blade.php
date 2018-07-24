@@ -34,6 +34,17 @@
 
     <script src="{{ asset(mix('/js/jquery.min.js', 'frontend')) }}"></script>
     <script src="{{ asset(mix('/js/libs.js', 'frontend')) }}"></script>
+    @if($GA_TRACKING_ID)
+    <!-- Google Analytics code -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{$GA_TRACKING_ID}}"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', '{{$GA_TRACKING_ID}}');
+    </script>
+    <!-- /Google Analytics code -->
+    @endif
 
     <!-- Extra js from child page -->
     @yield("extraScript")
