@@ -132,39 +132,42 @@ $(function () {
      * @returns void
      */
     function clockRun() {
-        var clock = document.getElementById('clock');
-        var date = document.getElementById('date');
-        date.innerHTML = getFormatedDate();
+        if($('.clock-menu').css('display') !='none') {
+            var clock = document.getElementById('clock');
+            var date = document.getElementById('date');
+            date.innerHTML = getFormatedDate();
 
-        setInterval(function () {
-            clock.innerHTML = getCurrentTime();
-        }, 1);
+            setInterval(function () {
+                clock.innerHTML = getCurrentTime();
+            }, 1);
 
-        function getCurrentTime() {
-            var currentDate = new Date();
-            var hours = currentDate.getHours() > 12 ? currentDate.getHours() - 12 : currentDate.getHours();
-            var ampm = currentDate.getHours() > 12 ? 'PM' : 'AM';
-            hours === 0 ? hours = 12 : hours = hours;
-            var minutes = currentDate.getMinutes();
-            var seconds = currentDate.getSeconds() < 10 ? '0' + currentDate.getSeconds() : currentDate.getSeconds();
-            var currentTime = hours + ':' + minutes + ':' + seconds + ' ' + ampm;
-            return currentTime;
+            function getCurrentTime() {
+                var currentDate = new Date();
+                var hours = currentDate.getHours() > 12 ? currentDate.getHours() - 12 : currentDate.getHours();
+                var ampm = currentDate.getHours() > 12 ? 'PM' : 'AM';
+                hours === 0 ? hours = 12 : hours = hours;
+                var minutes = currentDate.getMinutes();
+                var seconds = currentDate.getSeconds() < 10 ? '0' + currentDate.getSeconds() : currentDate.getSeconds();
+                var currentTime = hours + ':' + minutes + ':' + seconds + ' ' + ampm;
+                return currentTime;
+            }
+            function getFormatedDate() {
+                var date = new Date();
+                var monthNames = [
+                    "January", "February", "March",
+                    "April", "May", "June", "July",
+                    "August", "September", "October",
+                    "November", "December"
+                ];
+
+                var day = date.getDate();
+                var monthIndex = date.getMonth();
+                var year = date.getFullYear();
+
+                return monthNames[monthIndex] + ' ' + day + ', ' + year;
+            }
         }
-        function getFormatedDate() {
-            var date = new Date();
-            var monthNames = [
-                "January", "February", "March",
-                "April", "May", "June", "July",
-                "August", "September", "October",
-                "November", "December"
-            ];
 
-            var day = date.getDate();
-            var monthIndex = date.getMonth();
-            var year = date.getFullYear();
-
-            return monthNames[monthIndex] + ' ' + day + ', ' + year;
-        }
     }
     /**
      * Retrieve default settings and apply them to the template
