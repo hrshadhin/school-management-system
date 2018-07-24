@@ -1,6 +1,6 @@
 <header class="main-header">
     <!-- Logo -->
-<a href="{{ URL::route('user.dashboard') }}" class="logo">
+<a href="{{ URL::route('user.dashboard') }}" class="logo hidden-xs">
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini">
       <img style="max-width: 50px; max-height: 50px;" src="@if($siteInfo['logo']){{asset('storage/site/'.$siteInfo['logo'])}} @else{{ asset('images/logo-sm.png') }}@endif" alt="logo-mini">
@@ -22,7 +22,7 @@
 
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">    
-          <li class="clock-menu hidden-xs">
+          <li class="clock-menu hidden-xs tablet-hidden">
             <a href="#0">
                 <p class="smsclock"><span id="date"></span> || <span id="clock"></span></p>
             </a>
@@ -133,7 +133,7 @@
 <li class="dropdown user user-menu">
     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
         <i class="fa fa-user"></i>
-        <span>Admin <i class="caret"></i></span>
+        <span class="hidden-xs">Admin</span><i class="caret"></i>
     </a>
 
     <ul class="dropdown-menu">

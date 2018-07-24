@@ -258,7 +258,7 @@ $(function () {
         + 'Features'
         + '</h4>'
         // clock 
-        + '<div class="form-group">'
+        + '<div class="form-group tablet-hidden hidden-xs">'
         + '<label class="control-sidebar-subheading">'
         + '<input type="checkbox"data-feature="clock-menu"class="pull-right" checked/> '
         + 'Clock'

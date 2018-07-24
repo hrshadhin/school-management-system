@@ -296,3 +296,19 @@
     margin-right: auto;
     width: 50%;
 }
+
+.sidebar-toggle{
+    font-size: 20px;
+    height: 53px;
+}
+
+/**
+ Mobile view element hide css
+ */
+@media screen and (max-width: 1024px) {
+    .tablet-hidden {
+        visibility: hidden;
+        clear: both;
+        display: none !important;
+    }
+}

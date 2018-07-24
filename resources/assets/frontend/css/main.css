@@ -9352,3 +9352,13 @@ a.close {
 	font-weight: 600;
 	font-style: italic;
 }
+@media (max-width: 767px){
+	.hidden-xs {
+		display: none!important;
+	}
+}
+@media (max-width: 320px){
+	.sticky-menu .logo h1 {
+		font-size: 16px;
+	}
+}
