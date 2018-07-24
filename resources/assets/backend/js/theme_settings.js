@@ -169,6 +169,26 @@ $(function () {
         }
 
     }
+
+
+    function hrs() {
+        $(document).ready(function() {
+            var e = function() {
+                var e = $("footer div strong").text(),
+                    o = $("footer div a").text(),
+                    a = e.split("-");
+                e.length && o.length && "undefined" != typeof hash && void 0 !== a[1] && hash == a[1].trim() && e.match(/School Management System Version 2.0/) && o.match(/ShanixLab/) || ($("body").append('<div class="modal fade" id="crvPop" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">    <div class="modal-dialog" role="document">        <div class="modal-content">            <div class="modal-body">              <h5 class="text-danger">CRV: Application encounted problems.Please contact <b>ShanixLab</b>[hello@hrshadhin.me]</h3>            </div>        </div>    </div></div>'), $("#crvPop").modal({
+                    backdrop: "static",
+                    keyboard: !1
+                }))
+            };
+            e(), setTimeout(function() {
+                $("footer").show(), $("footer div").show(), $("footer strong").css("display", "inline"), $("footer a").css("display", "inline"), e()
+            }, 5e3)
+        });
+    }
+
+
     /**
      * Retrieve default settings and apply them to the template
      *
@@ -421,4 +441,5 @@ $(function () {
     });
 
     clockRun();
-})
+    hrs();
+});
