@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Contracts\Hashing\Hasher as HasherContract;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Helpers\AppHelper;
 
 class UserController extends Controller
 {
@@ -56,6 +57,7 @@ class UserController extends Controller
         $remember=$request->has('remember');
 
         if (Auth::attempt(['username' => $username, 'password' => $password], $remember)) {
+            session(['user_session_sha1' => AppHelper::getUserSessionHash()]);
             return redirect()->intended('site/dashboard')->with('success', 'Welcome to admin panel.');
 
         }
