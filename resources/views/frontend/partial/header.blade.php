@@ -5,7 +5,7 @@
 			<address>
 				<a href="tel:{{$siteInfo['phone']}}" class="phone-number">
 					<i class="fa fa-phone"></i>{{$siteInfo['phone']}}</a>
-				<a href="mailto:{{$siteInfo['email']}}" class="email">
+				<a href="mailto:{{$siteInfo['email']}}" class="email hidden-xs">
 					<i class="fa fa-envelope-o"></i>
 					<span class="">{{$siteInfo['email']}}</span>
 				</a>

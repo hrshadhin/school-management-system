@@ -1,6 +1,6 @@
 <header class="main-header">
     <!-- Logo -->
-<a href="{{ URL::route('user.dashboard') }}" class="logo">
+<a href="{{ URL::route('user.dashboard') }}" class="logo hidden-xs">
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini">
       <img style="max-width: 50px; max-height: 50px;" src="@if($siteInfo['logo']){{asset('storage/site/'.$siteInfo['logo'])}} @else{{ asset('images/logo-sm.png') }}@endif" alt="logo-mini">
@@ -22,7 +22,7 @@
 
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">    
-          <li class="clock-menu hidden-xs">
+          <li class="clock-menu hidden-xs tablet-hidden">
             <a href="#0">
                 <p class="smsclock"><span id="date"></span> || <span id="clock"></span></p>
             </a>
@@ -38,49 +38,20 @@
          <li class="dropdown messages-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                 <i class="fa fa-bell-o"></i>
-                <span class="label label-danger"><lable class="alert-image">15</lable></span> </a>
+                <span class="label label-danger"><lable class="alert-image">0</lable></span> </a>
             <ul class="dropdown-menu">
-                <li class="header">You have 5 recent notifications</li>
+                <li class="header">You have 0 recent notifications</li>
                 <li>
                         <ul class="menu notification">
-                            <li>
-                                <a href="#">
-                                    <div class="pull-left">
-                                    <img class="img-circle" src="{{ asset('images/notification.png') }}"></div>
-                                    <h4>Praesentium comm..<small><i class="fa fa-clock-o"></i> 5 min</small></h4>
-                                    <p>Blanditiis quia distinctio rep..</p>
-                                </a>
-                            </li>                           
-                            <li>
-                                <a href="#">
-                                    <div class="pull-left"><img class="img-circle" src="{{ asset('images/notification.png') }}"></div>
-                                    <h4>Autem modi aliqu..<small><i class="fa fa-clock-o"></i> 2 days</small></h4>
-                                    <p>Necessitatibus omnis voluptate..</p>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <div class="pull-left">
-                                    <img class="img-circle" src="{{ asset('images/notification.png') }}"></div>
-                                    <h4>Praesentium comm..<small><i class="fa fa-clock-o"></i> 5 days</small></h4>
-                                    <p>Blanditiis quia distinctio rep..</p>
-                                </a>
-                            </li>                           
-                            <li>
-                                <a href="#">
-                                    <div class="pull-left"><img class="img-circle" src="{{ asset('images/notification.png') }}"></div>
-                                    <h4>Autem modi aliqu..<small><i class="fa fa-clock-o"></i> 5 days</small></h4>
-                                    <p>Necessitatibus omnis voluptate..</p>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <div class="pull-left">
-                                    <img class="img-circle" src="{{ asset('images/notification.png') }}"></div>
-                                    <h4>Praesentium comm..<small><i class="fa fa-clock-o"></i> 20 days</small></h4>
-                                    <p>Blanditiis quia distinctio rep..</p>
-                                </a>
-                            </li>                         
+                            {{--<li>--}}
+                                {{--<a href="#">--}}
+                                    {{--<div class="pull-left">--}}
+                                    {{--<img class="img-circle" src="{{ asset('images/notification.png') }}"></div>--}}
+                                    {{--<h4>Praesentium comm..<small><i class="fa fa-clock-o"></i> 5 min</small></h4>--}}
+                                    {{--<p>Blanditiis quia distinctio rep..</p>--}}
+                                {{--</a>--}}
+                            {{--</li>                           --}}
+
                            
                         </ul>
                       
@@ -133,7 +104,7 @@
 <li class="dropdown user user-menu">
     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
         <i class="fa fa-user"></i>
-        <span>Admin <i class="caret"></i></span>
+        <span class="hidden-xs">Admin</span><i class="caret"></i>
     </a>
 
     <ul class="dropdown-menu">
