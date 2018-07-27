@@ -1,0 +1,205 @@
+/*
+Copyright 2016 Google Inc. All rights reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+/* Base styles, media queries, variables, etc. */
+/*
+Copyright 2014 Google Inc. All rights reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+/*
+Copyright 2015 Google Inc. All rights reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+
+:root { /* #f05721; */ /* #f7991c; */
+}
+
+
+/* Components. */
+/*
+Copyright 2014 Google Inc. All rights reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+
+.ActiveUsers {
+    background: hsl(30, 10%, 95%);
+    border-color: hsla(120, 100%, 25%, .5);
+    border: 1px solid #d4d2d0;
+    border-radius: 4px;
+    font-weight: 300;
+    padding: .5em 1.5em;
+    white-space: nowrap;
+}
+
+.ActiveUsers-value {
+    display: inline-block;
+    font-weight: 600;
+    margin-right: -.25em;
+}
+
+.ActiveUsers.is-increasing {
+    -webkit-animation: increase 3s;
+    animation: increase 3s;
+}
+
+.ActiveUsers.is-decreasing {
+    -webkit-animation: decrease 3s;
+    animation: decrease 3s;
+}
+
+@-webkit-keyframes increase {
+    0% {}
+    10% {
+        background-color: hsl(120, 100%, 96%);
+        border-color: hsla(120, 100%, 25%, .5);
+        color: hsla(120, 100%, 25%, 1);
+    }
+    100% {}
+}
+
+@keyframes increase {
+    0% {}
+    10% {
+        background-color: hsl(120, 100%, 96%);
+        border-color: hsla(120, 100%, 25%, .5);
+        color: hsla(120, 100%, 25%, 1);
+    }
+    100% {}
+}
+
+@-webkit-keyframes decrease {
+    0% {}
+    10% {
+        background-color: hsl(0, 100%, 96%);
+        border-color: hsla(0, 100%, 50%, .5);
+        color: hsl(0, 100%, 50%);
+    }
+    100% {}
+}
+
+@keyframes decrease {
+    0% {}
+    10% {
+        background-color: hsl(0, 100%, 96%);
+        border-color: hsla(0, 100%, 50%, .5);
+        color: hsl(0, 100%, 50%);
+    }
+    100% {}
+}
+/*
+Copyright 2014 Google Inc. All rights reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+
+.Chartjs {
+    font-size: .85em;
+}
+
+.Chartjs-figure {
+    height: 250px;
+}
+
+.Chartjs-legend {
+    list-style: none;
+    margin: 0;
+    padding: 1em 0 0;
+    text-align: center;
+}
+
+.Chartjs-legend > li {
+    display: inline-block;
+    padding: .25em .5em
+}
+
+.Chartjs-legend > li > i {
+    display: inline-block;
+    height: 1em;
+    margin-right: .5em;
+    vertical-align: -.1em;
+    width: 1em;
+}
+
+@media (min-width: 570px) {
+    .Chartjs-figure {
+        /* Add some breathing room. */
+        margin-right: 1.5em;
+    }
+}
+.Titles {
+    font-weight: 300;
+    line-height: 1.2;
+    margin: 0 0 1.5em;
+}
+.Titles-main {
+    font-size: 1.4em !important;
+}
+
+.Titles-main, .Titles-sub {
+    color: inherit;
+    font: inherit;
+    margin: 0;
+}
+.Titles-sub {
+    opacity: .6;
+    margin-top: .2em;
+}
