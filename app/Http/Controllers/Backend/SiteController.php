@@ -2,16 +2,20 @@
 
 namespace App\Http\Controllers\Backend;
 
+
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 use App\AboutContent;
 use App\AboutSlider;
 use App\Event;
 use App\SiteMeta;
 use App\Testimonial;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Storage;
-use Psy\Util\Json;
+use App\Http\Helpers\AppHelper;
+
+
 
 class SiteController extends Controller
 {
@@ -22,14 +26,30 @@ class SiteController extends Controller
      */
     public function dashboard()
     {
+
+        $gaInfo = SiteMeta::where('meta_key', 'ga_key_file')->first();
+        $KEY_FILE_LOCATION = null;
+        if($gaInfo){
+            $KEY_FILE_LOCATION = storage_path('app/secrets/'.$gaInfo->meta_value);
+        }
+        $googleToken = AppHelper::getGoogleAccessToken($KEY_FILE_LOCATION);
+
         $subscribers = SiteMeta::where('meta_key', 'subscriber')->count();
         $photos = SiteMeta::where('meta_key', 'gallery')->count();
         $events = Event::count();
+        $gaInfo = SiteMeta::where('meta_key', 'ga_id')->first();
+        $gaId = null;
+        if($gaInfo){
+            $gaId = $gaInfo->meta_value;
+        }
+
 
         return view('backend.site.dashboard', compact(
             'subscribers',
             'photos',
-            'events'
+            'events',
+            'googleToken',
+            'gaId'
         ));
     }
 
