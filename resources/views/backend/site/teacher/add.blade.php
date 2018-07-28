@@ -51,10 +51,16 @@
                             </div>
 
                             <div class="form-group has-feedback">
-                                <label for="designation">Designation/Education Qualification<span class="text-danger">*</span></label>
+                                <label for="designation">Designation<span class="text-danger">*</span></label>
                                 <input  type="text" class="form-control" name="designation" placeholder="write here" value="@if($profile){{ $profile->designation }}@else{{ old('designation') }} @endif" required minlength="5" maxlength="255">
                                 <span class="glyphicon glyphicon-info form-control-feedback"></span>
                                 <span class="text-danger">{{ $errors->first('designation') }}</span>
+                            </div>
+                            <div class="form-group has-feedback">
+                                <label for="qualification">Education Qualification<span class="text-danger">*</span></label>
+                                <input  type="text" class="form-control" name="qualification" placeholder="write here" value="@if($profile && $profile->qualification){{ $profile->qualification }}@else{{ old('qualification') }} @endif" required minlength="1" maxlength="255">
+                                <span class="glyphicon glyphicon-info form-control-feedback"></span>
+                                <span class="text-danger">{{ $errors->first('qualification') }}</span>
                             </div>
                             <div class="form-group has-feedback">
                                 <label for="description">Description</label>

@@ -1291,7 +1291,7 @@ header:before{
 	display: inline-block;
 	vertical-align: middle;
 	font-family: "Georgia";
-	font-size: 36px;
+	font-size: 20px;
 	clear: none;
 	color: #5f5f5f;
 	margin: 0;
@@ -1314,7 +1314,7 @@ header:before{
 	margin: 3px 0;
 }
 .sticky-menu.scrolling .logo h1 {
-	font-size: 28px;
+	font-size: 22px;
     line-height: 52px;
 }
 .main-nav ul {
@@ -1360,16 +1360,54 @@ header:before{
 .main-nav>ul>li:last-child>a:after {
 	display: none;
 }
-@media screen and (max-width: 479px) {
-	.sticky-menu .logo h1 {
-		line-height: 45px;
-		font-size: 22px;
+
+
+/* ———– iPhone 5 and 5S ———– */
+
+/* Portrait and Landscape */
+
+@media only screen
+
+and (min-device-width: 320px)
+
+and (max-device-width: 568px)
+
+and (-webkit-min-device-pixel-ratio: 2) {
+
+ .sticky-menu .logo h1 {
+        line-height: 45px;
+		font-size: 11px !important;
 	}
 	.sticky-menu .logo {
 		height: 50px;
 	}
 
+
 }
+
+/* ———– iPhone 6 ———– */
+
+/* Portrait and Landscape */
+
+@media only screen
+
+and (min-device-width: 375px)
+
+and (max-device-width: 667px)
+
+and (-webkit-min-device-pixel-ratio: 2) {
+
+.sticky-menu .logo h1 {
+		line-height: 45px;
+		font-size: 14px !important;;
+	}
+	.sticky-menu .logo {
+		height: 50px;
+	}
+
+
+}
+
 
 
 /**/
