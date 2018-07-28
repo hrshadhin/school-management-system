@@ -517,6 +517,7 @@ class SiteController extends Controller
             ];
             $this->validate($request, [
                 'name' => 'required|min:5|max:255',
+                'short_name' => 'required|min:5|max:255',
                 'logo' => 'required|mimes:jpeg,jpg,png|max:1024|dimensions:min_width=82,min_height=72,max_width=82,max_height=72',
                 'logo2x' => 'required|mimes:jpeg,jpg,png|max:1024|dimensions:min_width=162,min_height=142,max_width=162,max_height=142',
                 'favicon' => 'required|mimes:png|max:512|dimensions:min_width=32,min_height=32,max_width=32,max_height=32',
@@ -538,6 +539,7 @@ class SiteController extends Controller
             $data['favicon'] = $fileName;
 
             $data['name'] = $request->get('name');
+            $data['short_name'] = $request->get('short_name');
             $data['facebook'] = $request->get('facebook');
             $data['google'] = $request->get('google');
             $data['twitter'] = $request->get('twitter');

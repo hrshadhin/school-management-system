@@ -43,8 +43,9 @@
                             <tr>
                                 <th width="9%">Photo</th>
                                 <th width="10%">Name</th>
-                                <th width="7%">Designation</th>
-                                <th width="20%">Description</th>
+                                <th width="6%">Designation</th>
+                                <th width="6%">Qualification</th>
+                                <th width="15%">Description</th>
                                 <th width="7%">Facebook</th>
                                 <th width="7%">Google</th>
                                 <th width="7%">Twitter</th>
@@ -59,6 +60,7 @@
                                     </td>
                                     <td>{{ $profile->name }}</td>
                                     <td> {{ $profile->designation }}</td>
+                                    <td> {{ $profile->qualification }}</td>
                                     <td> {{ $profile->description }}</td>
                                     <td>
                                         @if($profile->facebook)
@@ -101,8 +103,9 @@
                             <tr>
                                 <th width="9%">Photo</th>
                                 <th width="10%">Name</th>
-                                <th width="7%">Designation</th>
-                                <th width="20%">Description</th>
+                                <th width="6%">Designation</th>
+                                <th width="6%">Qualification</th>
+                                <th width="15%">Description</th>
                                 <th width="7%">Facebook</th>
                                 <th width="7%">Google</th>
                                 <th width="7%">Twitter</th>

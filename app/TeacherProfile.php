@@ -22,6 +22,7 @@ class TeacherProfile extends Model
         'image',
         'description',
         'designation',
+        'qualification',
         'facebook',
         'google',
         'twitter',

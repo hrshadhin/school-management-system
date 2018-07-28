@@ -42,6 +42,12 @@
                                 <span class="text-danger">{{ $errors->first('name') }}</span>
                             </div>
                             <div class="form-group has-feedback">
+                                <label for="short_name">School Short Name<span class="text-danger">*</span></label>
+                                <input type="text" name="short_name" class="form-control" placeholder="HRHS" value="@if($info){{ $info->short_name }}@endif" maxlength="255" required />
+                                <span class="fa fa-info form-control-feedback"></span>
+                                <span class="text-danger">{{ $errors->first('short_name') }}</span>
+                            </div>
+                            <div class="form-group has-feedback">
                                 <label for="logo">Logo<span class="text-danger">[82 X 72 exact size and max 1MB]*</span></label>
                                 <input  type="file" class="form-control" accept=".jpeg, .jpg, .png" name="logo" placeholder="logo image" required>
                                 <span class="glyphicon glyphicon-open-file form-control-feedback"></span>
