@@ -12,6 +12,7 @@ class BackendMasterComposer
 
         $siteInfo = [
             'name' => '',
+            'short_name' => '',
             'logo' => '',
             'logo2x' => '',
             'favicon' => '',
