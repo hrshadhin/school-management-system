@@ -499,7 +499,7 @@ class SiteController extends Controller
 
 
     /**
-     * timeline section content manage
+     * setting section content manage
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function settings(Request $request)
@@ -559,6 +559,64 @@ class SiteController extends Controller
         }
 
         return view('backend.site.settings', compact('info'));
+    }
+
+    /**
+     * Google Analytics section content manage
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function analytics(Request $request)
+    {
+        //for save on POST request
+        if ($request->isMethod('post')) {
+            //validate form
+            $this->validate($request, [
+                'ga_tracking_id' => 'required|max:255',
+                'ga_report_id' => 'required|max:255',
+                'ga_key_file' => 'required|file|mimetypes:text/plain',
+            ]);
+
+
+            $storagepath = $request->file('ga_key_file')->storeAs('secrets', 'ga_key_file.json');
+            $fileName = basename($storagepath);
+
+            //now crate
+            SiteMeta::updateOrCreate(
+                ['meta_key' => 'ga_key_file'],
+                ['meta_value' => $fileName]
+            );
+            SiteMeta::updateOrCreate(
+                ['meta_key' => 'ga_tracking_id'],
+                ['meta_value' => $request->get('ga_tracking_id')]
+            );
+            SiteMeta::updateOrCreate(
+                ['meta_key' => 'ga_id'],
+                ['meta_value' => $request->get('ga_report_id')]
+            );
+
+            return redirect()->route('site.analytics')->with('success', 'Record updated!');
+        }
+
+        //for get request
+        $info = new \stdClass();
+        $info->key_file = null;
+        $info->ga_id = null;
+        $info->ga_tracking_id = null;
+
+        $gaInfo = SiteMeta::where('meta_key', 'ga_key_file')->first();
+        if($gaInfo){
+            $info->key_file = $gaInfo->meta_value;
+        }
+        $gaInfo = SiteMeta::where('meta_key', 'ga_id')->first();
+        if($gaInfo){
+            $info->ga_id = $gaInfo->meta_value;
+        }
+        $gaInfo = SiteMeta::where('meta_key', 'ga_tracking_id')->first();
+        if($gaInfo){
+            $info->ga_tracking_id = $gaInfo->meta_value;
+        }
+
+        return view('backend.site.analytics', compact('info'));
     }
 
 

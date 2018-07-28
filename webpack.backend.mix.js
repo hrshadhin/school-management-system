@@ -15,7 +15,15 @@ const webpack = require('webpack');
 mix.webpackConfig({
     plugins: [
         // Ignore all locale files of moment.js
-        new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+        // new webpack.IgnorePlugin(
+        //     /^\.\/locale$/, /moment$/,
+        //     /^\.\/locale$/, /fullcalendar$/
+        // )
+        new webpack.ContextReplacementPlugin(
+            // The path to directory which should be handled by this plugin
+            /moment[\/\\]locale/,
+            /fullcalendar[\/\\]dist[\/\\]locale/,
+        )
     ],
 });
 
@@ -45,7 +53,8 @@ mix.js('resources/assets/backend/js/app.js', 'public/js')
     ], 'public/css/theme.css')
     .styles('resources/assets/backend/css/site-dashboard.css', 'public/css/site-dashboard.css')
     .autoload({
-        jquery: ['$', 'window.jQuery', 'jQuery', 'jquery']
+        jquery: ['$', 'window.jQuery', 'jQuery', 'jquery'],
+        moment: ['window.moment', 'moment'],
     });
 
 

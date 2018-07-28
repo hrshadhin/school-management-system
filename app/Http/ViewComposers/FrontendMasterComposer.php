@@ -13,6 +13,11 @@ class FrontendMasterComposer
         $address = SiteMeta::where('meta_key', 'contact_address')->first();
         $phone = SiteMeta::where('meta_key', 'contact_phone')->first();
         $email = SiteMeta::where('meta_key', 'contact_email')->first();
+        $gaInfo = SiteMeta::where('meta_key', 'ga_tracking_id')->first();
+        $GA_TRACKING_ID = null;
+        if($gaInfo){
+            $GA_TRACKING_ID = $gaInfo->meta_value;
+        }
         $siteInfo = [
             'address' => $address->meta_value,
             'phone' => $phone->meta_value,
@@ -52,6 +57,6 @@ class FrontendMasterComposer
         $view->with('maintainer_url', 'http://shanixlab.com');
         $view->with('siteInfo', $siteInfo);
         $view->with('event', $upComingEvent);
-        $view->with('GA_TRACKING_ID', env('GA_TRACKING_ID',null));
+        $view->with('GA_TRACKING_ID', $GA_TRACKING_ID);
     }
 }

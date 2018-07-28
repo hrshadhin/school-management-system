@@ -135,6 +135,10 @@ Route::group(
         ->name('site.settings');
     Route::post('site/settings','SiteController@settings')
         ->name('site.settings');
+    Route::get('site/analytics','SiteController@analytics')
+        ->name('site.analytics');
+    Route::post('site/analytics','SiteController@analytics')
+        ->name('site.analytics');
 
 
     //dev routes
