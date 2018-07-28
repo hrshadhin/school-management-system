@@ -33,7 +33,7 @@
 								 data-transform_out="opacity:0;s:300;s:1000;" data-start="400">
 								<div class="sl-title">{{$slider->title}}</div>
 								<p>{{$slider->subtitle}}</p>
-								<a href="admission.html" class="cws-button border-radius">Apply Now
+								<a href="#" class="cws-button border-radius">Apply Now
 									<i class="fa fa-angle-double-right"></i>
 								</a>
 							</div>
@@ -46,7 +46,7 @@
 								 data-transform_out="opacity:0;s:300;s:1000;" data-start="400">
 								<div class="sl-title">{{$slider->title}}</div>
 								<p>{{$slider->subtitle}}</p>
-								<a href="admission.html" class="cws-button border-radius">Apply Now
+								<a href="#" class="cws-button border-radius">Apply Now
 									<i class="fa fa-angle-double-right"></i>
 								</a>
 							</div>
@@ -59,7 +59,7 @@
 								 data-transform_in="opacity:0;s:1000;e:Power2.easeInOut;" data-transform_out="opacity:0;s:300;s:1000;" data-start="400">
 								<div class="sl-title">{{$slider->title}}</div>
 								<p>{{$slider->subtitle}}</p>
-								<a href="admission.html" class="cws-button border-radius">Apply Now
+								<a href="#" class="cws-button border-radius">Apply Now
 									<i class="fa fa-angle-double-right"></i>
 								</a>
 							</div>
