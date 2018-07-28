@@ -19,10 +19,11 @@ class FrontendMasterComposer
             $GA_TRACKING_ID = $gaInfo->meta_value;
         }
         $siteInfo = [
-            'address' => $address->meta_value,
-            'phone' => $phone->meta_value,
-            'email' => $email->meta_value,
+            'address' => isset($address->meta_value) ? $address->meta_value : '',
+            'phone' => isset($phone->meta_value) ? $phone->meta_value : '',
+            'email' => isset($email->meta_value) ? $email->meta_value : '',
             'name' => '',
+            'short_name' => '',
             'logo' => '',
             'logo2x' => '',
             'favicon' => '',
