@@ -73,6 +73,11 @@
             <span>Settings</span>
         </a>
         </li>
+        <li>
+          <a href="{{ URL::route('site.analytics') }}"><i class="fa fa-line-chart"></i>
+            <span>Analytics</span>
+        </a>
+        </li>
      
       </ul>
     </section>

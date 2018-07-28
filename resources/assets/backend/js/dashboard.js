@@ -1,6 +1,6 @@
 import Chart from 'chart.js';
+
 require('fullcalendar');
-window.moment = require('moment');
 
 class Dashboard {
     static init() {

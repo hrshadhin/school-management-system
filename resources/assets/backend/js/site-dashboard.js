@@ -1,5 +1,4 @@
 import Chart from 'chart.js';
-window.moment = require('moment');
 
 class GoogleAnaylytics {
     static init() {
@@ -207,8 +206,8 @@ class GoogleAnaylytics {
                                 strokeColor : 'rgba(220,220,220,1)',
                                 pointColor : 'rgba(220,220,220,1)',
                                 pointStrokeColor : '#fff',
-                                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                                borderColor: 'rgba(54, 162, 235, 1)',
+                                backgroundColor: window.chartColors.blue,
+                                borderColor: window.chartColors.blue,
                                 borderWidth: 1,
                                 data : data2
                             },
@@ -218,8 +217,8 @@ class GoogleAnaylytics {
                                 strokeColor : 'rgba(151,187,205,1)',
                                 pointColor : 'rgba(151,187,205,1)',
                                 pointStrokeColor : '#fff',
-                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                                borderColor:'rgba(75, 192, 192, 1)',
+                                backgroundColor: window.chartColors.green,
+                                borderColor: window.chartColors.green,
                                 borderWidth: 1,
                                 data : data1
                             }
