@@ -97,7 +97,7 @@
             var contentString = '<div id="content">' +
                 '<div id="siteNotice">' +
                 '</div>' +
-                '<h1 id="firstHeading" class="firstHeading">HR High School</h1>' +
+                '<h1 id="firstHeading" class="firstHeading">{{$siteInfo["name"]}}</h1>' +
                 '<div id="bodyContent">' +
                 '<p>{{$address->meta_value}}</p>' +
                 '</div>' +
@@ -110,7 +110,7 @@
             var marker = new google.maps.Marker({
                 position: latLong,
                 map: map,
-                title: 'HR High School'
+                title: '{{$siteInfo["name"]}}'
             });
             marker.addListener('click', function () {
                 infowindow.open(map, marker);
