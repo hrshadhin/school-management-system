@@ -20,7 +20,7 @@
 
 				</section>
 				<section class="grid-col grid-col-4 footer-latest">
-					<h2 class="corner-radius">Upcoming Event</h2>
+					<h2 class="corner-radius">@lang('site.up_event')</h2>
 					@if($event)
 					<article>
 						<img src="{{asset('frontend/img/event.png')}}" alt>
@@ -39,31 +39,31 @@
 					@endif
 				</section>
 				<section class="grid-col grid-col-4 footer-links">
-					<h2 class="corner-radius">Help Links
+					<h2 class="corner-radius">@lang('site.help_links')
 						<i class="site"></i>
 					</h2>
 					<ul class="clear-fix">
 						<li>
-							<a href="{{URL::route('site.faq_view')}}">FAQ</a>
+							<a href="{{URL::route('site.faq_view')}}">@lang('site.menu_faq')</a>
 						</li>
 						<li>
-							<a href="#">Admission</a>
+							<a href="#">@lang('site.menu_admission')</a>
 						</li>
 						<li>
-							<a href="#">Results</a>
+							<a href="#">@lang('site.menu_result')</a>
 						</li>
 					</ul>
 					<ul class="clear-fix">
 						<li>
-							<a href="{{URL::route('site.timeline_view')}}">Timeline</a>
+							<a href="{{URL::route('site.timeline_view')}}">@lang('site.menu_timeline')</a>
 
 						</li>
 						<li>
-							<a href="{{URL::route('site.gallery_view')}}">Gallery</a>
+							<a href="{{URL::route('site.gallery_view')}}">@lang('site.menu_gallery')</a>
 						</li>
 
 						<li>
-							<a href="{{URL::route('site.contact_us_view')}}">Contact Us</a>
+							<a href="{{URL::route('site.contact_us_view')}}">@lang('site.menu_contact_us')</a>
 						</li>
 					</ul>
 				</section>
@@ -72,7 +72,7 @@
 		<div class="footer-bottom">
 			<div class="grid-row clear-fix">
 				<div class="copyright">{{$siteInfo['name']}}
-					<span></span> 2018 . All Rights Reserved
+					<span></span> @lang('site.copy_right')
 				</div>
 
 				<div class="footer-social">
@@ -82,7 +82,7 @@
 					<a target="_blank" href="@if($siteInfo['youtube']){{$siteInfo['youtube']}}@else #@endif" class="fa fa-youtube"></a>
 				</div>
 
-				<div class="maintainedby">Maintained by
+				<div class="maintainedby">@lang('site.maintainer')
 					<a href="{{$maintainer_url}}" class="site">{{$maintainer}}</a>
 				</div>
 			</div>

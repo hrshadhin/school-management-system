@@ -954,8 +954,7 @@ html.t-pattern-8 {
 header {
 	position: relative;
 	z-index: 1000;
-	background-color: #272b31;
-	background-image: url(../img/headerbg.jpg);
+	background-color: #272c31;
 	background-size: cover;
 	background-position: 0% 50%;
 	background-repeat: no-repeat;

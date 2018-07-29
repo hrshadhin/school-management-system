@@ -1,17 +1,17 @@
 @extends('frontend.layouts.master')
-@section('pageTitle') Event Details @endsection
+@section('pageTitle') @lang('site.details') @endsection
 
 @section('pageBreadCrumb')
 	<!-- page title -->
 	<div class="page-title">
 		<div class="grid-row">
-			<h1>Event Details</h1>
+			<h1>@lang('site.details')</h1>
 			<nav class="bread-crumb">
-				<a href="{{URL::route('home')}}">Home</a>
+				<a href="{{URL::route('home')}}">@lang('site.menu_home')</a>
 				<i class="fa fa-long-arrow-right"></i>
-				<a href="{{URL::route('site.event')}}">Events</a>
+				<a href="{{URL::route('site.event')}}">@lang('site.menu_events')</a>
 				<i class="fa fa-long-arrow-right"></i>
-				<a href="#">Details</a>
+				<a href="#">@lang('site.details')</a>
 			</nav>
 		</div>
 	</div>

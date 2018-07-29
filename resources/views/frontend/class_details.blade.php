@@ -1,17 +1,17 @@
 @extends('frontend.layouts.master')
-@section('pageTitle') Class Details @endsection
+@section('pageTitle') @lang('site.details') @endsection
 
 @section('pageBreadCrumb')
 	<!-- page title -->
 	<div class="page-title">
 		<div class="grid-row">
-			<h1>Class Details</h1>
+			<h1>@lang('site.details')</h1>
 			<nav class="bread-crumb">
-				<a href="{{URL::route('home')}}">Home</a>
+				<a href="{{URL::route('home')}}">@lang('site.menu_home')</a>
 				<i class="fa fa-long-arrow-right"></i>
-				<a href="{{URL::route('site.class_profile')}}">Class</a>
+				<a href="{{URL::route('site.class_profile')}}">@lang('site.menu_class')</a>
 				<i class="fa fa-long-arrow-right"></i>
-				<a href="#">Details</a>
+				<a href="#">@lang('site.details')</a>
 			</nav>
 		</div>
 	</div>
@@ -43,7 +43,7 @@
 				<div class="grid-col grid-col-3 sidebar">
 					<!-- widget -->
 					<aside class="widget-course-details">
-						<h2>Information</h2>
+						<h2>@lang('site.information')</h2>
 						<p>
 							{{$profile->short_description}}
 						</p>
@@ -56,7 +56,7 @@
 							<i class="sms-icon-person"></i>
 						</div>
 						<div class="banner-text">
-							<h4>Teacher</h4>
+							<h4>@lang('site.teacher')</h4>
 							<p>{{$profile->teacher}}</p>
 						</div>
 					</div>
@@ -67,7 +67,7 @@
 							<i class="fa fa-institution"></i>
 						</div>
 						<div class="banner-text">
-							<h4>ROOM</h4>
+							<h4>@lang('site.room_no')</h4>
 							<p>{{$profile->room_no}}</p>
 						</div>
 					</div>
@@ -78,7 +78,7 @@
 							<i class="fa fa-users"></i>
 						</div>
 						<div class="banner-text">
-							<h4>CAPACITY</h4>
+							<h4>@lang('site.capacity')</h4>
 							<p>{{$profile->capacity}}</p>
 						</div>
 					</div>
@@ -89,7 +89,7 @@
 							<i class="fa fa-clock-o"></i>
 						</div>
 						<div class="banner-text">
-							<h4>SHIFT</h4>
+							<h4>@lang('site.description')</h4>
 							<p>{{$profile->shift}}</p>
 						</div>
 					</div>
@@ -106,8 +106,8 @@
 							<!-- tabs -->
 							<div class="tabs">
 								<div class="block-tabs-btn clear-fix">
-									<div class="tabs-btn active" data-tabs-id="tabs1">Description</div>
-									<div class="tabs-btn" data-tabs-id="tabs2">Course Outline</div>
+									<div class="tabs-btn active" data-tabs-id="tabs1">@lang('site.description')</div>
+									<div class="tabs-btn" data-tabs-id="tabs2">@lang('site.course_outline')</div>
 								</div>
 								<!-- tabs keeper -->
 								<div class="tabs-keeper">

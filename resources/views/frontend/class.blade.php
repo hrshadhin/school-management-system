@@ -5,11 +5,11 @@
 	<!-- page title -->
 	<div class="page-title">
 		<div class="grid-row">
-			<h1>Class</h1>
+			<h1>@lang('site.menu_class')</h1>
 			<nav class="bread-crumb">
-				<a href="{{URL::route('home')}}">Home</a>
+				<a href="{{URL::route('home')}}">@lang('site.menu_home')</a>
 				<i class="fa fa-long-arrow-right"></i>
-				<a href="#">Class</a>
+				<a href="#">@lang('site.menu_class')</a>
 			</nav>
 		</div>
 	</div>
@@ -42,7 +42,7 @@
 										<div class="course-hover">
 											<img src="{{asset('storage/class_profile/'.$profile->image_sm)}}"  alt>
 											<div class="hover-bg bg-color-{{$counter}}"></div>
-											<a href="{{URL::route('site.class_details',$profile->slug)}}">Details</a>
+											<a href="{{URL::route('site.class_details',$profile->slug)}}">@lang('site.details')</a>
 										</div>
 										<div class="course-name clear-fix">
 											<span class="price">{{$profile->room_no}}</span>

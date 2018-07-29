@@ -1,15 +1,15 @@
 @extends('frontend.layouts.master')
-@section('pageTitle') FAQ @endsection
+@section('pageTitle') @lang('site.menu_faq') @endsection
 
 @section('pageBreadCrumb')
 	<!-- page title -->
 	<div class="page-title">
 		<div class="grid-row">
-			<h1>FAQ</h1>
+			<h1>@lang('site.menu_faq')</h1>
 			<nav class="bread-crumb">
-				<a href="{{URL::route('home')}}">Home</a>
+				<a href="{{URL::route('home')}}">@lang('site.menu_home')</a>
 				<i class="fa fa-long-arrow-right"></i>
-				<a href="#">FAQ</a>
+				<a href="#">@lang('site.menu_faq')</a>
 			</nav>
 		</div>
 	</div>
@@ -24,7 +24,7 @@
 				<main>
 					<div class="grid-col grid-col-12">
 						<section class="padding-top-none">
-							<h2>Frequently asked question</h2>
+							<h2>@lang('site.faq_title')</h2>
 							<!-- accordions -->
 							<div class="accordions">
 							@foreach($faqs as $faq)

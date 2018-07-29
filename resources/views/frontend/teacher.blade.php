@@ -1,15 +1,15 @@
 @extends('frontend.layouts.master')
-@section('pageTitle') Teachers @endsection
+@section('pageTitle') @lang('site.menu_teachers') @endsection
 
 @section('pageBreadCrumb')
 	<!-- page title -->
 	<div class="page-title">
 		<div class="grid-row">
-			<h1>Teachers</h1>
+			<h1>@lang('site.menu_teachers')</h1>
 			<nav class="bread-crumb">
-				<a href="{{URL::route('home')}}">Home</a>
+				<a href="{{URL::route('home')}}">@lang('site.menu_home')</a>
 				<i class="fa fa-long-arrow-right"></i>
-				<a href="#">Teachers</a>
+				<a href="#">@lang('site.menu_teachers')</a>
 			</nav>
 		</div>
 	</div>
@@ -22,7 +22,7 @@
 		<main>
 			<div class="container">
 				<section class="clear-fix">
-					<h2>Meet our Teachers</h2>
+					<h2>@lang('site.meet_teacher')</h2>
 					<div class="grid-col-row">
 						@php $counter = 0; @endphp
 						@foreach($profiles as $profile)
@@ -62,7 +62,7 @@
 						<i class="fa fa-angle-double-left"></i>
 					</a>
 					<a href="#" class="active">
-						{{$profiles->currentPage()}}
+						{{AppHelper::translateNumber($profiles->currentPage())}}
 					</a>
 					<a title="next" @if($profiles->nextPageUrl()) href="{{$profiles->nextPageUrl()}}" @else href="#"  class="disabled" @endif>
 						<i class="fa fa-angle-double-right"></i>

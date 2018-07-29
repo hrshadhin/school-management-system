@@ -1,15 +1,15 @@
 @extends('frontend.layouts.master')
-@section('pageTitle') Gallery @endsection
+@section('pageTitle') @lang('site.menu_gallery') @endsection
 
 @section('pageBreadCrumb')
 	<!-- page title -->
 	<div class="page-title">
 		<div class="grid-row">
-			<h1>Gallery</h1>
+			<h1>@lang('site.menu_gallery')</h1>
 			<nav class="bread-crumb">
-				<a href="{{URL::route('home')}}">Home</a>
+				<a href="{{URL::route('home')}}">@lang('site.menu_home')</a>
 				<i class="fa fa-long-arrow-right"></i>
-				<a href="#">Gallery</a>
+				<a href="#">@lang('site.menu_gallery')</a>
 			</nav>
 		</div>
 	</div>
@@ -23,7 +23,7 @@
 			<main>
 				<div class="isotope-container">
 					<div class="isotope-header clear-fix">
-						<h2 class="margin-none">Gallery</h2>
+						<h2 class="margin-none">@lang('site.gallery_title')</h2>
 						{{--<div class="select-wrapper">--}}
 							{{--<select class="filter">--}}
 								{{--<option value="*" selected>All</option>--}}
@@ -58,7 +58,7 @@
 							<i class="fa fa-angle-double-left"></i>
 						</a>
 						<a href="#" class="active">
-							{{$images->currentPage()}}
+							{{AppHelper::translateNumber($images->currentPage())}}
 						</a>
 						<a title="next" @if($images->nextPageUrl()) href="{{$images->nextPageUrl()}}" @else href="#"  class="disabled" @endif>
 							<i class="fa fa-angle-double-right"></i>
