@@ -1,5 +1,5 @@
 @extends('frontend.layouts.master')
-@section('pageTitle') Class @endsection
+@section('pageTitle') @lang('site.menu_class') @endsection
 
 @section('pageBreadCrumb')
 	<!-- page title -->

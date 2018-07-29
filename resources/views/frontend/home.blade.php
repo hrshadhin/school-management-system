@@ -1,6 +1,6 @@
 @extends('frontend.layouts.master')
 
-@section('pageTitle') Home @endsection
+@section('pageTitle') @lang('site.menu_home') @endsection
 @section('extraStyle')
 	<link type="text/css" rel="stylesheet" href="{{ asset('/frontend/rs-plugin/css/settings.css') }}" />
 @endsection
