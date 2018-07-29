@@ -2,7 +2,7 @@
 		<div class="grid-row">
 			<div class="grid-col-row clear-fix">
 				<section class="grid-col grid-col-4 footer-about">
-					<h2 class="corner-radius">Contact Us</h2>
+					<h2 class="corner-radius">@lang('site.menu_contact_us')</h2>
 					<address>
 						@if(isset($siteInfo['phone']) && isset($siteInfo['email']) && isset($siteInfo['address']))
 						<p></p>
@@ -14,7 +14,7 @@
 						<br />
 						<a href="{{URL::route('site.contact_us_view')}}" class="address">{{$siteInfo['address']}}</a>
 							@else
-							<p>Add content from admin panel</p>
+							<p> @lang('site.empty_content') </p>
 						@endif
 					</address>
 
