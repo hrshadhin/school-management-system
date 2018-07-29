@@ -18,6 +18,9 @@ class Language
     public function handle($request, Closure $next)
     {
         $locale = Session::get('user_locale');
+        if(!$locale){
+            $locale = config('app.locale');
+        }
 //        Carbon::setLocale($locale);
         //set user wise locale
         App::setLocale($locale);

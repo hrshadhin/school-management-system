@@ -4,6 +4,10 @@ namespace App\Exceptions;
 
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+
 
 class Handler extends ExceptionHandler
 {
@@ -46,6 +50,31 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        $statusCode = $exception->getStatusCode();
+
+
+        if ($statusCode == 404)
+        {
+            $locale = Session::get('user_locale');
+            App::setLocale($locale);
+
+
+           if(!$request->user()){
+               return response()->view('errors.front_404', [], 404);
+           }
+
+        }
+
+        if ($statusCode == 500)
+        {
+            $locale = Session::get('user_locale');
+            App::setLocale($locale);
+
+           if(!$request->user()){
+               return response()->view('errors.front_500', [], 500);
+           }
+
+        }
         return parent::render($request, $exception);
     }
 }

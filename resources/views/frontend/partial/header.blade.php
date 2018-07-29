@@ -11,7 +11,7 @@
 				</a>
 			</address>
 			<div class="header-top-panel">
-				<a href="/login" class="fa fa-user login-icon"></a>
+				<a href="{{route('login')}}" class="fa fa-user login-icon"></a>
 				<div id="top_social_links_wrapper">
 					<div class="share-toggle-button">
 						<i class="share-icon fa fa-share-alt"></i>
@@ -68,23 +68,23 @@
 				<nav class="main-nav">
 					<ul class="clear-fix">
 						<li>
-							<a href="{{URL::route('home')}}" @if(Route::current()->getName() == "home") class="active" @endif>@lang('site.menu_home')</a>
+							<a href="{{URL::route('home')}}" >@lang('site.menu_home')</a>
 						</li>
 						<li>
-							<a href="{{URL::route('site.class_profile')}}" @if(Route::current()->getName() == "site.class_profile" || Route::current()->getName() == "site.class_details" ) class="active" @endif> @lang('site.menu_class') </a>
+							<a href="{{URL::route('site.class_profile')}}"> @lang('site.menu_class') </a>
 						</li>
 						<li>
-							<a href="{{URL::route('site.teacher_profile')}}" @if(Route::current()->getName() == "site.teacher_profile") class="active" @endif>@lang('site.menu_teachers')</a>
+							<a href="{{URL::route('site.teacher_profile')}}" >@lang('site.menu_teachers')</a>
 						</li>
 						<li>
-							<a href="{{URL::route('site.event')}}" @if(Route::current()->getName() == "site.event" || Route::current()->getName() == "site.event_details" ) class="active" @endif>@lang('site.menu_events')</a>
+							<a href="{{URL::route('site.event')}}">@lang('site.menu_events')</a>
 
 						</li>
 						<li>
-							<a href="{{URL::route('site.gallery_view')}}" @if(Route::current()->getName() == "site.gallery_view" ) class="active" @endif>@lang('site.menu_gallery')</a>
+							<a href="{{URL::route('site.gallery_view')}}" >@lang('site.menu_gallery')</a>
 						</li>
 						<li>
-							<a href="{{URL::route('site.contact_us_view')}}" @if(Route::current()->getName() == "site.contact_us_view" ) class="active" @endif>@lang('site.menu_contact_us')</a>
+							<a href="{{URL::route('site.contact_us_view')}}">@lang('site.menu_contact_us')</a>
 						</li>
 					</ul>
 				</nav>
