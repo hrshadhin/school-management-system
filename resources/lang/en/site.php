@@ -63,6 +63,10 @@ return [
     'our_office' => 'Our Office',
     'faq_title' => 'Frequently asked questions',
     'timeline_title' => 'Our Journey',
+    'not_found' => '404',
+    'not_found_title' => 'This page doesn\'t exist.',
+    'code_500' => '500',
+    'code_500_title' => 'Internal Server Error! Contact System Administrator.',
 
 
 

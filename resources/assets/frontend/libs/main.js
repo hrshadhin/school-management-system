@@ -1757,4 +1757,17 @@ function select2_init() {
 
 }
 
+$(function () {
+    'use strict'
+    var getUrl = window.location;
+    var baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
+    var fullUrl = getUrl.href;
+    $(".main-nav ul li a").each(function () {
+        if ($(this).attr("href") == fullUrl || $(this).attr("href") == baseUrl || baseUrl.slice(0, -1) == $(this).attr("href") || $(this).attr("href") == '') {
+            $(".main-nav ul li a").removeClass('active');
+            $(this).addClass("active");
+        }
+
+    });
+});
 
