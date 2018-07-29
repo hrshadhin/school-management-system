@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Session;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -155,12 +156,11 @@ Route::group(
 }
 );
 
-//
-//        Route::get(
-//            '/set-locale/{lang}', function ($lang) {
-//                //set user wanted locale to session
-//                session('user_locale', $lang);
-//                dd(session('user_locale'));
-//                return redirect()->back();
-//            }
-//        );
+
+Route::get(
+    '/set-locale/{lang}', function ($lang) {
+        //set user wanted locale to session
+        Session::put('user_locale', $lang);
+        return redirect()->back();
+}
+)->name('setLocale');

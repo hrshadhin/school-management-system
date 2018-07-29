@@ -18,7 +18,7 @@ class Language
      */
     public function handle($request, Closure $next)
     {
-        $locale = $request->segment(1);
+        $locale = Session::get('user_locale');
         //set user wise locale
         App::setLocale($locale);
 

@@ -35,24 +35,15 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function map(Router $router, Request $request)
+    public function map()
     {
         $this->mapApiRoutes();
 
-        $this->mapWebRoutes($router, $request);
+        $this->mapWebRoutes();
 
         //
     }
 
-//    public function map(Router $router, Request $request)
-//    {
-//        $locale = $request->segment(1);
-//        $this->app->setLocale($locale);
-//
-//        $router->group(['namespace' => $this->namespace, 'prefix' => $locale], function($router) {
-//            require app_path('Http/routes.php');
-//        });
-//    }
 
     /**
      * Define the "web" routes for the application.
@@ -61,15 +52,12 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function mapWebRoutes($router, $request)
+    protected function mapWebRoutes()
     {
 
-        $locale = $request->segment(1);
-        $this->app->setLocale($locale);
-
-        $router->group(['namespace' => $this->namespace, 'prefix' => $locale], function($router) {
-            require base_path('routes/web.php');
-        });
+        Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/web.php'));
     }
 
     /**

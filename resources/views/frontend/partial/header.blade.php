@@ -38,15 +38,15 @@
 					</div>
 
 					<div class="cws_lang_links">
-						<a href="/bn" class="cws_lang_link" title="Bangla">
+						<a href="{{route('setLocale','bn')}}" class="cws_lang_link" title="বাংলা">
 							<i class="lang-icon flag-icon flag-icon-bd"></i>
 						</a>
-						<a href="/en" class="cws_lang_link" title="English">
+						<a href="{{route('setLocale','en')}}" class="cws_lang_link" title="English">
 							<i class="lang-icon flag-icon flag-icon-gb"></i>
 						</a>
-						<a href="/in" class="cws_lang_link" title="Hindi">
-							<i class="lang-icon flag-icon flag-icon-in"></i>
-						</a>
+						{{--<a href="/in" class="cws_lang_link" title="Hindi">--}}
+							{{--<i class="lang-icon flag-icon flag-icon-in"></i>--}}
+						{{--</a>--}}
 					</div>
 				</div>
 
@@ -74,17 +74,17 @@
 							<a href="{{URL::route('site.class_profile')}}" @if(Route::current()->getName() == "site.class_profile" || Route::current()->getName() == "site.class_details" ) class="active" @endif> @lang('site.menu_class') </a>
 						</li>
 						<li>
-							<a href="{{URL::route('site.teacher_profile')}}" @if(Route::current()->getName() == "site.teacher_profile") class="active" @endif>Teachers</a>
+							<a href="{{URL::route('site.teacher_profile')}}" @if(Route::current()->getName() == "site.teacher_profile") class="active" @endif>@lang('site.menu_teachers')</a>
 						</li>
 						<li>
-							<a href="{{URL::route('site.event')}}" @if(Route::current()->getName() == "site.event" || Route::current()->getName() == "site.event_details" ) class="active" @endif>Events</a>
+							<a href="{{URL::route('site.event')}}" @if(Route::current()->getName() == "site.event" || Route::current()->getName() == "site.event_details" ) class="active" @endif>@lang('site.menu_events')</a>
 
 						</li>
 						<li>
-							<a href="{{URL::route('site.gallery_view')}}" @if(Route::current()->getName() == "site.gallery_view" ) class="active" @endif>Gallery</a>
+							<a href="{{URL::route('site.gallery_view')}}" @if(Route::current()->getName() == "site.gallery_view" ) class="active" @endif>@lang('site.menu_gallery')</a>
 						</li>
 						<li>
-							<a href="{{URL::route('site.contact_us_view')}}" @if(Route::current()->getName() == "site.contact_us_view" ) class="active" @endif>Contact Us</a>
+							<a href="{{URL::route('site.contact_us_view')}}" @if(Route::current()->getName() == "site.contact_us_view" ) class="active" @endif>@lang('site.menu_contact_us')</a>
 						</li>
 					</ul>
 				</nav>
