@@ -33,7 +33,7 @@
 								 data-transform_out="opacity:0;s:300;s:1000;" data-start="400">
 								<div class="sl-title">{{$slider->title}}</div>
 								<p>{{$slider->subtitle}}</p>
-								<a href="#" class="cws-button border-radius">Apply Now
+								<a href="#" class="cws-button border-radius">@lang('site.apply_now')
 									<i class="fa fa-angle-double-right"></i>
 								</a>
 							</div>
@@ -46,7 +46,7 @@
 								 data-transform_out="opacity:0;s:300;s:1000;" data-start="400">
 								<div class="sl-title">{{$slider->title}}</div>
 								<p>{{$slider->subtitle}}</p>
-								<a href="#" class="cws-button border-radius">Apply Now
+								<a href="#" class="cws-button border-radius">@lang('site.apply_now')
 									<i class="fa fa-angle-double-right"></i>
 								</a>
 							</div>
@@ -59,7 +59,7 @@
 								 data-transform_in="opacity:0;s:1000;e:Power2.easeInOut;" data-transform_out="opacity:0;s:300;s:1000;" data-start="400">
 								<div class="sl-title">{{$slider->title}}</div>
 								<p>{{$slider->subtitle}}</p>
-								<a href="#" class="cws-button border-radius">Apply Now
+								<a href="#" class="cws-button border-radius">@lang('site.apply_now')
 									<i class="fa fa-angle-double-right"></i>
 								</a>
 							</div>
@@ -75,11 +75,11 @@
 	<div id="home" class="page-content padding-none">
 		<section class="fullwidth-background padding-section">
 			<div class="grid-row clear-fix">
-				<h2 class="center-text">About Us</h2>
+				<h2 class="center-text">@lang('site.about_us')</h2>
 				@if($aboutContent)
 					<div class="grid-col-row">
 						<div class="grid-col grid-col-6">
-							<h3>Why We Are Better</h3>
+							<h3>@lang('site.why_we')</h3>
 							<p>{{ $aboutContent->why_content }}</p>
 							<!-- accordions -->
 							<div class="accordions">
@@ -140,14 +140,14 @@
 								</div>
 							@else
 								<div class="alert alert-warning">
-									<span>Please add about images</span>
+									<span>@lang('site.empty_content')</span>
 								</div>
 							@endif
 						</div>
 					</div>
 				@else
 					<div class="alert alert-warning">
-						<span>Please add content from admin panel</span>
+						<span>@lang('site.empty_content')</span>
 					</div>
 				@endif
 			</div>
@@ -165,7 +165,7 @@
 							</div>
 						</div>
 						<div class="grid-col grid-col-6 clear-fix">
-							<h2>Learn More About Us From Video</h2>
+							<h2>@lang('site.about_us_more')</h2>
 							<p>
 								{{ $aboutContent->who_we_are }}
 							</p>
@@ -174,7 +174,7 @@
 								<br/>
 								<br/>
 								<br/>
-								<a href="{{$aboutContent->video_site_link}}m" class="cws-button bt-color-3 border-radius alt icon-right float-right">Watch More
+								<a href="{{$aboutContent->video_site_link}}m" class="cws-button bt-color-3 border-radius alt icon-right float-right">@lang('site.about_us_more2')
 									<i class="fa fa-angle-right"></i>
 								</a>
 							@endif
@@ -217,11 +217,11 @@
 
 					</div>
 					<div class="grid-col grid-col-6 clear-fix">
-						<h2>Our Services</h2>
+						<h2>@lang('site.service')</h2>
 						@if($ourService)
 						<p>{{$ourService->meta_value}}</p>
 							@else
-						<p>Add text from admin panel</p>
+						<p>@lang('site.empty_content')</p>
 							@endif
 
 					</div>
@@ -243,14 +243,14 @@
 						<div class="counter-block">
 							<i class="flaticon-multiple"></i>
 							<div class="counter" data-count="{{$statistic->student}}">0</div>
-							<div class="counter-name">Students Enrolled</div>
+							<div class="counter-name">@lang('site.stat_students')</div>
 						</div>
 					</div>
 					<div class="grid-col grid-col-3 alt">
 						<div class="counter-block">
 							<i class="sms-icon-group"></i>
 							<div class="counter" data-count="{{$statistic->teacher}}">0</div>
-							<div class="counter-name">Teachers
+							<div class="counter-name">@lang('site.stat_teachers')
 							</div>
 						</div>
 					</div>
@@ -258,19 +258,19 @@
 						<div class="counter-block">
 							<i class="flaticon-college"></i>
 							<div class="counter" data-count="{{$statistic->graduate}}">0</div>
-							<div class="counter-name">Passing to College</div>
+							<div class="counter-name">@lang('site.stat_college')</div>
 						</div>
 					</div>
 					<div class="grid-col grid-col-3 alt">
 						<div class="counter-block">
 							<i class="flaticon-book1 last"></i>
 							<div class="counter" data-count="{{$statistic->books}}">0</div>
-							<div class="counter-name">Books</div>
+							<div class="counter-name">@lang('site.stat_books')</div>
 						</div>
 					</div>
 						@else
 						<div class="grid-col grid-col-3 alt">
-							<p>Add content from admin panel</p>
+							<p>@lang('site.empty_content')</p>
 						</div>
 						@endif
 				</div>
@@ -282,7 +282,7 @@
 		<!-- / section -->
 		<section class="fullwidth-background testimonial padding-section">
 			<div class="grid-row">
-				<h2 class="center-text">Testimonials</h2>
+				<h2 class="center-text">@lang('site.testimonials')</h2>
 				<div class="owl-carousel testimonials-carousel">
 					@foreach($testimonials as $test)
 					<div class="gallery-item">
@@ -310,13 +310,13 @@
 			</div>
 			<div class="them-mask bg-color-4"></div>
 			<div class="grid-row center-text">
-				<div class="font-style-1 margin-none">Get In Touch With Us</div>
+				<div class="font-style-1 margin-none">@lang('site.get_in')</div>
 				<div class="divider-mini"></div>
-				<p class="parallax-text">Drop your email here to get latest updates from us.</p>
+				<p class="parallax-text">@lang('site.drop_email')</p>
 				<form id="subscribeFrom" class="subscribe" action="{{URL::route('site.subscribe')}}" method="POST" enctype="multipart/form-data" >
 					@csrf
-					<input type="email" name="email" size="40" required placeholder="Enter your email" aria-required="true">
-					<input type="submit" value="Subscribe">
+					<input type="email" name="email" size="40" required placeholder="@lang('site.write_email')" aria-required="true">
+					<input type="submit" value="@lang('site.subscribe')">
 				</form>
 			</div>
 		</div>

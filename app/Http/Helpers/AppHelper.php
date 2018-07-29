@@ -3,6 +3,7 @@
 
  use GuzzleHttp\Client;
  use GuzzleHttp\Exception\RequestException;
+ use Illuminate\Support\Facades\App;
  use Illuminate\Support\Facades\Cache;
 
  class AppHelper
@@ -118,5 +119,37 @@
         return $result;
 
     }
+
+     /**
+      *
+      *    Input any number in Bengali and the following function will return the English number.
+      *
+      */
+
+     public static function en2bnNumber ($number)
+     {
+         $replace_array= array("১", "২", "৩", "৪", "৫", "৬", "৭", "৮", "৯", "০");
+         $search_array= array("1", "2", "3", "4", "5", "6", "7", "8", "9", "0");
+         $en_number = str_replace($search_array, $replace_array, $number);
+
+         return $en_number;
+     }
+     /**
+      *
+      *    Translate number according to application locale
+      *
+      */
+     public static function translateNumber($text)
+     {
+         $locale = App::getLocale();
+         if($locale == "bn"){
+             $transText = '';
+             foreach (str_split($text) as $letter){
+                 $transText .= self::en2bnNumber($letter);
+             }
+             return $transText;
+         }
+         return $text;
+     }
 
 }

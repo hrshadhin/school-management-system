@@ -1,15 +1,15 @@
 @extends('frontend.layouts.master')
-@section('pageTitle') Events @endsection
+@section('pageTitle') @lang('site.menu_events') @endsection
 
 @section('pageBreadCrumb')
 	<!-- page title -->
 	<div class="page-title">
 		<div class="grid-row">
-			<h1>Events</h1>
+			<h1>@lang('site.menu_events')</h1>
 			<nav class="bread-crumb">
-				<a href="{{URL::route('home')}}">Home</a>
+				<a href="{{URL::route('home')}}">@lang('site.menu_home')</a>
 				<i class="fa fa-long-arrow-right"></i>
-				<a href="#">Events</a>
+				<a href="#">@lang('site.menu_events')</a>
 			</nav>
 		</div>
 	</div>
@@ -58,7 +58,7 @@
 								<h3>{{$event->title}}</h3>
 								<p>
 									{!! substr($event->description,0,80) !!}
-									<a class="more" href="{{URL::route('site.event_details',$event->slug)}}">....<i class="fa fa-link"></i>More</a>
+									<a class="more" href="{{URL::route('site.event_details',$event->slug)}}">....<i class="fa fa-link"></i>@lang('site.more')</a>
 								</p>
 								@if($event->tags)
 								<div class="tags-post">
@@ -83,7 +83,7 @@
 						<i class="fa fa-angle-double-left"></i>
 					</a>
 					<a href="#" class="active">
-						{{$events->currentPage()}}
+						{{AppHelper::translateNumber($events->currentPage())}}
 					</a>
 					<a title="next" @if($events->nextPageUrl()) href="{{$events->nextPageUrl()}}" @else href="#"  class="disabled" @endif>
 						<i class="fa fa-angle-double-right"></i>

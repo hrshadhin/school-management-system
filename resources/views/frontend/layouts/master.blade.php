@@ -15,7 +15,16 @@
 
     <!-- Child Page css goes here  -->
     @yield("extraStyle")
-     <!-- Child Page css -->	
+     <!-- Child Page css -->
+
+    <!-- Locale specific font size for menu -->
+    @if(app()->getLocale() == 'bn')
+        <style>
+            .main-nav>ul>li {
+                font-size: 18px;
+            }
+        </style>
+        @endif
 </head>
 
 <body>

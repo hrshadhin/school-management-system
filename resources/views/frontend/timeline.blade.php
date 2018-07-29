@@ -1,15 +1,15 @@
 @extends('frontend.layouts.master')
-@section('pageTitle') Timeline @endsection
+@section('pageTitle') @lang('site.menu_timeline') @endsection
 
 @section('pageBreadCrumb')
 	<!-- page title -->
 	<div class="page-title">
 		<div class="grid-row">
-			<h1>Timeline</h1>
+			<h1>@lang('site.menu_timeline')</h1>
 			<nav class="bread-crumb">
-				<a href="{{URL::route('home')}}">Home</a>
+				<a href="{{URL::route('home')}}">@lang('site.menu_home')</a>
 				<i class="fa fa-long-arrow-right"></i>
-				<a href="#">Timeline</a>
+				<a href="#">@lang('site.menu_timeline')</a>
 			</nav>
 		</div>
 	</div>
@@ -21,7 +21,7 @@
 	<div class="page-content">
 		<!-- content  -->
 		<div class="grid-row">
-			<h2 class="center-text">Our Journey</h2>
+			<h2 class="center-text">@lang('site.timeline_title')</h2>
 			<div class="time-line">
 				@foreach($timeline as $line)
 					@php

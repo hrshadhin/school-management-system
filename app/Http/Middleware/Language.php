@@ -4,7 +4,6 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
 
 class Language
@@ -19,6 +18,7 @@ class Language
     public function handle($request, Closure $next)
     {
         $locale = Session::get('user_locale');
+//        Carbon::setLocale($locale);
         //set user wise locale
         App::setLocale($locale);
 
