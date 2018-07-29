@@ -68,10 +68,10 @@
 				<nav class="main-nav">
 					<ul class="clear-fix">
 						<li>
-							<a href="{{URL::route('home')}}" @if(Route::current()->getName() == "home") class="active" @endif>Home</a>
+							<a href="{{URL::route('home')}}" @if(Route::current()->getName() == "home") class="active" @endif>@lang('site.menu_home')</a>
 						</li>
 						<li>
-							<a href="{{URL::route('site.class_profile')}}" @if(Route::current()->getName() == "site.class_profile" || Route::current()->getName() == "site.class_details" ) class="active" @endif>Class</a>
+							<a href="{{URL::route('site.class_profile')}}" @if(Route::current()->getName() == "site.class_profile" || Route::current()->getName() == "site.class_details" ) class="active" @endif> @lang('site.menu_class') </a>
 						</li>
 						<li>
 							<a href="{{URL::route('site.teacher_profile')}}" @if(Route::current()->getName() == "site.teacher_profile") class="active" @endif>Teachers</a>
