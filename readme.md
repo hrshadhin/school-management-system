@@ -66,7 +66,6 @@ $ npm install
 ```
 $ npm run backend-prod
 ```
-or
 ```
 $ npm run frontend-prod
 ```
