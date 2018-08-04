@@ -63,7 +63,7 @@
         <li class="dropdown lang-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                 <img class="language-img" src="{{ asset('images/lang/english.png') }}"> 
-                <span class="label label-warning">3</span>
+                <span class="label label-warning">2</span>
             </a>
             <ul class="dropdown-menu">
                 <li class="header"> Language</li>            
@@ -87,16 +87,16 @@
                         </h4>
                     </a>
                 </li>
-                <li class="language" id="hindi">
-                    <a href="#">
-                        <div class="pull-left">
-                            <img src="{{ asset('images/lang/hindi.png') }}">
-                        </div>
-                        <h4>
-                          Hindi
-                        </h4>
-                    </a>
-                </li>               
+                {{--<li class="language" id="hindi">--}}
+                    {{--<a href="#">--}}
+                        {{--<div class="pull-left">--}}
+                            {{--<img src="{{ asset('images/lang/hindi.png') }}">--}}
+                        {{--</div>--}}
+                        {{--<h4>--}}
+                          {{--Hindi--}}
+                        {{--</h4>--}}
+                    {{--</a>--}}
+                {{--</li>               --}}
                 <li class="footer"></li>
             </ul>
         </li>                   
