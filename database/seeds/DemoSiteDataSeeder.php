@@ -247,7 +247,7 @@ class DemoSiteDataSeeder extends Seeder
             ]
         );
 
-        $fileName = '/3.jpg';
+        $fileName = '3.jpg';
         copy($originFilePath.$fileName, $destinationPath.$fileName);
     }
     private function testimonialData()
@@ -255,7 +255,8 @@ class DemoSiteDataSeeder extends Seeder
         $data = [
             'writer' => 'Shadhin',
             'comments' => 'Awesome Academy',
-            'avatar'    => null
+            'avatar'    => null,
+            'order'     => 1,
         ];
 
         Testimonial::create($data);
@@ -263,7 +264,8 @@ class DemoSiteDataSeeder extends Seeder
         $data = [
             'writer' => 'HRS',
             'comments' => 'Great school',
-            'avatar'    => null
+            'avatar'    => null,
+            'order'     => 2,
         ];
 
         Testimonial::create($data);
