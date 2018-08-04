@@ -43,8 +43,10 @@ $ git clone https://github.com/hrshadhin/school-management-system.git -b v2.0-de
 ```
 $ cd school-management-system
 ```
-
-**Change configuration according to your need and create Database**
+```
+$ cp .env.example .env
+```
+**Change configuration according to your need in ".env" file and create Database**
 ```
 $ composer install
 ```
