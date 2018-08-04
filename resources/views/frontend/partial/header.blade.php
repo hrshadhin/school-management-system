@@ -61,7 +61,8 @@
 			<div class="grid-row clear-fix">
 				<!-- logo -->
 				<a href="{{URL::route('home')}}" class="logo">
-					<img src="{{asset('storage/site/'.$siteInfo['logo'])}}" data-at2x="{{asset('storage/site/'.$siteInfo['logo2x'])}}" alt>
+
+					<img src="@if($siteInfo['logo']){{asset('storage/site/'.$siteInfo['logo'])}} @else{{ asset('frontend/img/logo.png') }}@endif" alt>
 					<h1>{{$siteInfo['name']}}</h1>
 				</a>
 				<!-- / logo -->

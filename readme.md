@@ -54,15 +54,19 @@ $ php artisan migrate
 ```
 $ php artisan db:seed
 ```
+**Load demo data**
+```
+$ php artisan db:seed --class DemoSiteDataSeeder
+```
 ```
 $ npm install
 ```
 ```
-$ npm run production
+$ npm run backend-prod
 ```
 or
 ```
-$ npm run development
+$ npm run frontend-prod
 ```
 ```
 $ php artisan serve
@@ -79,6 +83,7 @@ password: demo123
 # Screenshot
 ## Back Panel
 <img src="./screenshot/dashboard.png" >
+<img src="./screenshot/site-dashboard.png" >
 
 ## Front website
 <img src="./screenshot/home.png" >
