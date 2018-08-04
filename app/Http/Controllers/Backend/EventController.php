@@ -44,7 +44,7 @@ class EventController extends Controller
             'slider_3' => 'mimes:jpeg,jpg,png|max:2048|dimensions:min_width=1170,min_height=580',
             'description' => 'required',
             'tags' => 'max:255',
-            'tagcover_videos' => 'max:255'
+            'cover_videos' => 'max:255'
         ], $messages);
 
 
@@ -113,7 +113,7 @@ class EventController extends Controller
             'slider_3' => 'mimes:jpeg,jpg,png|max:2048|dimensions:min_width=1170,min_height=580',
             'description' => 'required',
             'tags' => 'max:255',
-            'tagcover_videos' => 'max:255'
+            'cover_videos' => 'max:255'
         ], $messages);
 
 

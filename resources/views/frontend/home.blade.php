@@ -174,7 +174,7 @@
 								<br/>
 								<br/>
 								<br/>
-								<a href="{{$aboutContent->video_site_link}}m" class="cws-button bt-color-3 border-radius alt icon-right float-right">@lang('site.about_us_more2')
+								<a href="{{$aboutContent->video_site_link}}" class="cws-button bt-color-3 border-radius alt icon-right float-right">@lang('site.about_us_more2')
 									<i class="fa fa-angle-right"></i>
 								</a>
 							@endif
