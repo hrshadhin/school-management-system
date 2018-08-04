@@ -17,7 +17,7 @@
             Change Password
         </h1>
         <ol class="breadcrumb">
-            <li><a href="{{URL::route('site.dashboard')}}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+            <li><a href="{{URL::route('user.dashboard')}}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
             <li class="active">Change Password</li>
         </ol>
     </section>

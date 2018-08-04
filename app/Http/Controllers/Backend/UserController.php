@@ -58,7 +58,7 @@ class UserController extends Controller
 
         if (Auth::attempt(['username' => $username, 'password' => $password], $remember)) {
             session(['user_session_sha1' => AppHelper::getUserSessionHash()]);
-            return redirect()->intended('site/dashboard')->with('success', 'Welcome to admin panel.');
+            return redirect()->intended('dashboard')->with('success', 'Welcome to admin panel.');
 
         }
         return redirect()->route('login')->with('error', 'Your email/password combination was incorrect OR account disabled!');
