@@ -42,7 +42,6 @@
         "jquery-ui": "^1.12.1",
         "jquery-validation": "^1.17.0",
         "moment": "^2.18.1",
-        "pace": "0.0.4",
         "popper.js": "^1.14.3",
         "remove": "^0.1.5",
         "select2": "^4.0.3",

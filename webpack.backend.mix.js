@@ -34,6 +34,9 @@ mix.js('resources/assets/backend/js/app.js', 'public/js')
     .js([
         'resources/assets/backend/js/dashboard.js',
     ], 'public/js/dashboard.js')
+    // .js([
+    //     'resources/assets/backend/js/pace.js',
+    // ], 'public/js/pace.js')
     .js([
         'resources/assets/backend/js/adminlte.js',
         'resources/assets/backend/js/theme_settings.js',
@@ -52,6 +55,7 @@ mix.js('resources/assets/backend/js/app.js', 'public/js')
         'resources/assets/backend/css/bootstrap-datetimepicker.min.css'
     ], 'public/css/theme.css')
     .styles('resources/assets/backend/css/site-dashboard.css', 'public/css/site-dashboard.css')
+    .styles('resources/assets/backend/css/pace.css', 'public/css/pace.css')
     .autoload({
         jquery: ['$', 'window.jQuery', 'jQuery', 'jquery'],
         moment: ['window.moment', 'moment'],
@@ -69,6 +73,7 @@ mix.options({
 
 // copy non processing files to public path
 mix.copy('resources/assets/backend/js/bootstrap3-wysihtml5.all.min.js', 'public/js/editor.js');
+mix.copy('resources/assets/backend/js/pace.js', 'public/js/pace.js');
 mix.copyDirectory('resources/assets/backend/images', 'public/images');
 
 
