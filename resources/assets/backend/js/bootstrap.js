@@ -51,7 +51,7 @@ window.swal = require('sweetalert2');
 // require( 'bootstrap-daterangepicker');
 // require( 'font-awesome');
 // require( 'inputmask');
-// require( 'pace');
+
 // require( 'select2');
 // require( 'slimscroll');
 // require( 'jszip' );
