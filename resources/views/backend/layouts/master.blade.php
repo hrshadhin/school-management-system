@@ -13,6 +13,9 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Favicon png -->
     <link rel="shortcut icon" href="@if($siteInfo['favicon']){{asset('storage/site/'.$siteInfo['favicon'])}} @else{{ asset('images/favicon.png') }}@endif">
+    <!-- Pace loading -->
+    <script src="{{ asset(mix('/js/pace.js')) }}"></script>
+    <link href="{{ asset(mix('/css/pace.css')) }}" rel="stylesheet" type="text/css">
 
     <!-- vendor libraries CSS -->
     <link href="{{ asset(mix('/css/vendor.css')) }}" rel="stylesheet" type="text/css">
@@ -39,6 +42,9 @@
 </head>
 
 <body class="hold-transition hold-transition skin-blue sidebar-mini @yield('bodyCssClass')">
+<div class="overlay-loader">
+<div class="loader" ></div>
+</div>
 <!-- Site wrapper -->
 <div class="wrapper">
     <!-- page header -->
