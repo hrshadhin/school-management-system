@@ -77,7 +77,8 @@ username: admin\
 password: demo123
 
 # Demo Live Link
-url: http://sms.hrshadhin.me \
+website url: http://sms.hrshadhin.me \
+app url: http://sms.hrshadhin.me/login \
 username: admin\
 password: demo123
 
