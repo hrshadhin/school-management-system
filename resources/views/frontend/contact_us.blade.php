@@ -1,6 +1,11 @@
 @extends('frontend.layouts.master')
 @section('pageTitle') @lang('site.menu_contact_us') @endsection
 
+@section('extraStyle')
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.3/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
+		  crossorigin="" />
+@endsection
+
 @section('pageBreadCrumb')
 	<!-- page title -->
 	<div class="page-title">
@@ -82,43 +87,21 @@
 @endsection
 
 @section('extraScript')
+	<script src="https://unpkg.com/leaflet@1.3.3/dist/leaflet.js" integrity="sha512-tAGcCfR4Sc5ZP5ZoVz0quoZDYX5aCtEm/eu1KhSLj2c9eFrylXZknQYmxUssFaVJKvvc0dJQixhGjG2yXWiV9Q=="
+			crossorigin=""></script>
 	<script>
-        var marker;
         @php
 		 $latLong = explode(',',$latlong->meta_value);
         @endphp
-        function initMap() {
-            var latLong = { lat: @if(isset($latLong[0])) {{$latLong[0]}} @else 23.7340076 @endif, lng: @if(isset($latLong[1])) {{$latLong[1]}} @else 90.3841824 @endif };
-            var map = new google.maps.Map(document.getElementById('map'), {
-                zoom: 19,
-                center: latLong
-            });
+        var map = L.map('map').setView([@if(isset($latLong[0])) {{$latLong[0]}} @else 23.7340076 @endif, @if(isset($latLong[1])) {{$latLong[1]}} @else 90.3841824 @endif], 19);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
 
-            var contentString = '<div id="content">' +
-                '<div id="siteNotice">' +
-                '</div>' +
-                '<h1 id="firstHeading" class="firstHeading">{{$siteInfo["name"]}}</h1>' +
-                '<div id="bodyContent">' +
-                '<p>{{$address->meta_value}}</p>' +
-                '</div>' +
-                '</div>';
-
-            var infowindow = new google.maps.InfoWindow({
-                content: contentString
-            });
-
-            var marker = new google.maps.Marker({
-                position: latLong,
-                map: map,
-                title: '{{$siteInfo["name"]}}'
-            });
-            marker.addListener('click', function () {
-                infowindow.open(map, marker);
-            });
-
-        }
-	</script>
-	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB2XNtW7LbQh726PirpG7QH2Za2HVzrptk&callback=initMap">
+        var contentString = '<b>{{$siteInfo["name"]}}</b><br><span>{{$address->meta_value}}</span>';
+        L.marker([@if(isset($latLong[0])) {{$latLong[0]}} @else 23.7340076 @endif, @if(isset($latLong[1])) {{$latLong[1]}} @else 90.3841824 @endif]).addTo(map)
+            .bindPopup(contentString)
+            .openPopup();
 	</script>
 
 @endsection
