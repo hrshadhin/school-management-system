@@ -157,7 +157,7 @@ class GoogleAnaylytics {
             renderWeekOverWeekChart(data.ids);
             renderYearOverYearChart(data.ids);
             renderTopBrowsersChart(data.ids);
-            renderTopDeviceChart(data.ids);
+            renderTopCountriesChart(data.ids);
 
             /**
              * Draw the a chart.js line chart with data from the specified view that
@@ -310,13 +310,15 @@ class GoogleAnaylytics {
              * show the top 5 browsers over the past seven days.
              */
             function renderTopBrowsersChart(ids) {
-
+                var now = window.moment();
                 query({
                     'ids': ids,
                     'dimensions': 'ga:browser',
                     'metrics': 'ga:pageviews',
                     'sort': '-ga:pageviews',
-                    'max-results': 5
+                    'max-results': 5,
+                    'start-date': window.moment(now).date(1).month(0).format('YYYY-MM-DD'),
+                    'end-date': window.moment(now).format('YYYY-MM-DD')
                 })
                     .then(function(response) {
 
@@ -352,13 +354,14 @@ class GoogleAnaylytics {
              * compares sessions from mobile, desktop, and tablet over the past seven
              * days.
              */
-            function renderTopDeviceChart(ids) {
+            function renderTopCountriesChart(ids) {
                 var now = window.moment();
                 query({
                     'ids': ids,
-                    'dimensions': 'ga:deviceCategory',
+                    'dimensions': 'ga:country',
                     'metrics': 'ga:users',
-                    'max-results': 3,
+                    'sort': '-ga:users',
+                    'max-results': 5,
                     'start-date': window.moment(now).date(1).month(0).format('YYYY-MM-DD'),
                     'end-date': window.moment(now).format('YYYY-MM-DD')
                 })
@@ -368,8 +371,8 @@ class GoogleAnaylytics {
                         let chartData = [];
                         let labels = [];
                         response.rows.forEach(function(row, i) {
-                            var percentage = parseFloat((row[1]/parseInt(totalUsers)*100).toFixed(1));
-                            chartData.push(percentage);
+                            // var percentage = parseFloat((row[1]/parseInt(totalUsers)*100).toFixed(1));
+                            chartData.push(row[1]);
                             labels.push(row[0]);
                         });
                         data = {
@@ -378,7 +381,9 @@ class GoogleAnaylytics {
                                 backgroundColor: [
                                     'rgb(66, 133, 244)',
                                     'rgb(104, 188, 237)',
-                                    'rgba(220, 57, 18, 0.85)'
+                                    'rgba(220, 57, 18, 0.85)',
+                                    '#E2EAE9',
+                                    '#F7464A',
                                 ]
                             }],
                             labels: labels,
@@ -386,18 +391,18 @@ class GoogleAnaylytics {
                         };
                         Chart.Doughnut(makeCanvas('chart-4-container'),{
                             data:data,
-                            options: {
-                                tooltips: {
-                                    callbacks: {
-                                        label: function (tooltipItem, data) {
-                                            var dataset = data.datasets[tooltipItem.datasetIndex];
-                                            var currentValue = dataset.data[tooltipItem.index];
-                                            var tooltipLabel = data.labels[tooltipItem.index];
-                                            return tooltipLabel + ': '+ currentValue + "%";
-                                        }
-                                    }
-                                }
-                            }
+                            // options: {
+                            //     tooltips: {
+                            //         callbacks: {
+                            //             label: function (tooltipItem, data) {
+                            //                 var dataset = data.datasets[tooltipItem.datasetIndex];
+                            //                 var currentValue = dataset.data[tooltipItem.index];
+                            //                 var tooltipLabel = data.labels[tooltipItem.index];
+                            //                 return tooltipLabel + ': '+ currentValue + "%";
+                            //             }
+                            //         }
+                            //     }
+                            // }
                         });
 
                     });

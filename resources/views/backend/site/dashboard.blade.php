@@ -124,8 +124,8 @@
                             <div class="col-md-6">
                                 <div class="Chartjs">
                                     <header class="Titles">
-                                        <h1 class="Titles-main">Top Devices This Year</h1>
-                                        <div class="Titles-sub">By sessions</div>
+                                        <h1 class="Titles-main">Top Countries This Year</h1>
+                                        <div class="Titles-sub">By user</div>
                                     </header>
                                     <figure class="Chartjs-figure" id="chart-4-container"></figure>
                                 </div>
