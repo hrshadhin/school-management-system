@@ -11,8 +11,8 @@
 				</a>
 			</address>
 			<div class="header-top-panel">
-				<a href="{{route('login')}}" class="fa fa-user login-icon"></a>
-				<div id="top_social_links_wrapper">
+				<a title="login" href="{{route('login')}}" class="fa fa-sign-in login-icon"></a>
+				<div title="social links" id="top_social_links_wrapper">
 					<div class="share-toggle-button">
 						<i class="share-icon fa fa-share-alt"></i>
 					</div>
@@ -32,7 +32,7 @@
 					</div>
 
 				</div>
-				<div id="top_lang_links_wrapper">
+				<div title="language" id="top_lang_links_wrapper">
 					<div class="lang-toggle-button">
 						<i class="fa fa-language"></i>
 					</div>
