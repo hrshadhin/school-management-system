@@ -22,7 +22,8 @@
         "laravel-mix": "^2.0",
         "lodash": "^4.17.10",
         "purify-css": "^1.2.5",
-        "purifycss-webpack": "^0.7.0"
+        "purifycss-webpack": "^0.7.0",
+        "script-loader": "^0.7.2"
     },
     "dependencies": {
         "bootstrap": "^3.3.7",
@@ -46,6 +47,7 @@
         "remove": "^0.1.5",
         "select2": "^4.0.3",
         "slimscroll": "^0.9.1",
-        "sweetalert2": "^7.24.1"
+        "sweetalert2": "^7.24.1",
+        "toastr": "^2.1.4"
     }
 }

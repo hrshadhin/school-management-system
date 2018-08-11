@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Session;
 |
 */
 
-
+//front website routes
 Route::group(
     ['namespace' => 'Frontend', 'middleware' => ['web']], function () {
     Route::get('/', 'HomeController@home')->name('home');
@@ -141,6 +141,28 @@ Route::group(
     Route::post('site/analytics','SiteController@analytics')
         ->name('site.analytics');
 
+    // application settings routes
+    Route::get('settings/institute','SettingsController@institute')
+        ->name('settings.institute');
+    Route::post('settings/institute','SettingsController@institute')
+        ->name('settings.institute');
+
+    // administrator routes
+        //academic year
+    Route::get('administrator/academic_year','AdministratorController@academicYearIndex')
+        ->name('administrator.academic_year');
+    Route::post('administrator/academic_year','AdministratorController@academicYearIndex')
+        ->name('administrator.academic_year');
+    Route::get('administrator/academic_year/create','AdministratorController@academicYearCru')
+        ->name('administrator.academic_year_create');
+    Route::post('administrator/academic_year/create','AdministratorController@academicYearCru')
+        ->name('administrator.academic_year_store');
+    Route::get('administrator/academic_year/edit/{id}','AdministratorController@academicYearCru')
+        ->name('administrator.academic_year_edit');
+    Route::post('administrator/academic_year/update/{id}','AdministratorController@academicYearCru')
+        ->name('administrator.academic_year_update');
+    Route::post('administrator/academic_year/status/{id}','AdministratorController@academicYearChangeStatus')
+        ->name('administrator.academic_year_status');
 
     //dev routes
     Route::get('/make-link',function(){
@@ -156,7 +178,7 @@ Route::group(
 }
 );
 
-
+//change website locale
 Route::get(
     '/set-locale/{lang}', function ($lang) {
         //set user wanted locale to session

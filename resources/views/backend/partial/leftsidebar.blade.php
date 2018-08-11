@@ -12,6 +12,54 @@
 
       <li class="treeview">
         <a href="#">
+          <i class="fa fa-user-secret"></i>
+          <span>Administrator</span>
+          <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+        </a>
+        <ul class="treeview-menu">
+          <li>
+            <a href="{{ URL::route('administrator.academic_year') }}">
+              <i class="fa fa-calendar-plus-o"></i> <span>Academic Year</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+
+      <li class="treeview">
+        <a href="#">
+          <i class="fa fa-cogs"></i>
+          <span>Settings</span>
+          <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+        </a>
+        <ul class="treeview-menu">
+          <li>
+            <a href="{{ URL::route('settings.institute') }}">
+              <i class="fa fa-building"></i> <span>Institute</span>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="fa fa-mobile"></i><span>SMS</span>
+            </a>
+          </li>
+          {{--<li>--}}
+            {{--<a href="#">--}}
+              {{--<i class="fa fa-envelope"></i><span>Email</span>--}}
+            {{--</a>--}}
+          {{--</li>--}}
+          {{--<li>--}}
+            {{--<a href="#">--}}
+              {{--<i class="fa fa-share-alt"></i><span>Miscellaneous</span>--}}
+            {{--</a>--}}
+          {{--</li>--}}
+        </ul>
+      </li>
+      <li class="treeview">
+        <a href="#">
           <i class="fa fa-globe"></i>
           <span>Site</span>
           <span class="pull-right-container">
@@ -94,10 +142,6 @@
           </li>
         </ul>
       </li>
-
-
-
-
     </ul>
   </section>
   <!-- /.sidebar -->

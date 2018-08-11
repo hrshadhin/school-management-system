@@ -419,9 +419,10 @@ $(function () {
     //sidebar menu active setter 
     var getUrl = window.location;
     var baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
+    var baseSubUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1] + "/" + getUrl.pathname.split('/')[2];
     var fullUrl = getUrl.href;
     $(".sidebar-menu li a").each(function () {
-        if ($(this).attr("href") == fullUrl || $(this).attr("href") == baseUrl || $(this).attr("href") == '') {
+        if ($(this).attr("href") == fullUrl || $(this).attr("href") == baseUrl || $(this).attr("href") == baseSubUrl || $(this).attr("href") == '') {
             $(".sidebar-menu li").removeClass('active');
             $(this).parent().parent().parents('li').addClass("active");
             $(this).parent().addClass("active");

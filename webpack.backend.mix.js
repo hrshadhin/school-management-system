@@ -23,6 +23,7 @@ mix.webpackConfig({
             // The path to directory which should be handled by this plugin
             /moment[\/\\]locale/,
             /fullcalendar[\/\\]dist[\/\\]locale/,
+            /select2[\/\\]dist[\/\\]js[\/\\]i18n/,
         )
     ],
 });
@@ -40,7 +41,8 @@ mix.js('resources/assets/backend/js/app.js', 'public/js')
     .js([
         'resources/assets/backend/js/adminlte.js',
         'resources/assets/backend/js/theme_settings.js',
-        'resources/assets/backend/js/bootstrap-datetimepicker.min.js'
+        'resources/assets/backend/js/bootstrap-datetimepicker.min.js',
+        'resources/assets/backend/js/bootstrap-toggle.min.js',
     ], 'public/js/theme.js')
     .extract([
         'jquery', 'bootstrap', 'icheck', 'jquery-validation', 'slimscroll', 'fastclick',
@@ -52,7 +54,8 @@ mix.js('resources/assets/backend/js/app.js', 'public/js')
         'resources/assets/backend/css/AdminLTE.css',
         'resources/assets/backend/css/_all-skins.css',
         'resources/assets/backend/css/bootstrap3-wysihtml5.min.css',
-        'resources/assets/backend/css/bootstrap-datetimepicker.min.css'
+        'resources/assets/backend/css/bootstrap-datetimepicker.min.css',
+        'resources/assets/backend/css/bootstrap-toggle.min.css'
     ], 'public/css/theme.css')
     .styles('resources/assets/backend/css/site-dashboard.css', 'public/css/site-dashboard.css')
     .styles('resources/assets/backend/css/pace.css', 'public/css/pace.css')

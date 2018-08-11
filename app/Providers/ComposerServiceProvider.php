@@ -26,6 +26,7 @@ class ComposerServiceProvider extends ServiceProvider
                 'backend.user.forgot',
                 'backend.user.reset',
                 'backend.user.lock',
+                'backend.settings.institute',
                 'frontend.contact_us'
             ],
             'App\Http\ViewComposers\BackendMasterComposer'
