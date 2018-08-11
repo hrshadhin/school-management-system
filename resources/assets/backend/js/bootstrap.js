@@ -46,13 +46,32 @@ require('jquery-validation');
 require('slimscroll');
 require('fastclick');
 window.swal = require('sweetalert2');
+require( 'select2');
+import toastr from 'toastr';
 
-// require( 'bootstrap-datepicker');
-// require( 'bootstrap-daterangepicker');
-// require( 'font-awesome');
+/**
+ * Toastr config
+ */
+window.toastr = toastr;
+window.toastr.options = {
+    "closeButton": false,
+    "debug": false,
+    "newestOnTop": true,
+    "progressBar": true,
+    "positionClass": "toast-top-right",
+    "preventDuplicates": false,
+    "onclick": null,
+    "showDuration": "300",
+    "hideDuration": "1000",
+    "timeOut": "5000",
+    "extendedTimeOut": "1000",
+    "showEasing": "swing",
+    "hideEasing": "linear",
+    "showMethod": "fadeIn",
+    "hideMethod": "fadeOut"
+};
+
 // require( 'inputmask');
-
-// require( 'select2');
 // require( 'slimscroll');
 // require( 'jszip' );
 // require( 'jszip' );

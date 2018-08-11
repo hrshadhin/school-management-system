@@ -9,6 +9,12 @@ class BackendMasterComposer
 {
     public function compose(View $view)
     {
+        $languages = [
+            'en' => 'English',
+            'bn' => 'Bangla',
+        ];
+        // todo: need to chagne application setting dynamic
+        $locale = 'en';
 
         $siteInfo = [
             'name' => '',
@@ -46,6 +52,8 @@ class BackendMasterComposer
         $view->with('maintainer', 'ShanixLab');
         $view->with('maintainer_url', 'http://shanixlab.com');
         $view->with('siteInfo', $siteInfo);
+        $view->with('languages', $languages);
+        $view->with('locale', $locale);
         $view->with('idc', 'fa63573e454f8fd86fe6a2c49eb60a1d2691b8fe');
     }
 }

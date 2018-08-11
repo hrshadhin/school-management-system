@@ -359,36 +359,27 @@ export default class Site {
 
     }
     static deleteThumnailImage(that) {
-        var id = $(that).attr('data-id');
-        postUrl = postUrl.replace(/\.?0+$/,id);
-        axios.post(postUrl,{})
+        let id = $(that).attr('data-id');
+        let newpostUrl = postUrl.replace(/\.?0+$/,id);
+        axios.post(newpostUrl,{})
             .then((response)=>{
                 if(response.data.success){
                     $(that).parents('div.thumbnail').remove();
+                    toastr.success(response.data.message);
                 }
                 else{
-                    var status = response.statusText;
-                    swal({
-                        type: 'error',
-                        title: 'Oops...',
-                        text: status,
-                        footer: ''
-                    });
+                    let status = response.data.message;
+                    toastr.error(status);
                 }
             }).catch((error)=>{
-            var status = error.statusText;
-            swal({
-                type: 'error',
-                title: 'Oops...',
-                text: status,
-                footer: ''
-            })
+            let status = error.statusText;
+            toastr.error(status);
         });
 
     }
     static galleryInit() {
         $('.thumbnail .remove-image').on('click', function () {
-            var that = this;
+            let that = this;
             swal({
                 title: 'Are you sure?',
                 text: 'You will not be able to recover this record!',

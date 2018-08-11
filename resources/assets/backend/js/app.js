@@ -32,3 +32,9 @@ window.Login = Login;
 
 import Site from './Site';
 window.Site = Site;
+
+import Settings from './Settings';
+window.Settings = Settings;
+
+import Administrator from './Administrator';
+window.Administrator = Administrator;

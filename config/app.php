@@ -161,6 +161,8 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\ComposerServiceProvider::class,
         // Hrshadhin\Userstamps\UserstampsServiceProvider::class,
+        Collective\Html\HtmlServiceProvider::class,
+
 
     ],
 
@@ -211,6 +213,8 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'AppHelper' => App\Http\Helpers\AppHelper::class,
+        'Form' => Collective\Html\FormFacade::class,
+        'Html' => Collective\Html\HtmlFacade::class,
 
     ],
 

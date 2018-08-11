@@ -62,41 +62,23 @@
           
         <li class="dropdown lang-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                <img class="language-img" src="{{ asset('images/lang/english.png') }}"> 
+                <img class="language-img" src="{{ asset('images/lang/'.$locale.'.png') }}">
                 <span class="label label-warning">2</span>
             </a>
             <ul class="dropdown-menu">
-                <li class="header"> Language</li>            
+                <li class="header"> Language</li>
+                @foreach($languages as $key => $lang)
                 <li class="language" id="bangla">
                     <a href="#">
                         <div class="pull-left">
-                            <img src="{{ asset('images/lang/bangla.png') }}">
+                            <img src="{{ asset('images/lang/'.$key.'.png') }}">
                         </div>
                         <h4>
-                            Bangla
-                        </h4>
-                    </a>
-                </li>                     
-                <li class="language" id="english">
-                    <a href="#">
-                        <div class="pull-left">
-                            <img src="{{ asset('images/lang/english.png') }}">
-                        </div>
-                        <h4>
-                            English  <i class="glyphicon glyphicon-ok green pull-right"></i>  
+                            {{$lang}} @if($locale == $key) <i class="glyphicon glyphicon-ok green pull-right"></i> @endif
                         </h4>
                     </a>
                 </li>
-                {{--<li class="language" id="hindi">--}}
-                    {{--<a href="#">--}}
-                        {{--<div class="pull-left">--}}
-                            {{--<img src="{{ asset('images/lang/hindi.png') }}">--}}
-                        {{--</div>--}}
-                        {{--<h4>--}}
-                          {{--Hindi--}}
-                        {{--</h4>--}}
-                    {{--</a>--}}
-                {{--</li>               --}}
+                @endforeach
                 <li class="footer"></li>
             </ul>
         </li>                   
