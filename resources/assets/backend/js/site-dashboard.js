@@ -316,7 +316,7 @@ class GoogleAnaylytics {
                     'dimensions': 'ga:browser',
                     'metrics': 'ga:pageviews',
                     'sort': '-ga:pageviews',
-                    'max-results': 5,
+                    // 'max-results': 5,
                     'start-date': window.moment(now).date(1).month(0).format('YYYY-MM-DD'),
                     'end-date': window.moment(now).format('YYYY-MM-DD')
                 })
@@ -337,6 +337,8 @@ class GoogleAnaylytics {
                                     window.chartColors.yellow,
                                     window.chartColors.green,
                                     window.chartColors.blue,
+                                    window.chartColors.purple,
+                                    window.chartColors.grey
                                 ]
                             }],
                             labels: labels,
@@ -361,7 +363,7 @@ class GoogleAnaylytics {
                     'dimensions': 'ga:country',
                     'metrics': 'ga:users',
                     'sort': '-ga:users',
-                    'max-results': 5,
+                    // 'max-results': 5,
                     'start-date': window.moment(now).date(1).month(0).format('YYYY-MM-DD'),
                     'end-date': window.moment(now).format('YYYY-MM-DD')
                 })
@@ -370,21 +372,35 @@ class GoogleAnaylytics {
                         $('.totalVisitors').text(totalUsers);
                         let chartData = [];
                         let labels = [];
+                        let colors = [
+                            'rgb(255, 99, 132)',
+                            'rgb(255, 159, 64)',
+                            'rgb(255, 205, 86)',
+                            'rgb(75, 192, 192)',
+                            'rgb(54, 162, 235)',
+                            'rgb(153, 102, 255)',
+                            'rgb(231,233,237)'
+                        ];
+                        let bgColors = [];
+                        let colorCounter = 0;
+                        
                         response.rows.forEach(function(row, i) {
                             // var percentage = parseFloat((row[1]/parseInt(totalUsers)*100).toFixed(1));
                             chartData.push(row[1]);
                             labels.push(row[0]);
+                            //
+                            bgColors.push(colors[colorCounter]);
+                            colorCounter++;
+                            if(colorCounter>=colors.length){
+                                colorCounter =0;
+                            }
+
                         });
+
                         data = {
                             datasets: [{
                                 data: chartData,
-                                backgroundColor: [
-                                    'rgb(66, 133, 244)',
-                                    'rgb(104, 188, 237)',
-                                    'rgba(220, 57, 18, 0.85)',
-                                    '#E2EAE9',
-                                    '#F7464A',
-                                ]
+                                backgroundColor: bgColors
                             }],
                             labels: labels,
 
