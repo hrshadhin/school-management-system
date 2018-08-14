@@ -43,4 +43,9 @@ class User extends Authenticatable
     {
         $this->notify(new ResetPasswordNotification($token));
     }
+
+    public function employee()
+    {
+        return $this->hasOne('App\Employee');
+    }
 }
