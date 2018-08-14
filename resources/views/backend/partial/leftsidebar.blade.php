@@ -9,7 +9,48 @@
           <i class="fa fa-dashboard"></i> <span>Dashboard</span>
         </a>
       </li>
+      <li>
+        <a href="{{ URL::route('user.dashboard') }}">
+          <i class="fa icon-student"></i> <span>Students</span>
+        </a>
+      </li>
+      <li>
+        <a href="{{ URL::route('user.dashboard') }}">
+          <i class="fa icon-teacher"></i> <span>Teachers</span>
+        </a>
+      </li>
+      <li class="treeview">
+        <a href="#">
+          <i class="fa icon-academicmain"></i>
+          <span>Academic</span>
+          <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+        </a>
+        <ul class="treeview-menu">
+          <li>
+            <a href="{{ URL::route('settings.institute') }}">
+              <i class="fa fa-sitemap"></i> <span>Class</span>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="fa fa-cubes"></i> <span>Section</span>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="fa icon-subject"></i> <span>Subject</span>
+            </a>
+          </li>
+          {{--<li>--}}
+            {{--<a href="#">--}}
+              {{--<i class="fa fa-clock-o"></i><span>Routine</span>--}}
+            {{--</a>--}}
+          {{--</li>--}}
 
+        </ul>
+      </li>
       <li class="treeview">
         <a href="#">
           <i class="fa fa-user-secret"></i>
@@ -22,6 +63,36 @@
           <li>
             <a href="{{ URL::route('administrator.academic_year') }}">
               <i class="fa fa-calendar-plus-o"></i> <span>Academic Year</span>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="fa fa-user-md"></i> <span>System Admin</span>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="fa fa-eye-slash"></i> <span>Reset Password</span>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="fa fa-users"></i> <span>Role</span>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="fa fa-user-times"></i> <span>Permission</span>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="fa fa-download"></i> <span>Backup</span>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="fa fa-upload"></i> <span>Restore</span>
             </a>
           </li>
         </ul>
@@ -43,14 +114,25 @@
           </li>
           <li>
             <a href="#">
-              <i class="fa fa-mobile"></i><span>SMS</span>
+              <i class="fa fa-file-text"></i> <span>SMS</span>
             </a>
           </li>
-          {{--<li>--}}
-            {{--<a href="#">--}}
-              {{--<i class="fa fa-envelope"></i><span>Email</span>--}}
-            {{--</a>--}}
-          {{--</li>--}}
+          <li>
+            <a href="#">
+              <i class="fa fa-envelope"></i> <span>Email</span>
+            </a>
+          </li>
+
+          <li>
+            <a href="#">
+              <i class="fa fa-certificate"></i> <span>Certificates</span>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="fa fa-files-o"></i> <span>Reports</span>
+            </a>
+          </li>
           {{--<li>--}}
             {{--<a href="#">--}}
               {{--<i class="fa fa-share-alt"></i><span>Miscellaneous</span>--}}
