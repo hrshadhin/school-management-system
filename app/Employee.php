@@ -56,6 +56,14 @@ class Employee extends Model
         return Arr::get($this->employee_type, $value);
     }
 
+    public function class()
+    {
+        return $this->hasMany('App\IClass', 'teacher_id');
+    }
 
+    public function section()
+    {
+        return $this->hasMany('App\Section', 'teacher_id');
+    }
 
 }
