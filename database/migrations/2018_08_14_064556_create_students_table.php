@@ -15,31 +15,43 @@ class CreateStudentsTable extends Migration
     {
         Schema::create('students', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('name');
+            $table->string('dob',10);
+            $table->enum('gender', [1,2])->default(1);
+            $table->string('religion')->nullable();
+            $table->string('blood_group',10)->nullable();
+            $table->string('nationality',50)->nullable();
+            $table->string('photo')->nullable();
+            $table->string('email',100)->nullable();
+            $table->string('phone_no')->nullable();
+            $table->string('extra_activity')->nullable();
+            $table->string('note',500)->nullable();
+            $table->string('father_name')->nullable();
+            $table->string('father_phone_no',15)->nullable();
+            $table->string('mother_name')->nullable();
+            $table->string('mother_phone_no',15)->nullable();
+            $table->string('guardian')->nullable();
+            $table->string('guardian_phone_no',15)->nullable();
+            $table->string('present_address',500)->nullable();
+            $table->string('permanent_address',500);
+            $table->enum('status', [0,1])->default(0);
+
+
             $table->timestamps();
+            $table->softDeletes();
+            $table->userstamps();
 
-            //name
-            //guardian later feature
-            // dob
-            // gender
-            //blood gorup
-            //geigion
-            // email
-            // phone
-            // addre
-            // country
-            //class
-            //section
-            // Group
-            // regi no
-            // roll no
-            // photo
-            //extra
-            // remarks
-            // user account create
+            // todo: user account create
 
-            // need registration table
-            // need student info log table
-
+        });
+        Schema::create('student_info_log', function (Blueprint $table) {
+            $table->unsignedInteger('student_id');
+            $table->unsignedInteger('academic_year_id');
+            $table->string('meta_key');
+            $table->text('meta_value');
+            $table->dateTime('created_at');
+            $table->foreign('student_id')->references('id')->on('students');
+            $table->foreign('academic_year_id')->references('id')->on('academic_years');
         });
     }
 
@@ -50,6 +62,7 @@ class CreateStudentsTable extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('student_info_log');
         Schema::dropIfExists('students');
     }
 }

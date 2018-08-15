@@ -22,9 +22,9 @@ class CreateEmployeesTable extends Migration
             $table->string('dob',10);
             $table->enum('gender', [1,2])->default(1);
             $table->string('religion')->nullable();
-            $table->string('email',100);
-            $table->string('phone',15)->nullable();
-            $table->string('address')->nullable();
+            $table->string('email',100)->nullable();
+            $table->string('phone_no',15)->nullable();
+            $table->string('address',500)->nullable();
             $table->string('joining_date',10);
             $table->string('photo')->nullable();
             $table->enum('status', [0,1])->default(0);

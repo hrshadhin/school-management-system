@@ -2,6 +2,8 @@
 
 use Illuminate\Database\Seeder;
 use App\User;
+use App\UserRole;
+use App\Http\Helpers\AppHelper;
 
 class UsersTableSeeder extends Seeder
 {
@@ -12,7 +14,7 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        User::create(
+        $user= User::create(
             [
                 'name' => 'Mr. admin',
                 'username' => 'admin',
@@ -21,5 +23,12 @@ class UsersTableSeeder extends Seeder
                 'remember_token' => null,
             ]
         );
+
+       UserRole::create(
+           [
+               'user_id' => $user->id,
+               'role_id' => AppHelper::USER_ADMIN
+           ]
+       );
     }
 }
