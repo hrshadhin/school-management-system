@@ -35,7 +35,7 @@
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body margin-top-20">
-                        <table id="listTable" class="table table-bordered table-striped list_view_table">
+                        <table id="listTable2" class="table table-bordered table-striped list_view_table">
                             <thead>
                             <tr>
                                 <th width="5%">#</th>
@@ -107,6 +107,36 @@
             window.postUrl = '{{URL::Route("administrator.academic_year_status", 0)}}';
             Administrator.academicYearInit();
             initDeleteDialog();
+           var table =  $('#listTable2').DataTable({
+                lengthChange: false,
+               // dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend:    'copyHtml5',
+                        text:      '<i class="fa fa-files-o"></i>',
+                        titleAttr: 'Copy'
+                    },
+                    {
+                        extend:    'excelHtml5',
+                        text:      '<i class="fa fa-file-excel-o"></i>',
+                        titleAttr: 'Excel'
+                    },
+                    // {
+                    //     extend:    'csvHtml5',
+                    //     text:      '<i class="fa fa-file-text-o"></i>',
+                    //     titleAttr: 'CSV'
+                    // },
+                    {
+                        extend:    'pdfHtml5',
+                        text:      '<i class="fa fa-file-pdf-o"></i>',
+                        titleAttr: 'PDF'
+                    }
+                    // 'colvis'
+                ]
+            });
+
+            table.buttons().container()
+                .appendTo( $('.col-sm-6:eq(0)', table.table().container() ) );
 
         });
     </script>

@@ -14,6 +14,8 @@ try {
     require('bootstrap');
     require('datatables.net-bs')(window, $);
     require('datatables.net-responsive-bs')();
+    require( 'datatables.net-buttons' )( window, $ );
+    require( 'datatables.net-buttons' )( window, $ );
 } catch (e) { }
 
 /**
@@ -73,14 +75,14 @@ window.toastr.options = {
 
 // require( 'inputmask');
 // require( 'slimscroll');
-// require( 'jszip' );
-// require( 'jszip' );
-// require( 'pdfmake' );
+// datatable buttons exports
+//
+require( 'jszip');
+require('pdfmake/build/pdfmake');
+require('pdfmake/build/vfs_fonts');
+// require( 'datatables.net-buttons/js/buttons.colVis' );
+// require( 'datatables.net-buttons/js/buttons.flash' );
+require( 'datatables.net-buttons/js/buttons.html5' );
+// require( 'datatables.net-buttons/js/buttons.print' );
 
-// require( 'datatables.net-buttons-bs' )();
-// require( 'datatables.net-buttons/js/buttons.colVis.js' )();
-// require( 'datatables.net-buttons/js/buttons.flash.js' )();
-// require( 'datatables.net-buttons/js/buttons.html5.js' )();
-// require( 'datatables.net-buttons/js/buttons.print.js' )();
-// require( 'datatables.net-responsive-bs' )();
 

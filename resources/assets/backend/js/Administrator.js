@@ -21,19 +21,15 @@ export default class Administrator {
 
         $(".date_picker").datetimepicker({
             format: "dd/mm/yyyy",
-            startView: 'month',
+            startView: 'decade',
             minView:'month',
             maxView:'decade',
             autoclose: true,
             todayBtn: true
         });
         $('#listTable').DataTable({
-            'paging': true,
-            'lengthChange': true,
-            'searching': true,
-            'ordering': true,
-            'info': true,
-            'autoWidth': false
+            lengthChange: false,
+            buttons: [ 'copy', 'excel', 'pdf', 'colvis' ]
         });
 
         let stopchange = false;
