@@ -28,16 +28,26 @@ class CreateIClassesTable extends Migration
 
         });
 
-        Schema::create('i_class_teacher_log', function (Blueprint $table) {
-            $table->unsignedInteger('class_id');
-            $table->unsignedInteger('teacher_id');
-            $table->timestamp('created_at')->useCurrent();
+        // create the history table
+        Schema::dropIfExists('i_class_history');
+        DB::unprepared("CREATE TABLE i_class_history LIKE i_classes;");
+        // alter table
+        DB::unprepared("ALTER TABLE i_class_history MODIFY COLUMN id int(11) NOT NULL, 
+   DROP PRIMARY KEY, ENGINE = MyISAM, ADD action VARCHAR(8) DEFAULT 'insert' FIRST, 
+   ADD revision INT(6) NOT NULL AUTO_INCREMENT AFTER action,
+   ADD PRIMARY KEY (id, revision);");
 
-            $table->foreign('class_id')->references('id')->on('i_classes');
-            $table->foreign('teacher_id')->references('id')->on('employees');
+        DB::unprepared("DROP TRIGGER IF EXISTS i_class__ai;");
+        DB::unprepared("DROP TRIGGER IF EXISTS i_class__au;");
+        //create after insert trigger
+        DB::unprepared("CREATE TRIGGER i_class__ai AFTER INSERT ON i_classes FOR EACH ROW
+    INSERT INTO i_class_history SELECT 'insert', NULL, d.* 
+    FROM i_classes AS d WHERE d.id = NEW.id;");
+        DB::unprepared("CREATE TRIGGER i_class__au AFTER UPDATE ON i_classes FOR EACH ROW
+    INSERT INTO i_class_history SELECT 'update', NULL, d.*
+    FROM i_classes AS d WHERE d.id = NEW.id;");
 
 
-        });
     }
 
     /**
@@ -47,7 +57,9 @@ class CreateIClassesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('i_class_teacher_log');
+        DB::unprepared("DROP TRIGGER IF EXISTS i_class__ai;");
+        DB::unprepared("DROP TRIGGER IF EXISTS i_class__au;");
+        Schema::dropIfExists('i_class_history');
         Schema::dropIfExists('i_classes');
     }
 }

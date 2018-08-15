@@ -29,4 +29,9 @@ class IClass extends Model
     {
         return $this->hasOne('App\Employee', 'teacher_id');
     }
+
+    public function section()
+    {
+        return $this->hasMany('App\Section', 'class_id');
+    }
 }

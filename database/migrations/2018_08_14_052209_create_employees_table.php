@@ -44,6 +44,8 @@ class CreateEmployeesTable extends Migration
      */
     public function down()
     {
+//        DB::statement('SET FOREIGN_KEY_CHECKS=0');
         Schema::dropIfExists('employees');
+//        DB::statement('SET FOREIGN_KEY_CHECKS=1');
     }
 }
