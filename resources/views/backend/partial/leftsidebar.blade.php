@@ -10,12 +10,12 @@
         </a>
       </li>
       <li>
-        <a href="{{ URL::route('user.dashboard') }}">
+        <a href="#">
           <i class="fa icon-student"></i> <span>Students</span>
         </a>
       </li>
       <li>
-        <a href="{{ URL::route('user.dashboard') }}">
+        <a href="#">
           <i class="fa icon-teacher"></i> <span>Teachers</span>
         </a>
       </li>
