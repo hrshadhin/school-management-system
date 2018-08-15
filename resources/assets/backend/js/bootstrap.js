@@ -12,10 +12,6 @@ try {
     window.$ = window.jQuery = require('jquery');
     jQuery = window.$;
     require('bootstrap');
-    require('datatables.net-bs')(window, $);
-    require('datatables.net-responsive-bs')();
-    require( 'datatables.net-buttons' )( window, $ );
-    require( 'datatables.net-buttons' )( window, $ );
 } catch (e) { }
 
 /**
@@ -39,7 +35,7 @@ let token = document.head.querySelector('meta[name="csrf-token"]');
 if (token) {
     window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
 } else {
-    console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
+    console.error('CSRF token not found!');
 }
 
 
@@ -48,7 +44,7 @@ require('jquery-validation');
 require('slimscroll');
 require('fastclick');
 window.swal = require('sweetalert2');
-require( 'select2');
+require('select2');
 import toastr from 'toastr';
 
 /**
@@ -74,15 +70,18 @@ window.toastr.options = {
 };
 
 // require( 'inputmask');
-// require( 'slimscroll');
+
 // datatable buttons exports
-//
-require( 'jszip');
-require('pdfmake/build/pdfmake');
-require('pdfmake/build/vfs_fonts');
-// require( 'datatables.net-buttons/js/buttons.colVis' );
-// require( 'datatables.net-buttons/js/buttons.flash' );
-require( 'datatables.net-buttons/js/buttons.html5' );
-// require( 'datatables.net-buttons/js/buttons.print' );
+window.JSZip = require('jszip')
+var pdfMake = require('pdfmake/build/pdfmake.js');
+var pdfFonts = require('pdfmake/build/vfs_fonts');
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
+
+require('datatables.net');
+require('datatables.net-bs');
+require('datatables.net-buttons');
+require('datatables.net-responsive-bs');
+require('datatables.net-buttons/js/buttons.html5');
+require('datatables.net-buttons/js/buttons.print');
 
 

@@ -35,7 +35,8 @@
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body margin-top-20">
-                        <table id="listTable2" class="table table-bordered table-striped list_view_table">
+                        <div class="table-responsive">
+                        <table id="listTable" class="table table-bordered table-striped list_view_table display responsive no-wrap" width="100%">
                             <thead>
                             <tr>
                                 <th width="5%">#</th>
@@ -43,7 +44,7 @@
                                 <th width="20%">Start Date</th>
                                 <th width="20%">End Date</th>
                                 <th width="10%">Status</th>
-                                <th width="10%">Action</th>
+                                <th class="notexport" width="10%">Action</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -56,13 +57,15 @@
                                     <td> {{ $year->start_date->format('d/m/Y') }}</td>
                                     <td> {{ $year->end_date->format('d/m/Y') }}</td>
                                     <td>
-                                        <input class="statusChange" type="checkbox" data-pk="{{$year->id}}" @if($year->status) checked @endif data-toggle="toggle" data-on="<i class='fa fa-check-circle'></i> Active" data-off="<i class='fa fa-ban'></i> Deactive" data-onstyle="success" data-offstyle="danger">
+                                        <!-- todo: have problem in mobile device -->
+                                        <input class="statusChange" type="checkbox" data-pk="{{$year->id}}" @if($year->status) checked @endif data-toggle="toggle" data-on="<i class='fa fa-check-circle'></i>" data-off="<i class='fa fa-ban'></i>" data-onstyle="success" data-offstyle="danger">
                                     </td>
                                     <td>
                                         <div class="btn-group">
                                             <a title="Edit" href="{{URL::route('administrator.academic_year_edit',$year->id)}}" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
                                             </a>
                                         </div>
+                                        <!-- todo: have problem in mobile device -->
                                         <div class="btn-group">
                                             <form  class="myAction" method="POST" action="{{URL::route('administrator.academic_year')}}">
                                                 @csrf
@@ -90,6 +93,7 @@
                             </tfoot>
                         </table>
                     </div>
+                    </div>
                     <!-- /.box-body -->
                 </div>
             </div>
@@ -107,37 +111,6 @@
             window.postUrl = '{{URL::Route("administrator.academic_year_status", 0)}}';
             Administrator.academicYearInit();
             initDeleteDialog();
-           var table =  $('#listTable2').DataTable({
-                lengthChange: false,
-               // dom: 'Bfrtip',
-                buttons: [
-                    {
-                        extend:    'copyHtml5',
-                        text:      '<i class="fa fa-files-o"></i>',
-                        titleAttr: 'Copy'
-                    },
-                    {
-                        extend:    'excelHtml5',
-                        text:      '<i class="fa fa-file-excel-o"></i>',
-                        titleAttr: 'Excel'
-                    },
-                    // {
-                    //     extend:    'csvHtml5',
-                    //     text:      '<i class="fa fa-file-text-o"></i>',
-                    //     titleAttr: 'CSV'
-                    // },
-                    {
-                        extend:    'pdfHtml5',
-                        text:      '<i class="fa fa-file-pdf-o"></i>',
-                        titleAttr: 'PDF'
-                    }
-                    // 'colvis'
-                ]
-            });
-
-            table.buttons().container()
-                .appendTo( $('.col-sm-6:eq(0)', table.table().container() ) );
-
         });
     </script>
 @endsection

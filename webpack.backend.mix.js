@@ -25,7 +25,7 @@ mix.webpackConfig({
             /fullcalendar[\/\\]dist[\/\\]locale/,
             /select2[\/\\]dist[\/\\]js[\/\\]i18n/,
         )
-    ],
+    ]
 });
 
 mix.js('resources/assets/backend/js/app.js', 'public/js')
@@ -35,9 +35,6 @@ mix.js('resources/assets/backend/js/app.js', 'public/js')
     .js([
         'resources/assets/backend/js/dashboard.js',
     ], 'public/js/dashboard.js')
-    // .js([
-    //     'resources/assets/backend/js/pace.js',
-    // ], 'public/js/pace.js')
     .js([
         'resources/assets/backend/js/adminlte.js',
         'resources/assets/backend/js/theme_settings.js',
@@ -46,7 +43,7 @@ mix.js('resources/assets/backend/js/app.js', 'public/js')
     ], 'public/js/theme.js')
     .extract([
         'jquery', 'bootstrap', 'icheck', 'jquery-validation', 'slimscroll', 'fastclick',
-        'datatables.net', 'datatables.net-bs', 'datatables.net-responsive-bs', 'datatables.net-buttons'
+        'datatables.net', 'datatables.net-bs', 'datatables.net-buttons', 'datatables.net-responsive-bs',
     ])
     .sass('resources/assets/backend/sass/app.scss', 'public/css')
     .sass('resources/assets/backend/sass/vendor.scss', 'public/css')
