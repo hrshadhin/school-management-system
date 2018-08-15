@@ -46,7 +46,7 @@ mix.js('resources/assets/backend/js/app.js', 'public/js')
     ], 'public/js/theme.js')
     .extract([
         'jquery', 'bootstrap', 'icheck', 'jquery-validation', 'slimscroll', 'fastclick',
-        'datatables.net', 'datatables.net-bs', 'datatables.net-responsive-bs',
+        'datatables.net', 'datatables.net-bs', 'datatables.net-responsive-bs', 'datatables.net-buttons'
     ])
     .sass('resources/assets/backend/sass/app.scss', 'public/css')
     .sass('resources/assets/backend/sass/vendor.scss', 'public/css')
