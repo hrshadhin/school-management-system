@@ -9,6 +9,14 @@
  class AppHelper
 {
 
+    const USER_ADMIN = 1;
+    const USER_TEACHER = 2;
+    const USER_STUDENT = 3;
+    const USER_PARENTS = 4;
+    const USER_ACCOUNTANT = 5;
+    const USER_LIBRARIAN = 6;
+    const USER_RECEPTIONIST = 7;
+
     public static function getUserSessionHash()
     {
         /**
