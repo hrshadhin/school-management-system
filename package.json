@@ -36,6 +36,7 @@
         "datatables.net-responsive-bs": "^2.2.1",
         "fastclick": "^1.0.6",
         "font-awesome": "^4.7.0",
+        "fs": "0.0.1-security",
         "fullcalendar": "^3.9.0",
         "icheck": "^1.0.2",
         "inputmask": "^3.3.7",
