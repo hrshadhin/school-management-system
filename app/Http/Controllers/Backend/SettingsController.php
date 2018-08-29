@@ -6,6 +6,7 @@ use App\AcademicYear;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\AppMeta;
+use Illuminate\Support\Facades\Cache;
 
 class SettingsController extends Controller
 {
@@ -28,13 +29,13 @@ class SettingsController extends Controller
             $this->validate(
                 $request, [
                 'name' => 'required|min:5|max:255',
-                'short_name' => 'required|min:5|max:255',
+                'short_name' => 'required|min:3|max:255',
                 'logo' => 'mimes:jpeg,jpg,png|max:1024|dimensions:min_width=230,min_height=50,max_width=230,max_height=50',
                 'favicon' => 'mimes:png|max:512|dimensions:min_width=32,min_height=32,max_width=32,max_height=32',
                 'establish' => 'min:4|max:255',
                 'website_link' => 'max:255',
-                'email' => 'email|max:255',
-                'phone_no' => 'min:8|max:255',
+                'email' => 'nullable|email|max:255',
+                'phone_no' => 'required|min:8|max:255',
                 'address' => 'required|max:500',
                 'academic_year' => 'required|integer',
                 'language' => 'required|min:2',
@@ -92,6 +93,7 @@ class SettingsController extends Controller
                 ['meta_key' => 'attendance_notification'],
                 ['meta_value' => $request->get('attendance_notification', 0)]
             );
+            Cache::forget('app_settings');
             return redirect()->route('settings.institute')->with('success', 'Setting updated!');
         }
 

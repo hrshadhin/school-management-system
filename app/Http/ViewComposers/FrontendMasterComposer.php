@@ -9,6 +9,7 @@ class FrontendMasterComposer
 {
     public function compose(View $view)
     {
+        //todo: need to implement cache here for db call
         //for get request
         $address = SiteMeta::where('meta_key', 'contact_address')->first();
         $phone = SiteMeta::where('meta_key', 'contact_phone')->first();

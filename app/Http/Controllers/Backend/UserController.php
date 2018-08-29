@@ -58,6 +58,10 @@ class UserController extends Controller
 
         if (Auth::attempt(['username' => $username, 'password' => $password], $remember)) {
             session(['user_session_sha1' => AppHelper::getUserSessionHash()]);
+
+            // todo: check application settings has or not and show warning info
+//            $appSettings = AppHelper::getAppSettings();
+
             return redirect()->intended('dashboard')->with('success', 'Welcome to admin panel.');
 
         }

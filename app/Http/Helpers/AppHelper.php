@@ -5,6 +5,8 @@
  use GuzzleHttp\Exception\RequestException;
  use Illuminate\Support\Facades\App;
  use Illuminate\Support\Facades\Cache;
+ use App\AppMeta;
+
 
  class AppHelper
 {
@@ -158,6 +160,39 @@
              return $transText;
          }
          return $text;
+     }
+
+     /**
+      *
+      *    Application settings fetch
+      *
+      */
+     public static function getAppSettings(){
+         $appSettings = null;
+         if (Cache::has('app_settings')) {
+             $appSettings = Cache::get('app_settings');
+         }
+         else{
+             $settings = AppMeta::whereIn(
+                 'meta_key', [
+                     'academic_year',
+                     'frontend_website',
+                     'language',
+                     'disable_language',
+                     'attendance_notification',
+                 ]
+             )->get();
+
+             $metas = [];
+             foreach ($settings as $setting){
+                 $metas[$setting->meta_key] = $setting->meta_value;
+             }
+             $appSettings = $metas;
+             Cache::forever('app_settings', $metas);
+
+         }
+
+         return $appSettings;
      }
 
 }

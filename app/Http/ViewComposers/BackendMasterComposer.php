@@ -9,6 +9,7 @@ class BackendMasterComposer
 {
     public function compose(View $view)
     {
+        //todo: need to implement cache here for db call
         $languages = [
             'en' => 'English',
             'bn' => 'Bangla',

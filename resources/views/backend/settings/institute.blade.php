@@ -45,7 +45,7 @@
                             </div>
                             <div class="form-group has-feedback">
                                 <label for="short_name">Institute Short Name<span class="text-danger">*</span></label>
-                                <input type="text" name="short_name" class="form-control" placeholder="HRHS" value="@if($info){{ $info->short_name }}@endif" maxlength="255" required />
+                                <input type="text" name="short_name" class="form-control" placeholder="HRHS" value="@if($info){{ $info->short_name }}@endif" minlength="3" maxlength="255" required />
                                 <span class="fa fa-info form-control-feedback"></span>
                                 <span class="text-danger">{{ $errors->first('short_name') }}</span>
                             </div>
@@ -57,7 +57,7 @@
                                 <span class="text-danger">{{ $errors->first('establish') }}</span>
                             </div>
                             <div class="form-group has-feedback">
-                                <label for="logo">Logo<span class="text-danger">[230 X 50 exact size and max 1MB]*</span></label>
+                                <label for="logo">Logo<span class="text-danger">[230 X 50 exact size and max 1MB]</span></label>
                                 <input  type="file" class="form-control" accept=".jpeg, .jpg, .png" name="logo" placeholder="logo image">
                                 @if($info && isset($info->logo))
                             <input type="hidden" name="oldLogo" value="{{$info->logo}}">
@@ -66,7 +66,7 @@
                                 <span class="text-danger">{{ $errors->first('logo') }}</span>
                             </div>
                             <div class="form-group has-feedback">
-                                <label for="favicon">Favicon<span class="text-danger">[only .png image][32 X 32 exact size and max 512KB]*</span></label>
+                                <label for="favicon">Favicon<span class="text-danger">[only .png image][32 X 32 exact size and max 512KB]</span></label>
                                 <input  type="file" class="form-control" accept=".png" name="favicon" placeholder="favicon image">
                                 @if($info && isset($info->favicon))
                                 <input type="hidden" name="oldFavicon" value="{{$info->favicon}}">
@@ -87,7 +87,7 @@
                                 <span class="text-danger">{{ $errors->first('email') }}</span>
                             </div>
                             <div class="form-group has-feedback">
-                                <label for="phone_no">Phone/Mobile No.</label>
+                                <label for="phone_no">Phone/Mobile No.<span class="text-danger">*</span></label>
                                 <input  type="text" class="form-control" name="phone_no" required placeholder="phone or mobile number" value="@if($info) {{ $info->phone_no }} @endif" min="8" maxlength="255">
                                 <span class="fa fa-phone form-control-feedback"></span>
                                 <span class="text-danger">{{ $errors->first('phone_no') }}</span>

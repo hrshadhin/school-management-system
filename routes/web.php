@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Session;
 
 //front website routes
 Route::group(
-    ['namespace' => 'Frontend', 'middleware' => ['web']], function () {
+    ['namespace' => 'Frontend', 'middleware' => ['web', 'frontend']], function () {
     Route::get('/', 'HomeController@home')->name('home');
     Route::post('site/subscribe','HomeController@subscribe')
         ->name('site.subscribe');
