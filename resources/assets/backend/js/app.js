@@ -36,5 +36,11 @@ window.Site = Site;
 import Settings from './Settings';
 window.Settings = Settings;
 
+import Generic from './Generic';
+window.Generic = Generic;
+
 import Administrator from './Administrator';
 window.Administrator = Administrator;
+
+import Academic from './Academic';
+window.Academic = Academic;

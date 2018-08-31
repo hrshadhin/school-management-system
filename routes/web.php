@@ -164,6 +164,23 @@ Route::group(
     Route::post('administrator/academic_year/status/{id}','AdministratorController@academicYearChangeStatus')
         ->name('administrator.academic_year_status');
 
+    // academic routes
+    // class
+    Route::get('academic/class','AcademicController@classIndex')
+        ->name('academic.class');
+    Route::post('academic/class','AcademicController@classIndex')
+        ->name('academic.class');
+    Route::get('academic/class/create','AcademicController@classCru')
+        ->name('academic.class_create');
+    Route::post('academic/class/create','AcademicController@classCru')
+        ->name('academic.class_store');
+    Route::get('academic/class/edit/{id}','AcademicController@classCru')
+        ->name('academic.class_edit');
+    Route::post('academic/class/update/{id}','AcademicController@classCru')
+        ->name('academic.class_update');
+    Route::post('academic/class/status/{id}','AcademicController@classChangeStatus')
+        ->name('academic.class_status');
+
     //dev routes
     Route::get('/make-link',function(){
         App::make('files')->link(storage_path('app/public'), public_path('storage'));

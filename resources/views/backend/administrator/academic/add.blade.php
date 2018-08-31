@@ -30,12 +30,6 @@
             <div class="col-md-12">
                 <div class="box box-info">
                     <form novalidate id="entryForm" action="@if($academicYear) {{URL::Route('administrator.academic_year_update', $academicYear->id)}} @else {{URL::Route('administrator.academic_year_store')}} @endif" method="post" enctype="multipart/form-data">
-                        <div class="box-header">
-                            <div class="callout callout-warning">
-                                <p><b>Note:</b> * Marks are required feild.</p>
-                            </div>
-                        </div>
-                    <!-- /.box-header -->
 
                     <div class="box-body">
                             @csrf
