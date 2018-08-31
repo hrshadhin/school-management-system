@@ -29,8 +29,8 @@
                 <div class="box box-info">
                     <form  id="entryForm" action="{{URL::Route('settings.institute')}}" method="post" enctype="multipart/form-data">
                         <div class="box-header">
-                            <div class="callout callout-warning">
-                                <p><b>Note:</b> * Marks are required feild. Create academic year before change settings.</p>
+                            <div class="callout callout-danger">
+                                <p><b>Note:</b> Create academic year if not have any.</p>
                             </div>
                         </div>
 

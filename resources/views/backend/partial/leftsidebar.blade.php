@@ -29,7 +29,7 @@
         </a>
         <ul class="treeview-menu">
           <li>
-            <a href="{{ URL::route('settings.institute') }}">
+            <a href="{{ URL::route('academic.class') }}">
               <i class="fa fa-sitemap"></i> <span>Class</span>
             </a>
           </li>

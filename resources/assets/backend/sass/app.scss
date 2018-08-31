@@ -314,6 +314,20 @@
 .margin-right-20{
     margin-right: 20px;
 }
+
+.callout {
+    margin: 0;
+    padding: 15px 30px 15px 15px;
+    border-left: 5px solid #eee;
+}
+.callout.callout-danger {
+    background-color: #fcf2f2 !important;
+    border-color: #dFb5b4;
+}
+.callout.callout-danger p {
+    color: #000;
+}
+
 /**
  Mobile view element hide css
  */
