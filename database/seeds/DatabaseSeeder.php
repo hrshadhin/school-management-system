@@ -15,9 +15,9 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         DB::statement("SET foreign_key_checks=0");
-//        User::truncate();
+        User::truncate();
         Role::truncate();
-//        UserRole::truncate();
+        UserRole::truncate();
         DB::statement("SET foreign_key_checks=1");
         $this->call(RolesTableSeeder::class);
         $this->call(UsersTableSeeder::class);

@@ -181,6 +181,11 @@ Route::group(
     Route::post('academic/class/status/{id}','AcademicController@classChangeStatus')
         ->name('academic.class_status');
 
+    // teacher routes
+    Route::resource('teacher', 'TeacherController');
+    Route::post('teacher/status/{id}','TeacherController@changeStatus')
+        ->name('teacher.status');
+
     //dev routes
     Route::get('/make-link',function(){
         App::make('files')->link(storage_path('app/public'), public_path('storage'));

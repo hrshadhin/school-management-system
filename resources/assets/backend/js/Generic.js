@@ -35,7 +35,7 @@ export default class Generic {
                     body: function (data, row, column, node) {
                         if(typeof(window.changeExportColumnIndex) !== 'undefined') {
                             if (column === window.changeExportColumnIndex) {
-                                data = /checked/.test(data) ? 'Active' : 'Deactive';
+                                data = /checked/.test(data) ? 'Active' : 'Inactive';
                             }
                         }
                         return data;
@@ -114,7 +114,9 @@ export default class Generic {
 
                     });
             }
-        })
+        });
+
+        $('.select2').select2();
 
 
     }

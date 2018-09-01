@@ -15,7 +15,7 @@
         </a>
       </li>
       <li>
-        <a href="#">
+        <a href="{{ URL::route('teacher.index') }}">
           <i class="fa icon-teacher"></i> <span>Teachers</span>
         </a>
       </li>

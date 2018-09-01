@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Http\Helpers\AppHelper;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Hrshadhin\Userstamps\UserstampsTrait;
@@ -23,13 +24,15 @@ class Employee extends Model
     protected $fillable = [
         'user_id',
         'emp_type',
+        'id_card',
         'name',
         'designation',
+        'qualification',
         'dob',
         'gender',
         'religion',
         'email',
-        'phone',
+        'phone_no',
         'address',
         'joining_date',
         'photo',
@@ -39,21 +42,23 @@ class Employee extends Model
 
     public function user()
     {
-        return $this->hasOne('App\User');
+        return $this->hasOne('App\User', 'id');
     }
-
-    private $genders = [1 => 'Male', 2 => 'Female'];
-    private $employee_type = [1 => 'Teacher', 2 => 'Stuff'];
 
 
     public function getGenderAttribute($value)
     {
-        return Arr::get($this->genders, $value);
+        return Arr::get(AppHelper::GENDER, $value);
     }
 
     public function getEmpTypeAttribute($value)
     {
-        return Arr::get($this->employee_type, $value);
+        return Arr::get(AppHelper::EMP_TYPES, $value);
+    }
+
+    public function getReligionAttribute($value)
+    {
+        return Arr::get(AppHelper::RELIGION, $value);
     }
 
     public function class()
