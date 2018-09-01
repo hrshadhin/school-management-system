@@ -28,7 +28,7 @@ class IClass extends Model
 
     public function teacher()
     {
-        return $this->hasOne('App\Employee', 'id');
+        return $this->belongsTo('App\Employee', 'teacher_id');
     }
 
     public function section()

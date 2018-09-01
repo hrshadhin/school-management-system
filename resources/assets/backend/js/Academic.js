@@ -6,5 +6,9 @@ export default class Academic {
         Generic.initCommonPageJS();
         Generic.initDeleteDialog();
     }
+    static sectionInit() {
+        Generic.initCommonPageJS();
+        Generic.initDeleteDialog();
+    }
 
 }
