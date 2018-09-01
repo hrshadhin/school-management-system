@@ -21,15 +21,14 @@ class AcademicController extends Controller
             $this->validate($request, [
                 'hiddenId' => 'required|integer',
             ]);
-            $year = AcademicYear::findOrFail($request->get('hiddenId'));
-            // todo: put logic here for block used year deletion
-            $year->delete();
+            $iclass = IClass::findOrFail($request->get('hiddenId'));
+            $iclass->delete();
 
-            return redirect()->route('administrator.academic_year')->with('success', 'Record deleted!');
+            return redirect()->route('academic.class')->with('success', 'Record deleted!');
         }
 
         //for get request
-        $iclasses = IClass::with('teacher')->orderBy('id', 'desc')->get();
+        $iclasses = IClass::with('teacher')->orderBy('numeric_value', 'asc')->get();
 
 
         return view('backend.academic.iclass.list', compact('iclasses'));

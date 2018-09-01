@@ -123,8 +123,8 @@
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group has-feedback">
-                                        <label for="id_card">ID Card No.</label>
-                                        <input  type="text" class="form-control" name="id_card"  placeholder="id card number" value="@if($teacher){{$teacher->id_card}}@else{{old('id_card')}}@endif" maxlength="50">
+                                        <label for="id_card">ID Card No.<span class="text-danger">*</span></label>
+                                        <input  type="text" class="form-control" name="id_card"  placeholder="id card number" value="@if($teacher){{$teacher->id_card}}@else{{old('id_card')}}@endif" required min="4" maxlength="50">
                                         <span class="fa fa-phone form-control-feedback"></span>
                                         <span class="text-danger">{{ $errors->first('id_card') }}</span>
                                     </div>

@@ -66,7 +66,7 @@ class TeacherController extends Controller
                 'email' => 'email|max:255|unique:employees,email|unique:users,email',
                 'phone_no' => 'required|min:8|max:255',
                 'address' => 'max:500',
-                'id_card' => 'required|max:50|unique:employees,id_card',
+                'id_card' => 'required|min:4|max:50|unique:employees,id_card',
                 'joining_date' => 'min:10',
                 'username' => 'required|min:5|max:255|unique:users,username',
                 'password' => 'required|min:6|max:50',
@@ -95,8 +95,6 @@ class TeacherController extends Controller
         $data['joining_date'] = $request->get('joining_date');
         $data['id_card'] = $request->get('id_card');
         $data['emp_type'] = AppHelper::EMP_TEACHER;
-
-        // todo: need user conflict verification
 
         DB::beginTransaction();
         try {
@@ -212,7 +210,7 @@ class TeacherController extends Controller
                 'email' => 'email|max:255|unique:employees,email,'.$teacher->id.'|unique:users,email,'.$teacher->user_id,
                 'phone_no' => 'required|min:8|max:255',
                 'address' => 'max:500',
-                'id_card' => 'required|max:50|unique:employees,id_card,'.$teacher->id,
+                'id_card' => 'required|min:4|max:50|unique:employees,id_card,'.$teacher->id,
                 'joining_date' => 'min:10',
 
             ]
