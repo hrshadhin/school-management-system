@@ -21,13 +21,14 @@ class IClass extends Model
         'teacher_id',
         'name',
         'numeric_value',
-        'status'
+        'status',
+        'note'
     ];
 
 
     public function teacher()
     {
-        return $this->hasOne('App\Employee', 'teacher_id');
+        return $this->hasOne('App\Employee', 'id');
     }
 
     public function section()

@@ -18,6 +18,25 @@
     const USER_ACCOUNTANT = 5;
     const USER_LIBRARIAN = 6;
     const USER_RECEPTIONIST = 7;
+    const ACTIVE = '1';
+    const INACTIVE = '0';
+    const EMP_TEACHER = 1;
+    const EMP_STAFF = 2;
+    const GENDER = [
+        1 => 'Male',
+        2 => 'Female'
+    ];
+    const RELIGION = [
+        1 => 'Islam',
+        2 => 'Hindu',
+        3 => 'Cristian',
+        4 => 'Buddhist',
+        5 => 'Other',
+    ];
+    const EMP_TYPES = [
+        1 => 'Teacher',
+        2 => 'Staff'
+    ];
 
     public static function getUserSessionHash()
     {

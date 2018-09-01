@@ -328,6 +328,34 @@
     color: #000;
 }
 
+
+.btn-ta:hover {
+    background-color: #ED857E;
+    color: #EDEDED;
+}
+.btn-sm-ta {
+    border-radius: 3px;
+    font-size: 12px;
+    line-height: 1.5;
+    padding: 5px 10px;
+}
+.btn-ta {
+    background-color: #FF766C;
+    color: #FFFFFF;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1.42857;
+    margin: 2px;
+    padding: 6px 12px;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
 /**
  Mobile view element hide css
  */

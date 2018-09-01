@@ -29,7 +29,7 @@ class AcademicController extends Controller
         }
 
         //for get request
-        $iclasses = IClass::orderBy('id', 'desc')->get();
+        $iclasses = IClass::with('teacher')->orderBy('id', 'desc')->get();
 
 
         return view('backend.academic.iclass.list', compact('iclasses'));
@@ -53,7 +53,7 @@ class AcademicController extends Controller
 
             $data = $request->all();
             if(!$id){
-                $data['status'] = '1';
+                $data['status'] = AppHelper::ACTIVE;
             }
 
             IClass::updateOrCreate(
@@ -69,7 +69,9 @@ class AcademicController extends Controller
         //for get request
         $iclass = IClass::find($id);
 
-        $teachers = Employee::where('emp_type', AppHelper::USER_TEACHER)->pluck('name', 'id');
+        $teachers = Employee::where('emp_type', AppHelper::EMP_TEACHER)
+            ->where('status', AppHelper::ACTIVE)
+            ->pluck('name', 'id');
         $teacher = null;
 
         if($iclass){

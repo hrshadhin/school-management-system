@@ -2,7 +2,7 @@
 @extends('backend.layouts.master')
 
 <!-- Page title -->
-@section('pageTitle') Class @endsection
+@section('pageTitle') Teacher @endsection
 <!-- End block -->
 
 <!-- Page body extra class -->
@@ -14,12 +14,12 @@
     <!-- Section header -->
     <section class="content-header">
         <h1>
-            Class
+            Teacher
             <small>List</small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="{{URL::route('user.dashboard')}}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-            <li class="active">Class</li>
+            <li class="active">Teacher</li>
         </ol>
     </section>
     <!-- ./Section header -->
@@ -30,7 +30,7 @@
                 <div class="box box-info">
                     <div class="box-header">
                         <div class="box-tools pull-right">
-                            <a class="btn btn-info btn-sm" href="{{ URL::route('academic.class_create') }}"><i class="fa fa-plus-circle"></i> Add New</a>
+                            <a class="btn btn-info btn-sm" href="{{ URL::route('teacher.create') }}"><i class="fa fa-plus-circle"></i> Add New</a>
                         </div>
                     </div>
                     <!-- /.box-header -->
@@ -40,38 +40,46 @@
                             <thead>
                             <tr>
                                 <th width="5%">#</th>
-                                <th width="20%">Name</th>
-                                <th width="5%">Numeric Value</th>
-                                <th width="30%">Teacher</th>
-                                <th width="20%">Note</th>
+                                <th class="notexport" width="10%">Photo</th>
+                                <th width="10%">ID Card</th>
+                                <th width="30%">Name</th>
+                                <th width="10%">Phone No</th>
+                                <th width="10%">Email</th>
                                 <th width="10%">Status</th>
-                                <th class="notexport" width="10%">Action</th>
+                                <th class="notexport" width="15%">Action</th>
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($iclasses as $iclass)
+                            @foreach($teachers as $teacher)
                                 <tr>
                                     <td>
                                         {{$loop->iteration}}
                                     </td>
-                                    <td>{{ $iclass->name }}</td>
-                                    <td>{{ $iclass->numeric_value }}</td>
-                                    <td>{{ $iclass->teacher->name }}</td>
-                                    <td>{{ $iclass->note }}</td>
+                                    <td>
+                                        <img class="img-responsive center" style="height: 35px; width: 35px;" src="@if($teacher->photo ){{ asset('storage/employee')}}/{{ $teacher->photo }} @else {{ asset('images/avatar.jpg')}} @endif" alt="">
+                                    </td>
+                                    <td>{{ $teacher->id_card }}</td>
+                                    <td>{{ $teacher->name }}</td>
+                                    <td>{{ $teacher->phone_no }}</td>
+                                    <td>{{ $teacher->email }}</td>
                                     <td>
                                         <!-- todo: have problem in mobile device -->
-                                        <input class="statusChange" type="checkbox" data-pk="{{$iclass->id}}" @if($iclass->status) checked @endif data-toggle="toggle" data-on="<i class='fa fa-check-circle'></i>" data-off="<i class='fa fa-ban'></i>" data-onstyle="success" data-offstyle="danger">
+                                        <input class="statusChange" type="checkbox" data-pk="{{$teacher->id}}" @if($teacher->status) checked @endif data-toggle="toggle" data-on="<i class='fa fa-check-circle'></i>" data-off="<i class='fa fa-ban'></i>" data-onstyle="success" data-offstyle="danger">
                                     </td>
                                     <td>
                                         <div class="btn-group">
-                                            <a title="Edit" href="{{URL::route('academic.class_edit',$iclass->id)}}" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
+                                            <a title="Details"  href="{{URL::route('teacher.show',$teacher->id)}}"  class="btn btn-primary btn-sm"><i class="fa fa-eye"></i>
+                                            </a>
+                                        </div>
+                                        <div class="btn-group">
+                                            <a title="Edit" href="{{URL::route('teacher.edit',$teacher->id)}}" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
                                             </a>
                                         </div>
                                         <!-- todo: have problem in mobile device -->
                                         <div class="btn-group">
-                                            <form  class="myAction" method="POST" action="{{URL::route('academic.class')}}">
+                                            <form  class="myAction" method="POST" action="{{URL::route('teacher.destroy', $teacher->id)}}">
                                                 @csrf
-                                                <input type="hidden" name="hiddenId" value="{{$iclass->id}}">
+                                                <input name="_method" type="hidden" value="DELETE">
                                                 <button type="submit" class="btn btn-danger btn-sm" title="Delete">
                                                     <i class="fa fa-fw fa-trash"></i>
                                                 </button>
@@ -86,12 +94,13 @@
                             <tfoot>
                             <tr>
                                 <th width="5%">#</th>
-                                <th width="20%">Name</th>
-                                <th width="5%">Numeric Value</th>
-                                <th width="30%">Teacher</th>
-                                <th width="20%">Note</th>
+                                <th class="notexport" width="10%">Photo</th>
+                                <th width="10%">ID Card</th>
+                                <th width="30%">Name</th>
+                                <th width="10%">Phone No</th>
+                                <th width="10%">Email</th>
                                 <th width="10%">Status</th>
-                                <th class="notexport" width="10%">Action</th>
+                                <th class="notexport" width="15%">Action</th>
                             </tr>
                             </tfoot>
                         </table>
@@ -111,9 +120,10 @@
 @section('extraScript')
     <script type="text/javascript">
         $(document).ready(function () {
-            window.postUrl = '{{URL::Route("academic.class_status", 0)}}';
+            window.postUrl = '{{URL::Route("teacher.status", 0)}}';
             window.changeExportColumnIndex = 5;
-            Academic.iclassInit();
+            Generic.initCommonPageJS();
+            Generic.initDeleteDialog();
         });
     </script>
 @endsection
