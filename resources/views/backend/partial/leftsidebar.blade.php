@@ -34,7 +34,7 @@
             </a>
           </li>
           <li>
-            <a href="#">
+            <a href="{{ URL::route('academic.section') }}">
               <i class="fa fa-cubes"></i> <span>Section</span>
             </a>
           </li>

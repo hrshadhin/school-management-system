@@ -29,10 +29,10 @@ class Section extends Model
 
     public function teacher()
     {
-        return $this->belongsTo('App\Employee', 'id');
+        return $this->belongsTo('App\Employee', 'teacher_id');
     }
     public function class()
     {
-        return $this->belongsTo('App\IClass', 'id');
+        return $this->belongsTo('App\IClass', 'class_id');
     }
 }

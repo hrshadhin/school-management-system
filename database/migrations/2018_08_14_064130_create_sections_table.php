@@ -20,7 +20,7 @@ class CreateSectionsTable extends Migration
             $table->unsignedInteger('class_id');
             $table->unsignedInteger('teacher_id');
             $table->text('note')->nullable();
-            $table->enum('status', [0,1])->default(0);
+            $table->enum('status', [0,1])->default(1);
             $table->timestamps();
             $table->softDeletes();
             $table->userstamps();
