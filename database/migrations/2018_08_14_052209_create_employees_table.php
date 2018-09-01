@@ -17,7 +17,7 @@ class CreateEmployeesTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('user_id');
             $table->enum('emp_type',[1,2])->default(1);
-            $table->string('id_card',50)->nullable();
+            $table->string('id_card',50)->unique();
             $table->string('name');
             $table->string('designation')->nullable();
             $table->string('qualification')->nullable();

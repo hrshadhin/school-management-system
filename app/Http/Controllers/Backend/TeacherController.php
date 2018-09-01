@@ -66,7 +66,7 @@ class TeacherController extends Controller
                 'email' => 'email|max:255|unique:employees,email|unique:users,email',
                 'phone_no' => 'required|min:8|max:255',
                 'address' => 'max:500',
-                'id_card' => 'max:50',
+                'id_card' => 'required|max:50|unique:employees,id_card',
                 'joining_date' => 'min:10',
                 'username' => 'required|min:5|max:255|unique:users,username',
                 'password' => 'required|min:6|max:50',
@@ -212,7 +212,7 @@ class TeacherController extends Controller
                 'email' => 'email|max:255|unique:employees,email,'.$teacher->id.'|unique:users,email,'.$teacher->user_id,
                 'phone_no' => 'required|min:8|max:255',
                 'address' => 'max:500',
-                'id_card' => 'max:50',
+                'id_card' => 'required|max:50|unique:employees,id_card,'.$teacher->id,
                 'joining_date' => 'min:10',
 
             ]
