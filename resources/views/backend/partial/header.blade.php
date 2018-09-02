@@ -3,11 +3,11 @@
 <a href="{{ URL::route('user.dashboard') }}" class="logo hidden-xs">
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini">
-      <img style="max-width: 50px; max-height: 50px;" src="@if($siteInfo['logo']){{asset('storage/site/'.$siteInfo['logo'])}} @else{{ asset('images/logo-sm.png') }}@endif" alt="logo-mini">
+      <img style="max-width: 50px; max-height: 50px;" src="@if(isset($appSettings['institute_settings']['logo_small'])) {{asset('storage/logo/'.$appSettings['institute_settings']['logo_small'])}} @else {{ asset('images/logo-sm.png') }} @endif" alt="logo-mini">
       </span>
       <!-- logo for regular state and mobile devices -->
       <span class="logo-lg">
-        <img style="max-width: 230px; max-height: 50px;" src="@if($siteInfo['logo2x']){{asset('storage/site/'.$siteInfo['logo2x'])}} @else{{ asset('images/logo-md.png') }}@endif" alt="logo-md">
+        <img style="max-width: 230px; max-height: 50px;" src="@if(isset($appSettings['institute_settings']['logo'])) {{asset('storage/logo/'.$appSettings['institute_settings']['logo'])}} @else {{ asset('images/logo-md.png') }} @endif" alt="logo-md">
       </span>
     </a>
     <!-- Header Navbar: style can be found in header.less -->
@@ -28,11 +28,13 @@
             </a>
           </li>     
           <!-- Site Start -->
+            @if($frontend_website)
         <li class="dropdown site-menu">
         <a target="_blank" title="Site" href="{{ URL::route('home') }}" class="dropdown-toggle" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="Visit Site">
                 <i class="fa fa-globe"></i>
             </a>
         </li>
+            @endif
         <!-- Site Close -->
          <!-- Notifications: style can be found in dropdown.less-->
          <li class="dropdown messages-menu">
@@ -59,7 +61,7 @@
                 <li class="footer"><a href="#">See All Notifications</a></li>
             </ul>
         </li>                                                  
-          
+          @if($show_language)
         <li class="dropdown lang-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                 <img class="language-img" src="{{ asset('images/lang/'.$locale.'.png') }}">
@@ -81,7 +83,8 @@
                 @endforeach
                 <li class="footer"></li>
             </ul>
-        </li>                   
+        </li>
+        @endif
 <!-- User Account: style can be found in dropdown.less -->
 <li class="dropdown user user-menu">
     <a href="#" class="dropdown-toggle" data-toggle="dropdown">

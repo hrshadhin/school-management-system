@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\AppMeta;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
 
 class SettingsController extends Controller
 {
@@ -22,7 +23,9 @@ class SettingsController extends Controller
             //validate form
             $messages = [
                 'logo.max' => 'The :attribute size must be under 1MB.',
-                'logo.dimensions' => 'The :attribute dimensions must be 230 X 50.',
+                'logo_small.max' => 'The :attribute size must be under 512kb.',
+                'logo.dimensions' => 'The :attribute dimensions max be 230 X 50.',
+                'logo_small.dimensions' => 'The :attribute dimensions max be 50 X 50.',
                 'favicon.max' => 'The :attribute size must be under 1MB.',
                 'favicon.dimensions' => 'The :attribute dimensions must be 32 X 32.',
             ];
@@ -30,7 +33,8 @@ class SettingsController extends Controller
                 $request, [
                 'name' => 'required|min:5|max:255',
                 'short_name' => 'required|min:3|max:255',
-                'logo' => 'mimes:jpeg,jpg,png|max:1024|dimensions:min_width=230,min_height=50,max_width=230,max_height=50',
+                'logo' => 'mimes:jpeg,jpg,png|max:1024|dimensions:max_width=230,max_height=50',
+                'logo_small' => 'mimes:jpeg,jpg,png|max:512|dimensions:max_width=50,max_height=50',
                 'favicon' => 'mimes:png|max:512|dimensions:min_width=32,min_height=32,max_width=32,max_height=32',
                 'establish' => 'min:4|max:255',
                 'website_link' => 'max:255',
@@ -47,14 +51,45 @@ class SettingsController extends Controller
                 $storagepath = $request->file('logo')->store('public/logo');
                 $fileName = basename($storagepath);
                 $data['logo'] = $fileName;
+
+                //if file chnage then delete old one
+                $oldFile = $request->get('oldLogo','');
+                if( $oldFile != ''){
+                    $file_path = "public/logo/".$oldFile;
+                    Storage::delete($file_path);
+                }
             }
             else{
                 $data['logo'] = $request->get('oldLogo','');
             }
+
+            if($request->hasFile('logo_small')) {
+                $storagepath = $request->file('logo_small')->store('public/logo');
+                $fileName = basename($storagepath);
+                $data['logo_small'] = $fileName;
+
+                //if file chnage then delete old one
+                $oldFile = $request->get('oldLogoSmall','');
+                if( $oldFile != ''){
+                    $file_path = "public/logo/".$oldFile;
+                    Storage::delete($file_path);
+                }
+            }
+            else{
+                $data['logo_small'] = $request->get('oldLogoSmall','');
+            }
+
             if($request->hasFile('favicon')) {
                 $storagepath = $request->file('favicon')->store('public/logo');
                 $fileName = basename($storagepath);
                 $data['favicon'] = $fileName;
+
+                //if file chnage then delete old one
+                $oldFile = $request->get('oldFavicon','');
+                if( $oldFile != ''){
+                    $file_path = "public/logo/".$oldFile;
+                    Storage::delete($file_path);
+                }
             }
             else{
                 $data['favicon'] = $request->get('oldFavicon','');

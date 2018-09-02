@@ -114,7 +114,7 @@
 @section('extraScript')
     <script type="text/javascript">
         $(document).ready(function () {
-            window.postUrl = '{{URL::Route("academic.class_status", 0)}}';
+            window.postUrl = '{{URL::Route("academic.section_status", 0)}}';
             window.changeExportColumnIndex = 6;
             Academic.sectionInit();
         });

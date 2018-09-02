@@ -1,6 +1,7 @@
 <?php
  namespace App\Http\Helpers;
 
+ use App\Event;
  use App\SiteMeta;
  use GuzzleHttp\Client;
  use GuzzleHttp\Exception\RequestException;
@@ -204,12 +205,16 @@
                      'language',
                      'disable_language',
                      'attendance_notification',
+                     'institute_settings'
                  ]
              )->get();
 
              $metas = [];
              foreach ($settings as $setting){
                  $metas[$setting->meta_key] = $setting->meta_value;
+             }
+             if(isset($metas['institute_settings'])){
+                 $metas['institute_settings'] = json_decode($metas['institute_settings'], true);
              }
              $appSettings = $metas;
              Cache::forever('app_settings', $metas);

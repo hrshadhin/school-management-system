@@ -1,3 +1,7 @@
+<script>
+    window.frontendWebsite = {{$frontend_website}};
+    window.show_language = {{$show_language}};
+</script>
 <!-- Control Sidebar -->
 <aside  class="control-sidebar control-sidebar-dark">
     <div id="rightSideBarContent">
