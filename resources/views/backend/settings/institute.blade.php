@@ -57,10 +57,19 @@
                                 <span class="text-danger">{{ $errors->first('establish') }}</span>
                             </div>
                             <div class="form-group has-feedback">
-                                <label for="logo">Logo<span class="text-danger">[230 X 50 exact size and max 1MB]</span></label>
+                                <label for="logo">Logo<span class="text-danger">[230 X 50 max size and max 1MB]</span></label>
                                 <input  type="file" class="form-control" accept=".jpeg, .jpg, .png" name="logo" placeholder="logo image">
                                 @if($info && isset($info->logo))
                             <input type="hidden" name="oldLogo" value="{{$info->logo}}">
+                                @endif
+                                <span class="glyphicon glyphicon-open-file form-control-feedback"></span>
+                                <span class="text-danger">{{ $errors->first('logo') }}</span>
+                            </div>
+                            <div class="form-group has-feedback">
+                                <label for="logo_small">Logo Small<span class="text-danger">[50 X 50 max size and max 512kb]</span></label>
+                                <input  type="file" class="form-control" accept=".jpeg, .jpg, .png" name="logo_small" placeholder="logo image">
+                                @if($info && isset($info->logo_small))
+                                    <input type="hidden" name="oldLogoSmall" value="{{$info->logo_small}}">
                                 @endif
                                 <span class="glyphicon glyphicon-open-file form-control-feedback"></span>
                                 <span class="text-danger">{{ $errors->first('logo') }}</span>
@@ -103,7 +112,7 @@
                                     <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Set default academic year"></i>
                                 </label>
                                 {!! Form::select('academic_year', $academic_years, $academic_year, ['placeholder' => 'Pick a year...','class' => 'form-control select2', 'required' => 'true']) !!}
-                                <span class="fa fa-calendar form-control-feedback"></span>
+                                <span class="form-control-feedback"></span>
                                 <span class="text-danger">{{ $errors->first('academic_year') }}</span>
                             </div>
                             <div class="form-group has-feedback">
@@ -141,7 +150,7 @@
                                     <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="select attendance notificaton type"></i>
                                 </label>
                                 {!! Form::select('attendance_notification', [0 => "None", 1 => "SMS", 2 => "Email"], $attendance_notification , ['class' => 'form-control select2']) !!}
-                                <span class="fa fa-pencil form-control-feedback"></span>
+                                <span class="form-control-feedback"></span>
                                 <span class="text-danger">{{ $errors->first('attendance_notification') }}</span>
                             </div>
 

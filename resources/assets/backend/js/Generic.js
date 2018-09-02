@@ -116,6 +116,20 @@ export default class Generic {
             }
         });
 
+        $(".year_picker").datetimepicker({
+            format: "yyyy",
+            autoclose: true,
+            startView: 'decade',
+            minView:'decade',
+            maxView:'decade',
+            viewSelect:'decade'
+        });
+
+        $('input').not('.dont-style').iCheck({
+            checkboxClass: 'icheckbox_square-blue',
+            radioClass: 'iradio_square-blue',
+            increaseArea: '20%' /* optional */
+        });
         $('.select2').select2();
 
 

@@ -276,40 +276,44 @@ $(function () {
     var $demoSettings = $('<div />')
 
     // Layout options
-    var showSite = window.frontendWebsite ? 'checked' : '';
-    $demoSettings.append(
-        '<h4 class="control-sidebar-heading">'
+    var checkBoxes = '<h4 class="control-sidebar-heading">'
         + 'Features'
         + '</h4>'
-        // clock 
+        // clock
         + '<div class="form-group tablet-hidden hidden-xs">'
         + '<label class="control-sidebar-subheading">'
-        + '<input type="checkbox"data-feature="clock-menu"class="pull-right" checked/> '
+        + '<input type="checkbox"data-feature="clock-menu"class="dont-style pull-right" checked/> '
         + 'Clock'
         + '</label>'
-        + '</div>'
-        // Site link
-        + '<div class="form-group">'
+        + '</div>';
+
+    if(window.frontendWebsite){
+        checkBoxes += '<div class="form-group">'
+            + '<label class="control-sidebar-subheading">'
+            + '<input type="checkbox" data-feature="site-menu" class="dont-style pull-right" checked /> '
+            + 'Site Link'
+            + '</label>'
+            + '</div>';
+    }
+
+    // Notification
+    checkBoxes += '<div class="form-group">'
         + '<label class="control-sidebar-subheading">'
-        + '<input type="checkbox" data-feature="site-menu" class="pull-right" '+ showSite +'/> '
-        + 'Site Link'
-        + '</label>'
-        + '</div>'
-        // Notification
-        + '<div class="form-group">'
-        + '<label class="control-sidebar-subheading">'
-        + '<input type="checkbox"data-feature="messages-menu"class="pull-right" checked/> '
+        + '<input type="checkbox"data-feature="messages-menu"class="dont-style pull-right" checked/> '
         + 'Notification'
         + '</label>'
-        + '</div>'
+        + '</div>';
+    if(window.show_language){
         // Language
-        + '<div class="form-group">'
-        + '<label class="control-sidebar-subheading">'
-        + '<input type="checkbox"data-feature="lang-menu"class="pull-right" checked/> '
-        + 'Language'
-        + '</label>'
-        + '</div>'
-    )
+        checkBoxes += '<div class="form-group">'
+            + '<label class="control-sidebar-subheading">'
+            + '<input type="checkbox"data-feature="lang-menu"class="dont-style pull-right" checked/> '
+            + 'Language'
+            + '</label>'
+            + '</div>';
+    }
+
+    $demoSettings.append(checkBoxes);
     var $skinsList = $('<ul />', { 'class': 'list-unstyled clearfix' })
 
     // Dark sidebar skins

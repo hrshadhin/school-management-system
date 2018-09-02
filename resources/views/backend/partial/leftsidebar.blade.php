@@ -4,7 +4,7 @@
   <section class="sidebar">
     <!-- sidebar menu -->
     <ul class="sidebar-menu" data-widget="tree">
-      <li>
+        <li>
         <a href="{{ URL::route('user.dashboard') }}">
           <i class="fa fa-dashboard"></i> <span>Dashboard</span>
         </a>
@@ -142,9 +142,6 @@
       </li>
       <!-- Frontend Website links and settings -->
       @if($frontend_website)
-        <script>
-          window.frontendWebsite = {{$frontend_website}};
-        </script>
       <li class="treeview">
         <a href="#">
           <i class="fa fa-globe"></i>
