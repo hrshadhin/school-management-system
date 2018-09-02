@@ -16,7 +16,11 @@ class ComposerServiceProvider extends ServiceProvider
     {
         // Using class based composers...
         View::composer(
-            'frontend.layouts.master', 'App\Http\ViewComposers\FrontendMasterComposer'
+            [
+                'frontend.layouts.master',
+                'frontend.contact_us'
+            ],
+            'App\Http\ViewComposers\FrontendMasterComposer'
         );
         View::composer(
             [
@@ -27,8 +31,7 @@ class ComposerServiceProvider extends ServiceProvider
                 'backend.user.forgot',
                 'backend.user.reset',
                 'backend.user.lock',
-                'backend.settings.institute',
-                'frontend.contact_us'
+                'backend.settings.institute'
             ],
             'App\Http\ViewComposers\BackendMasterComposer'
         );
