@@ -2,6 +2,7 @@
 
 namespace App\Http\ViewComposers;
 use App\Event;
+use App\Http\Helpers\AppHelper;
 use App\SiteMeta;
 use Illuminate\Contracts\View\View;
 
@@ -9,20 +10,15 @@ class FrontendMasterComposer
 {
     public function compose(View $view)
     {
-        //todo: need to implement cache here for db call
-        //for get request
-        $address = SiteMeta::where('meta_key', 'contact_address')->first();
-        $phone = SiteMeta::where('meta_key', 'contact_phone')->first();
-        $email = SiteMeta::where('meta_key', 'contact_email')->first();
-        $gaInfo = SiteMeta::where('meta_key', 'ga_tracking_id')->first();
-        $GA_TRACKING_ID = null;
-        if($gaInfo){
-            $GA_TRACKING_ID = $gaInfo->meta_value;
-        }
+        //get site meta values
+        $metas = AppHelper::getSiteMetas();
+
+        $GA_TRACKING_ID = isset($metas['ga_tracking_id']) ? $metas['ga_tracking_id'] : null;
+
         $siteInfo = [
-            'address' => isset($address->meta_value) ? $address->meta_value : '',
-            'phone' => isset($phone->meta_value) ? $phone->meta_value : '',
-            'email' => isset($email->meta_value) ? $email->meta_value : '',
+            'address' => isset($metas['contact_address']) ? $metas['contact_address'] : '',
+            'phone' => isset($metas['contact_phone']) ? $metas['contact_phone'] : '',
+            'email' => isset($metas['contact_email']) ? $metas['contact_email'] : '',
             'name' => '',
             'short_name' => '',
             'logo' => '',
@@ -33,8 +29,8 @@ class FrontendMasterComposer
             'twitter' => '',
             'youtube' => '',
         ];
-        $upComingEvent = Event::whereDate('event_time','>=', date('Y-m-d'))->orderBy('event_time','asc')->take(1)->first();
-        $settings = SiteMeta::where('meta_key','settings')->first();
+        $upComingEvent = AppHelper::getUpcommingEvent();
+        $settings = AppHelper::getWebsiteSettings();
         $info = null;
         if($settings){
             $info = json_decode($settings->meta_value);
@@ -48,12 +44,6 @@ class FrontendMasterComposer
             $siteInfo['twitter'] = $info->twitter;
             $siteInfo['youtube'] = $info->youtube;
         }
-
-
-        /**
-         * Acronyms generator of a phrase
-         */
-//         $siteInfo['short_name'] = preg_replace('~\b(\w)|.~', '$1', $siteInfo['name']);
 
 
         $view->with('maintainer', 'ShanixLab');

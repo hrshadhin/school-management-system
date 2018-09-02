@@ -1,6 +1,7 @@
 <?php
  namespace App\Http\Helpers;
 
+ use App\SiteMeta;
  use GuzzleHttp\Client;
  use GuzzleHttp\Exception\RequestException;
  use Illuminate\Support\Facades\App;
@@ -11,6 +12,10 @@
  class AppHelper
 {
 
+    const LANGUEAGES = [
+        'en' => 'English',
+        'bn' => 'Bangla',
+    ];
     const USER_ADMIN = 1;
     const USER_TEACHER = 2;
     const USER_STUDENT = 3;
@@ -212,6 +217,77 @@
          }
 
          return $appSettings;
+     }
+
+     /**
+      *
+      *    site meta data settings fetch
+      *
+      */
+     public static function getSiteMetas(){
+         $siteMetas = null;
+         if (Cache::has('site_metas')) {
+             $siteMetas = Cache::get('site_metas');
+         }
+         else{
+
+             $settings = SiteMeta::whereIn(
+                 'meta_key', [
+                     'contact_address',
+                     'contact_phone',
+                     'contact_email',
+                     'ga_tracking_id',
+                 ]
+             )->get();
+
+             $metas = [];
+             foreach ($settings as $setting){
+                 $metas[$setting->meta_key] = $setting->meta_value;
+             }
+             $siteMetas = $metas;
+             Cache::forever('site_metas', $metas);
+
+         }
+
+         return $siteMetas;
+     }
+
+     /**
+      *
+      *    Website settings fetch
+      *
+      */
+     public static function getWebsiteSettings(){
+         $webSettings = null;
+         if (Cache::has('website_settings')) {
+             $webSettings = Cache::get('website_settings');
+         }
+         else{
+             $webSettings = SiteMeta::where('meta_key','settings')->first();
+             Cache::forever('website_settings', $webSettings);
+
+         }
+
+         return $webSettings;
+     }
+
+     /**
+      *
+      *   up comming event fetch
+      *
+      */
+     public static function getUpcommingEvent(){
+         $event = null;
+         if (Cache::has('upcomming_event')) {
+             $event = Cache::get('upcomming_event');
+         }
+         else{
+             $event = Event::whereDate('event_time','>=', date('Y-m-d'))->orderBy('event_time','asc')->take(1)->first();
+             Cache::forever('upcomming_event', $event);
+
+         }
+
+         return $event;
      }
 
 }

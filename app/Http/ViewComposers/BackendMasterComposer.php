@@ -2,6 +2,7 @@
 
 namespace App\Http\ViewComposers;
 use App\Event;
+use App\Http\Helpers\AppHelper;
 use App\SiteMeta;
 use Illuminate\Contracts\View\View;
 
@@ -9,12 +10,7 @@ class BackendMasterComposer
 {
     public function compose(View $view)
     {
-        //todo: need to implement cache here for db call
-        $languages = [
-            'en' => 'English',
-            'bn' => 'Bangla',
-        ];
-        // todo: need to chagne application setting dynamic
+        $languages = AppHelper::LANGUEAGES;
         $locale = 'en';
 
         $siteInfo = [
@@ -28,7 +24,7 @@ class BackendMasterComposer
             'twitter' => '',
             'youtube' => '',
         ];
-        $settings = SiteMeta::where('meta_key','settings')->first();
+        $settings = AppHelper::getWebsiteSettings();
         $info = null;
         if($settings){
             $info = json_decode($settings->meta_value);
@@ -43,11 +39,13 @@ class BackendMasterComposer
             $siteInfo['youtube'] = $info->youtube;
         }
 
+        // get app settings
+        $appSettings = AppHelper::getAppSettings();
 
-        /**
-         * Acronyms generator of a phrase
-         */
-//         $siteInfo['short_name'] = preg_replace('~\b(\w)|.~', '$1', $siteInfo['name']);
+        $view->with('frontend_website', 1);
+        if (!isset($appSettings['frontend_website']) or $appSettings['frontend_website'] == 0) {
+            $view->with('frontend_website', 0);
+        }
 
 
         $view->with('maintainer', 'ShanixLab');

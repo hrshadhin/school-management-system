@@ -22,6 +22,7 @@ class ComposerServiceProvider extends ServiceProvider
             [
                 'backend.layouts.master',
                 'backend.layouts.front_master',
+                'backend.partial.leftsidebar',
                 'backend.user.login',
                 'backend.user.forgot',
                 'backend.user.reset',

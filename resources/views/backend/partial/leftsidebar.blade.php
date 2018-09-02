@@ -140,6 +140,11 @@
           {{--</li>--}}
         </ul>
       </li>
+      <!-- Frontend Website links and settings -->
+      @if($frontend_website)
+        <script>
+          window.frontendWebsite = {{$frontend_website}};
+        </script>
       <li class="treeview">
         <a href="#">
           <i class="fa fa-globe"></i>
@@ -224,6 +229,7 @@
           </li>
         </ul>
       </li>
+      @endif
     </ul>
   </section>
   <!-- /.sidebar -->
