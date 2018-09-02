@@ -276,6 +276,7 @@ $(function () {
     var $demoSettings = $('<div />')
 
     // Layout options
+    var showSite = window.frontendWebsite ? 'checked' : '';
     $demoSettings.append(
         '<h4 class="control-sidebar-heading">'
         + 'Features'
@@ -290,7 +291,7 @@ $(function () {
         // Site link
         + '<div class="form-group">'
         + '<label class="control-sidebar-subheading">'
-        + '<input type="checkbox"data-feature="site-menu"class="pull-right" checked/> '
+        + '<input type="checkbox" data-feature="site-menu" class="pull-right" '+ showSite +'/> '
         + 'Site Link'
         + '</label>'
         + '</div>'

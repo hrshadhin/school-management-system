@@ -22,6 +22,7 @@ class AcademicController extends Controller
             $this->validate($request, [
                 'hiddenId' => 'required|integer',
             ]);
+            // todo: need to add delete protection
             $iclass = IClass::findOrFail($request->get('hiddenId'));
             $iclass->delete();
 
@@ -119,8 +120,9 @@ class AcademicController extends Controller
             $this->validate($request, [
                 'hiddenId' => 'required|integer',
             ]);
-            $isection = Isection::findOrFail($request->get('hiddenId'));
-            $isection->delete();
+            // todo: need to add delete protection
+            $section = Section::findOrFail($request->get('hiddenId'));
+            $section->delete();
 
             return redirect()->route('academic.section')->with('success', 'Record deleted!');
         }

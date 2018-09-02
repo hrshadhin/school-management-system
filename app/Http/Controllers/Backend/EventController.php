@@ -81,6 +81,7 @@ class EventController extends Controller
         }
 
         Event::create($data);
+        Cache::forget('upcomming_event');
 
         return redirect()->back()->with('success', 'New event added.');
     }
@@ -169,6 +170,7 @@ class EventController extends Controller
 
         $event->fill($data);
         $event->save();
+        Cache::forget('upcomming_event');
 
         return redirect()->route('event.index')->with('success', 'Event information updated.');
     }

@@ -550,6 +550,7 @@ class SiteController extends Controller
                 ['meta_key' => 'settings'],
                 ['meta_value' => json_encode($data)]
             );
+            Cache::forget('website_settings');
             return redirect()->route('site.settings')->with('success', 'Record updated!');
         }
 
