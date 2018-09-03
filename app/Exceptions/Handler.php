@@ -2,11 +2,12 @@
 
 namespace App\Exceptions;
 
+use App\Http\Helpers\AppHelper;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+
 
 
 class Handler extends ExceptionHandler
@@ -51,30 +52,29 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $exception)
     {
         if(!env('APP_DEBUG', false)) {
-            $statusCode = $exception->getStatusCode();
-            // todo: need to fixed unauthenticate route error here
-
-            if ($statusCode == 404) {
-                $locale = Session::get('user_locale');
-                App::setLocale($locale);
+            if (method_exists($exception, 'getStatusCode')) {
 
 
-                if (!$request->user()) {
-                    return response()->view('errors.front_404', [], 404);
+                if (!$request->user() && AppHelper::isFrontendEnabled()) {
+                    $locale = Session::get('user_locale');
+                    App::setLocale($locale);
+                    $statusCode = $exception->getStatusCode();
+                    if ($statusCode == 404) {
+                        return response()->view('errors.front_404', [], 404);
+                    }
+
+                    if ($statusCode == 500) {
+
+                        return response()->view('errors.front_500', [], 500);
+                    }
+
                 }
+
 
             }
 
-            if ($statusCode == 500) {
-                $locale = Session::get('user_locale');
-                App::setLocale($locale);
-
-                if (!$request->user()) {
-                    return response()->view('errors.front_500', [], 500);
-                }
-
-            }
         }
+
         return parent::render($request, $exception);
     }
 }
