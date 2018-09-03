@@ -295,4 +295,21 @@
          return $event;
      }
 
+     /**
+      *
+      *   check is frontend website enabled
+      *
+      */
+     public static function isFrontendEnabled(){
+         // get app settings
+         $appSettings = AppHelper::getAppSettings();
+         if (isset($appSettings['frontend_website']) && $appSettings['frontend_website'] == '1') {
+             return true;
+         }
+
+         return false;
+     }
+
+
+
 }
