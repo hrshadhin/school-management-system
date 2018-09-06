@@ -44,6 +44,17 @@
         2 => 'Staff'
     ];
 
+    const BLOOD_GROUP = [
+        1 => 'A+',
+        2 => 'O+',
+        3 => 'B+',
+        4 => 'AB+',
+        5 => 'A-',
+        6 => 'O-',
+        7 => 'B-',
+        8 => 'AB-',
+    ];
+
     public static function getUserSessionHash()
     {
         /**
