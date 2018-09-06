@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Hrshadhin\Userstamps\UserstampsTrait;
-use Illuminate\Support\Arr;
+use App\Http\Helpers\AppHelper;
 
 
 class Student extends Model
@@ -43,10 +43,19 @@ class Student extends Model
         'status',
     ];
 
-    private $genders = [1 => 'Male', 2 => 'Female'];
 
     public function getGenderAttribute($value)
     {
-        return Arr::get($this->genders, $value);
+        return Arr::get(AppHelper::GENDER, $value);
+    }
+
+    public function getReligionAttribute($value)
+    {
+        return Arr::get(AppHelper::RELIGION, $value);
+    }
+
+    public function getBloodGroupAttribute($value)
+    {
+        return Arr::get(AppHelper::BLOOD_GROUP, $value);
     }
 }

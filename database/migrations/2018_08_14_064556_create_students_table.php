@@ -41,8 +41,6 @@ class CreateStudentsTable extends Migration
             $table->softDeletes();
             $table->userstamps();
 
-            // todo: user account create
-
         });
         Schema::create('student_info_log', function (Blueprint $table) {
             $table->unsignedInteger('student_id');
