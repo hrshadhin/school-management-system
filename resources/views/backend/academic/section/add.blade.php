@@ -48,7 +48,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group has-feedback">
-                                        <label for="capacity">Numeric Value<span class="text-danger">*</span></label>
+                                        <label for="capacity">Capacity<span class="text-danger">*</span></label>
                                         <input  type="number" class="form-control" name="capacity" placeholder="40" value="@if($section){{ $section->capacity }}@else{{ old('capacity') }}@endif" required min="1">
                                         <span class="fa fa-sort-numeric-asc form-control-feedback"></span>
                                         <span class="text-danger">{{ $errors->first('capacity') }}</span>
