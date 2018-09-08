@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Hrshadhin\Userstamps\UserstampsTrait;
 use App\Http\Helpers\AppHelper;
+use Illuminate\Support\Arr;
 
 
 class Student extends Model
@@ -43,7 +44,11 @@ class Student extends Model
         'status',
     ];
 
-
+    public function registration()
+    {
+        // todo: need to add relation ship for academic year wise student select
+        return $this->hasMany('App\Registration', 'student_id');
+    }
     public function getGenderAttribute($value)
     {
         return Arr::get(AppHelper::GENDER, $value);

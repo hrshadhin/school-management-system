@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Http\Helpers\AppHelper;
+use App\IClass;
+use App\Student;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -15,9 +18,12 @@ class StudentController extends Controller
     public function index()
     {
 
-        $teachers = Employee::where('emp_type', AppHelper::EMP_TEACHER)->get();
-
-        return view('backend.teacher.list', compact('teachers'));
+        $students = Student::where('status', AppHelper::ACTIVE)->get();
+        // todo: need fetch registration information here
+        $classes = IClass::where('status', AppHelper::ACTIVE)
+            ->pluck('name', 'id');
+        $iclass = null;
+        return view('backend.student.list', compact('students', 'classes', 'iclass'));
 
     }
 
@@ -29,10 +35,30 @@ class StudentController extends Controller
      */
     public function create()
     {
-        $teacher = null;
+        $classes = IClass::where('status', AppHelper::ACTIVE)
+            ->pluck('name', 'id');
+        $student = null;
         $gender = 1;
         $religion = 1;
-        return view('backend.teacher.add', compact('teacher', 'gender', 'religion'));
+        $blood_group = 1;
+        $nationality = 'Bangladeshi';
+        $iclass = null;
+        $group = 'None';
+        $shift = 'Day';
+        $regiInfo = null;
+
+        return view('backend.student.add', compact(
+            'classes',
+            'student',
+            'gender',
+            'religion',
+            'blood_group',
+            'nationality',
+            'regiInfo',
+            'iclass',
+            'group',
+            'shift'
+        ));
     }
 
 

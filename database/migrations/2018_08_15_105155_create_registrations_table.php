@@ -25,6 +25,7 @@ class CreateRegistrationsTable extends Migration
             $table->string('shift',15)->nullable();
             $table->string('card_no',50)->nullable();
             $table->string('board_regi_no',50)->nullable();
+            $table->unsignedInteger('fourth_subject')->default(0);
 
 
             $table->foreign('student_id')->references('id')->on('students');

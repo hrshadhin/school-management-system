@@ -201,6 +201,10 @@ Route::group(
     Route::resource('teacher', 'TeacherController');
     Route::post('teacher/status/{id}','TeacherController@changeStatus')
         ->name('teacher.status');
+    // student routes
+    Route::resource('student', 'StudentController');
+    Route::post('student/status/{id}','StudentController@changeStatus')
+        ->name('student.status');
 
     //dev routes
     Route::get('/make-link',function(){

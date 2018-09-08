@@ -2,7 +2,7 @@
 @extends('backend.layouts.master')
 
 <!-- Page title -->
-@section('pageTitle') Teacher @endsection
+@section('pageTitle') Student @endsection
 <!-- End block -->
 
 <!-- Page body extra class -->
@@ -14,12 +14,12 @@
     <!-- Section header -->
     <section class="content-header">
         <h1>
-            Teacher
+            Student
             <small>List</small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="{{URL::route('user.dashboard')}}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-            <li class="active">Teacher</li>
+            <li class="active">Student</li>
         </ol>
     </section>
     <!-- ./Section header -->
@@ -29,20 +29,28 @@
             <div class="col-md-12">
                 <div class="box box-info">
                     <div class="box-header">
+                        <div class="col-md-4">
+                        <div class="form-group has-feedback">
+                                {!! Form::select('class_id', $classes, $iclass , ['placeholder' => 'Pick a class...','class' => 'form-control select2', 'required' => 'true']) !!}
+                            </div>
+                        </div>
                         <div class="box-tools pull-right">
-                            <a class="btn btn-info btn-sm" href="{{ URL::route('teacher.create') }}"><i class="fa fa-plus-circle"></i> Add New</a>
+                            <a class="btn btn-info btn-sm" href="{{ URL::route('student.create') }}"><i class="fa fa-plus-circle"></i> Add New</a>
                         </div>
                     </div>
                     <!-- /.box-header -->
-                    <div class="box-body margin-top-20">
+                    <div class="box-body">
                         <div class="table-responsive">
                         <table id="listDataTable" class="table table-bordered table-striped list_view_table display responsive no-wrap" width="100%">
                             <thead>
                             <tr>
                                 <th width="5%">#</th>
-                                <th class="notexport" width="10%">Photo</th>
-                                <th width="10%">ID Card</th>
-                                <th width="30%">Name</th>
+                                <th class="notexport" width="7%">Photo</th>
+                                <th width="3%">Section</th>
+                                <th width="8%">Regi. No.</th>
+                                <th width="8%">Roll No.</th>
+                                <th width="8%">ID Card</th>
+                                <th width="16%">Name</th>
                                 <th width="10%">Phone No</th>
                                 <th width="10%">Email</th>
                                 <th width="10%">Status</th>
@@ -50,34 +58,34 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($teachers as $teacher)
+                            @foreach($students as $student)
                                 <tr>
                                     <td>
                                         {{$loop->iteration}}
                                     </td>
                                     <td>
-                                        <img class="img-responsive center" style="height: 35px; width: 35px;" src="@if($teacher->photo ){{ asset('storage/employee')}}/{{ $teacher->photo }} @else {{ asset('images/avatar.jpg')}} @endif" alt="">
+                                        <img class="img-responsive center" style="height: 35px; width: 35px;" src="@if($student->photo ){{ asset('storage/employee')}}/{{ $student->photo }} @else {{ asset('images/avatar.jpg')}} @endif" alt="">
                                     </td>
-                                    <td>{{ $teacher->id_card }}</td>
-                                    <td>{{ $teacher->name }}</td>
-                                    <td>{{ $teacher->phone_no }}</td>
-                                    <td>{{ $teacher->email }}</td>
+                                    <td>{{ $student->id_card }}</td>
+                                    <td>{{ $student->name }}</td>
+                                    <td>{{ $student->phone_no }}</td>
+                                    <td>{{ $student->email }}</td>
                                     <td>
                                         <!-- todo: have problem in mobile device -->
-                                        <input class="statusChange" type="checkbox" data-pk="{{$teacher->id}}" @if($teacher->status) checked @endif data-toggle="toggle" data-on="<i class='fa fa-check-circle'></i>" data-off="<i class='fa fa-ban'></i>" data-onstyle="success" data-offstyle="danger">
+                                        <input class="statusChange" type="checkbox" data-pk="{{$student->id}}" @if($student->status) checked @endif data-toggle="toggle" data-on="<i class='fa fa-check-circle'></i>" data-off="<i class='fa fa-ban'></i>" data-onstyle="success" data-offstyle="danger">
                                     </td>
                                     <td>
                                         <div class="btn-group">
-                                            <a title="Details"  href="{{URL::route('teacher.show',$teacher->id)}}"  class="btn btn-primary btn-sm"><i class="fa fa-eye"></i>
+                                            <a title="Details"  href="{{URL::route('student.show',$student->id)}}"  class="btn btn-primary btn-sm"><i class="fa fa-eye"></i>
                                             </a>
                                         </div>
                                         <div class="btn-group">
-                                            <a title="Edit" href="{{URL::route('teacher.edit',$teacher->id)}}" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
+                                            <a title="Edit" href="{{URL::route('student.edit',$student->id)}}" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
                                             </a>
                                         </div>
                                         <!-- todo: have problem in mobile device -->
                                         <div class="btn-group">
-                                            <form  class="myAction" method="POST" action="{{URL::route('teacher.destroy', $teacher->id)}}">
+                                            <form  class="myAction" method="POST" action="{{URL::route('student.destroy', $student->id)}}">
                                                 @csrf
                                                 <input name="_method" type="hidden" value="DELETE">
                                                 <button type="submit" class="btn btn-danger btn-sm" title="Delete">
@@ -94,9 +102,12 @@
                             <tfoot>
                             <tr>
                                 <th width="5%">#</th>
-                                <th class="notexport" width="10%">Photo</th>
-                                <th width="10%">ID Card</th>
-                                <th width="30%">Name</th>
+                                <th class="notexport" width="7%">Photo</th>
+                                <th width="3%">Section</th>
+                                <th width="8%">Regi. No.</th>
+                                <th width="8%">Roll No.</th>
+                                <th width="8%">ID Card</th>
+                                <th width="16%">Name</th>
                                 <th width="10%">Phone No</th>
                                 <th width="10%">Email</th>
                                 <th width="10%">Status</th>
@@ -120,10 +131,9 @@
 @section('extraScript')
     <script type="text/javascript">
         $(document).ready(function () {
-            window.postUrl = '{{URL::Route("teacher.status", 0)}}';
-            window.changeExportColumnIndex = 5;
-            Generic.initCommonPageJS();
-            Generic.initDeleteDialog();
+            window.postUrl = '{{URL::Route("student.status", 0)}}';
+            window.changeExportColumnIndex = 9;
+           Academic.studentInit();
         });
     </script>
 @endsection
