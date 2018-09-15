@@ -80,7 +80,7 @@ class AdministratorController extends Controller
      */
     public function academicYearChangeStatus(Request $request, $id=0)
     {
-
+        // todo: need to protect from change status if this is default academic year
         $year =  AcademicYear::findOrFail($id);
         if(!$year){
             return [

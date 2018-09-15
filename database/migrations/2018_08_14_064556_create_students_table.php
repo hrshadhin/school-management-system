@@ -15,6 +15,7 @@ class CreateStudentsTable extends Migration
     {
         Schema::create('students', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('user_id')->nullable();
             $table->string('name');
             $table->string('dob',10);
             $table->enum('gender', [1,2])->default(1);
@@ -34,7 +35,8 @@ class CreateStudentsTable extends Migration
             $table->string('guardian_phone_no',15)->nullable();
             $table->string('present_address',500)->nullable();
             $table->string('permanent_address',500);
-            $table->enum('status', [0,1])->default(0);
+            $table->enum('status', [0,1])->default(1);
+
 
 
             $table->timestamps();

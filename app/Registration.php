@@ -28,7 +28,8 @@ class Registration extends Model
         'shift',
         'card_no',
         'board_regi_no',
-        'fourth_subject'
+        'fourth_subject',
+        'status',
     ];
 
     public function student()

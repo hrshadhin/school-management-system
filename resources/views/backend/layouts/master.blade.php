@@ -69,6 +69,12 @@
                     @endif
                     </h5>
             </div>
+        @endif
+        @if (Session::has('message'))
+            <div class="alert  alert-success keepIt">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <h5 style="font-weight: bold; font-size: large;"><i class="icon fa fa-check"></i>{{ Session::get('message') }}</h5>
+            </div>
     @endif
     <!-- ./Message -->
         <!-- BEGIN CHILD PAGE-->
