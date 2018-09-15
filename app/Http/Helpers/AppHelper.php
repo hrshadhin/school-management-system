@@ -8,6 +8,7 @@
  use Illuminate\Support\Facades\App;
  use Illuminate\Support\Facades\Cache;
  use App\AppMeta;
+ use Illuminate\Support\Facades\DB;
 
 
  class AppHelper
@@ -321,6 +322,34 @@
          return false;
      }
 
+     /**
+      * Create triggers
+      * This function only used on shared hosting deployment
+      */
+     public static function createTriggers(){
+
+         // class history table trigger
+         DB::unprepared("DROP TRIGGER IF EXISTS i_class__ai;");
+         DB::unprepared("DROP TRIGGER IF EXISTS i_class__au;");
+         //create after insert trigger
+         DB::unprepared("CREATE TRIGGER i_class__ai AFTER INSERT ON i_classes FOR EACH ROW
+    INSERT INTO i_class_history SELECT 'insert', NULL, d.* 
+    FROM i_classes AS d WHERE d.id = NEW.id;");
+         DB::unprepared("CREATE TRIGGER i_class__au AFTER UPDATE ON i_classes FOR EACH ROW
+    INSERT INTO i_class_history SELECT 'update', NULL, d.*
+    FROM i_classes AS d WHERE d.id = NEW.id;");
+
+         // section history table trigger
+         DB::unprepared("DROP TRIGGER IF EXISTS section__ai;");
+         DB::unprepared("DROP TRIGGER IF EXISTS section__au;");
+         //create after insert trigger
+         DB::unprepared("CREATE TRIGGER section__ai AFTER INSERT ON sections FOR EACH ROW
+    INSERT INTO section_history SELECT 'insert', NULL, d.* 
+    FROM sections AS d WHERE d.id = NEW.id;");
+         DB::unprepared("CREATE TRIGGER section__au AFTER UPDATE ON sections FOR EACH ROW
+    INSERT INTO section_history SELECT 'update', NULL, d.*
+    FROM sections AS d WHERE d.id = NEW.id;");
+     }
 
 
 }
