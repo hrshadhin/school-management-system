@@ -64,7 +64,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group has-feedback">
                                         <label for="dob">Date of birth<span class="text-danger">*</span></label>
-                                        <input type='text' class="form-control date_picker"  readonly name="dob" placeholder="date" value="@if($teacher){{ $teacher->dob }}@else{{old('dob')}}@endif" required minlength="10" maxlength="255" />
+                                        <input type='text' class="form-control dob_picker"  readonly name="dob" placeholder="date" value="@if($teacher){{ $teacher->dob }}@else{{old('dob')}}@endif" required minlength="10" maxlength="255" />
                                         <span class="fa fa-calendar form-control-feedback"></span>
                                         <span class="text-danger">{{ $errors->first('dob') }}</span>
                                     </div>

@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Employee;
 use DB;
+use Illuminate\Support\Facades\Storage;
 
 class TeacherController extends Controller
 {
@@ -220,6 +221,13 @@ class TeacherController extends Controller
             $storagepath = $request->file('photo')->store('public/employee');
             $fileName = basename($storagepath);
             $data['photo'] = $fileName;
+
+            //if file change then delete old one
+            $oldFile = $request->get('oldPhoto','');
+            if( $oldFile != ''){
+                $file_path = "public/employee/".$oldFile;
+                Storage::delete($file_path);
+            }
         }
         else{
             $data['photo'] = $request->get('oldPhoto','');

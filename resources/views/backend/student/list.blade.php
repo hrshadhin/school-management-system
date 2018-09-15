@@ -31,7 +31,7 @@
                     <div class="box-header">
                         <div class="col-md-4">
                         <div class="form-group has-feedback">
-                                {!! Form::select('class_id', $classes, $iclass , ['placeholder' => 'Pick a class...','class' => 'form-control select2', 'required' => 'true']) !!}
+                                {!! Form::select('class_filter', $classes, $iclass , ['placeholder' => 'Pick a class...','class' => 'form-control select2', 'required' => 'true']) !!}
                             </div>
                         </div>
                         <div class="box-tools pull-right">
@@ -58,34 +58,37 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($students as $student)
+                            @foreach($students as $info)
                                 <tr>
                                     <td>
                                         {{$loop->iteration}}
                                     </td>
                                     <td>
-                                        <img class="img-responsive center" style="height: 35px; width: 35px;" src="@if($student->photo ){{ asset('storage/employee')}}/{{ $student->photo }} @else {{ asset('images/avatar.jpg')}} @endif" alt="">
+                                        <img class="img-responsive center" style="height: 35px; width: 35px;" src="@if($info->student->photo ){{ asset('storage/student')}}/{{ $info->class_id }}/{{ $info->student->photo }} @else {{ asset('images/avatar.jpg')}} @endif" alt="">
                                     </td>
-                                    <td>{{ $student->id_card }}</td>
-                                    <td>{{ $student->name }}</td>
-                                    <td>{{ $student->phone_no }}</td>
-                                    <td>{{ $student->email }}</td>
+                                    <td>{{ $info->section->name }}</td>
+                                    <td>{{ $info->regi_no }}</td>
+                                    <td>{{ $info->roll_no }}</td>
+                                    <td>{{ $info->card_no }}</td>
+                                    <td>{{ $info->student->name }}</td>
+                                    <td>{{ $info->student->phone_no }}</td>
+                                    <td>{{ $info->student->email }}</td>
                                     <td>
                                         <!-- todo: have problem in mobile device -->
-                                        <input class="statusChange" type="checkbox" data-pk="{{$student->id}}" @if($student->status) checked @endif data-toggle="toggle" data-on="<i class='fa fa-check-circle'></i>" data-off="<i class='fa fa-ban'></i>" data-onstyle="success" data-offstyle="danger">
+                                        <input class="statusChange" type="checkbox" data-pk="{{$info->id}}" @if($info->status) checked @endif data-toggle="toggle" data-on="<i class='fa fa-check-circle'></i>" data-off="<i class='fa fa-ban'></i>" data-onstyle="success" data-offstyle="danger">
                                     </td>
                                     <td>
                                         <div class="btn-group">
-                                            <a title="Details"  href="{{URL::route('student.show',$student->id)}}"  class="btn btn-primary btn-sm"><i class="fa fa-eye"></i>
+                                            <a title="Details"  href="{{URL::route('student.show',$info->id)}}"  class="btn btn-primary btn-sm"><i class="fa fa-eye"></i>
                                             </a>
                                         </div>
                                         <div class="btn-group">
-                                            <a title="Edit" href="{{URL::route('student.edit',$student->id)}}" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
+                                            <a title="Edit" href="{{URL::route('student.edit',$info->id)}}" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
                                             </a>
                                         </div>
                                         <!-- todo: have problem in mobile device -->
                                         <div class="btn-group">
-                                            <form  class="myAction" method="POST" action="{{URL::route('student.destroy', $student->id)}}">
+                                            <form  class="myAction" method="POST" action="{{URL::route('student.destroy', $info->id)}}">
                                                 @csrf
                                                 <input name="_method" type="hidden" value="DELETE">
                                                 <button type="submit" class="btn btn-danger btn-sm" title="Delete">
@@ -132,7 +135,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
             window.postUrl = '{{URL::Route("student.status", 0)}}';
-            window.changeExportColumnIndex = 9;
+            window.changeExportColumnIndex = 8;
            Academic.studentInit();
         });
     </script>

@@ -21,6 +21,14 @@ export default class Generic {
 
         $(".date_picker").datetimepicker({
             format: "dd/mm/yyyy",
+            startView: 'month',
+            minView: 'month',
+            maxView: 'decade',
+            autoclose: true,
+            todayBtn: true
+        });
+        $(".dob_picker").datetimepicker({
+            format: "dd/mm/yyyy",
             startView: 'decade',
             minView: 'month',
             maxView: 'decade',

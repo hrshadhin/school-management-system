@@ -115,6 +115,7 @@ class AcademicController extends Controller
      */
     public function sectionIndex(Request $request)
     {
+
         //for save on POST request
         if ($request->isMethod('post')) {//
             $this->validate($request, [
@@ -125,6 +126,14 @@ class AcademicController extends Controller
             $section->delete();
 
             return redirect()->route('academic.section')->with('success', 'Record deleted!');
+        }
+
+
+        // check for ajax request here
+        if($request->ajax()){
+            $class_id = $request->query->get('class', 0);
+            $sections = Section::select('id', 'name as text')->where('class_id',$class_id)->where('status', AppHelper::ACTIVE)->orderBy('name', 'asc')->get();
+            return $sections;
         }
 
         $sections = Section::with('teacher')->with('class')->orderBy('name', 'asc')->get();

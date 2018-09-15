@@ -15,12 +15,12 @@
     <section class="content-header">
         <h1>
             Student
-            <small>@if($student) Update @else Add New @endif</small>
+            <small>@if($regiInfo) Update @else Add New @endif</small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="{{URL::route('user.dashboard')}}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
             <li><a href="{{URL::route('student.index')}}"><i class="fa icon-teacher"></i> Student</a></li>
-            <li class="active">@if($student) Update @else Add @endif</li>
+            <li class="active">@if($regiInfo) Update @else Add @endif</li>
         </ol>
     </section>
     <!-- ./Section header -->
@@ -29,10 +29,15 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="box box-info">
-                    <form novalidate id="entryForm" action="@if($student) {{URL::Route('student.update', $student->id)}} @else {{URL::Route('student.store')}} @endif" method="post" enctype="multipart/form-data">
+                    <form novalidate id="entryForm" action="@if($regiInfo) {{URL::Route('student.update', $regiInfo->id)}} @else {{URL::Route('student.store')}} @endif" method="post" enctype="multipart/form-data">
+                        <div class="box-header">
+                            <div class="callout callout-danger">
+                                <p><b>Note:</b> Create a class and section before create new student. And subject if student have elective subject.</p>
+                            </div>
+                        </div>
                         <div class="box-body">
                             @csrf
-                            @if($student)  {{ method_field('PATCH') }} @endif
+                            @if($regiInfo)  {{ method_field('PATCH') }} @endif
                             <p class="lead section-title">Student Info:</p>
                             <div class="row">
                                 <div class="col-md-4">
@@ -46,7 +51,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group has-feedback">
                                         <label for="dob">Date of birth<span class="text-danger">*</span></label>
-                                        <input type='text' class="form-control date_picker"  readonly name="dob" placeholder="date" value="@if($student){{ $student->dob }}@else{{old('dob')}}@endif" required minlength="10" maxlength="255" />
+                                        <input type='text' class="form-control dob_picker"  readonly name="dob" placeholder="date" value="@if($student){{ $student->dob }}@else{{old('dob')}}@endif" required minlength="10" maxlength="255" />
                                         <span class="fa fa-calendar form-control-feedback"></span>
                                         <span class="text-danger">{{ $errors->first('dob') }}</span>
                                     </div>
@@ -79,7 +84,7 @@
                                         <label for="blood_group">Blood Group<span class="text-danger">*</span>
                                             <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="select blood group type"></i>
                                         </label>
-                                        {!! Form::select('blood_group', AppHelper::BLOOD_GROUP, $blood_group , ['class' => 'form-control select2', 'required' => 'true']) !!}
+                                        {!! Form::select('blood_group', AppHelper::BLOOD_GROUP, $bloodGroup , ['class' => 'form-control select2', 'required' => 'true']) !!}
                                         <span class="form-control-feedback"></span>
                                         <span class="text-danger">{{ $errors->first('blood_group') }}</span>
                                     </div>
@@ -97,7 +102,7 @@
                                 <div class="col-md-3">
                                     <div class="form-group has-feedback">
                                         <label for="nationality">Nationality</label>
-                                        <input  type="text" class="form-control" name="nationality" readonly placeholder="Nationality" value="@if($student){{$student->nationality}}@else{{old('nationality')}}@endif" maxlength="50" >
+                                        <input  type="text" class="form-control" name="nationality_other" readonly placeholder="Nationality" value="@if($student && $student->nationality == "Other"){{$student->nationality}}@else{{old('nationality')}}@endif" maxlength="50" >
                                         <span class="fa fa-map-marker form-control-feedback"></span>
                                         <span class="text-danger">{{ $errors->first('nationality') }}</span>
                                     </div>
@@ -219,7 +224,7 @@
 
                                 <div class="col-md-6">
                                     <div class="form-group has-feedback">
-                                        <label for="permanent_address">Permanent Address</label>
+                                        <label for="permanent_address">Permanent Address<span class="text-danger">*</span></label>
                                         <textarea name="permanent_address" class="form-control" required minlength="10" maxlength="500" >@if($student){{ $student->permanent_address }}@else{{ old('permanent_address') }} @endif</textarea>
                                         <span class="fa fa-location-arrow form-control-feedback"></span>
                                         <span class="text-danger">{{ $errors->first('permanent_address') }}</span>
@@ -242,6 +247,7 @@
                                     <div class="form-group has-feedback">
                                         <label for="class_id">Class Name
                                             <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Set class that student belongs to"></i>
+                                            <span class="text-danger">*</span>
                                         </label>
                                         {!! Form::select('class_id', $classes, $iclass , ['placeholder' => 'Pick a class...','class' => 'form-control select2', 'required' => 'true']) !!}
                                         <span class="form-control-feedback"></span>
@@ -252,8 +258,9 @@
                                     <div class="form-group has-feedback">
                                         <label for="section_id">Section
                                             <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Set section that student belongs to"></i>
+                                            <span class="text-danger">*</span>
                                         </label>
-                                        {!! Form::select('section_id', [], null , ['placeholder' => 'Pick a section...','class' => 'form-control select2', 'required' => 'true']) !!}
+                                        {!! Form::select('section_id', $sections, $section , ['placeholder' => 'Pick a section...','class' => 'form-control select2', 'required' => 'true']) !!}
                                         <span class="form-control-feedback"></span>
                                         <span class="text-danger">{{ $errors->first('section_id') }}</span>
                                     </div>
@@ -284,7 +291,7 @@
                             <div class="col-md-3">
                                     <div class="form-group has-feedback">
                                         <label for="card_no">ID Card No.</label>
-                                        <input  type="text" class="form-control" name="id_card"  placeholder="id card number" value="@if($regiInfo){{$regiInfo->card_no}}@else{{old('card_no')}}@endif"  min="4" maxlength="50">
+                                        <input  type="text" class="form-control" name="card_no"  placeholder="id card number" value="@if($regiInfo){{$regiInfo->card_no}}@else{{old('card_no')}}@endif"  min="4" maxlength="50">
                                         <span class="fa fa-id-card form-control-feedback"></span>
                                         <span class="text-danger">{{ $errors->first('card_no') }}</span>
                                     </div>
@@ -316,36 +323,36 @@
                                     </div>
                                 </div>
                             </div>
-                            {{--@if(!$student)--}}
-                            {{--<hr>--}}
-                            {{--<div class="row">--}}
-                                {{--<div class="col-md-4">--}}
-                                    {{--<div class="form-group has-feedback">--}}
-                                        {{--<label for="username">Username<span class="text-danger">*</span></label>--}}
-                                        {{--<input  type="text" class="form-control" value="" name="username" required minlength="5" maxlength="255">--}}
-                                        {{--<span class="glyphicon glyphicon-info-sign form-control-feedback"></span>--}}
-                                        {{--<span class="text-danger">{{ $errors->first('username') }}</span>--}}
-                                    {{--</div>--}}
-                                {{--</div>--}}
-                                {{--<div class="col-md-4">--}}
-                                    {{--<div class="form-group has-feedback">--}}
-                                        {{--<label for="password">Passwrod<span class="text-danger">*</span></label>--}}
-                                        {{--<input type="password" class="form-control" name="password" placeholder="Password" required minlength="6" maxlength="50">--}}
-                                        {{--<span class="glyphicon glyphicon-lock form-control-feedback"></span>--}}
-                                        {{--<span class="text-danger">{{ $errors->first('password') }}</span>--}}
-                                    {{--</div>--}}
-                                {{--</div>--}}
-                                {{--<div class="col-md-4">--}}
+                            @if(!$student)
+                                <p class="lead section-title">Access Info:</p>
+                                <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group has-feedback">
+                                        <label for="username">Username</label>
+                                        <input  type="text" class="form-control" value="" name="username" placeholder="leave blank if not need to create user"  minlength="5" maxlength="255">
+                                        <span class="glyphicon glyphicon-info-sign form-control-feedback"></span>
+                                        <span class="text-danger">{{ $errors->first('username') }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group has-feedback">
+                                        <label for="password">Passwrod</label>
+                                        <input type="password" class="form-control" name="password" placeholder="leave blank if not need to create user"  minlength="6" maxlength="50">
+                                        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                                        <span class="text-danger">{{ $errors->first('password') }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
 
-                                {{--</div>--}}
-                            {{--</div>--}}
-                                {{--@endif--}}
+                                </div>
+                            </div>
+                                @endif
 
                         </div>
                         <!-- /.box-body -->
                         <div class="box-footer">
                             <a href="{{URL::route('student.index')}}" class="btn btn-default">Cancel</a>
-                            <button type="submit" class="btn btn-info pull-right"><i class="fa @if($student) fa-refresh @else fa-plus-circle @endif"></i> @if($student) Update @else Add @endif</button>
+                            <button type="submit" class="btn btn-info pull-right"><i class="fa @if($regiInfo) fa-refresh @else fa-plus-circle @endif"></i> @if($regiInfo) Update @else Add @endif</button>
 
                         </div>
                     </form>
@@ -361,7 +368,9 @@
 @section('extraScript')
     <script type="text/javascript">
         $(document).ready(function () {
+            window.section_list_url = '{{URL::Route("academic.section")}}';
             Academic.studentInit();
+
         });
     </script>
 @endsection
