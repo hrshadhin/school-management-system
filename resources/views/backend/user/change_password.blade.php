@@ -52,7 +52,7 @@
                             </div>
 
                             <br>
-                            <a href="{{URL::route('site.dashboard')}}" class="btn btn-default btnCancel">Cancel</a>
+                            <a href="{{URL::route('user.dashboard')}}" class="btn btn-default btnCancel">Cancel</a>
                             <button type="submit" class="btn btn-info pull-right"><i class="fa fa-refresh"></i> Update</button>
                         </form>
                     </div>
