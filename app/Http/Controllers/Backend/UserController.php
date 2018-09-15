@@ -56,7 +56,7 @@ class UserController extends Controller
         $password = $request->get('password');
         $remember=$request->has('remember');
 
-        if (Auth::attempt(['username' => $username, 'password' => $password], $remember)) {
+        if (Auth::attempt(['username' => $username, 'password' => $password, 'status' => AppHelper::ACTIVE], $remember)) {
             session(['user_session_sha1' => AppHelper::getUserSessionHash()]);
 
             // todo: check application settings has or not and show warning info

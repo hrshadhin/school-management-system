@@ -19,7 +19,7 @@
         </h1>
         <ol class="breadcrumb">
             <li><a href="{{URL::route('user.dashboard')}}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-            <li><a href="{{URL::route('student.index')}}"><i class="fa icon-teacher"></i> Student</a></li>
+            <li><a href="{{URL::route('student.index')}}"><i class="fa icon-student"></i> Student</a></li>
             <li class="active">@if($regiInfo) Update @else Add @endif</li>
         </ol>
     </section>

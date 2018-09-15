@@ -255,12 +255,23 @@ class StudentController extends Controller
      */
     public function show($id)
     {
-        $teacher = Employee::with('user')->where('emp_type', AppHelper::EMP_TEACHER)->where('id', $id)->first();
-        if(!$teacher){
+        //get student
+        $student = Registration::where('id', $id)
+            ->with('student')
+            ->with('class')
+            ->with('section')
+            ->with('acYear')
+            ->first();
+        if(!$student){
             abort(404);
         }
-
-        return view('backend.teacher.view', compact('teacher'));
+        $username = '';
+        $fourthSubject = $student->fourth_subject ? $student->fourth_subject : '';
+        if($student->student->user_id){
+            $user = User::find($student->student->user_id);
+            $username = $user->username;
+        }
+        return view('backend.student.view', compact('student', 'username', 'fourthSubject'));
 
 
     }
@@ -469,6 +480,10 @@ class StudentController extends Controller
 
             $registration->delete();
             $student->delete();
+            if($student->user_id){
+                $user = User::find($student->user_id);
+                $user->delete();
+            }
             DB::commit();
 
             return redirect()->route('student.index')->with('success', 'Student deleted.');
@@ -506,6 +521,10 @@ class StudentController extends Controller
 
         $student->status = (string)$request->get('status');
         $registration->status = (string)$request->get('status');
+        if($student->user_id){
+            $user = User::find($student->user_id);
+            $user->status = (string)$request->get('status');
+        }
 
         $message = 'Something went wrong!';
         DB::beginTransaction();
@@ -513,6 +532,7 @@ class StudentController extends Controller
 
             $registration->save();
             $student->save();
+            $user->save();
             DB::commit();
 
             return [
