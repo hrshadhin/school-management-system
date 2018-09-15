@@ -249,9 +249,14 @@
                                             <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Set class that student belongs to"></i>
                                             <span class="text-danger">*</span>
                                         </label>
+                                        @if($regiInfo)
+                                            <br><span class="text-danger">Class can't be change.</span>
+                                            @else
                                         {!! Form::select('class_id', $classes, $iclass , ['placeholder' => 'Pick a class...','class' => 'form-control select2', 'required' => 'true']) !!}
                                         <span class="form-control-feedback"></span>
                                         <span class="text-danger">{{ $errors->first('class_id') }}</span>
+                                            @endif
+
                                     </div>
                                 </div>
                                 <div class="col-md-2">

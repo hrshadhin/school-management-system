@@ -10,6 +10,7 @@ use App\Section;
 use App\Student;
 use App\User;
 use App\UserRole;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -369,7 +370,7 @@ class StudentController extends Controller
             'permanent_address' => 'required|max:500',
             'card_no' => 'nullable|min:4|max:50|unique:registrations,card_no,'.$regiInfo->id,
             'email' => 'nullable|email|max:255|unique:students,email,'.$student->id.'|email|unique:users,email,'.$student->user_id,
-            'class_id' => 'required|integer',
+//            'class_id' => 'required|integer',
             'section_id' => 'required|integer',
             'group' => 'nullable|max:15',
             'shift' => 'nullable|max:15',
@@ -416,7 +417,7 @@ class StudentController extends Controller
 
 
         $registrationData = [
-            'class_id' => $data['class_id'],
+//            'class_id' => $data['class_id'],
             'section_id' => $data['section_id'],
             'roll_no' => $data['roll_no'],
             'group' => $data['group'],
@@ -425,6 +426,90 @@ class StudentController extends Controller
             'board_regi_no' => $data['board_regi_no'],
             'fourth_subject' => $data['fourth_subject'] ? $data['fourth_subject'] : 0
         ];
+
+        // now check if student academic information changed, if so then log it
+        $isChanged = false;
+        $logData = [];
+        $timeNow = Carbon::now();
+        if($regiInfo->section_id != $data['section_id']){
+            $isChanged = true;
+            $logData[] = [
+                'student_id' => $regiInfo->student_id,
+                'academic_year_id' => $regiInfo->academic_year_id,
+                'meta_key' => 'section',
+                'meta_value' => $regiInfo->section_id,
+                'created_at' => $timeNow,
+
+            ];
+        }
+        if($regiInfo->roll_no != $data['roll_no']){
+            $isChanged = true;
+            $logData[] = [
+                'student_id' => $regiInfo->student_id,
+                'academic_year_id' => $regiInfo->academic_year_id,
+                'meta_key' => 'roll no',
+                'meta_value' => $regiInfo->roll_no,
+                'created_at' => $timeNow,
+
+            ];
+        }
+
+        if($regiInfo->group != $data['group']){
+            $isChanged = true;
+            $logData[] = [
+                'student_id' => $regiInfo->student_id,
+                'academic_year_id' => $regiInfo->academic_year_id,
+                'meta_key' => 'group',
+                'meta_value' => $regiInfo->group,
+                'created_at' => $timeNow,
+
+            ];
+        }
+        if($regiInfo->shift != $data['shift']){
+            $isChanged = true;
+            $logData[] = [
+                'student_id' => $regiInfo->student_id,
+                'academic_year_id' => $regiInfo->academic_year_id,
+                'meta_key' => 'shift',
+                'meta_value' => $regiInfo->shift,
+                'created_at' => $timeNow,
+
+            ];
+        }
+
+        if($regiInfo->card_no != $data['card_no']){
+            $isChanged = true;
+            $logData[] = [
+                'student_id' => $regiInfo->student_id,
+                'academic_year_id' => $regiInfo->academic_year_id,
+                'meta_key' => 'card no',
+                'meta_value' => $regiInfo->card_no,
+                'created_at' => $timeNow,
+
+            ];
+        }
+        if($regiInfo->board_regi_no != $data['board_regi_no']){
+            $isChanged = true;
+            $logData[] = [
+                'student_id' => $regiInfo->student_id,
+                'academic_year_id' => $regiInfo->academic_year_id,
+                'meta_key' => 'board regi no',
+                'meta_value' => $regiInfo->board_regi_no,
+                'created_at' => $timeNow,
+
+            ];
+        }
+        if($regiInfo->fourth_subject != $data['fourth_subject']){
+            $isChanged = true;
+            $logData[] = [
+                'student_id' => $regiInfo->student_id,
+                'academic_year_id' => $regiInfo->academic_year_id,
+                'meta_key' => 'fourth subject',
+                'meta_value' => $regiInfo->fourth_subject,
+                'created_at' => $timeNow,
+
+            ];
+        }
 
         $message = 'Something went wrong!';
         DB::beginTransaction();
@@ -438,6 +523,10 @@ class StudentController extends Controller
             $student->fill($data);
             $student->save();
 
+            //if have changes then insert log
+            if($isChanged){
+                DB::table('student_info_log')->insert($logData);
+            }
             // now commit the database
             DB::commit();
 
@@ -448,6 +537,7 @@ class StudentController extends Controller
         catch(\Exception $e){
             DB::rollback();
             $message = str_replace(array("\r", "\n","'","`"), ' ', $e->getMessage());
+//            dd($message);
         }
 
         return redirect()->route('student.edit', $regiInfo->id)->with("error",$message);;
