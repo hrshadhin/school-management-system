@@ -48,7 +48,7 @@ class CreateStudentsTable extends Migration
             $table->unsignedInteger('student_id');
             $table->unsignedInteger('academic_year_id');
             $table->string('meta_key');
-            $table->text('meta_value');
+            $table->text('meta_value')->nullable();
             $table->dateTime('created_at');
             $table->foreign('student_id')->references('id')->on('students');
             $table->foreign('academic_year_id')->references('id')->on('academic_years');
