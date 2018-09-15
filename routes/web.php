@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Session;
+use App\Http\Helpers\AppHelper;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -216,6 +217,17 @@ Route::group(
         $exitCode = Artisan::call('view:clear');
         $exitCode = Artisan::call('route:clear');
         return 'clear cache';
+    });
+
+    // create neccessary tiggers
+    Route::get('/create-triggers/{code}', function($code) {
+        if($code !== '007'){
+            return 'Wrong code!';
+        }
+
+        AppHelper::createTriggers();
+
+        return 'Triggers created :)';
     });
 }
 );
