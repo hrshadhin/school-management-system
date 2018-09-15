@@ -442,7 +442,7 @@ $(function () {
     /**
      * Alert message auto hide
      */
-    $(".alert").not('.keepIt').delay(4000).slideUp(200, function () {
+    $(".alert").not('.keepIt').delay(8000).slideUp(200, function () {
         $(this).alert('close');
     });
 

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Helpers\AppHelper;
+use App\IClass;
+use App\Section;
 use App\User;
 use App\UserRole;
 use Illuminate\Http\Request;
@@ -263,9 +265,19 @@ class TeacherController extends Controller
     public function destroy($id)
     {
         $teacher = Employee::where('emp_type', AppHelper::EMP_TEACHER)->where('id', $id)->first();
+
         if(!$teacher){
             abort(404);
         }
+        //protect from delete the teacher if have any class or section connected with this teacher
+        $haveClass = IClass::where('teacher_id', $teacher->id)->count();
+        $haveSection = Section::where('teacher_id', $teacher->id)->count();
+
+        if($haveClass || $haveSection){
+            return redirect()->route('teacher.index')->with('error', 'Can not delete! Teacher used in class or section.');
+
+        }
+
         $teacher->delete();
         return redirect()->route('teacher.index')->with('success', 'Teacher deleted.');
 

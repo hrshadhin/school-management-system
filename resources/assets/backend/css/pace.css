@@ -93,6 +93,17 @@ Another Loader
     height: 100%;
     width: 100%;
 }
+.ajax-loader {
+    display: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 2000;
+    height: 100%;
+    width: 100%;
+}
 .loader  {
     animation: rotate 1s infinite;
     height: 50px;
@@ -101,6 +112,13 @@ Another Loader
     top: 50%;
     position: absolute;
 
+}
+.loader2{
+    top:50%;
+    left:50%;
+    position: absolute;
+    height: 50px;
+    width: 50px;
 }
 
 .loader:before,

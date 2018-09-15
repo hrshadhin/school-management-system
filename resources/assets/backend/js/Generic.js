@@ -163,4 +163,13 @@ export default class Generic {
             });
         });
     }
+
+    static loaderStart(){
+        // console.log('loader started...');
+        $('.ajax-loader').css('display','block');
+    } 
+    static loaderStop(){
+        // console.log('loader stoped...');
+        $('.ajax-loader').css('display','none');
+    }
 }

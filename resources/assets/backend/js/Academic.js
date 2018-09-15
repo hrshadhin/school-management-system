@@ -26,7 +26,9 @@ export default class Academic {
 
         $('select[name="class_id"]').on('change', function () {
             let class_id = $(this).val();
+            Generic.loaderStart();
             Academic.getSection(class_id);
+            Generic.loaderStop();
         });
 
         $('select[name="class_filter"]').on('change', function () {

@@ -33,18 +33,19 @@
     <script>
         var hash = '{{session('user_session_sha1')}}';
     </script>
-    <!-- Google Font -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
-    <!-- Child Page css goes here  -->
+   <!-- Child Page css goes here  -->
 @yield("extraStyle")
 <!-- Child Page css -->
-
 </head>
 
 <body class="hold-transition hold-transition skin-blue sidebar-mini @yield('bodyCssClass')">
 <div class="overlay-loader">
 <div class="loader" ></div>
 </div>
+<div class="ajax-loader">
+    <img class="loader2" src="{{ asset('/images/loader.svg') }}" alt="">
+</div>
+
 <!-- Site wrapper -->
 <div class="wrapper">
     <!-- page header -->

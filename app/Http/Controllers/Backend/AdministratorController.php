@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Http\Helpers\AppHelper;
+use App\Registration;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -21,7 +23,13 @@ class AdministratorController extends Controller
                 'hiddenId' => 'required|integer',
             ]);
             $year = AcademicYear::findOrFail($request->get('hiddenId'));
-            // todo: put logic here for block used year deletion
+
+            // now check is academic year set or not
+            $settings = AppHelper::getAppSettings();
+            $haveStudent = Registration::where('academic_year_id', $year->id)->count();
+            if((isset($settings['academic_year']) && (int)$settings['academic_year'] == $year->id) || ($haveStudent > 0)){
+                return redirect()->route('administrator.academic_year')->with('error', 'Can not delete it because this year have student or have in default setting.');
+            }
             $year->delete();
 
             return redirect()->route('administrator.academic_year')->with('success', 'Record deleted!');
@@ -80,12 +88,19 @@ class AdministratorController extends Controller
      */
     public function academicYearChangeStatus(Request $request, $id=0)
     {
-        // todo: need to protect from change status if this is default academic year
         $year =  AcademicYear::findOrFail($id);
         if(!$year){
             return [
                 'success' => false,
                 'message' => 'Record not found!'
+            ];
+        }
+
+        $settings = AppHelper::getAppSettings();
+        if(isset($settings['academic_year']) && (int)$settings['academic_year'] == $year->id){
+            return [
+                'success' => false,
+                'message' => 'Can not change status! Year is using as academic year right now.'
             ];
         }
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\AppHelper;
+use App\Registration;
 use App\Section;
 use Illuminate\Http\Request;
 use App\IClass;
@@ -22,8 +23,14 @@ class AcademicController extends Controller
             $this->validate($request, [
                 'hiddenId' => 'required|integer',
             ]);
-            // todo: need to add delete protection
             $iclass = IClass::findOrFail($request->get('hiddenId'));
+
+            $haveSection = Section::where('class_id', $iclass->id)->count();
+            $haveStudent = Registration::where('class_id', $iclass->id)->count();
+            if($haveStudent || $haveSection){
+                return redirect()->route('academic.class')->with('error', 'Can not delete! Class used in section or have student.');
+            }
+
             $iclass->delete();
 
             return redirect()->route('academic.class')->with('success', 'Record deleted!');
@@ -121,8 +128,13 @@ class AcademicController extends Controller
             $this->validate($request, [
                 'hiddenId' => 'required|integer',
             ]);
-            // todo: need to add delete protection
             $section = Section::findOrFail($request->get('hiddenId'));
+
+            $haveStudent = Registration::where('section_id', $section->id)->count();
+            if($haveStudent){
+                return redirect()->route('academic.section')->with('error', 'Can not delete! Section have student.');
+            }
+
             $section->delete();
 
             return redirect()->route('academic.section')->with('success', 'Record deleted!');
