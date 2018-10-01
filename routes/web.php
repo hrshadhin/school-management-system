@@ -66,6 +66,12 @@ Route::group(
         ->name('change_password');
     Route::post('/change-password', 'UserController@changePassword')
         ->name('change_password');
+    //user management
+    Route::resource('user','UserController');
+    Route::post('user/status/{id}','UserController@changeStatus')
+        ->name('user.status');
+
+
 
 
     /**

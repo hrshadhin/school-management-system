@@ -97,7 +97,11 @@
           </li>
         </ul>
       </li>
-
+      <li>
+        <a href="{{ URL::route('user.index') }}">
+          <i class="fa fa-users"></i> <span>Users</span>
+        </a>
+      </li>
       <li class="treeview">
         <a href="#">
           <i class="fa fa-cogs"></i>
