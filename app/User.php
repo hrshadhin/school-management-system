@@ -48,4 +48,9 @@ class User extends Authenticatable
     {
         return $this->hasOne('App\Employee');
     }
+
+    public function role()
+    {
+        return $this->hasOne('App\UserRole');
+    }
 }
