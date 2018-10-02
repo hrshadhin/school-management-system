@@ -2,7 +2,7 @@
 @extends('backend.layouts.master')
 
 <!-- Page title -->
-@section('pageTitle') User @endsection
+@section('pageTitle') System Admin @endsection
 <!-- End block -->
 
 <!-- Page body extra class -->
@@ -14,12 +14,12 @@
     <!-- Section header -->
     <section class="content-header">
         <h1>
-            User
+            System Admin
             <small>List</small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="{{URL::route('user.dashboard')}}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-            <li class="active">User</li>
+            <li class="active">System Admin</li>
         </ol>
     </section>
     <!-- ./Section header -->
@@ -30,7 +30,7 @@
                 <div class="box box-info">
                     <div class="box-header">
                         <div class="box-tools pull-right">
-                            <a class="btn btn-info btn-sm" href="{{ URL::route('user.create') }}"><i class="fa fa-plus-circle"></i> Add New</a>
+                            <a class="btn btn-info btn-sm" href="{{ URL::route('administrator.user_create') }}"><i class="fa fa-plus-circle"></i> Add New</a>
                         </div>
                     </div>
                     <!-- /.box-header -->
@@ -63,17 +63,14 @@
                                         <input class="statusChange" type="checkbox" data-pk="{{$user->id}}" @if($user->status) checked @endif data-toggle="toggle" data-on="<i class='fa fa-check-circle'></i>" data-off="<i class='fa fa-ban'></i>" data-onstyle="success" data-offstyle="danger">
                                     </td>
                                     <td>
-                                        {{--<div class="btn-group">--}}
-                                            {{--<a title="Details"  href="{{URL::route('user.show',$user->id)}}"  class="btn btn-primary btn-sm"><i class="fa fa-eye"></i>--}}
-                                            {{--</a>--}}
-                                        {{--</div>--}}
+
                                         <div class="btn-group">
-                                            <a title="Edit" href="{{URL::route('user.edit',$user->id)}}" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
+                                            <a title="Edit" href="{{URL::route('administrator.user_edit',$user->id)}}" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
                                             </a>
                                         </div>
                                         <!-- todo: have problem in mobile device -->
                                         <div class="btn-group">
-                                            <form  class="myAction" method="POST" action="{{URL::route('user.destroy', $user->id)}}">
+                                            <form  class="myAction" method="POST" action="{{URL::route('administrator.user_destroy', $user->id)}}">
                                                 @csrf
                                                 <input name="_method" type="hidden" value="DELETE">
                                                 <button type="submit" class="btn btn-danger btn-sm" title="Delete">
@@ -115,7 +112,7 @@
 @section('extraScript')
     <script type="text/javascript">
         $(document).ready(function () {
-            window.postUrl = '{{URL::Route("user.status", 0)}}';
+            window.postUrl = '{{URL::Route("administrator.user_status", 0)}}';
             window.changeExportColumnIndex = 5;
             Generic.initCommonPageJS();
             Generic.initDeleteDialog();

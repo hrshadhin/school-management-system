@@ -71,6 +71,32 @@ Route::group(
     Route::post('user/status/{id}','UserController@changeStatus')
         ->name('user.status');
 
+    //system user management
+    Route::get('/administrator/user', 'AdministratorController@userIndex')
+        ->name('administrator.user_index');
+    Route::get('/administrator/user/create', 'AdministratorController@userCreate')
+        ->name('administrator.user_create');
+    Route::post('/administrator/user/store', 'AdministratorController@userStore')
+        ->name('administrator.user_store');
+    Route::get('/administrator/user/{id}/edit', 'AdministratorController@userEdit')
+        ->name('administrator.user_edit');
+    Route::post('/administrator/user/{id}', 'AdministratorController@userUpdate')
+        ->name('administrator.user_update');
+    Route::post('/administrator/user/{id}/delete', 'AdministratorController@userDestroy')
+        ->name('administrator.user_destroy');
+    Route::post('administrator/user/status/{id}','AdministratorController@userChangeStatus')
+        ->name('administrator.user_status');
+
+    //user role manage
+    Route::get('/role', 'UserController@roles')
+        ->name('user.role_index');
+    Route::post('/role', 'UserController@roles')
+        ->name('user.role_destroy');
+    Route::get('/role/create', 'UserController@roleCreate')
+        ->name('user.role_create');
+    Route::post('/role/store', 'UserController@roleCreate')
+        ->name('user.role_store');
+
 
 
 

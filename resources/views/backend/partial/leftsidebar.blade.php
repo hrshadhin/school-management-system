@@ -66,7 +66,7 @@
             </a>
           </li>
           <li>
-            <a href="#">
+            <a href="{{URL::route('administrator.user_index')}}">
               <i class="fa fa-user-md"></i> <span>System Admin</span>
             </a>
           </li>
@@ -76,7 +76,7 @@
             </a>
           </li>
           <li>
-            <a href="#">
+            <a href="{{URL::route('user.role_index')}}">
               <i class="fa fa-users"></i> <span>Role</span>
             </a>
           </li>
