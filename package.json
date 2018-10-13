@@ -16,10 +16,10 @@
     },
     "devDependencies": {
         "axios": "^0.18",
-        "browser-sync": "^2.24.4",
+        "browser-sync": "^2.26.3",
         "browser-sync-webpack-plugin": "^2.2.2",
         "cross-env": "^5.1",
-        "laravel-mix": "^2.0",
+        "laravel-mix": "^2.1.14",
         "lodash": "^4.17.10",
         "purify-css": "^1.2.5",
         "purifycss-webpack": "^0.7.0",
