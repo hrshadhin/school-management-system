@@ -13,6 +13,12 @@ use App\Http\Helpers\AppHelper;
 |
 */
 
+//Route::group(['middleware' => 'role:admin'], function() {
+//    Route::get('/admin', function() {
+//        return 'Welcome Admin';
+//    });
+//});
+
 //front website routes
 Route::group(
     ['namespace' => 'Frontend', 'middleware' => ['web', 'frontend']], function () {
@@ -29,7 +35,6 @@ Route::group(
     Route::post('/contact-us', 'HomeController@contactUs')->name('site.contact_us_form');
     Route::get('/faq', 'HomeController@faq')->name('site.faq_view');
     Route::get('/timeline', 'HomeController@timeline')->name('site.timeline_view');
-
 
 }
 );
