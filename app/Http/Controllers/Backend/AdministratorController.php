@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Helpers\AppHelper;
 use App\Registration;
+use App\Role;
 use App\User;
+use App\UserRole;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -123,6 +125,7 @@ class AdministratorController extends Controller
      */
     public function userIndex()
     {
+        // todo: need to fixed system user bugs
 
         $users = User::rightJoin('user_roles', 'users.id', '=', 'user_roles.user_id')
             ->leftJoin('roles', 'user_roles.role_id', '=', 'roles.id')

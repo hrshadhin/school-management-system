@@ -202,8 +202,10 @@ class UserController extends Controller
      *
      * @return Response
      */
-    public function dashboard()
+    public function dashboard(Request $request)
     {
+//        $user = $request->user();
+//        dd($user->can('user.create'));
         return view('backend.user.dashboard');
     }
 

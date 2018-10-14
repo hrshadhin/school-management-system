@@ -72,7 +72,6 @@
                                         <div class="btn-group">
                                             <form  class="myAction" method="POST" action="{{URL::route('administrator.user_destroy', $user->id)}}">
                                                 @csrf
-                                                <input name="_method" type="hidden" value="DELETE">
                                                 <button type="submit" class="btn btn-danger btn-sm" title="Delete">
                                                     <i class="fa fa-fw fa-trash"></i>
                                                 </button>

@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Hrshadhin\Userstamps\UserstampsTrait;
 use App\Notifications\ResetPassword as ResetPasswordNotification;
+use App\Permissions\HasPermissionsTrait;
 
 
 class User extends Authenticatable
@@ -14,6 +15,7 @@ class User extends Authenticatable
      use Notifiable;
     use SoftDeletes;
     use UserstampsTrait;
+    use HasPermissionsTrait;
 
     /**
      * The attributes that are mass assignable.

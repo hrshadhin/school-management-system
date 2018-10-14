@@ -30,5 +30,16 @@ class UsersTableSeeder extends Seeder
                'role_id' => AppHelper::USER_ADMIN
            ]
        );
+
+//        $dev_role = Role::where('slug','developer')->first();
+//        $dev_perm = Permission::where('slug','create-tasks')->first();
+//
+//        $developer = new User();
+//        $developer->name = 'Usama Muneer';
+//        $developer->email = 'usama@thewebtier.com';
+//        $developer->password = bcrypt('secret');
+//        $developer->save();
+//        $developer->roles()->attach($dev_role);
+//        $developer->permissions()->attach($dev_perm);
     }
 }
