@@ -60,4 +60,8 @@ trait HasPermissionsTrait {
     }
 
     //todo: need to implement this function getAllPermissions
+    private function getAllPermissions($permissions)
+    {
+        return Permission::whereIn('id', $permissions)->get();
+    }
 }

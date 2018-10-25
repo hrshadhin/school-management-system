@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Http\Helpers\AppHelper;
 use App\Permission;
 use Gate;
 use Illuminate\Support\Facades\Blade;
@@ -16,9 +17,8 @@ class PermissionsServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if (app()->runningUnitTests() || !app()->runningInConsole()) {
 
-            Permission::get()->map(function ($permission) {
+            AppHelper::getPermissions()->map(function ($permission) {
                 Gate::define($permission->slug, function ($user) use ($permission) {
                     return $user->hasPermissionTo($permission);
                 });
@@ -30,7 +30,7 @@ class PermissionsServiceProvider extends ServiceProvider
             Blade::directive('endrole', function ($role) {
                 return "<?php endif; ?>";
             });
-        }
+
     }
 
     /**
