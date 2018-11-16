@@ -25,7 +25,7 @@ class RoleMiddleware
             if($request->ajax()) {
                 return response('Access denied!', 401);
             }
-            abort(404);
+            abort(401);
         }
         return $next($request);
     }

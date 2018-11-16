@@ -59,7 +59,6 @@ trait HasPermissionsTrait {
         return $this;
     }
 
-    //todo: need to implement this function getAllPermissions
     private function getAllPermissions($permissions)
     {
         return Permission::whereIn('id', $permissions)->get();

@@ -3316,6 +3316,7 @@ table.text-center th {
 .error-page > .error-content > h3 {
   font-weight: 300;
   font-size: 25px;
+  padding-top: 30px;
 }
 @media (max-width: 991px) {
   .error-page > .error-content > h3 {
