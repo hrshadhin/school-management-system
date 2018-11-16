@@ -18,9 +18,9 @@
         "axios": "^0.18",
         "browser-sync": "^2.26.3",
         "browser-sync-webpack-plugin": "^2.2.2",
-        "cross-env": "^5.1",
+        "cross-env": "^5.2.0",
         "laravel-mix": "^2.1.14",
-        "lodash": "^4.17.10",
+        "lodash": "^4.17.11",
         "purify-css": "^1.2.5",
         "purifycss-webpack": "^0.7.0",
         "script-loader": "^0.7.2"
@@ -29,7 +29,7 @@
         "bootstrap": "^3.3.7",
         "bootstrap-datepicker": "^1.7.0",
         "bootstrap-daterangepicker": "^2.1.25",
-        "chart.js": "^2.7.2",
+        "chart.js": "^2.7.3",
         "datatables.net": "^1.10.15",
         "datatables.net-bs": "^1.10.15",
         "datatables.net-buttons": "^1.5.3",
@@ -46,12 +46,12 @@
         "jquery-validation": "^1.17.0",
         "jszip": "^3.1.5",
         "moment": "^2.18.1",
-        "pdfmake": "^0.1.37",
-        "popper.js": "^1.14.3",
+        "pdfmake": "^0.1.39",
+        "popper.js": "^1.14.5",
         "remove": "^0.1.5",
         "select2": "^4.0.3",
         "slimscroll": "^0.9.1",
-        "sweetalert2": "^7.24.1",
+        "sweetalert2": "^7.29.0",
         "toastr": "^2.1.4"
     }
 }
