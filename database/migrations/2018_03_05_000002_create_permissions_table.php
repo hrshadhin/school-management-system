@@ -17,6 +17,7 @@ class CreatePermissionsTable extends Migration
             $table->increments('id');
             $table->string('slug'); //route name [user.create]
             $table->string('name'); // Readable Name [User Create]
+            $table->string('group')->nullable(); // Group name [site, user, system user]
             $table->timestamps();
         });
     }
