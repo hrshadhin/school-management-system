@@ -51,29 +51,43 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        if(!env('APP_DEBUG', false)) {
+
             if (method_exists($exception, 'getStatusCode')) {
 
+                $statusCode = $exception->getStatusCode();
 
-                if (!$request->user() && AppHelper::isFrontendEnabled()) {
-                    $locale = Session::get('user_locale');
-                    App::setLocale($locale);
-                    $statusCode = $exception->getStatusCode();
-                    if ($statusCode == 404) {
-                        return response()->view('errors.front_404', [], 404);
+                if(!env('APP_DEBUG', false)) {
+                    if (!$request->user() && AppHelper::isFrontendEnabled()) {
+                        $locale = Session::get('user_locale');
+                        App::setLocale($locale);
+
+                        if ($statusCode == 404) {
+                            return response()->view('errors.front_404', [], 404);
+                        }
+
+                        if ($statusCode == 500) {
+
+                            return response()->view('errors.front_500', [], 500);
+                        }
+
                     }
-
-                    if ($statusCode == 500) {
-
-                        return response()->view('errors.front_500', [], 500);
-                    }
-
                 }
+
+                if ($request->user()) {
+                    if ($statusCode == 404) {
+                        return response()->view('errors.back_404', [], 404);
+                    }
+
+                    if ($statusCode == 401) {
+                        return response()->view('errors.back_401', [], 404);
+                    }
+                }
+
 
 
             }
 
-        }
+
 
         return parent::render($request, $exception);
     }
