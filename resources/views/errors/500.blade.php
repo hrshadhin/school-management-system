@@ -1,5 +1,5 @@
 <!-- Master page  -->
-@extends('backend.layouts.master')
+@extends('backend.layouts.error_master')
 
 <!-- Page title -->
 @section('pageTitle') 500 @endsection
@@ -8,17 +8,6 @@
 
 <!-- BEGIN PAGE CONTENT-->
 @section('pageContent')
-    <!-- Section header -->
-    <section class="content-header">
-        <h1>
-            Internal Server Error
-        </h1>
-        <ol class="breadcrumb">
-            <li><a href="{{URL::route('user.dashboard')}}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-            <li class="active"><a href="#"><i class="fa fa-warning"></i> 500</a></li>
-        </ol>
-    </section>
-    <!-- ./header -->
 
     <!-- Main content -->
     <section class="content">
@@ -28,7 +17,7 @@
                 <h3><i class="fa fa-warning text-red"></i> Oops! Something went wrong.</h3>
                 <p>
                     We will work on fixing that right away.<br>
-                    Meanwhile, you may <a href="{{URL::route('user.dashboard')}}">return to dashboard</a>
+                    Meanwhile, you may <a href="/">return to home</a>
                 </p>
             </div>
         </div>
