@@ -69,7 +69,7 @@
                                         </div>
                                         <!-- todo: have problem in mobile device -->
                                         <div class="btn-group">
-                                            <form  class="myAction" method="POST" action="{{URL::route('academic.class')}}">
+                                            <form  class="myAction" method="POST" action="{{URL::route('academic.class_destroy')}}">
                                                 @csrf
                                                 <input type="hidden" name="hiddenId" value="{{$iclass->id}}">
                                                 <button type="submit" class="btn btn-danger btn-sm" title="Delete">

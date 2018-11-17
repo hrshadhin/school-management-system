@@ -67,7 +67,7 @@
                                         </div>
                                         <!-- todo: have problem in mobile device -->
                                         <div class="btn-group">
-                                            <form  class="myAction" method="POST" action="{{URL::route('administrator.academic_year')}}">
+                                            <form  class="myAction" method="POST" action="{{URL::route('administrator.academic_year_destroy')}}">
                                                 @csrf
                                                 <input type="hidden" name="hiddenId" value="{{$year->id}}">
                                                 <button type="submit" class="btn btn-danger btn-sm" title="Delete">

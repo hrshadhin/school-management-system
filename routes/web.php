@@ -95,7 +95,7 @@ Route::group(
     Route::get('administrator/academic_year','AdministratorController@academicYearIndex')
         ->name('administrator.academic_year');
     Route::post('administrator/academic_year','AdministratorController@academicYearIndex')
-        ->name('administrator.academic_year');
+        ->name('administrator.academic_year_destroy');
     Route::get('administrator/academic_year/create','AdministratorController@academicYearCru')
         ->name('administrator.academic_year_create');
     Route::post('administrator/academic_year/create','AdministratorController@academicYearCru')
@@ -112,7 +112,7 @@ Route::group(
     Route::get('academic/class','AcademicController@classIndex')
         ->name('academic.class');
     Route::post('academic/class','AcademicController@classIndex')
-        ->name('academic.class');
+        ->name('academic.class_destroy');
     Route::get('academic/class/create','AcademicController@classCru')
         ->name('academic.class_create');
     Route::post('academic/class/create','AcademicController@classCru')
@@ -128,7 +128,7 @@ Route::group(
     Route::get('academic/section','AcademicController@sectionIndex')
         ->name('academic.section');
     Route::post('academic/section','AcademicController@sectionIndex')
-        ->name('academic.section');
+        ->name('academic.section_destroy');
     Route::get('academic/section/create','AcademicController@sectionCru')
         ->name('academic.section_create');
     Route::post('academic/section/create','AcademicController@sectionCru')
@@ -144,33 +144,12 @@ Route::group(
     Route::resource('teacher', 'TeacherController');
     Route::post('teacher/status/{id}','TeacherController@changeStatus')
         ->name('teacher.status');
+
     // student routes
     Route::resource('student', 'StudentController');
     Route::post('student/status/{id}','StudentController@changeStatus')
         ->name('student.status');
 
-    //dev routes
-    Route::get('/make-link',function(){
-        App::make('files')->link(storage_path('app/public'), public_path('storage'));
-        return 'Done link';
-    });
-    Route::get('/clear-cache', function() {
-        $exitCode = Artisan::call('cache:clear');
-        $exitCode = Artisan::call('view:clear');
-        $exitCode = Artisan::call('route:clear');
-        return 'clear cache';
-    });
-
-    // create neccessary tiggers
-    Route::get('/create-triggers/{code}', function($code) {
-        if($code !== '007'){
-            return 'Wrong code!';
-        }
-
-        AppHelper::createTriggers();
-
-        return 'Triggers created :)';
-    });
 });
 
 //change website locale
@@ -180,3 +159,33 @@ Route::get(
         Session::put('user_locale', $lang);
         return redirect()->back();
 })->name('setLocale');
+
+
+//dev routes
+Route::get('/make-link',function($code){
+    if($code !== '007'){
+        return 'Wrong code!';
+    }
+    App::make('files')->link(storage_path('app/public'), public_path('storage'));
+    return 'Done link';
+});
+Route::get('/clear-cache', function($code) {
+    if($code !== '007'){
+        return 'Wrong code!';
+    }
+    $exitCode = Artisan::call('cache:clear');
+    $exitCode = Artisan::call('view:clear');
+    $exitCode = Artisan::call('route:clear');
+    return 'clear cache';
+});
+
+// create tiggers
+Route::get('/create-triggers/{code}', function($code) {
+    if($code !== '007'){
+        return 'Wrong code!';
+    }
+
+    AppHelper::createTriggers();
+
+    return 'Triggers created :)';
+});
