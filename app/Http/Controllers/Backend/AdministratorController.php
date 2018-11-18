@@ -11,6 +11,8 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\AcademicYear;
+use Illuminate\Support\Facades\DB;
+use function PHPSTORM_META\map;
 
 class AdministratorController extends Controller
 {
@@ -125,7 +127,6 @@ class AdministratorController extends Controller
      */
     public function userIndex()
     {
-        // todo: need to fixed system user bugs
 
         $users = User::rightJoin('user_roles', 'users.id', '=', 'user_roles.user_id')
             ->leftJoin('roles', 'user_roles.role_id', '=', 'roles.id')
@@ -145,10 +146,8 @@ class AdministratorController extends Controller
      */
     public function userCreate()
     {
-        $roles = Role::where('id', '<>', AppHelper::USER_ADMIN)->pluck('name', 'id');
         $user = null;
-        $role = null;
-        return view('backend.user.add', compact('roles','user', 'role'));
+        return view('backend.administrator.user.add', compact('user'));
     }
 
     /**
@@ -166,17 +165,12 @@ class AdministratorController extends Controller
                 'email' => 'email|max:255|unique:users,email',
                 'username' => 'required|min:5|max:255|unique:users,username',
                 'password' => 'required|min:6|max:50',
-                'role_id' => 'required|numeric',
 
             ]
         );
 
         $data = $request->all();
 
-        if($data['role_id'] == AppHelper::USER_ADMIN){
-            return redirect()->route('user.create')->with("error",'Do not mess with the system!!!');
-
-        }
 
         DB::beginTransaction();
         try {
@@ -194,13 +188,13 @@ class AdministratorController extends Controller
             UserRole::create(
                 [
                     'user_id' => $user->id,
-                    'role_id' => $data['role_id']
+                    'role_id' => AppHelper::USER_ADMIN
                 ]
             );
 
             DB::commit();
 
-            return redirect()->route('user.create')->with('success', 'User added!');
+            return redirect()->route('administrator.user_create')->with('success', 'System User added!');
 
 
         }
@@ -208,10 +202,10 @@ class AdministratorController extends Controller
             DB::rollback();
             $message = str_replace(array("\r", "\n","'","`"), ' ', $e->getMessage());
             return $message;
-            return redirect()->route('user.create')->with("error",$message);
+            return redirect()->route('administrator.user_create')->with("error",$message);
         }
 
-        return redirect()->route('user.create');
+        return redirect()->route('administrator.user_create');
 
 
     }
@@ -220,7 +214,7 @@ class AdministratorController extends Controller
     {
 
         $user = User::rightJoin('user_roles', 'users.id', '=', 'user_roles.user_id')
-            ->where('user_roles.role_id', '<>', AppHelper::USER_ADMIN)
+            ->where('user_roles.role_id', '=', AppHelper::USER_ADMIN)
             ->where('users.id', $id)
             ->select('users.*','user_roles.role_id')
             ->first();
@@ -230,10 +224,7 @@ class AdministratorController extends Controller
         }
 
 
-        $roles = Role::where('id', '<>', AppHelper::USER_ADMIN)->pluck('name', 'id');
-        $role = $user->role_id;
-
-        return view('backend.user.add', compact('user','roles','role'));
+        return view('backend.administrator.user.add', compact('user'));
 
     }
 
@@ -248,7 +239,7 @@ class AdministratorController extends Controller
     public function userUpdate(Request $request, $id)
     {
         $user = User::rightJoin('user_roles', 'users.id', '=', 'user_roles.user_id')
-            ->where('user_roles.role_id', '<>', AppHelper::USER_ADMIN)
+            ->where('user_roles.role_id', '=', AppHelper::USER_ADMIN)
             ->where('users.id', $id)
             ->select('users.*','user_roles.role_id')
             ->first();
@@ -261,15 +252,8 @@ class AdministratorController extends Controller
             $request, [
                 'name' => 'required|min:5|max:255',
                 'email' => 'email|max:255|unique:users,email,'.$user->id,
-                'role_id' => 'required|numeric'
-
             ]
         );
-
-        if($request->get('role_id') == AppHelper::USER_ADMIN){
-            return redirect()->route('user.index')->with("error",'Do not mess with the system!!!');
-
-        }
 
 
         $data['name'] = $request->get('name');
@@ -277,13 +261,7 @@ class AdministratorController extends Controller
         $user->fill($data);
         $user->save();
 
-        if($user->role_id != $request->get('role_id')){
-            $userRole = UserRole::where('user_id', $user->id)->first();
-            $userRole->role_id = $request->get('role_id');
-            $userRole->save();
-        }
-
-        return redirect()->route('user.index')->with('success', 'User updated!');
+        return redirect()->route('administrator.user_index')->with('success', 'System User updated!');
 
 
     }
@@ -299,18 +277,21 @@ class AdministratorController extends Controller
     {
 
         $user =  User::findOrFail($id);
-
         $userRole = UserRole::where('user_id', $user->id)->first();
 
-        if($userRole && $userRole->role_id == AppHelper::USER_ADMIN){
-            return redirect()->route('user.index')->with('Error', 'Don not mess with the system');
+        if(!$userRole){
+            return redirect()->route('administrator.user_index')->with('error', 'Don not mess with the system');
 
         }
 
+        //check if have any other system user or not
+        $systemUsers = UserRole::where('role_id', AppHelper::USER_ADMIN)->count();
+        if($systemUsers < 2){
+            return redirect()->route('administrator.user_index')->with('error', 'System has only one admin user, you can\'t delete it!');
+        }
 
         $user->delete();
-
-        return redirect()->route('user.index')->with('success', 'User deleted.');
+        return redirect()->route('administrator.user_index')->with('success', 'Admin user deleted.');
 
     }
 
@@ -330,8 +311,24 @@ class AdministratorController extends Controller
             ];
         }
 
-        $user->status = (string)$request->get('status');
+        $status = (string)$request->get('status');
 
+        if($status == '0') {
+            //check if have any other system user or not
+            $systemUsers = UserRole::where('role_id', AppHelper::USER_ADMIN)->get();
+            $ids = $systemUsers->map(function ($ur) use ($systemUsers) {
+                return $ur->user_id;
+            });
+            $users = User::where('status', '1')->whereIn('id', $ids)->count();
+            if ($users < 2) {
+                return [
+                    'success' => false,
+                    'message' => 'System has only one admin user, you can\'t disable it!'
+                ];
+            }
+        }
+
+        $user->status = $status;
         $user->save();
 
         return [
