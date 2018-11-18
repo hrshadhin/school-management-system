@@ -63,7 +63,7 @@ Route::group(
     Route::get('site/testimonial','SiteController@testimonialIndex')
         ->name('site.testimonial');
     Route::post('site/testimonial','SiteController@testimonialIndex')
-        ->name('site.testimonial');
+        ->name('site.testimonial_delete');
     Route::get('site/testimonial/create','SiteController@testimonialCreate')
         ->name('site.testimonial_create');
     Route::post('site/testimonial/create','SiteController@testimonialCreate')
