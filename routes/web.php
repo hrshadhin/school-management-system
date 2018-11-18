@@ -66,12 +66,17 @@ Route::group(
         ->name('administrator.user_store');
     Route::get('/administrator/user/{id}/edit', 'AdministratorController@userEdit')
         ->name('administrator.user_edit');
-    Route::post('/administrator/user/{id}', 'AdministratorController@userUpdate')
+    Route::post('/administrator/user/{id}/update', 'AdministratorController@userUpdate')
         ->name('administrator.user_update');
     Route::post('/administrator/user/{id}/delete', 'AdministratorController@userDestroy')
         ->name('administrator.user_destroy');
     Route::post('administrator/user/status/{id}','AdministratorController@userChangeStatus')
         ->name('administrator.user_status');
+
+    Route::any('/administrator/user/reset-password', 'AdministratorController@userResetPassword')
+        ->name('administrator.user_password_reset');
+
+
 
     //user role manage
     Route::get('/role', 'UserController@roles')

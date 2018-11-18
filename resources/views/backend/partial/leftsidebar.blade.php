@@ -71,12 +71,12 @@
               <i class="fa fa-user-md"></i> <span>System Admin</span>
             </a>
           </li>
-          @endrole
           <li>
-            <a href="#">
-              <i class="fa fa-eye-slash"></i> <span>Reset Password</span>
+            <a href="{{route('administrator.user_password_reset')}}">
+              <i class="fa fa-eye-slash"></i> <span>Reset User Password</span>
             </a>
           </li>
+          @endrole
           <li>
             <a href="{{URL::route('user.role_index')}}">
               <i class="fa fa-users"></i> <span>Role</span>
@@ -113,11 +113,13 @@
             </span>
         </a>
         <ul class="treeview-menu">
+          @role('Admin')
           <li>
             <a href="{{ URL::route('settings.institute') }}">
               <i class="fa fa-building"></i> <span>Institute</span>
             </a>
           </li>
+          @endrole
           <li>
             <a href="#">
               <i class="fa fa-file-text"></i> <span>SMS</span>

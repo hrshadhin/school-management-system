@@ -43,14 +43,7 @@ class PermissionTableSeeder extends Seeder
         ];
 
         $administratorPermissionList = [
-            [ "slug" => "settings.institute",
-                "name" => "Institute Edit",
-                "group" => "Administration"
-            ],
-            [ "slug" => "settings.institute",
-                "name" => "Institute Edit",
-                "group" => "Administration"
-            ],
+
             [
                 "slug" => "administrator.academic_year_destroy",
                 "name" => "Academic Year Delete",
@@ -84,41 +77,6 @@ class PermissionTableSeeder extends Seeder
             [
                 "slug" => "administrator.academic_year_update",
                 "name" => "Academic Year Edit",
-                "group" => "Administration"
-            ],
-            [
-                "slug" => "administrator.user_index",
-                "name" => "System User View",
-                "group" => "Administration"
-            ],
-            [
-                "slug" => "administrator.user_create",
-                "name" => "System User Create",
-                "group" => "Administration"
-            ],
-            [
-                "slug" => "administrator.user_status",
-                "name" => "System User Edit",
-                "group" => "Administration"
-            ],
-            [
-                "slug" => "administrator.user_store",
-                "name" => "System User Create",
-                "group" => "Administration"
-            ],
-            [
-                "slug" => "administrator.user_update",
-                "name" => "System User Edit",
-                "group" => "Administration"
-            ],
-            [
-                "slug" => "administrator.user_destroy",
-                "name" => "System User Delete",
-                "group" => "Administration"
-            ],
-            [
-                "slug" => "administrator.user_edit",
-                "name" => "System User Edit",
                 "group" => "Administration"
             ],
             [   "slug" => "user.role_index",
@@ -168,6 +126,52 @@ class PermissionTableSeeder extends Seeder
             [   "slug" => "user.edit",
                 "name" => "User Edit",
                 "group" => "Administration"
+            ]
+        ];
+
+        $onlyAdminPermissions = [
+            [ "slug" => "settings.institute",
+                "name" => "Institute Edit",
+                "group" => "Admin Only"
+            ],
+            [
+                "slug" => "administrator.user_index",
+                "name" => "System User View",
+                "group" => "Admin Only"
+            ],
+            [
+                "slug" => "administrator.user_create",
+                "name" => "System User Create",
+                "group" => "Admin Only"
+            ],
+            [
+                "slug" => "administrator.user_status",
+                "name" => "System User Edit",
+                "group" => "Admin Only"
+            ],
+            [
+                "slug" => "administrator.user_store",
+                "name" => "System User Create",
+                "group" => "Admin Only"
+            ],
+            [
+                "slug" => "administrator.user_update",
+                "name" => "System User Edit",
+                "group" => "Admin Only"
+            ],
+            [
+                "slug" => "administrator.user_destroy",
+                "name" => "System User Delete",
+                "group" => "Admin Only"
+            ],
+            [
+                "slug" => "administrator.user_edit",
+                "name" => "System User Edit",
+                "group" => "Admin Only"
+            ],
+            [   "slug" => "administrator.user_password_reset",
+                "name" => "User Password Reset",
+                "group" => "Admin Only"
             ]
         ];
 
@@ -555,7 +559,7 @@ class PermissionTableSeeder extends Seeder
         ];
 
         //merge all permissions and insert into db
-        $permissions = array_merge($commonPermissionList, $administratorPermissionList, $academicPermissionList, $websitePermissionList);
+        $permissions = array_merge($commonPermissionList, $administratorPermissionList, $onlyAdminPermissions, $academicPermissionList, $websitePermissionList);
 
         echo PHP_EOL , 'seeding permissions...';
 
