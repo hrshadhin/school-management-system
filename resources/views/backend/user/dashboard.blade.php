@@ -21,8 +21,7 @@
                             <i class="fa icon-student"></i>
                         </div>
                         <div class="inner ">
-                            <h3 class="text-white">
-                                150                  </h3>
+                            <h3 class="text-white">{{$students}} </h3>
                             <p class="text-white">
                                 Student </p>
                         </div>
@@ -38,7 +37,7 @@
                         </div>
                         <div class="inner ">
                             <h3 class="text-white">
-                                12                  </h3>
+                                {{$teachers}}                  </h3>
                             <p class="text-white">
                                 Teacher </p>
                         </div>

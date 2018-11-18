@@ -62,11 +62,11 @@
             <div class="alert custom_alert @if (Session::has('success')) alert-success @elseif(Session::has('error')) alert-danger @else alert-warning @endif alert-dismissible">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                 @if (Session::has('success'))
-                    <h5><i class="icon fa fa-check"></i>{{ Session::get('success') }}</h5>
+                    <h5><i class="icon fa fa-check"></i>{!! Session::get('success') !!} </h5>
                 @elseif(Session::has('error'))
-                    <h5><i class="icon fa fa-ban"></i>{{ Session::get('error') }}</h5>
+                    <h5><i class="icon fa fa-ban"></i>{!! Session::get('error') !!} </h5>
                 @else
-                    <h5><i class="icon fa fa-warning"></i>{{ Session::get('warning') }}</h5>
+                    <h5><i class="icon fa fa-warning"></i>{!!  Session::get('warning') !!} </h5>
                     @endif
                     </h5>
             </div>
@@ -74,7 +74,7 @@
         @if (Session::has('message'))
             <div class="alert  alert-success keepIt">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                <h5 style="font-weight: bold; font-size: large;"><i class="icon fa fa-check"></i>{{ Session::get('message') }}</h5>
+                <h5 style="font-weight: bold; font-size: large;"><i class="icon fa fa-check"></i>{!! Session::get('message') !!} </h5>
             </div>
     @endif
     <!-- ./Message -->
