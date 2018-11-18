@@ -14,12 +14,12 @@
     <!-- Section header -->
     <section class="content-header">
         <h1>
-            User
+           System User
             <small>@if($user) Update @else Add New @endif</small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="{{URL::route('user.dashboard')}}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-            <li><a href="{{URL::route('user.index')}}"><i class="fa icon-user"></i> User</a></li>
+            <li><a href="{{URL::route('administrator.user_index')}}"><i class="fa fa-user-md"></i> System User</a></li>
             <li class="active">@if($user) Update @else Add @endif</li>
         </ol>
     </section>
@@ -29,17 +29,13 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="box box-info">
-                    <form novalidate id="entryForm" action="@if($user) {{URL::Route('user.update', $user->id)}} @else {{URL::Route('user.store')}} @endif" method="post" enctype="multipart/form-data">
+                    <form novalidate id="entryForm" action="@if($user) {{URL::Route('administrator.user_update', $user->id)}} @else {{URL::Route('administrator.user_store')}} @endif" method="post" enctype="multipart/form-data">
                         <div class="box-header">
-                            <div class="callout callout-danger">
-                                <p><b>Note:</b> Create a role before create user if not exist.</p>
-                            </div>
                         </div>
                         <div class="box-body">
                             @csrf
-                            @if($user)  {{ method_field('PATCH') }} @endif
                             <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <div class="form-group has-feedback">
                                         <label for="name">Name<span class="text-danger">*</span></label>
                                         <input autofocus type="text" class="form-control" name="name" placeholder="name" value="@if($user){{ $user->name }}@else{{old('name')}}@endif" required minlength="2" maxlength="255">
@@ -47,22 +43,12 @@
                                         <span class="text-danger">{{ $errors->first('name') }}</span>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <div class="form-group has-feedback">
                                         <label for="email">Email<span class="text-danger">*</span></label>
                                         <input  type="email" class="form-control" name="email"  placeholder="email address" value="@if($user){{$user->email}}@else{{old('email')}}@endif" maxlength="100" required>
                                         <span class="fa fa-envelope form-control-feedback"></span>
                                         <span class="text-danger">{{ $errors->first('email') }}</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group has-feedback">
-                                        <label for="role_id">User Role
-                                            <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Set a user role"></i>
-                                        </label>
-                                        {!! Form::select('role_id', $roles, $role , ['placeholder' => 'Pick a role...','class' => 'form-control select2', 'required' => 'true']) !!}
-                                        <span class="form-control-feedback"></span>
-                                        <span class="text-danger">{{ $errors->first('role_id') }}</span>
                                     </div>
                                 </div>
                             </div>

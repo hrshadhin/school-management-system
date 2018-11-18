@@ -33,7 +33,7 @@
                         <img class="profile-user-img img-responsive img-circle" src="{{ asset('images/avatar.jpg') }}" alt="User profile picture">
 
                         <h3 class="profile-username text-center">{{$user->name}}</h3>
-                        <p class="text-muted text-center">Admin</p>
+                        <p class="text-muted text-center">{{$role->name}}</p>
 
                         <strong><i class="fa fa-user margin-r-5"></i>Username</strong>
                         <p class="text-muted">{{$user->username}}</p>

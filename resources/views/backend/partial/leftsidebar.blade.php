@@ -65,7 +65,7 @@
               <i class="fa fa-calendar-plus-o"></i> <span>Academic Year</span>
             </a>
           </li>
-          @role('admin')
+          @role('Admin')
           <li>
             <a href="{{URL::route('administrator.user_index')}}">
               <i class="fa fa-user-md"></i> <span>System Admin</span>
@@ -84,7 +84,7 @@
           </li>
           <li>
             <a href="#">
-              <i class="fa fa-user-times"></i> <span>Permission</span>
+              <i class="fa fa-user-times"></i> <span>User Permission</span>
             </a>
           </li>
           <li>

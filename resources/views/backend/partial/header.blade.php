@@ -89,7 +89,7 @@
 <li class="dropdown user user-menu">
     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
         <i class="fa fa-user"></i>
-        <span class="hidden-xs">Admin</span><i class="caret"></i>
+        <span class="hidden-xs">{{auth()->user()->name}}</span><i class="caret"></i>
     </a>
 
     <ul class="dropdown-menu">
