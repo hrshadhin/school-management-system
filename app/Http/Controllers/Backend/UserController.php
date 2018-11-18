@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Employee;
 use App\Models\PasswordResets;
 use App\Role;
+use App\Student;
 use App\User;
 use App\UserRole;
 use Carbon\Carbon;
@@ -62,10 +64,17 @@ class UserController extends Controller
         if (Auth::attempt(['username' => $username, 'password' => $password, 'status' => AppHelper::ACTIVE], $remember)) {
             session(['user_session_sha1' => AppHelper::getUserSessionHash()]);
 
-            // todo: check application settings has or not and show warning info
-//            $appSettings = AppHelper::getAppSettings();
+            $appSettings = AppHelper::getAppSettings();
 
-            return redirect()->intended('dashboard')->with('success', 'Welcome to admin panel.');
+            $msgType = "success";
+            $msg = "Welcome to admin panel.";
+
+            if(!count($appSettings)){
+                $msgType = "warning";
+                $msg = "Please update institute information <a href='".route('settings.institute')."'> <b>Here</b></a>";
+            }
+
+            return redirect()->intended('dashboard')->with($msgType, $msg);
 
         }
         return redirect()->route('login')->with('error', 'Your email/password combination was incorrect OR account disabled!');
@@ -204,9 +213,11 @@ class UserController extends Controller
      */
     public function dashboard(Request $request)
     {
-//        $user = $request->user();
-//        dd($user->can('user.create'));
-        return view('backend.user.dashboard');
+
+        $teachers = Employee::where('emp_type', AppHelper::EMP_TEACHER)->count();
+        $students = Student::count();
+
+        return view('backend.user.dashboard', compact('teachers','students'));
     }
 
     /**

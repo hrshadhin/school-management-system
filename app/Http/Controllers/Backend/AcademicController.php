@@ -196,7 +196,7 @@ class AcademicController extends Controller
 
         if($section){
             $teacher = $section->teacher_id;
-            $iclass = $section->section_id;
+            $iclass = $section->class_id;
         }
 
         return view('backend.academic.section.add', compact('section', 'iclass', 'classes', 'teachers', 'teacher'));
