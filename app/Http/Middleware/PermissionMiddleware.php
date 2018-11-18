@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Support\Facades\Auth;
 
 class PermissionMiddleware
 {
@@ -23,6 +24,15 @@ class PermissionMiddleware
                 return response('Access denied!', 401);
             }
             abort(401);
+        }
+
+        //check for user force logout
+        if($request->user()->force_logout){
+            $request->user()->force_logout = 0;
+            $request->user()->save();
+
+            Auth::logout();
+            return redirect()->route('login');
         }
         return $next($request);
     }

@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\AcademicYear;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use function PHPSTORM_META\map;
 
@@ -329,6 +330,7 @@ class AdministratorController extends Controller
         }
 
         $user->status = $status;
+        $user->force_logout = (int)$status ? 0 : 1;
         $user->save();
 
         return [
@@ -337,6 +339,40 @@ class AdministratorController extends Controller
         ];
 
     }
+
+
+/* Handle an user password change
+*
+* @return Response
+*/
+    public function userResetPassword(Request $request)
+    {
+
+        if ($request->isMethod('post')) {
+
+            $user = User::findOrFail($request->get('user_id'));
+            //validate form
+            $this->validate($request, [
+                'password' => 'required|confirmed|min:6|max:50',
+            ]);
+
+            $user->password = bcrypt($request->get('password'));
+            $user->force_logout = 1;
+            $user->save();
+
+            return redirect()->route('administrator.user_password_reset')->with('success', 'Password successfully changed.');
+
+        }
+
+       $users = User::select(DB::raw("CONCAT(name,'[',username,']') AS name"),'id')->where('status', '1')->pluck('name','id');
+
+        return view('backend.administrator.user.change_password', compact('users'));
+    }
+
+
+
+
+
 
 
 }

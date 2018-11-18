@@ -556,6 +556,7 @@ class UserController extends Controller
         }
 
         $user->status = (string)$request->get('status');
+        $user->force_logout = (int)$request->get('status') ? 0 : 1;
 
         $user->save();
 
