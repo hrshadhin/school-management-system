@@ -12,6 +12,8 @@ class RolesTableSeeder extends Seeder
      */
     public function run()
     {
+        echo PHP_EOL , 'seeding roles...';
+
         Role::create(
             [
                 'name' => 'Admin',

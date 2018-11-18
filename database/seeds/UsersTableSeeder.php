@@ -14,6 +14,8 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
+        echo PHP_EOL , 'seeding users...';
+
         $user= User::create(
             [
                 'name' => 'Mr. admin',
@@ -31,15 +33,5 @@ class UsersTableSeeder extends Seeder
            ]
        );
 
-//        $dev_role = Role::where('slug','developer')->first();
-//        $dev_perm = Permission::where('slug','create-tasks')->first();
-//
-//        $developer = new User();
-//        $developer->name = 'Usama Muneer';
-//        $developer->email = 'usama@thewebtier.com';
-//        $developer->password = bcrypt('secret');
-//        $developer->save();
-//        $developer->roles()->attach($dev_role);
-//        $developer->permissions()->attach($dev_perm);
     }
 }
