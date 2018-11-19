@@ -39,9 +39,9 @@
 </head>
 
 <body class="hold-transition hold-transition skin-blue sidebar-mini @yield('bodyCssClass')">
-<div class="overlay-loader">
-<div class="loader" ></div>
-</div>
+{{--<div class="overlay-loader">--}}
+{{--<div class="loader" ></div>--}}
+{{--</div>--}}
 <div class="ajax-loader">
     <img class="loader2" src="{{ asset('/images/loader.svg') }}" alt="">
 </div>
