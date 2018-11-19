@@ -286,11 +286,11 @@ class StudentController extends Controller
      */
     public function edit($id)
     {
-        $regiInfo = Registration::findOrFail($id);
+        $regiInfo = Registration::find($id);
         if(!$regiInfo){
             abort(404);
         }
-        $student =  Student::findOrFail($regiInfo->student_id);
+        $student =  Student::find($regiInfo->student_id);
         if(!$student){
             abort(404);
         }
@@ -335,11 +335,11 @@ class StudentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $regiInfo = Registration::findOrFail($id);
+        $regiInfo = Registration::find($id);
         if(!$regiInfo){
             abort(404);
         }
-        $student =  Student::findOrFail($regiInfo->student_id);
+        $student =  Student::find($regiInfo->student_id);
         if(!$student){
             abort(404);
         }
@@ -555,11 +555,11 @@ class StudentController extends Controller
      */
     public function destroy($id)
     {
-        $registration = Registration::findOrFail($id);
+        $registration = Registration::find($id);
         if(!$registration){
            abort(404);
         }
-        $student =  Student::findOrFail($registration->student_id);
+        $student =  Student::find($registration->student_id);
         if(!$student){
             abort(404);
         }
@@ -594,14 +594,14 @@ class StudentController extends Controller
     public function changeStatus(Request $request, $id=0)
     {
 
-        $registration = Registration::findOrFail($id);
+        $registration = Registration::find($id);
         if(!$registration){
             return [
                 'success' => false,
                 'message' => 'Record not found!'
             ];
         }
-        $student =  Student::findOrFail($registration->student_id);
+        $student =  Student::find($registration->student_id);
         if(!$student){
             return [
                 'success' => false,
@@ -622,7 +622,9 @@ class StudentController extends Controller
 
             $registration->save();
             $student->save();
-            $user->save();
+            if($student->user_id) {
+                $user->save();
+            }
             DB::commit();
 
             return [
