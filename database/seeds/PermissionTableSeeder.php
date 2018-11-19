@@ -44,41 +44,6 @@ class PermissionTableSeeder extends Seeder
 
         $administratorPermissionList = [
 
-            [
-                "slug" => "administrator.academic_year_destroy",
-                "name" => "Academic Year Delete",
-                "group" => "Administration"
-            ],
-            [
-                "slug" => "administrator.academic_year",
-                "name" => "Academic Year View",
-                "group" => "Administration"
-            ],
-            [
-                "slug" => "administrator.academic_year_store",
-                "name" => "Academic Year Create",
-                "group" => "Administration"
-            ],
-            [
-                "slug" => "administrator.academic_year_create",
-                "name" => "Academic Year Create",
-                "group" => "Administration"
-            ],
-            [
-                "slug" => "administrator.academic_year_edit",
-                "name" => "Academic Year Edit",
-                "group" => "Administration"
-            ],
-            [
-                "slug" => "administrator.academic_year_status",
-                "name" => "Academic Year Edit",
-                "group" => "Administration"
-            ],
-            [
-                "slug" => "administrator.academic_year_update",
-                "name" => "Academic Year Edit",
-                "group" => "Administration"
-            ],
             [   "slug" => "user.store",
                 "name" => "User Create",
                 "group" => "Administration"
@@ -118,6 +83,41 @@ class PermissionTableSeeder extends Seeder
         ];
 
         $onlyAdminPermissions = [
+            [
+                "slug" => "administrator.academic_year_destroy",
+                "name" => "Academic Year Delete",
+                "group" => "Admin Only"
+            ],
+            [
+                "slug" => "administrator.academic_year",
+                "name" => "Academic Year View",
+                "group" => "Admin Only"
+            ],
+            [
+                "slug" => "administrator.academic_year_store",
+                "name" => "Academic Year Create",
+                "group" => "Admin Only"
+            ],
+            [
+                "slug" => "administrator.academic_year_create",
+                "name" => "Academic Year Create",
+                "group" => "Admin Only"
+            ],
+            [
+                "slug" => "administrator.academic_year_edit",
+                "name" => "Academic Year Edit",
+                "group" => "Admin Only"
+            ],
+            [
+                "slug" => "administrator.academic_year_status",
+                "name" => "Academic Year Edit",
+                "group" => "Admin Only"
+            ],
+            [
+                "slug" => "administrator.academic_year_update",
+                "name" => "Academic Year Edit",
+                "group" => "Admin Only"
+            ],
             [ "slug" => "settings.institute",
                 "name" => "Institute Edit",
                 "group" => "Admin Only"
