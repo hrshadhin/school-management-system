@@ -931,15 +931,15 @@
             Pace.start();
         }
     }
-    Pace.on('start', function () {
-        // console.log('i am in fire');
-        var element = document.getElementsByClassName('overlay-loader');
-        element[0].style.display = "block";
-    });
-    Pace.on('done', function () {
-        // console.log('fire down');
-        var element = document.getElementsByClassName('overlay-loader');
-        element[0].style.display = "none";
-    });
+    // Pace.on('start', function () {
+    //     // console.log('i am in fire');
+    //     var element = document.getElementsByClassName('overlay-loader');
+    //     element[0].style.display = "block";
+    // });
+    // Pace.on('done', function () {
+    //     // console.log('fire down');
+    //     var element = document.getElementsByClassName('overlay-loader');
+    //     element[0].style.display = "none";
+    // });
 
 }).call(this);
