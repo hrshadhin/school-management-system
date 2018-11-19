@@ -110,6 +110,10 @@ class PermissionTableSeeder extends Seeder
             [   "slug" => "user.edit",
                 "name" => "User Edit",
                 "group" => "Administration"
+            ],
+            [   "slug" => "user.permission",
+                "name" => "User Edit",
+                "group" => "Administration"
             ]
         ];
 

@@ -81,11 +81,6 @@
               <i class="fa fa-users"></i> <span>Role</span>
             </a>
           </li>
-          <li>
-            <a href="#">
-              <i class="fa fa-user-times"></i> <span>User Permission</span>
-            </a>
-          </li>
           @endrole
           <li>
             <a href="#">

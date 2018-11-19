@@ -56,6 +56,8 @@ Route::group(
         ->name('change_password');
     Route::post('user/status/{id}','UserController@changeStatus')
         ->name('user.status');
+    Route::any('user/{id}/permission','UserController@updatePermission')
+        ->name('user.permission');
 
     //system user management
     Route::get('/administrator/user', 'AdministratorController@userIndex')

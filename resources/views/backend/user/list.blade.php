@@ -73,6 +73,10 @@
                                         </div>
                                         <!-- todo: have problem in mobile device -->
                                         <div class="btn-group">
+                                            <a title="Edit Permission" href="{{URL::route('user.permission',$user->id)}}" class="btn btn-info btn-sm"><i class="fa fa-user-times"></i></a>
+                                            </a>
+                                        </div>
+                                        <div class="btn-group">
                                             <form  class="myAction" method="POST" action="{{URL::route('user.destroy', $user->id)}}">
                                                 @csrf
                                                 <input name="_method" type="hidden" value="DELETE">

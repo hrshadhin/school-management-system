@@ -76,7 +76,7 @@
                         </div>
                         <!-- /.box-body -->
                         <div class="box-footer">
-                            <a href="{{URL::route('user.index')}}" class="btn btn-default">Cancel</a>
+                            <a href="{{URL::route('administrator.user_index')}}" class="btn btn-default">Cancel</a>
                             <button type="submit" class="btn btn-info pull-right"><i class="fa @if($user) fa-refresh @else fa-plus-circle @endif"></i> @if($user) Update @else Add @endif</button>
 
                         </div>
