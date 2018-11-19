@@ -51,6 +51,7 @@
 
         </ul>
       </li>
+      @role('Admin')
       <li class="treeview">
         <a href="#">
           <i class="fa fa-user-secret"></i>
@@ -65,7 +66,7 @@
               <i class="fa fa-calendar-plus-o"></i> <span>Academic Year</span>
             </a>
           </li>
-          @role('Admin')
+
           <li>
             <a href="{{URL::route('administrator.user_index')}}">
               <i class="fa fa-user-md"></i> <span>System Admin</span>
@@ -81,21 +82,22 @@
               <i class="fa fa-users"></i> <span>Role</span>
             </a>
           </li>
-          @endrole
-          <li>
-            <a href="#">
-              <i class="fa fa-download"></i> <span>Backup</span>
-            </a>
-          </li>
-          @role('Admin')
-          <li>
-            <a href="#">
-              <i class="fa fa-upload"></i> <span>Restore</span>
-            </a>
-          </li>
-          @endrole
+
+          {{--<li>--}}
+            {{--<a href="#">--}}
+              {{--<i class="fa fa-download"></i> <span>Backup</span>--}}
+            {{--</a>--}}
+          {{--</li>--}}
+
+          {{--<li>--}}
+            {{--<a href="#">--}}
+              {{--<i class="fa fa-upload"></i> <span>Restore</span>--}}
+            {{--</a>--}}
+          {{--</li>--}}
+
         </ul>
       </li>
+      @endrole
       <li>
         <a href="{{ URL::route('user.index') }}">
           <i class="fa fa-users"></i> <span>Users</span>
