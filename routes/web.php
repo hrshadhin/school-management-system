@@ -87,6 +87,8 @@ Route::group(
         ->name('user.role_create');
     Route::post('/role/store', 'UserController@roleCreate')
         ->name('user.role_store');
+    Route::any('/role/update/{id}', 'UserController@roleUpdate')
+        ->name('user.role_update');
 
 
     // application settings routes

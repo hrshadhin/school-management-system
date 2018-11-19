@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\Employee;
 use App\Models\PasswordResets;
+use App\Permission;
 use App\Role;
 use App\Student;
 use App\User;
@@ -18,6 +19,7 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Contracts\Hashing\Hasher as HasherContract;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Helpers\AppHelper;
+use function PHPSTORM_META\type;
 
 class UserController extends Controller
 {
@@ -528,14 +530,33 @@ class UserController extends Controller
          $userRole = UserRole::where('user_id', $user->id)->first();
 
          if($userRole && $userRole->role_id == AppHelper::USER_ADMIN){
-             return redirect()->route('user.index')->with('Error', 'Don not mess with the system');
+             return redirect()->route('user.index')->with('error', 'Don not mess with the system');
 
          }
 
+         $message = "Something went wrong!";
+        DB::beginTransaction();
+        try {
 
-        $user->delete();
+            DB::table('user_roles')->where('user_id', $user->id)->update([
+                'deleted_by' => auth()->user()->id,
+                'deleted_at' => Carbon::now()
+            ]);
+            $user->delete();
 
-        return redirect()->route('user.index')->with('success', 'User deleted.');
+            DB::commit();
+            return redirect()->route('user.index')->with('success', 'User deleted.');
+
+
+        }
+        catch(\Exception $e){
+            DB::rollback();
+            $message = str_replace(array("\r", "\n","'","`"), ' ', $e->getMessage());
+        }
+
+        return redirect()->route('user.index')->with("error",$message);
+
+
 
     }
 
@@ -579,9 +600,11 @@ class UserController extends Controller
     {
         //for save on POST request
         if ($request->isMethod('post')) {
+
             $this->validate($request, [
                 'hiddenId' => 'required|integer',
             ]);
+
             $id = $request->get('hiddenId',0);
             $role = Role::findOrFail($id);
 
@@ -589,13 +612,40 @@ class UserController extends Controller
                 return redirect()->route('user.role_index')->with('error', 'You can\'t delete this role?');
             }
 
-            $role->delete();
-            return redirect()->route('user.role_index')->with('success', 'Role deleted!');
+            //check if this role has active user
+            $users = UserRole::where('role_id', $role->id)->count();
+            if($users){
+                return redirect()->route('user.role_index')->with('error', 'Role has users, So can\'t delete it!');
+            }
+
+
+            $message = "Something went wrong!";
+            DB::beginTransaction();
+            try {
+
+                DB::table('roles_permissions')->where('role_id', $id)->update([
+                    'deleted_by' => auth()->user()->id,
+                    'deleted_at' => Carbon::now()
+                ]);
+
+                $role->delete();
+
+                DB::commit();
+                return redirect()->route('user.role_index')->with('success', 'Role deleted!');
+
+            }
+            catch(\Exception $e){
+                DB::rollback();
+                $message = str_replace(array("\r", "\n","'","`"), ' ', $e->getMessage());
+            }
+
+
+
+            return redirect()->route('user.role_index')->with('error', $message);
         }
 
         //for get request
         $roles = Role::get();
-
 
         return view('backend.role.list', compact('roles'));
     }
@@ -608,21 +658,158 @@ class UserController extends Controller
     {
         //for save on POST request
         if ($request->isMethod('post')) {
-            ;
             $this->validate($request, [
-                'name' => 'required|min:4|max:255',
+                'name' => 'required|min:4|max:255|unique:roles',
             ]);
 
 
-            Role::create([
+            $role = Role::create([
                 'name' => $request->get('name')
             ]);
+
+
+            $permissionList = $request->get('permissions');
+
+            if(count($permissionList)){
+
+                $rolePermissions = $this->proccessInputPermissions($permissionList,'role_id', $role->id, auth()->user()->id);
+
+                DB::table('roles_permissions')->insert($rolePermissions);
+
+            }
 
             return redirect()->route('user.role_index')->with('success', 'Role Created.');
         }
 
 
-        return view('backend.role.add');
+       $permissions = Permission::select('id','name','group')->whereNotIn('group',['Admin Only','Common'])->get();
+
+        $permissionList = $this->formatPermissions($permissions);
+        $role = null;
+
+        return view('backend.role.add', compact('permissionList', 'role'));
+    }
+
+    /**
+     * role create
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function roleUpdate(Request $request, $id)
+    {
+        //check if it is admin role then, reject from modify
+        if($id == AppHelper::USER_ADMIN){
+            return redirect()->route('user.role_index')->with('error', 'Don not mess with the system');
+        }
+
+        //collect role info and permissions
+        $role = Role::findOrFail($id);
+
+        //for save on POST request
+        if ($request->isMethod('post')) {
+
+            $permissionList = $request->get('permissions');
+
+            $message = "Something went wrong!";
+            DB::beginTransaction();
+//            try {
+
+                //now delete previous permissions
+                DB::table('roles_permissions')->where('role_id', $id)->update([
+                    'deleted_by' => auth()->user()->id,
+                    'deleted_at' => Carbon::now()
+                ]);
+
+                //then insert new permissions
+                $rolePermissions = $this->proccessInputPermissions($permissionList, 'role_id', $role->id, auth()->user()->id);
+                DB::table('roles_permissions')->insert($rolePermissions);
+
+                DB::commit();
+                return redirect()->route('user.role_index')->with('success', 'Role Permission Updated.');
+
+//            }
+//            catch(\Exception $e){
+//                DB::rollback();
+//                $message = str_replace(array("\r", "\n","'","`"), ' ', $e->getMessage());
+//            }
+
+            return redirect()->route('user.role_index')->with('error', $message);
+        }
+
+
+
+        $rolePermissions = DB::table('roles_permissions')->where('role_id', $role->id)->whereNull('deleted_at')->pluck('permission_id')->toArray();
+
+        $permissions = Permission::select('id','name','group')->whereNotIn('group',['Admin Only','Common'])->get();
+
+        $permissionList = $this->formatPermissions($permissions, $rolePermissions);
+
+        return view('backend.role.add', compact('permissionList', 'role'));
+    }
+
+    private function formatPermissions($permissions, $rolePermissions=null){
+        //now build the structure to view on blade
+        //$permissionList[group_name][module_name][permission_verb][permission_ids]
+        $permissionList = [];
+
+        foreach ($permissions as $permission){
+
+            $namePart = preg_split("/\s+(?=\S*+$)/",$permission->name);
+            $moduleName = $namePart[0];
+            $verb = $namePart[1];
+
+            $permissionList[$permission->group][$moduleName][$verb]['ids'][] = $permission->id;
+
+            if($rolePermissions){
+                $permissionList[$permission->group][$moduleName][$verb]['checked'] = in_array($permission->id, $rolePermissions) ? 1 : 0;
+
+            }
+            else{
+                $permissionList[$permission->group][$moduleName][$verb]['checked'] = 0;
+
+            }
+        }
+
+        return $permissionList;
+
+    }
+
+    private function proccessInputPermissions($permissionList, $type, $roleOrUserId, $loggedInUser){
+
+        $rolePermissions = [];
+
+        if(count($permissionList)) {
+
+            $now = Carbon::now('Asia/Dhaka');
+
+            foreach ($permissionList as $permissions) {
+                $permissions = explode(',', $permissions);
+                foreach ($permissions as $permission) {
+                    $rolePermissions[] = [
+                        $type => $roleOrUserId,
+                        'permission_id' => $permission,
+                        'created_at' => $now,
+                        'updated_at' => $now,
+                        'created_by' => $loggedInUser,
+                        'updated_by' => $loggedInUser,
+                    ];
+                }
+            }
+
+            //now add common permissions
+            $permissions = Permission::select('id')->where('group', 'Common')->get();
+            foreach ($permissions as $permission) {
+                $rolePermissions[] = [
+                    $type => $roleOrUserId,
+                    'permission_id' => $permission->id,
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                    'created_by' => $loggedInUser,
+                    'updated_by' => $loggedInUser,
+                ];
+            }
+        }
+
+        return $rolePermissions;
     }
 
 

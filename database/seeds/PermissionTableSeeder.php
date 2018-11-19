@@ -79,22 +79,6 @@ class PermissionTableSeeder extends Seeder
                 "name" => "Academic Year Edit",
                 "group" => "Administration"
             ],
-            [   "slug" => "user.role_index",
-                "name" => "Role View",
-                "group" => "Administration"
-            ],
-            [   "slug" => "user.role_destroy",
-                "name" => "Role Delete",
-                "group" => "Administration"
-            ],
-            [   "slug" => "user.role_create",
-                "name" => "Role Create",
-                "group" => "Administration"
-            ],
-            [   "slug" => "user.role_store",
-                "name" => "Role Create",
-                "group" => "Administration"
-            ],
             [   "slug" => "user.store",
                 "name" => "User Create",
                 "group" => "Administration"
@@ -134,39 +118,59 @@ class PermissionTableSeeder extends Seeder
                 "name" => "Institute Edit",
                 "group" => "Admin Only"
             ],
+            [   "slug" => "user.role_index",
+                "name" => "Role View",
+                "group" => "Admin Only"
+            ],
+            [   "slug" => "user.role_destroy",
+                "name" => "Role Delete",
+                "group" => "Admin Only"
+            ],
+            [   "slug" => "user.role_create",
+                "name" => "Role Create",
+                "group" => "Admin Only"
+            ],
+            [   "slug" => "user.role_store",
+                "name" => "Role Create",
+                "group" => "Admin Only"
+            ],
+            [   "slug" => "user.role_update",
+                "name" => "Role Edit",
+                "group" => "Admin Only"
+            ],
             [
                 "slug" => "administrator.user_index",
-                "name" => "System User View",
+                "name" => "System Admin View",
                 "group" => "Admin Only"
             ],
             [
                 "slug" => "administrator.user_create",
-                "name" => "System User Create",
+                "name" => "System Admin Create",
                 "group" => "Admin Only"
             ],
             [
                 "slug" => "administrator.user_status",
-                "name" => "System User Edit",
+                "name" => "System Admin Edit",
                 "group" => "Admin Only"
             ],
             [
                 "slug" => "administrator.user_store",
-                "name" => "System User Create",
+                "name" => "System Admin Create",
                 "group" => "Admin Only"
             ],
             [
                 "slug" => "administrator.user_update",
-                "name" => "System User Edit",
+                "name" => "System Admin Edit",
                 "group" => "Admin Only"
             ],
             [
                 "slug" => "administrator.user_destroy",
-                "name" => "System User Delete",
+                "name" => "System Admin Delete",
                 "group" => "Admin Only"
             ],
             [
                 "slug" => "administrator.user_edit",
-                "name" => "System User Edit",
+                "name" => "System Admin Edit",
                 "group" => "Admin Only"
             ],
             [   "slug" => "administrator.user_password_reset",

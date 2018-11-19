@@ -76,7 +76,6 @@
               <i class="fa fa-eye-slash"></i> <span>Reset User Password</span>
             </a>
           </li>
-          @endrole
           <li>
             <a href="{{URL::route('user.role_index')}}">
               <i class="fa fa-users"></i> <span>Role</span>
@@ -87,16 +86,19 @@
               <i class="fa fa-user-times"></i> <span>User Permission</span>
             </a>
           </li>
+          @endrole
           <li>
             <a href="#">
               <i class="fa fa-download"></i> <span>Backup</span>
             </a>
           </li>
+          @role('Admin')
           <li>
             <a href="#">
               <i class="fa fa-upload"></i> <span>Restore</span>
             </a>
           </li>
+          @endrole
         </ul>
       </li>
       <li>

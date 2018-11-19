@@ -36,49 +36,58 @@
                     <!-- /.box-header -->
                     <div class="box-body margin-top-20">
                         <div class="table-responsive">
-                        <table id="listDataTable" class="table table-bordered table-striped list_view_table display responsive no-wrap" width="100%">
-                            <thead>
-                            <tr>
-                                <th width="10%">#</th>
-                                <th width="60%">Name</th>
-                                <th class="notexport" width="30%">Action</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach($roles as $role)
+                            <table id="listDataTable" class="table table-bordered table-striped list_view_table display responsive no-wrap" width="100%">
+                                <thead>
                                 <tr>
-                                    <td>
-                                        {{$loop->iteration}}
-                                    </td>
-                                    <td>{{ $role->name }}</td>
-                                    <td>
-                                        <!-- todo: have problem in mobile device -->
-                                        @if($role->deletable)
-                                        <div class="btn-group">
-                                            <form  class="myAction" method="POST" action="{{URL::route('user.role_destroy')}}">
-                                                @csrf
-                                                <input type="hidden" name="hiddenId" value="{{$role->id}}">
-                                                <button type="submit" class="btn btn-danger btn-sm" title="Delete">
-                                                    <i class="fa fa-fw fa-trash"></i>
-                                                </button>
-                                            </form>
-                                        </div>
+                                    <th width="10%">#</th>
+                                    <th width="60%">Name</th>
+                                    <th class="notexport" width="30%">Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach($roles as $role)
+                                    <tr>
+                                        <td>
+                                            {{$loop->iteration}}
+                                        </td>
+                                        <td>{{ $role->name }}</td>
+                                        <td>
+
+                                            <!-- todo: have problem in mobile device -->
+                                            @if($role->id != AppHelper::USER_ADMIN)
+                                                <div class="btn-group">
+                                                    <a title="Edit Permission" href="{{URL::route('user.role_update',$role->id)}}" class="btn btn-info btn-sm"><i class="fa fa-user-times"></i></a>
+                                                    </a>
+                                                </div>
+                                            @endif
+                                            @if($role->deletable)
+                                                <div class="btn-group">
+                                                    <form  class="myAction" method="POST" action="{{URL::route('user.role_destroy')}}">
+                                                        @csrf
+                                                        <input type="hidden" name="hiddenId" value="{{$role->id}}">
+                                                        <button type="submit" class="btn btn-danger btn-sm" title="Delete">
+                                                            <i class="fa fa-fw fa-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
                                             @endif
 
-                                    </td>
-                                </tr>
-                            @endforeach
 
-                            </tbody>
-                            <tfoot>
-                            <tr>
-                                <th width="10%">#</th>
-                                <th width="60%">Name</th>
-                                <th class="notexport" width="30%">Action</th>
-                            </tr>
-                            </tfoot>
-                        </table>
-                    </div>
+
+                                        </td>
+                                    </tr>
+                                @endforeach
+
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <th width="10%">#</th>
+                                    <th width="60%">Name</th>
+                                    <th class="notexport" width="30%">Action</th>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
                     </div>
                     <!-- /.box-body -->
                 </div>
