@@ -132,7 +132,7 @@ class TeacherController extends Controller
         catch(\Exception $e){
             DB::rollback();
             $message = str_replace(array("\r", "\n","'","`"), ' ', $e->getMessage());
-            return $message;
+//            return $message;
             return redirect()->route('teacher.create')->with("error",$message);
         }
 
