@@ -576,6 +576,16 @@ class UserController extends Controller
             ];
         }
 
+        $userRole = UserRole::where('user_id', $user->id)->first();
+
+        if($userRole && $userRole->role_id == AppHelper::USER_ADMIN){
+            return [
+                'success' => false,
+                'message' => 'Don not mess with the system!'
+            ];
+
+        }
+
         $user->status = (string)$request->get('status');
         $user->force_logout = (int)$request->get('status') ? 0 : 1;
 
@@ -587,6 +597,66 @@ class UserController extends Controller
         ];
 
     }
+
+
+    /**
+     * update permission
+     * @return mixed
+     */
+    public function updatePermission(Request $request, $id)
+    {
+        $user =  User::findOrFail($id);
+        $userRole = UserRole::where('user_id', $user->id)->first();
+
+        if($userRole && $userRole->role_id == AppHelper::USER_ADMIN){
+            return redirect()->route('user.index')->with('error', 'Don not mess with the system.');
+
+        }
+
+        //for save on POST request
+        if ($request->isMethod('post')) {
+
+            $permissionList = $request->get('permissions');
+
+            $message = "Something went wrong!";
+            DB::beginTransaction();
+            try {
+
+            //now delete previous permissions
+            DB::table('users_permissions')->where('user_id', $user->id)->update([
+                'deleted_by' => auth()->user()->id,
+                'deleted_at' => Carbon::now()
+            ]);
+
+            //then insert new permissions
+            $userPermissions = $this->proccessInputPermissions($permissionList, 'user_id', $user->id, auth()->user()->id);
+            DB::table('users_permissions')->insert($userPermissions);
+
+            DB::commit();
+            return redirect()->route('user.index')->with('success', 'User Permission Updated.');
+
+            }
+            catch(\Exception $e){
+                DB::rollback();
+                $message = str_replace(array("\r", "\n","'","`"), ' ', $e->getMessage());
+            }
+
+            return redirect()->route('user.index')->with('error', $message);
+        }
+
+
+
+        $userPermissions = DB::table('users_permissions')->where('user_id', $user->id)
+            ->whereNull('deleted_at')->pluck('permission_id')->toArray();
+
+        $permissions = Permission::select('id','name','group')->whereNotIn('group',['Admin Only','Common'])->get();
+
+        $permissionList = $this->formatPermissions($permissions, $userPermissions);
+
+        return view('backend.user.permission', compact('permissionList', 'user'));
+
+    }
+
 
 
 
@@ -711,7 +781,7 @@ class UserController extends Controller
 
             $message = "Something went wrong!";
             DB::beginTransaction();
-//            try {
+            try {
 
                 //now delete previous permissions
                 DB::table('roles_permissions')->where('role_id', $id)->update([
@@ -726,11 +796,11 @@ class UserController extends Controller
                 DB::commit();
                 return redirect()->route('user.role_index')->with('success', 'Role Permission Updated.');
 
-//            }
-//            catch(\Exception $e){
-//                DB::rollback();
-//                $message = str_replace(array("\r", "\n","'","`"), ' ', $e->getMessage());
-//            }
+            }
+            catch(\Exception $e){
+                DB::rollback();
+                $message = str_replace(array("\r", "\n","'","`"), ' ', $e->getMessage());
+            }
 
             return redirect()->route('user.role_index')->with('error', $message);
         }
