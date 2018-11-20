@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\Employee;
 use App\Models\PasswordResets;
+use App\Notifications\UserActivity;
 use App\Permission;
 use App\Role;
 use App\Student;
@@ -15,11 +16,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Contracts\Hashing\Hasher as HasherContract;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Helpers\AppHelper;
-use function PHPSTORM_META\type;
 
 class UserController extends Controller
 {
@@ -216,6 +217,19 @@ class UserController extends Controller
     public function dashboard(Request $request)
     {
 
+
+
+//        $user = auth()->user();
+//        foreach ($user->unreadNotifications->take(2) as $notification) {
+//            print_r($notification->data);
+//
+//            $notification->markAsRead();
+//
+//        }
+//
+//        die();
+
+
         $teachers = Employee::where('emp_type', AppHelper::EMP_TEACHER)->count();
         $students = Student::count();
 
@@ -397,6 +411,16 @@ class UserController extends Controller
             );
 
             DB::commit();
+
+
+            //now notifiy the admins about this record
+            $users = User::rightJoin('user_roles', 'users.id', '=', 'user_roles.user_id')
+            ->where('user_roles.role_id', AppHelper::USER_ADMIN)
+            ->select('users.id')
+            ->get();
+            $msg = $data['name']." user added by ".auth()->user()->name;
+            Notification::send($users, new UserActivity('info', $msg));
+            // Notification end
 
             return redirect()->route('user.create')->with('success', 'User added!');
 
