@@ -39,7 +39,7 @@ Route::group(
 );
 
 Route::group(
-    ['namespace' => 'Backend', 'middleware' => ['auth','permission']], function () {
+    ['namespace' => 'Backend', 'middleware' => ['auth']], function () {
     Route::get('/logout', 'UserController@logout')->name('logout');
     Route::get('/lock', 'UserController@lock')->name('lockscreen');
     Route::get('/dashboard', 'UserController@dashboard')->name('user.dashboard');
@@ -58,6 +58,14 @@ Route::group(
         ->name('user.status');
     Route::any('user/{id}/permission','UserController@updatePermission')
         ->name('user.permission');
+
+    //user notification
+    Route::get('/notification/unread', 'NotificationController@getUnReadNotification')
+        ->name('user.notification_unread');
+    Route::get('/notification/read', 'NotificationController@getReadNotification')
+        ->name('user.notification_read');
+    Route::get('/notification/all', 'NotificationController@getAllNotification')
+        ->name('user.notification_all');
 
     //system user management
     Route::get('/administrator/user', 'AdministratorController@userIndex')
