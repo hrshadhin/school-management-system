@@ -56,7 +56,7 @@
                         <div class="row">
                             <div class="col-md-offset-2 col-md-8">
                                 @if(count($messages))
-                                @if($type == 'unread') <a class="btn btn-info" href="?action=mark_as_read"><i class="fa fa-envelope-open"></i> Mark as Read</a> @endif
+                                @if($type == 'unread') <a class="btn btn-info btn_mark_as_read" href="?action=mark_as_read"><i class="fa fa-envelope-open"></i> Mark as Read</a> @endif
                                 <a class="btn btn-danger" href="?action=delete"><i class="fa fa-trash"></i> Delete</a>
                                 @endif
                                 <ul class="list-group notification">
@@ -87,7 +87,10 @@
 @section('extraScript')
     <script type="text/javascript">
         $(document).ready(function () {
-
+            $('.btn_mark_as_read').click(function(e){
+                localStorage.removeItem('notiCallTime');
+                localStorage.removeItem('notifications');
+            });
         });
     </script>
 @endsection

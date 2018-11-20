@@ -38,6 +38,21 @@ class PermissionTableSeeder extends Seeder
                 "slug" => "profile",
                 "name" => "Profile",
                 "group" => "Common"
+            ],
+            [
+                "slug" => "user.notification_unread",
+                "name" => "Notification View",
+                "group" => "Common"
+            ],
+            [
+                "slug" => "user.notification_read",
+                "name" => "Notification View",
+                "group" => "Common"
+            ],
+            [
+                "slug" => "user.notification_all",
+                "name" => "Notification View",
+                "group" => "Common"
             ]
 
         ];

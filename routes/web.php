@@ -39,7 +39,7 @@ Route::group(
 );
 
 Route::group(
-    ['namespace' => 'Backend', 'middleware' => ['auth']], function () {
+    ['namespace' => 'Backend', 'middleware' => ['auth', 'permission']], function () {
         Route::get('/logout', 'UserController@logout')->name('logout');
         Route::get('/lock', 'UserController@lock')->name('lockscreen');
         Route::get('/dashboard', 'UserController@dashboard')->name('user.dashboard');
