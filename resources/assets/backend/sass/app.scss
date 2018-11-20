@@ -361,6 +361,11 @@
      border-top: 1px solid #eee;
      color: #31708f;
  }
+ .notification_title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-left: 20px !important;
+ }
 /**
  Mobile view element hide css
  */

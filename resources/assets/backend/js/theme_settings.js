@@ -188,6 +188,74 @@ $(function () {
         });
     }
 
+    /**
+     * Fetch User unread notifications
+     */
+    function fetchNotifications() {
+
+        //check is feature enabled by user
+        var isHidden = get('messages-menu');
+        if(!isHidden){
+            //call notification in every 5 minutes
+            //so check it and call the api
+            var oldTime = localStorage.getItem('notiCallTime');
+            var fetchNotificaton = true;
+
+            if(typeof (oldTime) !== 'undefined') {
+                var timeDiff = parseInt((new Date() - new Date(oldTime))/1000/60);
+                // console.log(timeDiff);
+                if(timeDiff <= 5){
+                    fetchNotificaton = false;
+                }
+            }
+
+            if(fetchNotificaton){
+                $.ajax({
+                    url: '/notification/unread?limit=5',
+                    success: function (response) {
+                        localStorage.setItem('notiCallTime', new Date());
+                        localStorage.setItem('notifications', JSON.stringify(response));
+                    },
+                    async: false
+                });
+            }
+
+            var notifications = (typeof (localStorage.getItem('notifications')) !== "undefined") ? JSON.parse(localStorage.getItem('notifications')) : [];
+            // console.log(notifications);
+            $('.notificaton_header').text('You have '+notifications.length+' recent notifications');
+            $('.notification_badge').text(notifications.length);
+            $('ul.notification_top').empty();
+            notifications.forEach(function(notification, index){
+                var notiIcon = "fa-times-circle text-danger";
+                switch (notification.type){
+                    case "info":
+                        notiIcon = "fa-info-circle";
+                        break;
+                    case "warning":
+                        notiIcon = "fa-warning text-warning";
+                        break;
+                    case "success":
+                        notiIcon = "fa-check-circle text-success";
+                        break;
+                    default:
+                        break;
+                }
+
+                var li = '<li>\n' +
+                    '<a href="#">\n' +
+                    '    <div class="pull-left">\n'+
+                    '    <i class="fa '+ notiIcon +'"></i>\n' +
+                    '</div>\n' +
+                    '    <h4 class="notification_title">'+ notification.message +'</h4>\n' +
+                    '   <p><small class="pull-right"><i class="fa fa-clock-o"></i> '+ notification.created_at +'</small></p>\n' +
+                    '</a>\n' +
+                    '</li>';
+                $('ul.notification_top').append(li);
+            })
+
+        }
+
+    }
 
     /**
      * Retrieve default settings and apply them to the template
@@ -448,4 +516,5 @@ $(function () {
 
     clockRun();
     hrs();
+    fetchNotifications();
 });

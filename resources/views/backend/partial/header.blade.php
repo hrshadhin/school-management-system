@@ -40,25 +40,15 @@
          <li class="dropdown messages-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                 <i class="fa fa-bell-o"></i>
-                <span class="label label-danger"><lable class="alert-image">0</lable></span> </a>
+                <span class="label label-danger"><lable class="alert-image notification_badge">0</lable></span> </a>
             <ul class="dropdown-menu">
-                <li class="header">You have 0 recent notifications</li>
+                <li class="header notificaton_header">You have 0 recent notifications</li>
                 <li>
-                        <ul class="menu notification">
-                            {{--<li>--}}
-                                {{--<a href="#">--}}
-                                    {{--<div class="pull-left">--}}
-                                    {{--<img class="img-circle" src="{{ asset('images/notification.png') }}"></div>--}}
-                                    {{--<h4>Praesentium comm..<small><i class="fa fa-clock-o"></i> 5 min</small></h4>--}}
-                                    {{--<p>Blanditiis quia distinctio rep..</p>--}}
-                                {{--</a>--}}
-                            {{--</li>                           --}}
-
-                           
+                        <ul class="menu notification_top">
                         </ul>
                       
                 </li>
-                <li class="footer"><a href="#">See All Notifications</a></li>
+                <li class="footer"><a href="{{route('user.notification_unread')}}">See All Notifications</a></li>
             </ul>
         </li>                                                  
           @if($show_language)
