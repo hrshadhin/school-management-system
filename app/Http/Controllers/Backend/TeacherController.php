@@ -55,12 +55,15 @@ class TeacherController extends Controller
         //validate form
         $messages = [
             'photo.max' => 'The :attribute size must be under 200kb.',
+            'signature.max' => 'The :attribute size must be under 200kb.',
             'photo.dimensions' => 'The :attribute dimensions min 150 X 150.',
+            'signature.dimensions' => 'The :attribute dimensions max 160 X 80.',
         ];
         $this->validate(
             $request, [
                 'name' => 'required|min:5|max:255',
                 'photo' => 'mimes:jpeg,jpg,png|max:200|dimensions:min_width=150,min_height=150',
+                'signature' => 'mimes:jpeg,jpg,png|max:200|dimensions:max_width=160,max_height=80',
                 'designation' => 'max:255',
                 'qualification' => 'max:255',
                 'dob' => 'min:10',
@@ -84,6 +87,15 @@ class TeacherController extends Controller
         }
         else{
             $data['photo'] = $request->get('oldPhoto','');
+        }
+
+        if($request->hasFile('signature')) {
+            $storagepath = $request->file('signature')->store('public/employee/signature');
+            $fileName = basename($storagepath);
+            $data['signature'] = $fileName;
+        }
+        else{
+            $data['signature'] = $request->get('oldSignature','');
         }
 
         $data['name'] = $request->get('name');
@@ -203,12 +215,15 @@ class TeacherController extends Controller
         //validate form
         $messages = [
             'photo.max' => 'The :attribute size must be under 200kb.',
+            'signature.max' => 'The :attribute size must be under 200kb.',
             'photo.dimensions' => 'The :attribute dimensions min 150 X 150.',
+            'signature.dimensions' => 'The :attribute dimensions max 160 X 80.',
         ];
         $this->validate(
             $request, [
                 'name' => 'required|min:5|max:255',
                 'photo' => 'mimes:jpeg,jpg,png|max:200|dimensions:min_width=150,min_height=150',
+                'signature' => 'mimes:jpeg,jpg,png|max:200|dimensions:max_width=160,max_height=80',
                 'designation' => 'max:255',
                 'qualification' => 'max:255',
                 'dob' => 'min:10',
@@ -238,6 +253,23 @@ class TeacherController extends Controller
         else{
             $data['photo'] = $request->get('oldPhoto','');
         }
+
+        if($request->hasFile('signature')) {
+            $storagepath = $request->file('signature')->store('public/employee/signature');
+            $fileName = basename($storagepath);
+            $data['signature'] = $fileName;
+
+            //if file change then delete old one
+            $oldFile = $request->get('oldSignature','');
+            if( $oldFile != ''){
+                $file_path = "public/employee/signature/".$oldFile;
+                Storage::delete($file_path);
+            }
+        }
+        else{
+            $data['signature'] = $request->get('oldSignature','');
+        }
+
 
         $data['name'] = $request->get('name');
         $data['designation'] = $request->get('designation');

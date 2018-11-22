@@ -36,6 +36,7 @@ class Employee extends Model
         'address',
         'joining_date',
         'photo',
+        'signature',
         'status'
     ];
 

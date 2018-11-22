@@ -112,24 +112,17 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group has-feedback">
-                                        <label for="address">Address</label>
-                                        <textarea name="address" class="form-control"  maxlength="500" >@if($teacher){{ $teacher->address }}@else{{ old('address') }} @endif</textarea>
-                                        <span class="fa fa-location-arrow form-control-feedback"></span>
-                                        <span class="text-danger">{{ $errors->first('address') }}</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group has-feedback">
-                                        <label for="id_card">ID Card No./Employee ID<span class="text-danger">*</span></label>
+                                        <label for="id_card">ID Card No. / Employee ID<span class="text-danger">*</span></label>
                                         <input  type="text" class="form-control" name="id_card"  placeholder="id card number" value="@if($teacher){{$teacher->id_card}}@else{{old('id_card')}}@endif" required min="4" maxlength="50">
                                         <span class="fa fa-id-card form-control-feedback"></span>
                                         <span class="text-danger">{{ $errors->first('id_card') }}</span>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-2">
                                     <div class="form-group has-feedback">
                                         <label for="joining_date">Joining Date<span class="text-danger">*</span></label>
                                         <input type='text' class="form-control date_picker2"  readonly name="joining_date" placeholder="date" value="@if($teacher){{$teacher->joining_date}}@else{{ old('joining_date') }}@endif" required minlength="10" maxlength="255" />
@@ -139,13 +132,32 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group has-feedback">
-                                        <label for="photo">Photo<span class="text-danger">[min 150 X 150 size and max 200kb]</span></label>
+                                        <label for="address">Address</label>
+                                        <textarea name="address" class="form-control"  maxlength="500" >@if($teacher){{ $teacher->address }}@else{{ old('address') }} @endif</textarea>
+                                        <span class="fa fa-location-arrow form-control-feedback"></span>
+                                        <span class="text-danger">{{ $errors->first('address') }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group has-feedback">
+                                        <label for="photo">Photo<br><span class="text-danger">[min 150 X 150 size and max 200kb]</span></label>
                                         <input  type="file" class="form-control" accept=".jpeg, .jpg, .png" name="photo" placeholder="Photo image">
                                         @if($teacher && isset($teacher->photo))
                                             <input type="hidden" name="oldPhoto" value="{{$teacher->photo}}">
                                         @endif
-                                        <span class="glyphicon glyphicon-open-file form-control-feedback"></span>
+                                        <span class="glyphicon glyphicon-open-file form-control-feedback" style="top:45px;"></span>
                                         <span class="text-danger">{{ $errors->first('photo') }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group has-feedback">
+                                        <label for="photo">Signature<br><span class="text-danger">[max 160 X 80 size and max 200kb]</span></label>
+                                        <input  type="file" class="form-control" accept=".jpeg, .jpg, .png" name="signature" placeholder="Signature image">
+                                        @if($teacher && isset($teacher->signature))
+                                            <input type="hidden" name="oldSignature" value="{{$teacher->signature}}">
+                                        @endif
+                                        <span class="glyphicon glyphicon-open-file form-control-feedback" style="top:45px;"></span>
+                                        <span class="text-danger">{{ $errors->first('signature') }}</span>
                                     </div>
                                 </div>
 
