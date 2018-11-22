@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Backend;
 
 use App\Employee;
 use App\Models\PasswordResets;
-use App\Notifications\UserActivity;
 use App\Permission;
 use App\Role;
 use App\Student;
@@ -16,7 +15,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Contracts\Hashing\Hasher as HasherContract;
 use Illuminate\Support\Facades\Validator;
@@ -413,13 +411,9 @@ class UserController extends Controller
             DB::commit();
 
 
-            //now notifiy the admins about this record
-            $users = User::rightJoin('user_roles', 'users.id', '=', 'user_roles.user_id')
-            ->where('user_roles.role_id', AppHelper::USER_ADMIN)
-            ->select('users.id')
-            ->get();
-            $msg = $data['name']." user added by ".auth()->user()->name;
-            Notification::send($users, new UserActivity('info', $msg));
+            //now notify the admins about this record
+             $msg = $data['name']." user added by ".auth()->user()->name;
+             $nothing = AppHelper::sendNotificationToAdmins('info', $msg);
             // Notification end
 
             return redirect()->route('user.create')->with('success', 'User added!');
@@ -569,6 +563,12 @@ class UserController extends Controller
             $user->delete();
 
             DB::commit();
+
+            //now notify the admins about this record
+            $msg = $user->name." user deleted by ".auth()->user()->name;
+            $nothing = AppHelper::sendNotificationToAdmins('info', $msg);
+            // Notification end
+
             return redirect()->route('user.index')->with('success', 'User deleted.');
 
 
@@ -657,6 +657,12 @@ class UserController extends Controller
             DB::table('users_permissions')->insert($userPermissions);
 
             DB::commit();
+
+                //now notify the admins about this record
+                $msg = $user->name." user permission updated by ".auth()->user()->name;
+                $nothing = AppHelper::sendNotificationToAdmins('info', $msg);
+                // Notification end
+
             return redirect()->route('user.index')->with('success', 'User Permission Updated.');
 
             }
@@ -725,6 +731,12 @@ class UserController extends Controller
                 $role->delete();
 
                 DB::commit();
+
+                //now notify the admins about this record
+                $msg = $role->name." role deleted by ".auth()->user()->name;
+                $nothing = AppHelper::sendNotificationToAdmins('info', $msg);
+                // Notification end
+
                 return redirect()->route('user.role_index')->with('success', 'Role deleted!');
 
             }
@@ -772,6 +784,11 @@ class UserController extends Controller
 
             }
 
+            //now notify the admins about this record
+            $msg = $request->get('name')." role created by ".auth()->user()->name;
+            $nothing = AppHelper::sendNotificationToAdmins('info', $msg);
+            // Notification end
+
             return redirect()->route('user.role_index')->with('success', 'Role Created.');
         }
 
@@ -818,6 +835,12 @@ class UserController extends Controller
                 DB::table('roles_permissions')->insert($rolePermissions);
 
                 DB::commit();
+
+                //now notify the admins about this record
+                $msg = $role->name." role updated by ".auth()->user()->name;
+                $nothing = AppHelper::sendNotificationToAdmins('info', $msg);
+                // Notification end
+
                 return redirect()->route('user.role_index')->with('success', 'Role Permission Updated.');
 
             }

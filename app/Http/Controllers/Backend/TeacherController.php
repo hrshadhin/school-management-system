@@ -122,8 +122,12 @@ class TeacherController extends Controller
             // now save employee
             Employee::create($data);
 
-
             DB::commit();
+
+            //now notify the admins about this record
+            $msg = $data['name']." teacher added by ".auth()->user()->name;
+            $nothing = AppHelper::sendNotificationToAdmins('info', $msg);
+            // Notification end
 
             return redirect()->route('teacher.create')->with('success', 'Teacher added!');
 
@@ -279,6 +283,12 @@ class TeacherController extends Controller
         }
 
         $teacher->delete();
+
+        //now notify the admins about this record
+        $msg = $teacher->name." teacher deleted by ".auth()->user()->name;
+        $nothing = AppHelper::sendNotificationToAdmins('info', $msg);
+        // Notification end
+
         return redirect()->route('teacher.index')->with('success', 'Teacher deleted.');
 
     }
