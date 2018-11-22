@@ -51,7 +51,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group has-feedback">
                                         <label for="dob">Date of birth<span class="text-danger">*</span></label>
-                                        <input type='text' class="form-control dob_picker"  readonly name="dob" placeholder="date" value="@if($student){{ $student->dob }}@else{{old('dob')}}@endif" required minlength="10" maxlength="255" />
+                                        <input type='text' class="form-control date_picker2"  readonly name="dob" placeholder="date" value="@if($student){{ $student->dob }}@else{{old('dob')}}@endif" required minlength="10" maxlength="255" />
                                         <span class="fa fa-calendar form-control-feedback"></span>
                                         <span class="text-danger">{{ $errors->first('dob') }}</span>
                                     </div>
@@ -111,7 +111,7 @@
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group has-feedback">
-                                        <label for="photo">Photo<span class="text-danger">[600 X 600 size and max 200kb]</span></label>
+                                        <label for="photo">Photo<span class="text-danger">[min 150 X 150 size and max 200kb]</span></label>
                                         <input  type="file" class="form-control" accept=".jpeg, .jpg, .png" name="photo" placeholder="Photo image">
                                         @if($student && isset($student->photo))
                                             <input type="hidden" name="oldPhoto" value="{{$student->photo}}">
@@ -259,7 +259,7 @@
 
                                     </div>
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-3">
                                     <div class="form-group has-feedback">
                                         <label for="section_id">Section
                                             <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Set section that student belongs to"></i>
@@ -270,17 +270,7 @@
                                         <span class="text-danger">{{ $errors->first('section_id') }}</span>
                                     </div>
                                 </div>
-                                <div class="col-md-2">
-                                    <div class="form-group has-feedback">
-                                        <label for="group">Group
-                                            <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Set student group"></i>
-                                        </label>
-                                        {!! Form::select('group', ['None' => 'None', 'Science' => 'Science', 'Humanities' => 'Humanities', 'Commerce' => 'Commerce' ], $group , ['placeholder' => 'Pick a group...','class' => 'form-control select2', 'required' => 'true']) !!}
-                                        <span class="form-control-feedback"></span>
-                                        <span class="text-danger">{{ $errors->first('group') }}</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
+                                <div class="col-md-3">
                                     <div class="form-group has-feedback">
                                         <label for="shift">Shift
                                             <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Set class shift"></i>

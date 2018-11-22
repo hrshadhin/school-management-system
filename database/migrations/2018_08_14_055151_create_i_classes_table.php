@@ -18,6 +18,7 @@ class CreateIClassesTable extends Migration
             $table->unsignedInteger('teacher_id');
             $table->string('name');
             $table->integer('numeric_value');
+            $table->string('group',15)->nullable();
             $table->text('note')->nullable();
             $table->enum('status', [0,1])->default(0);
             $table->timestamps();

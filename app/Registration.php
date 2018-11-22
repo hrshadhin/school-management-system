@@ -24,7 +24,6 @@ class Registration extends Model
         'section_id',
         'academic_year_id',
         'roll_no',
-        'group',
         'shift',
         'card_no',
         'board_regi_no',

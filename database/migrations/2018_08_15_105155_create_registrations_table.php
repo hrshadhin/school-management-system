@@ -21,7 +21,6 @@ class CreateRegistrationsTable extends Migration
             $table->unsignedInteger('section_id');
             $table->unsignedInteger('academic_year_id');
             $table->string('roll_no',20)->nullable();
-            $table->string('group',15)->nullable();
             $table->string('shift',15)->nullable();
             $table->string('card_no',50)->nullable();
             $table->string('board_regi_no',50)->nullable();

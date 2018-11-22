@@ -2,7 +2,7 @@
 @extends('backend.layouts.master')
 
 <!-- Page title -->
-@section('pageTitle') Student @endsection
+@section('pageTitle') Student @if($classInfo)- {{$classInfo->name}} @endif @endsection
 <!-- End block -->
 
 <!-- Page body extra class -->

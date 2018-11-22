@@ -153,6 +153,14 @@
                                 <span class="form-control-feedback"></span>
                                 <span class="text-danger">{{ $errors->first('attendance_notification') }}</span>
                             </div>
+                            <div class="form-group has-feedback">
+                                <label for="attendance_notification">Institute Type
+                                    <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="select institute type"></i>
+                                </label>
+                                {!! Form::select('institute_type', [1 => "Boys", 2 => "Girls", 3 => "Boys & Girls"], $institute_type , ['class' => 'form-control select2']) !!}
+                                <span class="form-control-feedback"></span>
+                                <span class="text-danger">{{ $errors->first('institute_type') }}</span>
+                            </div>
 
                         </div>
                         <!-- /.box-body -->

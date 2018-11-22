@@ -46,12 +46,22 @@
                                         <span class="text-danger">{{ $errors->first('name') }}</span>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-2">
                                     <div class="form-group has-feedback">
                                         <label for="numeric_value">Numeric Value<span class="text-danger">*</span></label>
-                                        <input autofocus type="number" class="form-control" name="numeric_value" placeholder="1,2,3,5" value="@if($iclass){{ $iclass->numeric_value }}@else{{ old('numeric_value') }} @endif" required>
+                                        <input  type="number" class="form-control" name="numeric_value" placeholder="1,2,3,5" @if($iclass) readonly @endif value="@if($iclass){{ $iclass->numeric_value }}@else{{ old('numeric_value') }} @endif" required>
                                         <span class="fa fa-sort-numeric-asc form-control-feedback"></span>
                                         <span class="text-danger">{{ $errors->first('numeric_value') }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group has-feedback">
+                                        <label for="group">Group
+                                            <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Set group"></i>
+                                        </label>
+                                        {!! Form::select('group', ['None' => 'None', 'Science' => 'Science', 'Humanities' => 'Humanities', 'Commerce' => 'Commerce' ], $group , ['placeholder' => 'Pick a group...','class' => 'form-control select2', 'required' => 'true']) !!}
+                                        <span class="form-control-feedback"></span>
+                                        <span class="text-danger">{{ $errors->first('group') }}</span>
                                     </div>
                                 </div>
                                 <div class="col-md-4">

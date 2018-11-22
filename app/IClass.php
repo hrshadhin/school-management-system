@@ -21,6 +21,7 @@ class IClass extends Model
         'teacher_id',
         'name',
         'numeric_value',
+        'group',
         'status',
         'note'
     ];

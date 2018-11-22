@@ -42,7 +42,8 @@
                                 <th width="5%">#</th>
                                 <th width="20%">Name</th>
                                 <th width="5%">Numeric Value</th>
-                                <th width="30%">Teacher</th>
+                                <th width="5%">Group</th>
+                                <th width="25%">Teacher</th>
                                 <th width="20%">Note</th>
                                 <th width="10%">Status</th>
                                 <th class="notexport" width="10%">Action</th>
@@ -56,6 +57,7 @@
                                     </td>
                                     <td>{{ $iclass->name }}</td>
                                     <td>{{ $iclass->numeric_value }}</td>
+                                    <td>{{ $iclass->group }}</td>
                                     <td>{{ $iclass->teacher->name }}</td>
                                     <td>{{ $iclass->note }}</td>
                                     <td>
@@ -88,7 +90,8 @@
                                 <th width="5%">#</th>
                                 <th width="20%">Name</th>
                                 <th width="5%">Numeric Value</th>
-                                <th width="30%">Teacher</th>
+                                <th width="5%">Group</th>
+                                <th width="25%">Teacher</th>
                                 <th width="20%">Note</th>
                                 <th width="10%">Status</th>
                                 <th class="notexport" width="10%">Action</th>
