@@ -29,6 +29,7 @@ class CreateEmployeesTable extends Migration
             $table->string('address',500)->nullable();
             $table->string('joining_date',10);
             $table->string('photo')->nullable();
+            $table->string('signature')->nullable();
             $table->enum('status', [0,1])->default(1);
             $table->timestamps();
             $table->softDeletes();

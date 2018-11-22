@@ -93,6 +93,12 @@
                                                 <strong><i class="fa fa-sign-in margin-r-5"></i> Username</strong>
                                                 <p class="text-muted">{{$teacher->user->username}}</p>
 
+                                                <hr>
+                                                <strong><i class="fa fa-pencil margin-r-5"></i> Signature</strong>
+                                                @if($teacher->signature )
+                                                    <img class="img-responsive" src="{{ asset('storage/employee/signature')}}/{{ $teacher->signature }}">
+                                                @endif
+
                                             </div>
                                             <!-- /.box-body -->
                                         </div>
