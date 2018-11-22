@@ -27,7 +27,7 @@ export default class Generic {
             autoclose: true,
             todayBtn: true
         });
-        $(".dob_picker").datetimepicker({
+        $(".date_picker2").datetimepicker({
             format: "dd/mm/yyyy",
             startView: 'decade',
             minView: 'month',

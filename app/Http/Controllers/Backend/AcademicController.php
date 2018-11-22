@@ -54,6 +54,7 @@ class AcademicController extends Controller
             $this->validate($request, [
                 'name' => 'required|min:2|max:255',
                 'numeric_value' => 'required|numeric',
+                'group' => 'nullable|max:15',
                 'teacher_id' => 'required|numeric',
                 'note' => 'max:500',
             ]);
@@ -61,6 +62,10 @@ class AcademicController extends Controller
             $data = $request->all();
             if(!$id){
                 $data['status'] = AppHelper::ACTIVE;
+
+            }
+            else{
+                unset($data['numeric_value']);
             }
 
             IClass::updateOrCreate(
@@ -80,12 +85,14 @@ class AcademicController extends Controller
             ->where('status', AppHelper::ACTIVE)
             ->pluck('name', 'id');
         $teacher = null;
+        $group = null;
 
         if($iclass){
             $teacher = $iclass->teacher_id;
+            $group = $iclass->group;
         }
 
-        return view('backend.academic.iclass.add', compact('iclass', 'teachers', 'teacher'));
+        return view('backend.academic.iclass.add', compact('iclass', 'teachers', 'teacher', 'group'));
     }
 
     /**

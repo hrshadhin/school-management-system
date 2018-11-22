@@ -64,7 +64,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group has-feedback">
                                         <label for="dob">Date of birth<span class="text-danger">*</span></label>
-                                        <input type='text' class="form-control dob_picker"  readonly name="dob" placeholder="date" value="@if($teacher){{ $teacher->dob }}@else{{old('dob')}}@endif" required minlength="10" maxlength="255" />
+                                        <input type='text' class="form-control date_picker2"  readonly name="dob" placeholder="date" value="@if($teacher){{ $teacher->dob }}@else{{old('dob')}}@endif" required minlength="10" maxlength="255" />
                                         <span class="fa fa-calendar form-control-feedback"></span>
                                         <span class="text-danger">{{ $errors->first('dob') }}</span>
                                     </div>
@@ -132,14 +132,14 @@
                                 <div class="col-md-4">
                                     <div class="form-group has-feedback">
                                         <label for="joining_date">Joining Date<span class="text-danger">*</span></label>
-                                        <input type='text' class="form-control date_picker"  readonly name="joining_date" placeholder="date" value="@if($teacher){{$teacher->joining_date}}@else{{ old('joining_date') }}@endif" required minlength="10" maxlength="255" />
+                                        <input type='text' class="form-control date_picker2"  readonly name="joining_date" placeholder="date" value="@if($teacher){{$teacher->joining_date}}@else{{ old('joining_date') }}@endif" required minlength="10" maxlength="255" />
                                         <span class="fa fa-calendar form-control-feedback"></span>
                                         <span class="text-danger">{{ $errors->first('joining_date') }}</span>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group has-feedback">
-                                        <label for="photo">Photo<span class="text-danger">[600 X 600 size and max 200kb]</span></label>
+                                        <label for="photo">Photo<span class="text-danger">[min 150 X 150 size and max 200kb]</span></label>
                                         <input  type="file" class="form-control" accept=".jpeg, .jpg, .png" name="photo" placeholder="Photo image">
                                         @if($teacher && isset($teacher->photo))
                                             <input type="hidden" name="oldPhoto" value="{{$teacher->photo}}">

@@ -235,6 +235,14 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-3">
+                                    <label for="">Shift</label>
+                                </div>
+                                <div class="col-md-3">
+                                    <p for="">: {{$student->shift}}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
                                     <label for="">Roll No.</label>
                                 </div>
                                 <div class="col-md-3">
@@ -247,20 +255,7 @@
                                     <p for="">: {{$student->card_no}}</p>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <label for="">Group</label>
-                                </div>
-                                <div class="col-md-3">
-                                    <p for="">: {{$student->group}}</p>
-                                </div>
-                                <div class="col-md-3">
-                                    <label for="">Shift</label>
-                                </div>
-                                <div class="col-md-3">
-                                    <p for="">: {{$student->shift}}</p>
-                                </div>
-                            </div>
+
                             <div class="row">
                                 <div class="col-md-3">
                                     <label for="">Board Registration No.</label>

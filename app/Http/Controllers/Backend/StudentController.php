@@ -32,6 +32,7 @@ class StudentController extends Controller
 
         // get query parameter for filter the fetch
         $class_id = $request->query->get('class',0);
+        $classInfo = null;
         if($class_id){
             // now check is academic year set or not
             $settings = AppHelper::getAppSettings();
@@ -51,9 +52,11 @@ class StudentController extends Controller
                 ->get();
 
             $iclass = $class_id;
+
+            $classInfo = IClass::select('name')->where('id',$class_id)->first();
         }
 
-        return view('backend.student.list', compact('students', 'classes', 'iclass'));
+        return view('backend.student.list', compact('students', 'classes', 'iclass', 'classInfo'));
 
     }
 
@@ -78,6 +81,13 @@ class StudentController extends Controller
         $sections = [];
         $iclass = null;
         $section = null;
+
+        // check for institute type and set gender default value
+        $settings = AppHelper::getAppSettings();
+        if(isset($settings['institute_type']) && intval($settings['institute_type']) == 2){
+          $gender = 2;
+        }
+
 
         return view('backend.student.add', compact(
             'regiInfo',
@@ -107,11 +117,11 @@ class StudentController extends Controller
         //validate form
         $messages = [
             'photo.max' => 'The :attribute size must be under 200kb.',
-            'photo.dimensions' => 'The :attribute dimensions must be 600 X 600.',
+            'photo.dimensions' => 'The :attribute dimensions min 150 X 150.',
         ];
         $rules = [
             'name' => 'required|min:5|max:255',
-            'photo' => 'mimes:jpeg,jpg,png|max:200|dimensions:min_width=600,min_height=600,max_width=600,max_height=600',
+            'photo' => 'mimes:jpeg,jpg,png|max:200|dimensions:min_width=150,min_height=150',
             'dob' => 'min:10|max:10',
             'gender' => 'required|integer',
             'religion' => 'nullable|integer',
@@ -134,7 +144,6 @@ class StudentController extends Controller
             'email' => 'nullable|email|max:255|unique:students,email',
             'class_id' => 'required|integer',
             'section_id' => 'required|integer',
-            'group' => 'nullable|max:15',
             'shift' => 'nullable|max:15',
             'roll_no' => 'nullable|max:20',
             'board_regi_no' => 'nullable|max:50',
@@ -220,7 +229,6 @@ class StudentController extends Controller
                 'section_id' => $data['section_id'],
                 'academic_year_id' => $academicYearInfo->id,
                 'roll_no' => $data['roll_no'],
-                'group' => $data['group'],
                 'shift' => $data['shift'],
                 'card_no' => $data['card_no'],
                 'board_regi_no' => $data['board_regi_no'],
@@ -302,7 +310,6 @@ class StudentController extends Controller
         $religion = $student->religion;
         $bloodGroup = $student->blood_group;
         $nationality = $student->nationality;
-        $group = $regiInfo->group;
         $shift = $regiInfo->shift;
 
         $section = $regiInfo->section_id;
@@ -317,7 +324,6 @@ class StudentController extends Controller
             'nationality',
             'classes',
             'sections',
-            'group',
             'shift',
             'iclass',
             'section'
@@ -347,11 +353,11 @@ class StudentController extends Controller
         //validate form
         $messages = [
             'photo.max' => 'The :attribute size must be under 200kb.',
-            'photo.dimensions' => 'The :attribute dimensions must be 600 X 600.',
+            'photo.dimensions' => 'The :attribute dimensions min 150 X 150.',
         ];
         $rules = [
             'name' => 'required|min:5|max:255',
-            'photo' => 'mimes:jpeg,jpg,png|max:200|dimensions:min_width=600,min_height=600,max_width=600,max_height=600',
+            'photo' => 'mimes:jpeg,jpg,png|max:200|dimensions:min_width=150,min_height=150',
             'dob' => 'min:10|max:10',
             'gender' => 'required|integer',
             'religion' => 'nullable|integer',
@@ -372,7 +378,6 @@ class StudentController extends Controller
             'email' => 'nullable|email|max:255|unique:students,email,'.$student->id.'|email|unique:users,email,'.$student->user_id,
 //            'class_id' => 'required|integer',
             'section_id' => 'required|integer',
-            'group' => 'nullable|max:15',
             'shift' => 'nullable|max:15',
             'roll_no' => 'nullable|max:20',
             'board_regi_no' => 'nullable|max:50',
@@ -420,7 +425,6 @@ class StudentController extends Controller
 //            'class_id' => $data['class_id'],
             'section_id' => $data['section_id'],
             'roll_no' => $data['roll_no'],
-            'group' => $data['group'],
             'shift' => $data['shift'],
             'card_no' => $data['card_no'],
             'board_regi_no' => $data['board_regi_no'],
@@ -454,17 +458,7 @@ class StudentController extends Controller
             ];
         }
 
-        if($regiInfo->group != $data['group']){
-            $isChanged = true;
-            $logData[] = [
-                'student_id' => $regiInfo->student_id,
-                'academic_year_id' => $regiInfo->academic_year_id,
-                'meta_key' => 'group',
-                'meta_value' => $regiInfo->group,
-                'created_at' => $timeNow,
 
-            ];
-        }
         if($regiInfo->shift != $data['shift']){
             $isChanged = true;
             $logData[] = [

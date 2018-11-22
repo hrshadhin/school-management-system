@@ -44,6 +44,7 @@ class SettingsController extends Controller
                 'academic_year' => 'required|integer',
                 'language' => 'required|min:2',
                 'attendance_notification' => 'required|integer',
+                'institute_type' => 'required|integer',
                 ]
             );
 
@@ -128,6 +129,10 @@ class SettingsController extends Controller
                 ['meta_key' => 'attendance_notification'],
                 ['meta_value' => $request->get('attendance_notification', 0)]
             );
+            AppMeta::updateOrCreate(
+                ['meta_key' => 'institute_type'],
+                ['meta_value' => $request->get('institute_type', 1)]
+            );
             Cache::forget('app_settings');
             return redirect()->route('settings.institute')->with('success', 'Setting updated!');
         }
@@ -145,6 +150,7 @@ class SettingsController extends Controller
             'language',
             'disable_language',
             'attendance_notification',
+            'institute_type',
             ]
         )->get();
 
@@ -161,6 +167,7 @@ class SettingsController extends Controller
         $language = isset($metas['language']) ? $metas['language'] : 0;
         $disable_language = isset($metas['disable_language']) ? $metas['disable_language'] : 0;
         $attendance_notification = isset($metas['attendance_notification']) ? $metas['attendance_notification'] : 0;
+        $institute_type = isset($metas['institute_type']) ? $metas['institute_type'] : 1;
 
         return view(
             'backend.settings.institute', compact(
@@ -170,6 +177,7 @@ class SettingsController extends Controller
                 'frontend_website',
                 'disable_language',
                 'attendance_notification',
+                'institute_type',
                 'language'
             )
         );
