@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Helpers\AppHelper;
 use App\Registration;
 use App\Section;
+use App\User;
 use Illuminate\Http\Request;
 use App\IClass;
 use App\Employee;
@@ -32,6 +33,11 @@ class AcademicController extends Controller
             }
 
             $iclass->delete();
+
+            //now notify the admins about this record
+            $msg = $iclass->name." class deleted by ".auth()->user()->name;
+            $nothing = AppHelper::sendNotificationToAdmins('info', $msg);
+            // Notification end
 
             return redirect()->route('academic.class')->with('success', 'Record deleted!');
         }
@@ -72,6 +78,15 @@ class AcademicController extends Controller
                 ['id' => $id],
                 $data
             );
+
+            if(!$id){
+                //now notify the admins about this record
+                $msg = $data['name']." class added by ".auth()->user()->name;
+                $nothing = AppHelper::sendNotificationToAdmins('info', $msg);
+                // Notification end
+            }
+
+
             $msg = "Class ";
             $msg .= $id ? 'updated.' : 'added.';
 
@@ -85,7 +100,7 @@ class AcademicController extends Controller
             ->where('status', AppHelper::ACTIVE)
             ->pluck('name', 'id');
         $teacher = null;
-        $group = null;
+        $group = 'None';
 
         if($iclass){
             $teacher = $iclass->teacher_id;
@@ -143,6 +158,11 @@ class AcademicController extends Controller
 
             $section->delete();
 
+            //now notify the admins about this record
+            $msg = $section->name." section deleted by ".auth()->user()->name;
+            $nothing = AppHelper::sendNotificationToAdmins('info', $msg);
+            // Notification end
+
             return redirect()->route('academic.section')->with('success', 'Record deleted!');
         }
 
@@ -182,6 +202,15 @@ class AcademicController extends Controller
                 ['id' => $id],
                 $data
             );
+
+
+            if(!$id){
+                //now notify the admins about this record
+                $msg = $data['name']." section added by ".auth()->user()->name;
+                $nothing = AppHelper::sendNotificationToAdmins('info', $msg);
+                // Notification end
+            }
+
             $msg = "section ";
             $msg .= $id ? 'updated.' : 'added.';
 

@@ -240,6 +240,12 @@ class StudentController extends Controller
             // now commit the database
             DB::commit();
             $request->session()->flash('message', "Student registration number is ".$regiNo);
+
+            //now notify the admins about this record
+            $msg = $data['name']." student added by ".auth()->user()->name;
+            $nothing = AppHelper::sendNotificationToAdmins('info', $msg);
+            // Notification end
+
             return redirect()->route('student.create')->with('success', 'Student added!');
 
 
@@ -569,6 +575,12 @@ class StudentController extends Controller
                 $user->delete();
             }
             DB::commit();
+
+
+            //now notify the admins about this record
+            $msg = $student->name." student deleted by ".auth()->user()->name;
+            $nothing = AppHelper::sendNotificationToAdmins('info', $msg);
+            // Notification end
 
             return redirect()->route('student.index')->with('success', 'Student deleted.');
 

@@ -2,14 +2,17 @@
 namespace App\Http\Helpers;
 
 use App\Event;
+use App\Notifications\UserActivity;
 use App\Permission;
 use App\SiteMeta;
+use App\User;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use App\AppMeta;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 
 
 class AppHelper
@@ -218,6 +221,7 @@ class AppHelper
                     'language',
                     'disable_language',
                     'attendance_notification',
+                    'institute_type',
                     'institute_settings'
                 ]
             )->get();
@@ -377,6 +381,53 @@ class AppHelper
 
         return $permissions;
     }
+
+    /**
+     *
+     *    Application users By group
+     *
+     */
+    public static function getUsersByGroup($groupId){
+
+            try{
+
+                $users = User::rightJoin('user_roles', 'users.id', '=', 'user_roles.user_id')
+                    ->where('user_roles.role_id', $groupId)
+                    ->select('users.id')
+                    ->get();
+
+            } catch (\Illuminate\Database\QueryException $e) {
+                $users = collect();
+            }
+
+
+        return $users;
+    }
+
+    /**
+     *
+     *    Send notification to users
+     *
+     */
+    public static function sendNotificationToUsers($users, $type, $message){
+        Notification::send($users, new UserActivity($type, $message));
+
+        return true;
+    }
+
+    /**
+     *
+     *    Send notification to Admin users
+     *
+     */
+    public static function sendNotificationToAdmins($type, $message){
+        $admins = AppHelper::getUsersByGroup(AppHelper::USER_ADMIN);
+        return AppHelper::sendNotificationToUsers($admins, $type, $message);
+    }
+
+
+
+
 
 
 }

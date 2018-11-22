@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\AcademicYear;
+use App\Http\Helpers\AppHelper;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\AppMeta;
@@ -134,6 +135,12 @@ class SettingsController extends Controller
                 ['meta_value' => $request->get('institute_type', 1)]
             );
             Cache::forget('app_settings');
+
+            //now notify the admins about this record
+            $msg = "Institute settings updated by ".auth()->user()->name;
+            $nothing = AppHelper::sendNotificationToAdmins('info', $msg);
+            // Notification end
+
             return redirect()->route('settings.institute')->with('success', 'Setting updated!');
         }
 
