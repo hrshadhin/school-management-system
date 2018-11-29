@@ -9,7 +9,7 @@ class BackendMasterComposer
     public function compose(View $view)
     {
 
-       // get app settings
+        // get app settings
         $appSettings = AppHelper::getAppSettings();
 
         $view->with('frontend_website', 1);
@@ -31,6 +31,6 @@ class BackendMasterComposer
         $view->with('maintainer_url', 'http://shanixlab.com');
         $view->with('appSettings', $appSettings);
         $view->with('languages', AppHelper::LANGUEAGES);
-        $view->with('idc', 'aa5d15b1995e181215cff569dedb2d24cfe49c4c');
+        $view->with('idc', '36237fc442afd31e37c0acab35ad6b19d96c232a');
     }
 }
