@@ -137,8 +137,8 @@ class DemoSiteDataSeeder extends Seeder
         copy($originFilePath.$fileName, $destinationPath.$fileName);
         $data['favicon'] = $fileName;
 
-        $data['name'] = 'H.R. Model High School';
-        $data['short_name'] = 'HRMHS';
+        $data['name'] = 'Cloud School';
+        $data['short_name'] = 'CloudSchool';
         $data['facebook'] = '#';
         $data['google'] = '#';
         $data['twitter'] = '#';
