@@ -36,15 +36,15 @@
                     <!-- /.box-header -->
                     <div class="box-body margin-top-20">
                         <div class="table-responsive">
-                        <table id="listDataTable" class="table table-bordered table-striped list_view_table display responsive no-wrap" width="100%">
+                        <table id="listDataTableWithSearch" class="table table-bordered table-striped list_view_table display responsive no-wrap" width="100%">
                             <thead>
                             <tr>
                                 <th width="5%">#</th>
                                 <th class="notexport" width="10%">Photo</th>
-                                <th width="10%">ID Card</th>
-                                <th width="30%">Name</th>
-                                <th width="10%">Phone No</th>
-                                <th width="10%">Email</th>
+                                <th width="8%">ID Card</th>
+                                <th width="25%">Name</th>
+                                <th width="8%">Phone No</th>
+                                <th width="19%">Email</th>
                                 <th width="10%">Status</th>
                                 <th class="notexport" width="15%">Action</th>
                             </tr>
@@ -95,10 +95,10 @@
                             <tr>
                                 <th width="5%">#</th>
                                 <th class="notexport" width="10%">Photo</th>
-                                <th width="10%">ID Card</th>
-                                <th width="30%">Name</th>
-                                <th width="10%">Phone No</th>
-                                <th width="10%">Email</th>
+                                <th width="8%">ID Card</th>
+                                <th width="25%">Name</th>
+                                <th width="8%">Phone No</th>
+                                <th width="15%">Email</th>
                                 <th width="10%">Status</th>
                                 <th class="notexport" width="15%">Action</th>
                             </tr>
@@ -122,6 +122,7 @@
         $(document).ready(function () {
             window.postUrl = '{{URL::Route("teacher.status", 0)}}';
             window.changeExportColumnIndex = 5;
+            window.excludeFilterComlumns = [0,1,6,7];
             Generic.initCommonPageJS();
             Generic.initDeleteDialog();
         });

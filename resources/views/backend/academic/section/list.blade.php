@@ -36,7 +36,7 @@
                     <!-- /.box-header -->
                     <div class="box-body margin-top-20">
                         <div class="table-responsive">
-                        <table id="listDataTable" class="table table-bordered table-striped list_view_table display responsive no-wrap" width="100%">
+                        <table id="listDataTableWithSearch" class="table table-bordered table-striped list_view_table display responsive no-wrap" width="100%">
                             <thead>
                             <tr>
                                 <th width="5%">#</th>
@@ -116,6 +116,7 @@
         $(document).ready(function () {
             window.postUrl = '{{URL::Route("academic.section_status", 0)}}';
             window.changeExportColumnIndex = 6;
+            window.excludeFilterComlumns = [0,6,7];
             Academic.sectionInit();
         });
     </script>
