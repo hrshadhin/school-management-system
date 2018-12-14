@@ -30,15 +30,10 @@
             <div class="col-md-12">
                 <div class="box box-info">
                     <form novalidate id="entryForm" action="@if($iclass) {{URL::Route('academic.class_update', $iclass->id)}} @else {{URL::Route('academic.class_store')}} @endif" method="post" enctype="multipart/form-data">
-                        <div class="box-header">
-                            <div class="callout callout-danger">
-                                <p><b>Note:</b> Create a techer before create new class.</p>
-                            </div>
-                        </div>
                         <div class="box-body">
                             @csrf
                             <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md-7">
                                     <div class="form-group has-feedback">
                                         <label for="name">Name<span class="text-danger">*</span></label>
                                         <input autofocus type="text" class="form-control" name="name" placeholder="name" value="@if($iclass){{ $iclass->name }}@else{{ old('name') }} @endif" required minlength="2" maxlength="255">
@@ -54,7 +49,7 @@
                                         <span class="text-danger">{{ $errors->first('numeric_value') }}</span>
                                     </div>
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-3">
                                     <div class="form-group has-feedback">
                                         <label for="group">Group
                                             <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Set group"></i>
@@ -64,16 +59,7 @@
                                         <span class="text-danger">{{ $errors->first('group') }}</span>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="form-group has-feedback">
-                                        <label for="teacher_id">Teacher Name
-                                            <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Set class teacher"></i>
-                                        </label>
-                                        {!! Form::select('teacher_id', $teachers, $teacher , ['placeholder' => 'Pick a teacher...','class' => 'form-control select2', 'required' => 'true']) !!}
-                                        <span class="form-control-feedback"></span>
-                                        <span class="text-danger">{{ $errors->first('teacher_id') }}</span>
-                                    </div>
-                                </div>
+
                             </div>
                             <div class="row">
                                 <div class="col-md-12">

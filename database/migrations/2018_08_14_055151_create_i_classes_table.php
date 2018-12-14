@@ -15,7 +15,6 @@ class CreateIClassesTable extends Migration
     {
         Schema::create('i_classes', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('teacher_id');
             $table->string('name');
             $table->integer('numeric_value');
             $table->string('group',15)->nullable();
@@ -24,7 +23,6 @@ class CreateIClassesTable extends Migration
             $table->timestamps();
             $table->softDeletes();
             $table->userstamps();
-            $table->foreign('teacher_id')->references('id')->on('employees');
 
 
         });

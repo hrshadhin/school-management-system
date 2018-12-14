@@ -43,7 +43,7 @@ class AcademicController extends Controller
         }
 
         //for get request
-        $iclasses = IClass::select('id','name','numeric_value','status','teacher_id')->orderBy('numeric_value', 'asc')->get();
+        $iclasses = IClass::select('id','name','numeric_value','status','note')->orderBy('numeric_value', 'asc')->get();
 
         return view('backend.academic.iclass.list', compact('iclasses'));
     }
@@ -61,7 +61,6 @@ class AcademicController extends Controller
                 'name' => 'required|min:2|max:255',
                 'numeric_value' => 'required|numeric',
                 'group' => 'nullable|max:15',
-                'teacher_id' => 'required|numeric',
                 'note' => 'max:500',
             ]);
 
@@ -95,19 +94,13 @@ class AcademicController extends Controller
 
         //for get request
         $iclass = IClass::find($id);
-
-        $teachers = Employee::where('emp_type', AppHelper::EMP_TEACHER)
-            ->where('status', AppHelper::ACTIVE)
-            ->pluck('name', 'id');
-        $teacher = null;
         $group = 'None';
 
         if($iclass){
-            $teacher = $iclass->teacher_id;
             $group = $iclass->group;
         }
 
-        return view('backend.academic.iclass.add', compact('iclass', 'teachers', 'teacher', 'group'));
+        return view('backend.academic.iclass.add', compact('iclass','group'));
     }
 
     /**

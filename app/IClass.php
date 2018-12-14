@@ -18,7 +18,6 @@ class IClass extends Model
      * @var array
      */
     protected $fillable = [
-        'teacher_id',
         'name',
         'numeric_value',
         'group',
@@ -26,11 +25,6 @@ class IClass extends Model
         'note'
     ];
 
-
-    public function teacher()
-    {
-        return $this->belongsTo('App\Employee', 'teacher_id');
-    }
 
     public function section()
     {
