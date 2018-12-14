@@ -50,4 +50,13 @@ class Registration extends Model
     {
         return $this->belongsTo('App\AcademicYear', 'academic_year_id');
     }
+
+    public function scopeSection($query, $section)
+    {
+        if($section){
+            return $query->where('section_id', $section);
+        }
+
+        return $query;
+    }
 }

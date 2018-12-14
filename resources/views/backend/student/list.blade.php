@@ -2,7 +2,7 @@
 @extends('backend.layouts.master')
 
 <!-- Page title -->
-@section('pageTitle') Student @if($classInfo)- {{$classInfo->name}} @endif @endsection
+@section('pageTitle') Student @if($classInfo)- {{$classInfo->name}} @endif @if($sectionInfo)- {{$sectionInfo->name}} @endif @endsection
 <!-- End block -->
 
 <!-- Page body extra class -->
@@ -29,9 +29,14 @@
             <div class="col-md-12">
                 <div class="box box-info">
                     <div class="box-header">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                         <div class="form-group has-feedback">
-                                {!! Form::select('class_filter', $classes, $iclass , ['placeholder' => 'Pick a class...','class' => 'form-control select2', 'required' => 'true']) !!}
+                                {!! Form::select('class_id', $classes, $iclass , ['placeholder' => 'Pick a class...','class' => 'form-control select2', 'required' => 'true']) !!}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group has-feedback">
+                                {!! Form::select('section_id', $sections, $section_id , ['placeholder' => 'Pick a section...','class' => 'form-control select2', 'id' => 'student_list_filter', 'required' => 'true']) !!}
                             </div>
                         </div>
                         <div class="box-tools pull-right">
@@ -41,16 +46,15 @@
                     <!-- /.box-header -->
                     <div class="box-body">
                         <div class="table-responsive">
-                        <table id="listDataTable" class="table table-bordered table-striped list_view_table display responsive no-wrap" width="100%">
+                        <table id="listDataTableWithSearch" class="table table-bordered table-striped list_view_table display responsive no-wrap" width="100%">
                             <thead>
                             <tr>
                                 <th width="5%">#</th>
                                 <th class="notexport" width="7%">Photo</th>
-                                <th width="3%">Section</th>
                                 <th width="8%">Regi. No.</th>
                                 <th width="8%">Roll No.</th>
                                 <th width="8%">ID Card</th>
-                                <th width="16%">Name</th>
+                                <th width="19%">Name</th>
                                 <th width="10%">Phone No</th>
                                 <th width="10%">Email</th>
                                 <th width="10%">Status</th>
@@ -66,7 +70,6 @@
                                     <td>
                                         <img class="img-responsive center" style="height: 35px; width: 35px;" src="@if($info->student->photo ){{ asset('storage/student')}}/{{ $info->class_id }}/{{ $info->student->photo }} @else {{ asset('images/avatar.jpg')}} @endif" alt="">
                                     </td>
-                                    <td>{{ $info->section->name }}</td>
                                     <td>{{ $info->regi_no }}</td>
                                     <td>{{ $info->roll_no }}</td>
                                     <td>{{ $info->card_no }}</td>
@@ -106,11 +109,10 @@
                             <tr>
                                 <th width="5%">#</th>
                                 <th class="notexport" width="7%">Photo</th>
-                                <th width="3%">Section</th>
                                 <th width="8%">Regi. No.</th>
                                 <th width="8%">Roll No.</th>
                                 <th width="8%">ID Card</th>
-                                <th width="16%">Name</th>
+                                <th width="19%">Name</th>
                                 <th width="10%">Phone No</th>
                                 <th width="10%">Email</th>
                                 <th width="10%">Status</th>
@@ -135,7 +137,9 @@
     <script type="text/javascript">
         $(document).ready(function () {
             window.postUrl = '{{URL::Route("student.status", 0)}}';
-            window.changeExportColumnIndex = 8;
+            window.section_list_url = '{{URL::Route("academic.section")}}';
+            window.changeExportColumnIndex = 7;
+            window.excludeFilterComlumns = [0,1,8,9];
            Academic.studentInit();
         });
     </script>

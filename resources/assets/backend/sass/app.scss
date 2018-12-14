@@ -366,6 +366,11 @@
     text-overflow: ellipsis;
     margin-left: 20px !important;
  }
+ #listDataTableWithSearch thead input {
+             width: 100%;
+}
+
+
 /**
  Mobile view element hide css
  */

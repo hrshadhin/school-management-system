@@ -29,10 +29,15 @@ class StudentController extends Controller
             ->pluck('name', 'id');
         $iclass = null;
         $students = [];
+        $sections = [];
 
         // get query parameter for filter the fetch
         $class_id = $request->query->get('class',0);
+        $section_id = $request->query->get('section',0);
+
+
         $classInfo = null;
+        $sectionInfo = null;
         if($class_id){
             // now check is academic year set or not
             $settings = AppHelper::getAppSettings();
@@ -46,17 +51,27 @@ class StudentController extends Controller
             //get student
             $students = Registration::where('class_id', $class_id)
                 ->where('academic_year_id', $acYear)
+                ->section($section_id)
                 ->with('student')
-                ->with('section')
+//                ->with('section')
                 ->orderBy('student_id','asc')
                 ->get();
+
+            //if section is mention then full this class section list
+            if($section_id){
+                $sections = Section::where('status', AppHelper::ACTIVE)
+                    ->where('class_id', $class_id)
+                    ->pluck('name', 'id');
+
+                $sectionInfo =  Section::select('name')->where('id', $section_id)->first();
+            }
 
             $iclass = $class_id;
 
             $classInfo = IClass::select('name')->where('id',$class_id)->first();
         }
 
-        return view('backend.student.list', compact('students', 'classes', 'iclass', 'classInfo'));
+        return view('backend.student.list', compact('students', 'classes', 'iclass', 'sections', 'section_id', 'classInfo', 'sectionInfo'));
 
     }
 

@@ -31,10 +31,11 @@ export default class Academic {
             Generic.loaderStop();
         });
 
-        $('select[name="class_filter"]').on('change', function () {
-            let class_id = $(this).val();
-            if(class_id){
-                let getUrl = window.location.href.split('?')[0]+"?class="+class_id;
+        $('#student_list_filter').on('change', function () {
+            let class_id = $('select[name="class_id"]').val();
+            let section_id = $(this).val();
+            if(class_id && section_id){
+                let getUrl = window.location.href.split('?')[0]+"?class="+class_id+"&section="+section_id;
                 window.location = getUrl;
 
             }
@@ -49,7 +50,7 @@ export default class Academic {
             axios.get(getUrl)
                 .then((response) => {
                     if (Object.keys(response.data).length) {
-                        $('select[name="section_id"]').select2({data: response.data});
+                        $('select[name="section_id"]').empty().prepend('<option selected=""></option>').select2({placeholder: 'Pick a section...', data: response.data});
                     }
                     else {
                         $('select[name="section_id"]').empty().select2({placeholder: 'Pick a section...'});

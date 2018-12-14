@@ -51,6 +51,8 @@ export default class Generic {
                 }
             }
         };
+
+       //table with out search
         var table = $('#listDataTable').DataTable({
             pageLength: 25,
             lengthChange: false,
@@ -87,11 +89,74 @@ export default class Generic {
                 })
             ]
         });
-
         table.buttons().container().appendTo($('.col-sm-6:eq(0)', table.table().container()));
 
+
+
+        //style table with search
+        // Setup - add a text input to each footer cell
+        $('#listDataTableWithSearch thead tr').clone(true).appendTo( '#listDataTableWithSearch thead' );
+        $('#listDataTableWithSearch thead tr:eq(1) th').each( function (i) {
+
+            if(window.excludeFilterComlumns.indexOf(i) > -1) {
+                $(this).html( '' );
+                return;
+            }
+
+            $(this).html( '<input type="text" placeholder="Search" />' );
+            $( 'input', this ).on( 'keyup change', function () {
+                if ( table2.column(i).search() !== this.value ) {
+                    table2
+                        .column(i)
+                        .search( this.value )
+                        .draw();
+                }
+            } );
+        } );
+        var table2 = $('#listDataTableWithSearch').DataTable({
+            pageLength: 25,
+            lengthChange: false,
+            orderCellsTop: true,
+            responsive: true,
+            buttons: [
+                $.extend(true, {}, buttonCommon, {
+                    extend: 'copy',
+                    text: '<i class="fa fa-files-o"></i>',
+                    titleAttr: 'copy',
+                }),
+                $.extend(true, {}, buttonCommon, {
+                    extend: 'csv',
+                    text: '<i class="fa fa-file-text-o"></i>',
+                    titleAttr: 'csv',
+                }),
+                $.extend(true, {}, buttonCommon, {
+                    extend: 'excel',
+                    text: '<i class="fa fa-file-excel-o"></i>',
+                    titleAttr: 'Excel',
+                }),
+                $.extend(true, {}, buttonCommon, {
+                    extend: 'pdf',
+                    text: '<i class="fa fa-file-pdf-o"></i>',
+                    titleAttr: 'pdf',
+                    customize: function (doc) {
+                        doc.content[1].table.widths = Array(doc.content[1].table.body[0].length + 1).join('*').split('');
+                        doc.content[1].alignment = "center";
+                    }
+                }),
+                $.extend(true, {}, buttonCommon, {
+                    extend: 'print',
+                    text: '<i class="fa fa-print"></i>',
+                    titleAttr: 'print',
+                })
+            ]
+        });
+        table2.buttons().container().appendTo($('.col-sm-6:eq(0)', table2.table().container()));
+
+
+
+
         let stopchange = false;
-        $('.statusChange').change(function (e) {
+        $('html #listDataTableWithSearch, html #listDataTable').on('change', 'input.statusChange', function (e) {
             let that = $(this);
             if (stopchange === false) {
                 let isActive = $(this).prop('checked') ? 1 : 0;
@@ -144,7 +209,7 @@ export default class Generic {
     }
 
     static initDeleteDialog() {
-        $('form.myAction').submit(function (e) {
+        $('html #listDataTableWithSearch, html #listDataTable').on('submit', 'form.myAction', function (e) {
             e.preventDefault();
             var that = this;
             swal({
