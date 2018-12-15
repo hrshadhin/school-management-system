@@ -3,6 +3,7 @@ namespace App\Permissions;
 
 use App\Permission;
 use App\Role;
+use Illuminate\Support\Facades\Cache;
 
 trait HasPermissionsTrait {
 
@@ -19,7 +20,8 @@ trait HasPermissionsTrait {
 
     public function hasRole( ... $roles ) {
         foreach ($roles as $role) {
-            if ($this->roles->contains('name', $role)) {
+            $roles = $this->getRoles();
+            if ($roles->contains('name', $role)) {
                 return true;
             }
         }
@@ -27,8 +29,15 @@ trait HasPermissionsTrait {
     }
 
     public function hasPermissionThroughRole($permission) {
-        foreach ($permission->roles as $role){
-            if($this->roles->contains($role)) {
+
+        $permissionRoles = Cache::rememberForever('permission_role'.$permission->id, function() use($permission) {
+            return $permission->roles()->get();
+        });
+
+        $roles = $this->getRoles();
+
+        foreach ($permissionRoles as $role){
+            if($roles->contains($role)) {
                 return true;
             }
         }
@@ -40,29 +49,21 @@ trait HasPermissionsTrait {
     }
 
     protected function hasPermission($permission) {
-        return (bool) $this->permissions->where('slug', $permission->slug)->count();
+
+        $that = $this;
+        $hasPermission =  Cache::rememberForever('permission'.auth()->user()->id, function() use($that, $permission) {
+            return $that->permissions->where('slug', $permission->slug)->count();
+        });
+
+
+        return (bool) $hasPermission;
     }
 
-    // I used soft delete so i have to do it manually for both add and delete permission
-    // that's why i don't need below functions
-//    public function givePermissionsTo(... $permissions) {
-//        $permissions = $this->getAllPermissions($permissions);
-//
-//        if($permissions === null) {
-//            return $this;
-//        }
-//        $this->permissions()->saveMany($permissions);
-//        return $this;
-//    }
-//
-//    public function deletePermissions( ... $permissions ) {
-//        $permissions = $this->getAllPermissions($permissions);
-//        $this->permissions()->detach($permissions);
-//        return $this;
-//    }
-//
-//    private function getAllPermissions($permissions)
-//    {
-//        return Permission::whereIn('name', $permissions)->get();
-//    }
+    protected function getRoles() {
+        $that = $this;
+        return Cache::rememberForever('roles'.auth()->user()->id, function() use($that) {
+            return $that->roles()->get();
+        });
+    }
+
 }
