@@ -14,11 +14,13 @@
           <i class="fa icon-student"></i> <span>Students</span>
         </a>
       </li>
+      @can('teacher.index')
       <li>
         <a href="{{ URL::route('teacher.index') }}">
           <i class="fa icon-teacher"></i> <span>Teachers</span>
         </a>
       </li>
+      @endcan
       <li class="treeview">
         <a href="#">
           <i class="fa icon-academicmain"></i>
@@ -98,11 +100,13 @@
         </ul>
       </li>
       @endrole
+      @can('user.index')
       <li>
         <a href="{{ URL::route('user.index') }}">
           <i class="fa fa-users"></i> <span>Users</span>
         </a>
       </li>
+      @endcan
       <li class="treeview">
         <a href="#">
           <i class="fa fa-cogs"></i>
