@@ -186,7 +186,7 @@ class UserController extends Controller
             $reset = PasswordResets::where('email', $email)->first();
             if($reset) {
                 //token expiration checking, allow 24 hrs only
-                $today =  Carbon::now(new \DateTimeZone('Asia/Dhaka'));
+                $today =  Carbon::now(env('APP_TIMEZONE','Asia/Dhaka'));
                 $createdDate = Carbon::parse($reset->created_at);
                 $hoursGone = $today->diffInHours($createdDate);
                 if($this->hasher->check($token, $reset->token) && $hoursGone <= 24) {
@@ -245,7 +245,6 @@ class UserController extends Controller
 
         $isPost = false;
         $user = auth()->user();
-        $role = Role::where('id', $user->role->role_id)->first();
 
 
         if ($request->isMethod('post')) {
@@ -290,6 +289,8 @@ class UserController extends Controller
             }
 
         }
+
+        $role = Role::where('id', $user->role->role_id)->first();
 
         return view('backend.user.profile', compact('user','isPost','role'));
     }/**
@@ -916,9 +917,9 @@ class UserController extends Controller
 
         $rolePermissions = [];
 
-        if(count($permissionList)) {
+        $now = Carbon::now(env('APP_TIMEZONE','Asia/Dhaka'));
 
-            $now = Carbon::now('Asia/Dhaka');
+        if(count($permissionList)) {
 
             foreach ($permissionList as $permissions) {
                 $permissions = explode(',', $permissions);
@@ -934,18 +935,20 @@ class UserController extends Controller
                 }
             }
 
-            //now add common permissions
-            $permissions = Permission::select('id')->where('group', 'Common')->get();
-            foreach ($permissions as $permission) {
-                $rolePermissions[] = [
-                    $type => $roleOrUserId,
-                    'permission_id' => $permission->id,
-                    'created_at' => $now,
-                    'updated_at' => $now,
-                    'created_by' => $loggedInUser,
-                    'updated_by' => $loggedInUser,
-                ];
-            }
+
+        }
+
+        //now add common permissions
+        $permissions = Permission::select('id')->where('group', 'Common')->get();
+        foreach ($permissions as $permission) {
+            $rolePermissions[] = [
+                $type => $roleOrUserId,
+                'permission_id' => $permission->id,
+                'created_at' => $now,
+                'updated_at' => $now,
+                'created_by' => $loggedInUser,
+                'updated_by' => $loggedInUser,
+            ];
         }
 
         return $rolePermissions;
