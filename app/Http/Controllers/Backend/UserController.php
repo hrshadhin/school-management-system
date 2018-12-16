@@ -523,9 +523,11 @@ class UserController extends Controller
         $user->save();
 
         if($user->role_id != $request->get('role_id')){
-            $userRole = UserRole::where('user_id', $user->id)->first();
-            $userRole->role_id = $request->get('role_id');
-            $userRole->save();
+            DB::table('user_roles')->where('user_id', $user->id)->update([
+                'role_id' => $request->get('role_id'),
+                'updated_at' => Carbon::now(),
+                'updated_by' => auth()->user()->id
+            ]);
         }
 
         return redirect()->route('user.index')->with('success', 'User updated!');

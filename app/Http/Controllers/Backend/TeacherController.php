@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Helpers\AppHelper;
-use App\IClass;
 use App\Section;
 use App\User;
 use App\UserRole;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Employee;
-use DB;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class TeacherController extends Controller
@@ -306,22 +306,44 @@ class TeacherController extends Controller
             abort(404);
         }
         //protect from delete the teacher if have any class or section connected with this teacher
-        $haveClass = IClass::where('teacher_id', $teacher->id)->count();
         $haveSection = Section::where('teacher_id', $teacher->id)->count();
 
-        if($haveClass || $haveSection){
-            return redirect()->route('teacher.index')->with('error', 'Can not delete! Teacher used in class or section.');
+        if($haveSection){
+            return redirect()->route('teacher.index')->with('error', 'Can not delete! Teacher used in section.');
 
         }
 
-        $teacher->delete();
 
-        //now notify the admins about this record
-        $msg = $teacher->name." teacher deleted by ".auth()->user()->name;
-        $nothing = AppHelper::sendNotificationToAdmins('info', $msg);
-        // Notification end
+        $message = "Something went wrong!";
+        DB::beginTransaction();
+        try {
 
-        return redirect()->route('teacher.index')->with('success', 'Teacher deleted.');
+            User::destroy($teacher->user_id);
+            DB::table('user_roles')->where('user_id', $teacher->user_id)->update([
+                'deleted_by' => auth()->user()->id,
+                'deleted_at' => Carbon::now()
+            ]);
+            $teacher->delete();
+
+            DB::commit();
+
+            //now notify the admins about this record
+            $msg = $teacher->name." teacher deleted by ".auth()->user()->name;
+            $nothing = AppHelper::sendNotificationToAdmins('info', $msg);
+            // Notification end
+
+            return redirect()->route('teacher.index')->with('success', 'Teacher deleted.');
+
+        }
+        catch(\Exception $e){
+            DB::rollback();
+            $message = str_replace(array("\r", "\n","'","`"), ' ', $e->getMessage());
+        }
+
+
+
+
+        return redirect()->route('teacher.index')->with('error', $message);
 
     }
 
