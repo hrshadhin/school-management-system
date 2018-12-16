@@ -572,6 +572,10 @@ class UserController extends Controller
             $nothing = AppHelper::sendNotificationToAdmins('info', $msg);
             // Notification end
 
+            //flash this user permission cache
+            Cache::forget('permission'.auth()->user()->id);
+            Cache::forget('roles'.auth()->user()->id);
+
             return redirect()->route('user.index')->with('success', 'User deleted.');
 
 
@@ -615,8 +619,11 @@ class UserController extends Controller
 
         $user->status = (string)$request->get('status');
         $user->force_logout = (int)$request->get('status') ? 0 : 1;
-
         $user->save();
+
+        //flash this user permission cache
+        Cache::forget('permission'.auth()->user()->id);
+        Cache::forget('roles'.auth()->user()->id);
 
         return [
             'success' => true,
