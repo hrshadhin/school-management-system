@@ -62,15 +62,13 @@ class StudentController extends Controller
                     ->where('class_id', $class_id)
                     ->pluck('name', 'id');
 
-                $sectionInfo =  Section::select('name')->where('id', $section_id)->first();
             }
 
             $iclass = $class_id;
 
-            $classInfo = IClass::select('name')->where('id',$class_id)->first();
         }
 
-        return view('backend.student.list', compact('students', 'classes', 'iclass', 'sections', 'section_id', 'classInfo', 'sectionInfo'));
+        return view('backend.student.list', compact('students', 'classes', 'iclass', 'sections', 'section_id'));
 
     }
 
