@@ -2,7 +2,7 @@
 @extends('backend.layouts.master')
 
 <!-- Page title -->
-@section('pageTitle') Student @if($classInfo)- {{$classInfo->name}} @endif @if($sectionInfo)- {{$sectionInfo->name}} @endif @endsection
+@section('pageTitle') Student @endsection
 <!-- End block -->
 
 <!-- Page body extra class -->
@@ -140,7 +140,7 @@
             window.section_list_url = '{{URL::Route("academic.section")}}';
             window.changeExportColumnIndex = 7;
             window.excludeFilterComlumns = [0,1,8,9];
-           Academic.studentInit();
+           Academic.studentInit();$('title').text($('title').text() + '-' + $('select[name="class_id"] option[selected]').text() + '(' + $('select[name="section_id"] option[selected]').text() +')');
         });
     </script>
 @endsection
