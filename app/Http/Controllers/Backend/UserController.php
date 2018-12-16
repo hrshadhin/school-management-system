@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
@@ -665,6 +666,9 @@ class UserController extends Controller
                 $nothing = AppHelper::sendNotificationToAdmins('info', $msg);
                 // Notification end
 
+                //flush the permission cache also other cache
+                Cache::flush();
+
             return redirect()->route('user.index')->with('success', 'User Permission Updated.');
 
             }
@@ -739,6 +743,9 @@ class UserController extends Controller
                 $nothing = AppHelper::sendNotificationToAdmins('info', $msg);
                 // Notification end
 
+                //flush the permission cache also other cache
+                Cache::flush();
+
                 return redirect()->route('user.role_index')->with('success', 'Role deleted!');
 
             }
@@ -791,6 +798,9 @@ class UserController extends Controller
             $nothing = AppHelper::sendNotificationToAdmins('info', $msg);
             // Notification end
 
+            //flush the permission cache also other cache
+            Cache::flush();
+
             return redirect()->route('user.role_index')->with('success', 'Role Created.');
         }
 
@@ -842,6 +852,9 @@ class UserController extends Controller
                 $msg = $role->name." role updated by ".auth()->user()->name;
                 $nothing = AppHelper::sendNotificationToAdmins('info', $msg);
                 // Notification end
+
+                //flush the permission cache also other cache
+                Cache::flush();
 
                 return redirect()->route('user.role_index')->with('success', 'Role Permission Updated.');
 
