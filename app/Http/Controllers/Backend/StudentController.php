@@ -53,7 +53,6 @@ class StudentController extends Controller
                 ->where('academic_year_id', $acYear)
                 ->section($section_id)
                 ->with('student')
-//                ->with('section')
                 ->orderBy('student_id','asc')
                 ->get();
 
