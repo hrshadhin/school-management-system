@@ -290,9 +290,7 @@ class UserController extends Controller
 
         }
 
-        $role = Role::where('id', $user->role->role_id)->first();
-
-        return view('backend.user.profile', compact('user','isPost','role'));
+        return view('backend.user.profile', compact('user','isPost'));
     }/**
 
 
