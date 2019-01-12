@@ -5,10 +5,6 @@
 @section('pageTitle') Settings @endsection
 <!-- End block -->
 
-<!-- Page body extra class -->
-@section('bodyCssClass') @endsection
-<!-- End block -->
-
 <!-- BEGIN PAGE CONTENT-->
 @section('pageContent')
     <!-- Section header -->
@@ -28,11 +24,13 @@
             <div class="col-md-12">
                 <div class="box box-info">
                     <form  id="entryForm" action="{{URL::Route('settings.institute')}}" method="post" enctype="multipart/form-data">
+                        @if(AppHelper::getInstituteCategory() != 'college')
                         <div class="box-header">
                             <div class="callout callout-danger">
                                 <p><b>Note:</b> Create academic year if not have any.</p>
                             </div>
                         </div>
+                        @endif
 
                         <!-- /.box-header -->
                         <div class="box-body">
@@ -72,7 +70,7 @@
                                     <input type="hidden" name="oldLogoSmall" value="{{$info->logo_small}}">
                                 @endif
                                 <span class="glyphicon glyphicon-open-file form-control-feedback"></span>
-                                <span class="text-danger">{{ $errors->first('logo') }}</span>
+                                <span class="text-danger">{{ $errors->first('logo_small') }}</span>
                             </div>
                             <div class="form-group has-feedback">
                                 <label for="favicon">Favicon<span class="text-danger">[only .png image][32 X 32 exact size and max 512KB]</span></label>
@@ -107,6 +105,7 @@
                                 <span class="fa fa-location-arrow form-control-feedback"></span>
                                 <span class="text-danger">{{ $errors->first('address') }}</span>
                             </div>
+                            @if(AppHelper::getInstituteCategory() != 'college')
                             <div class="form-group has-feedback">
                                 <label for="academic_year">Default Academic Year
                                     <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Set default academic year"></i>
@@ -115,6 +114,7 @@
                                 <span class="form-control-feedback"></span>
                                 <span class="text-danger">{{ $errors->first('academic_year') }}</span>
                             </div>
+                            @endif
                             <div class="form-group has-feedback">
                                     <label for="frontend_website">Frontend Website
                                         <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Enable/Disable frontend website"></i>
