@@ -105,7 +105,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group has-feedback">
                                         <label for="phone_no">Phone/Mobile No.<span class="text-danger">*</span></label>
-                                        <input  type="text" class="form-control" name="phone_no" required placeholder="phone or mobile number" value="@if($teacher){{$teacher->phone_no}}@else{{old('phone_no')}}@endif" min="8" maxlength="255">
+                                        <input  type="text" class="form-control" name="phone_no" required placeholder="phone or mobile number" value="@if($teacher){{$teacher->phone_no}}@else{{old('phone_no')}}@endif" min="8" maxlength="15">
                                         <span class="fa fa-phone form-control-feedback"></span>
                                         <span class="text-danger">{{ $errors->first('phone_no') }}</span>
                                     </div>

@@ -32,6 +32,7 @@
     <![endif]-->
     <script>
         var hash = '{{session('user_session_sha1')}}';
+        var institute_category = '{{$institute_category}}';
     </script>
    <!-- Child Page css goes here  -->
 @yield("extraStyle")

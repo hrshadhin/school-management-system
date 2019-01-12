@@ -29,6 +29,13 @@
             <div class="col-md-12">
                 <div class="box box-info">
                     <div class="box-header">
+                        @if(AppHelper::getInstituteCategory() == 'college')
+                        <div class="col-md-3">
+                        <div class="form-group has-feedback">
+                                {!! Form::select('academic_year', $academic_years, $acYear , ['placeholder' => 'Pick a year...','class' => 'form-control select2', 'required' => 'true']) !!}
+                            </div>
+                        </div>
+                        @endif
                         <div class="col-md-3">
                         <div class="form-group has-feedback">
                                 {!! Form::select('class_id', $classes, $iclass , ['placeholder' => 'Pick a class...','class' => 'form-control select2', 'required' => 'true']) !!}
@@ -140,7 +147,8 @@
             window.section_list_url = '{{URL::Route("academic.section")}}';
             window.changeExportColumnIndex = 7;
             window.excludeFilterComlumns = [0,1,8,9];
-           Academic.studentInit();$('title').text($('title').text() + '-' + $('select[name="class_id"] option[selected]').text() + '(' + $('select[name="section_id"] option[selected]').text() +')');
+           Academic.studentInit();
+           $('title').text($('title').text() + '-' + $('select[name="class_id"] option[selected]').text() + '(' + $('select[name="section_id"] option[selected]').text() +')');
         });
     </script>
 @endsection
