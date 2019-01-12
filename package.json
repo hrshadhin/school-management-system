@@ -26,7 +26,7 @@
         "script-loader": "^0.7.2"
     },
     "dependencies": {
-        "bootstrap": "^3.3.7",
+        "bootstrap": "^3.4.0",
         "bootstrap-datepicker": "^1.7.0",
         "bootstrap-daterangepicker": "^2.1.25",
         "chart.js": "^2.7.3",
@@ -37,21 +37,21 @@
         "fastclick": "^1.0.6",
         "font-awesome": "^4.7.0",
         "fs": "0.0.1-security",
-        "fullcalendar": "^3.9.0",
+        "fullcalendar": "^3.10.0",
         "icheck": "^1.0.2",
         "inputmask": "^3.3.7",
         "install": "^0.11.0",
         "jquery": "^3.3.1",
         "jquery-ui": "^1.12.1",
-        "jquery-validation": "^1.17.0",
+        "jquery-validation": "^1.19.0",
         "jszip": "^3.1.5",
-        "moment": "^2.18.1",
-        "pdfmake": "^0.1.39",
-        "popper.js": "^1.14.5",
+        "moment": "^2.23.0",
+        "pdfmake": "^0.1.40",
+        "popper.js": "^1.14.6",
         "remove": "^0.1.5",
         "select2": "^4.0.3",
         "slimscroll": "^0.9.1",
-        "sweetalert2": "^7.29.0",
+        "sweetalert2": "^7.33.1",
         "toastr": "^2.1.4"
     }
 }
