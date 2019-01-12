@@ -28,6 +28,8 @@ class Registration extends Model
         'card_no',
         'board_regi_no',
         'fourth_subject',
+        'fourth_subject',
+        'alt_fourth_subject',
         'status',
     ];
 
