@@ -8,6 +8,7 @@ use App\IClass;
 use App\Registration;
 use App\Section;
 use App\Student;
+use App\Subject;
 use App\User;
 use App\UserRole;
 use Carbon\Carbon;
@@ -106,6 +107,10 @@ class StudentController extends Controller
         $iclass = null;
         $section = null;
         $acYear = null;
+        $esubject = null;
+        $csubject = null;
+        $electiveSubjects = [];
+        $coreSubjects = [];
         $academic_years = [];
 
         // check for institute type and set gender default value
@@ -134,7 +139,11 @@ class StudentController extends Controller
             'iclass',
             'section',
             'academic_years',
-            'acYear'
+            'acYear',
+            'electiveSubjects',
+            'coreSubjects',
+            'esubject',
+            'csubject'
         ));
     }
 
@@ -358,14 +367,27 @@ class StudentController extends Controller
             ->pluck('name', 'id');
         $sections = Section::where('class_id', $regiInfo->class_id)->where('status', AppHelper::ACTIVE)
             ->pluck('name', 'id');
-        $gender = $student->gender;
-        $religion = $student->religion;
-        $bloodGroup = $student->blood_group;
-        $nationality = $student->nationality;
+
+        $isCollege = (AppHelper::getInstituteCategory() == 'college');
+        $subjectType = $isCollege ? 0 : 2;
+        $electiveSubjects = Subject::select('id', 'name')->where('class_id',$regiInfo->class_id)
+            ->sType($subjectType)->where('status', AppHelper::ACTIVE)->orderBy('name', 'asc')->pluck('name', 'id');
+        $coreSubjects = null;
+        if($isCollege){
+            $coreSubjects = Subject::select('id', 'name')->where('class_id',$regiInfo->class_id)
+                ->sType(1)->where('status', AppHelper::ACTIVE)->orderBy('name', 'asc')->pluck('name', 'id');
+        }
+
+        $gender = $student->getOriginal('gender');
+        $religion = $student->getOriginal('religion');
+        $bloodGroup = $student->getOriginal('blood_group');
+        $nationality = ($student->nationality != "Bangladeshi") ? "Other" : "";
         $shift = $regiInfo->shift;
 
         $section = $regiInfo->section_id;
         $iclass = $regiInfo->class_id;
+        $esubject = $regiInfo->fourth_subject;
+        $csubject = $regiInfo->alt_fourth_subject;
 
         return view('backend.student.add', compact(
             'regiInfo',
@@ -378,7 +400,11 @@ class StudentController extends Controller
             'sections',
             'shift',
             'iclass',
-            'section'
+            'section',
+            'electiveSubjects',
+            'coreSubjects',
+            'esubject',
+            'csubject'
         ));
 
     }
@@ -489,7 +515,8 @@ class StudentController extends Controller
             'shift' => $data['shift'],
             'card_no' => $data['card_no'],
             'board_regi_no' => $data['board_regi_no'],
-            'fourth_subject' => $data['fourth_subject'] ? $data['fourth_subject'] : 0
+            'fourth_subject' => $data['fourth_subject'] ? $data['fourth_subject'] : 0,
+            'alt_fourth_subject' => $data['alt_fourth_subject'] ?? 0
         ];
 
         // now check if student academic information changed, if so then log it

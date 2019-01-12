@@ -60,6 +60,11 @@ class AppHelper
         8 => 'AB-',
     ];
 
+    const SUBJECT_TYPE = [
+        1 => 'Core',
+        2 => 'Electives'
+    ];
+
 
     /**
      * Get institution category for app settings

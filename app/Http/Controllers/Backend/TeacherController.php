@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Helpers\AppHelper;
 use App\Section;
+use App\Subject;
 use App\User;
 use App\UserRole;
 use Carbon\Carbon;
@@ -190,8 +191,8 @@ class TeacherController extends Controller
         if(!$teacher){
             abort(404);
         }
-        $gender = $teacher->gender;
-        $religion = $teacher->religion;
+        $gender = $teacher->getOriginal('gender');
+        $religion = $teacher->getOriginal('religion');
 
         return view('backend.teacher.add', compact('teacher', 'gender', 'religion'));
 
@@ -307,9 +308,10 @@ class TeacherController extends Controller
         }
         //protect from delete the teacher if have any class or section connected with this teacher
         $haveSection = Section::where('teacher_id', $teacher->id)->count();
+        $haveSubject = Subject::where('teacher_id', $teacher->id)->count();
 
-        if($haveSection){
-            return redirect()->route('teacher.index')->with('error', 'Can not delete! Teacher used in section.');
+        if($haveSection || $haveSubject){
+            return redirect()->route('teacher.index')->with('error', 'Can not delete! Teacher used in section or subject.');
 
         }
 

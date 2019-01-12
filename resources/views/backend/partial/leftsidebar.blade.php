@@ -46,11 +46,15 @@
               </a>
             </li>
           @endcan
-          <li>
-            <a href="#">
-              <i class="fa icon-subject"></i> <span>Subject</span>
-            </a>
-          </li>
+
+          @can('academic.subject')
+            <li>
+              <a href="{{ URL::route('academic.subject') }}">
+                <i class="fa icon-subject"></i> <span>Subject</span>
+              </a>
+            </li>
+          @endcan
+
           {{--<li>--}}
           {{--<a href="#">--}}
           {{--<i class="fa fa-clock-o"></i><span>Routine</span>--}}

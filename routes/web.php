@@ -157,6 +157,22 @@ Route::group(
     Route::post('academic/section/status/{id}', 'AcademicController@sectionStatus')
         ->name('academic.section_status');
 
+    // subject
+    Route::get('academic/subject', 'AcademicController@subjectIndex')
+        ->name('academic.subject');
+    Route::post('academic/subject', 'AcademicController@subjectIndex')
+        ->name('academic.subject_destroy');
+    Route::get('academic/subject/create', 'AcademicController@subjectCru')
+        ->name('academic.subject_create');
+    Route::post('academic/subject/create', 'AcademicController@subjectCru')
+        ->name('academic.subject_store');
+    Route::get('academic/subject/edit/{id}', 'AcademicController@subjectCru')
+        ->name('academic.subject_edit');
+    Route::post('academic/subject/update/{id}', 'AcademicController@subjectCru')
+        ->name('academic.subject_update');
+    Route::post('academic/subject/status/{id}', 'AcademicController@subjectStatus')
+        ->name('academic.subject_status');
+
     // teacher routes
     Route::resource('teacher', 'TeacherController');
     Route::post('teacher/status/{id}', 'TeacherController@changeStatus')
