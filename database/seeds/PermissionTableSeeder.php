@@ -269,6 +269,43 @@ class PermissionTableSeeder extends Seeder
                 "name" => "Section Edit",
                 "group" => "Academic"
             ],
+            //subject
+            [
+                "slug" => "academic.subject_destroy",
+                "name" => "Subject Delete",
+                "group" => "Academic"
+            ],
+            [
+                "slug" => "academic.subject",
+                "name" => "Subject View",
+                "group" => "Academic"
+            ],
+            [
+                "slug" => "academic.subject_store",
+                "name" => "Subject Create",
+                "group" => "Academic"
+            ],
+            [
+                "slug" => "academic.subject_create",
+                "name" => "Subject Create",
+                "group" => "Academic"
+            ],
+            [
+                "slug" => "academic.subject_edit",
+                "name" => "Subject Edit",
+                "group" => "Academic"
+            ],
+            [
+                "slug" => "academic.subject_status",
+                "name" => "Subject Edit",
+                "group" => "Academic"
+            ],
+            [
+                "slug" => "academic.subject_update",
+                "name" => "Subject Edit",
+                "group" => "Academic"
+            ],
+            //subject end
             [   "slug" => "student.store",
                 "name" => "Student Create",
                 "group" => "Academic"
