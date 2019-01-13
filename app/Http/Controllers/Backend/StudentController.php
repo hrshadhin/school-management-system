@@ -8,6 +8,7 @@ use App\IClass;
 use App\Registration;
 use App\Section;
 use App\Student;
+use App\Subject;
 use App\User;
 use App\UserRole;
 use Carbon\Carbon;
@@ -27,6 +28,13 @@ class StudentController extends Controller
     {
         $classes = IClass::where('status', AppHelper::ACTIVE)
             ->pluck('name', 'id');
+
+        //if its college then have to get those academic years
+        $academic_years = [];
+        if(AppHelper::getInstituteCategory() == 'college') {
+            $academic_years = AcademicYear::where('status', '1')->orderBy('id', 'desc')->pluck('title', 'id');
+        }
+
         $iclass = null;
         $students = [];
         $sections = [];
@@ -34,19 +42,24 @@ class StudentController extends Controller
         // get query parameter for filter the fetch
         $class_id = $request->query->get('class',0);
         $section_id = $request->query->get('section',0);
+        $acYear = $request->query->get('academic_year',0);
 
 
         $classInfo = null;
         $sectionInfo = null;
         if($class_id){
-            // now check is academic year set or not
-            $settings = AppHelper::getAppSettings();
-            if(!isset($settings['academic_year']) || (int)($settings['academic_year']) < 1){
-                return redirect()->route('student.index')
-                    ->with("error",'Academic year not set yet! Please go to settings and set it.')
-                    ->withInput();
+
+            if(AppHelper::getInstituteCategory() != 'college') {
+                // now check is academic year set or not
+                $settings = AppHelper::getAppSettings();
+                if(!isset($settings['academic_year']) || (int)($settings['academic_year']) < 1){
+                    return redirect()->route('student.index')
+                        ->with("error",'Academic year not set yet! Please go to settings and set it.')
+                        ->withInput();
+                }
+                $acYear = $settings['academic_year'];
             }
-            $acYear = $settings['academic_year'];
+
 
             //get student
             $students = Registration::where('class_id', $class_id)
@@ -62,15 +75,13 @@ class StudentController extends Controller
                     ->where('class_id', $class_id)
                     ->pluck('name', 'id');
 
-                $sectionInfo =  Section::select('name')->where('id', $section_id)->first();
             }
 
             $iclass = $class_id;
 
-            $classInfo = IClass::select('name')->where('id',$class_id)->first();
         }
 
-        return view('backend.student.list', compact('students', 'classes', 'iclass', 'sections', 'section_id', 'classInfo', 'sectionInfo'));
+        return view('backend.student.list', compact('students', 'classes', 'iclass', 'sections', 'section_id', 'academic_years', 'acYear'));
 
     }
 
@@ -95,12 +106,23 @@ class StudentController extends Controller
         $sections = [];
         $iclass = null;
         $section = null;
+        $acYear = null;
+        $esubject = null;
+        $csubject = null;
+        $electiveSubjects = [];
+        $coreSubjects = [];
+        $academic_years = [];
 
         // check for institute type and set gender default value
         $settings = AppHelper::getAppSettings();
         if(isset($settings['institute_type']) && intval($settings['institute_type']) == 2){
           $gender = 2;
         }
+
+        if(AppHelper::getInstituteCategory() == 'college') {
+            $academic_years = AcademicYear::where('status', '1')->orderBy('id', 'desc')->pluck('title', 'id');
+        }
+
 
 
         return view('backend.student.add', compact(
@@ -115,7 +137,13 @@ class StudentController extends Controller
             'group',
             'shift',
             'iclass',
-            'section'
+            'section',
+            'academic_years',
+            'acYear',
+            'electiveSubjects',
+            'coreSubjects',
+            'esubject',
+            'csubject'
         ));
     }
 
@@ -164,6 +192,12 @@ class StudentController extends Controller
             'fourth_subject' => 'nullable|integer',
 
         ];
+        //if it college then need another 2 feilds
+        if(AppHelper::getInstituteCategory() == 'college') {
+            $rules['academic_year'] = 'required|integer';
+            $rules['alt_fourth_subject'] = 'nullable|integer';
+        }
+
 
         $createUser = false;
 
@@ -175,13 +209,20 @@ class StudentController extends Controller
 
         $this->validate($request, $rules);
 
-        // now check is academic year set or not
-        $settings = AppHelper::getAppSettings();
 
-        if(!isset($settings['academic_year']) || (int)($settings['academic_year']) < 1){
-            return redirect()->route('student.create')
-                ->with("error",'Academic year not set yet! Please go to settings and set it.')
-                ->withInput();
+        if(AppHelper::getInstituteCategory() != 'college') {
+            // now check is academic year set or not
+            $settings = AppHelper::getAppSettings();
+            if (!isset($settings['academic_year']) || (int)($settings['academic_year']) < 1) {
+                return redirect()->route('student.create')
+                    ->with("error", 'Academic year not set yet! Please go to settings and set it.')
+                    ->withInput();
+            }
+
+            $acYearId = $settings['academic_year'];
+        }
+        else {
+            $acYearId = $request->get('academic_year');
         }
 
         $data = $request->all();
@@ -227,7 +268,6 @@ class StudentController extends Controller
             $student = Student::create($data);
 
             $classInfo = IClass::find($data['class_id']);
-            $acYearId = $settings['academic_year'];
             $academicYearInfo = AcademicYear::find($acYearId);
             $regiNo = $academicYearInfo->start_date->format('y') . (string)$classInfo->numeric_value;
 
@@ -246,7 +286,8 @@ class StudentController extends Controller
                 'shift' => $data['shift'],
                 'card_no' => $data['card_no'],
                 'board_regi_no' => $data['board_regi_no'],
-                'fourth_subject' => $data['fourth_subject'] ? $data['fourth_subject'] : 0
+                'fourth_subject' => $data['fourth_subject'] ? $data['fourth_subject'] : 0,
+                'alt_fourth_subject' => $data['alt_fourth_subject'] ??  0
             ];
 
             Registration::create($registrationData);
@@ -326,14 +367,27 @@ class StudentController extends Controller
             ->pluck('name', 'id');
         $sections = Section::where('class_id', $regiInfo->class_id)->where('status', AppHelper::ACTIVE)
             ->pluck('name', 'id');
-        $gender = $student->gender;
-        $religion = $student->religion;
-        $bloodGroup = $student->blood_group;
-        $nationality = $student->nationality;
+
+        $isCollege = (AppHelper::getInstituteCategory() == 'college');
+        $subjectType = $isCollege ? 0 : 2;
+        $electiveSubjects = Subject::select('id', 'name')->where('class_id',$regiInfo->class_id)
+            ->sType($subjectType)->where('status', AppHelper::ACTIVE)->orderBy('name', 'asc')->pluck('name', 'id');
+        $coreSubjects = null;
+        if($isCollege){
+            $coreSubjects = Subject::select('id', 'name')->where('class_id',$regiInfo->class_id)
+                ->sType(1)->where('status', AppHelper::ACTIVE)->orderBy('name', 'asc')->pluck('name', 'id');
+        }
+
+        $gender = $student->getOriginal('gender');
+        $religion = $student->getOriginal('religion');
+        $bloodGroup = $student->getOriginal('blood_group');
+        $nationality = ($student->nationality != "Bangladeshi") ? "Other" : "";
         $shift = $regiInfo->shift;
 
         $section = $regiInfo->section_id;
         $iclass = $regiInfo->class_id;
+        $esubject = $regiInfo->fourth_subject;
+        $csubject = $regiInfo->alt_fourth_subject;
 
         return view('backend.student.add', compact(
             'regiInfo',
@@ -346,7 +400,11 @@ class StudentController extends Controller
             'sections',
             'shift',
             'iclass',
-            'section'
+            'section',
+            'electiveSubjects',
+            'coreSubjects',
+            'esubject',
+            'csubject'
         ));
 
     }
@@ -405,15 +463,24 @@ class StudentController extends Controller
 
         ];
 
+        //if it college then need another 1 feilds
+        if(AppHelper::getInstituteCategory() == 'college') {
+            $rules['alt_fourth_subject'] = 'nullable|integer';
+        }
+
+
 
         $this->validate($request, $rules);
 
-        // now check is academic year set or not
-        $settings = AppHelper::getAppSettings();
-        if(!isset($settings['academic_year']) || (int)($settings['academic_year']) < 1){
-            return redirect()->route('student.index')
-                ->with("error",'Academic year not set yet! Please go to settings and set it.')
-                ->withInput();
+
+        if(AppHelper::getInstituteCategory() != 'college') {
+            // now check is academic year set or not
+            $settings = AppHelper::getAppSettings();
+            if (!isset($settings['academic_year']) || (int)($settings['academic_year']) < 1) {
+                return redirect()->back()
+                    ->with("error", 'Academic year not set yet! Please go to settings and set it.');
+
+            }
         }
 
         $data = $request->all();
@@ -448,7 +515,8 @@ class StudentController extends Controller
             'shift' => $data['shift'],
             'card_no' => $data['card_no'],
             'board_regi_no' => $data['board_regi_no'],
-            'fourth_subject' => $data['fourth_subject'] ? $data['fourth_subject'] : 0
+            'fourth_subject' => $data['fourth_subject'] ? $data['fourth_subject'] : 0,
+            'alt_fourth_subject' => $data['alt_fourth_subject'] ?? 0
         ];
 
         // now check if student academic information changed, if so then log it
@@ -513,6 +581,7 @@ class StudentController extends Controller
 
             ];
         }
+
         if($regiInfo->fourth_subject != $data['fourth_subject']){
             $isChanged = true;
             $logData[] = [
@@ -523,6 +592,21 @@ class StudentController extends Controller
                 'created_at' => $timeNow,
 
             ];
+        }
+
+        //if it college then need another 1 feilds
+        if(AppHelper::getInstituteCategory() == 'college') {
+            if ($regiInfo->alt_fourth_subject != $data['alt_fourth_subject']) {
+                $isChanged = true;
+                $logData[] = [
+                    'student_id' => $regiInfo->student_id,
+                    'academic_year_id' => $regiInfo->academic_year_id,
+                    'meta_key' => 'alt fourth subject',
+                    'meta_value' => $regiInfo->alt_fourth_subject,
+                    'created_at' => $timeNow,
+
+                ];
+            }
         }
 
         $message = 'Something went wrong!';
@@ -544,7 +628,7 @@ class StudentController extends Controller
             // now commit the database
             DB::commit();
 
-            return redirect()->route('student.index', ['class' => $regiInfo->class_id])->with('success', 'Student updated!');
+            return redirect()->route('student.index', ['class' => $regiInfo->class_id, 'section'=> $regiInfo->section_id, 'academic_year' => $regiInfo->academic_year_id])->with('success', 'Student updated!');
 
 
         }

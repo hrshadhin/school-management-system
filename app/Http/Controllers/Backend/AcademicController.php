@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Helpers\AppHelper;
 use App\Registration;
 use App\Section;
+use App\Subject;
 use App\User;
 use Illuminate\Http\Request;
 use App\IClass;
@@ -255,5 +256,143 @@ class AcademicController extends Controller
         ];
 
     }
+
+
+    /**
+     * subject  manage
+     * @return \Illuminate\Http\Response
+     */
+    public function subjectIndex(Request $request)
+    {
+
+        //for save on POST request
+        if ($request->isMethod('post')) {//
+            $this->validate($request, [
+                'hiddenId' => 'required|integer',
+            ]);
+            $subject = Subject::findOrFail($request->get('hiddenId'));
+
+            //todo: add delete protection here
+//            $haveExam = Exam::where('section_id', $subject->id)->count();
+//            if($haveExam){
+//                return redirect()->route('academic.section')->with('error', 'Can not delete! Section have student.');
+//            }
+
+            $subject->delete();
+
+            //now notify the admins about this record
+            $msg = $subject->name." subject deleted by ".auth()->user()->name;
+            $nothing = AppHelper::sendNotificationToAdmins('info', $msg);
+            // Notification end
+
+            return redirect()->route('academic.subject')->with('success', 'Record deleted!');
+        }
+
+
+        // check for ajax request here
+        if($request->ajax()){
+            $class_id = $request->query->get('class', 0);
+            $subjectType = $request->query->get('type', 0);
+            $subjects = Subject::select('id', 'name as text')->where('class_id',$class_id)->sType($subjectType)->where('status', AppHelper::ACTIVE)->orderBy('name', 'asc')->get();
+            return $subjects;
+        }
+
+
+        $class_id = $request->query->get('class',0);
+        $subjects = Subject::iclass($class_id)->with('teacher')->with('class')->orderBy('name', 'asc')->get();
+        $classes = IClass::where('status', AppHelper::ACTIVE)
+            ->pluck('name', 'id');
+        $iclass = $class_id;
+
+
+        return view('backend.academic.subject.list', compact('subjects','classes', 'iclass'));
+    }
+
+    /**
+     * subject create, read, update manage
+     * @return \Illuminate\Http\Response
+     */
+    public function subjectCru(Request $request, $id=0)
+    {
+        //for save on POST request
+        if ($request->isMethod('post')) {
+            ;
+            $this->validate($request, [
+                'name' => 'required|min:1|max:255',
+                'code' => 'required|min:1|max:255',
+                'type' => 'required|numeric',
+                'class_id' => 'required|integer',
+                'teacher_id' => 'required|integer',
+            ]);
+
+            $data = $request->all();
+
+            Subject::updateOrCreate(
+                ['id' => $id],
+                $data
+            );
+
+
+            if(!$id){
+                //now notify the admins about this record
+                $msg = $data['name']." subject added by ".auth()->user()->name;
+                $nothing = AppHelper::sendNotificationToAdmins('info', $msg);
+                // Notification end
+            }
+
+            $msg = "subject ";
+            $msg .= $id ? 'updated.' : 'added.';
+
+            return redirect()->route('academic.subject')->with('success', $msg);
+        }
+
+        //for get request
+        $subject = Subject::find($id);
+
+        $teachers = Employee::where('emp_type', AppHelper::EMP_TEACHER)
+            ->where('status', AppHelper::ACTIVE)
+            ->pluck('name', 'id');
+        $teacher = null;
+
+        $classes = IClass::where('status', AppHelper::ACTIVE)
+            ->pluck('name', 'id');
+        $iclass = null;
+        $subjectType = null;
+
+        if($subject){
+            $teacher = $subject->teacher_id;
+            $iclass = $subject->class_id;
+            $subjectType = $subject->getOriginal('type');
+        }
+
+        return view('backend.academic.subject.add', compact('subject', 'iclass', 'classes', 'teachers', 'teacher', 'subjectType'));
+    }
+
+    /**
+     * subject status change
+     * @return mixed
+     */
+    public function subjectStatus(Request $request, $id=0)
+    {
+
+        $subject =  Subject::findOrFail($id);
+        if(!$subject){
+            return [
+                'success' => false,
+                'message' => 'Record not found!'
+            ];
+        }
+
+        $subject->status = (string)$request->get('status');
+
+        $subject->save();
+
+        return [
+            'success' => true,
+            'message' => 'Status updated.'
+        ];
+
+    }
+
 
 }

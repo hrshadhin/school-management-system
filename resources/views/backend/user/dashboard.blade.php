@@ -53,7 +53,7 @@
                         </div>
                         <div class="inner ">
                             <h3 class="text-white">
-                                80                  </h3>
+                                {{$subjects}}                  </h3>
                             <p class="text-white">
                                 Subject </p>
                         </div>

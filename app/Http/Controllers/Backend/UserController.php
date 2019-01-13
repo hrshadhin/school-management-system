@@ -7,6 +7,7 @@ use App\Models\PasswordResets;
 use App\Permission;
 use App\Role;
 use App\Student;
+use App\Subject;
 use App\User;
 use App\UserRole;
 use Carbon\Carbon;
@@ -231,8 +232,9 @@ class UserController extends Controller
 
         $teachers = Employee::where('emp_type', AppHelper::EMP_TEACHER)->count();
         $students = Student::count();
+        $subjects = Subject::count();
 
-        return view('backend.user.dashboard', compact('teachers','students'));
+        return view('backend.user.dashboard', compact('teachers','students', 'subjects'));
     }
 
     /**
@@ -290,9 +292,7 @@ class UserController extends Controller
 
         }
 
-        $role = Role::where('id', $user->role->role_id)->first();
-
-        return view('backend.user.profile', compact('user','isPost','role'));
+        return view('backend.user.profile', compact('user','isPost'));
     }/**
 
 
