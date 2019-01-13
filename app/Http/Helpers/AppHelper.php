@@ -60,6 +60,31 @@ class AppHelper
         8 => 'AB-',
     ];
 
+    const SUBJECT_TYPE = [
+        1 => 'Core',
+        2 => 'Electives'
+    ];
+
+
+    /**
+     * Get institution category for app settings
+     * school or college
+     * @return mixed
+     */
+    public static function getInstituteCategory() {
+
+        $iCategory = env('INSTITUTE_CATEGORY', 'school');
+        if($iCategory != 'school' && $iCategory != 'college'){
+            $iCategory = 'school';
+        }
+
+        return $iCategory;
+    }
+
+    /**
+     * @return string
+     */
+
     public static function getUserSessionHash()
     {
         /**

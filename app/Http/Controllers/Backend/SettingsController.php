@@ -19,19 +19,22 @@ class SettingsController extends Controller
      */
     public function institute(Request $request)
     {
+
+
         //for save on POST request
         if ($request->isMethod('post')) {
+
             //validate form
             $messages = [
                 'logo.max' => 'The :attribute size must be under 1MB.',
                 'logo_small.max' => 'The :attribute size must be under 512kb.',
                 'logo.dimensions' => 'The :attribute dimensions max be 230 X 50.',
                 'logo_small.dimensions' => 'The :attribute dimensions max be 50 X 50.',
-                'favicon.max' => 'The :attribute size must be under 1MB.',
+                'favicon.max' => 'The :attribute size must be under 512kb.',
                 'favicon.dimensions' => 'The :attribute dimensions must be 32 X 32.',
             ];
-            $this->validate(
-                $request, [
+
+            $rules = [
                 'name' => 'required|min:5|max:255',
                 'short_name' => 'required|min:3|max:255',
                 'logo' => 'mimes:jpeg,jpg,png|max:1024|dimensions:max_width=230,max_height=50',
@@ -40,14 +43,19 @@ class SettingsController extends Controller
                 'establish' => 'min:4|max:255',
                 'website_link' => 'max:255',
                 'email' => 'nullable|email|max:255',
-                'phone_no' => 'required|min:8|max:255',
+                'phone_no' => 'required|min:8|max:15',
                 'address' => 'required|max:500',
-                'academic_year' => 'required|integer',
                 'language' => 'required|min:2',
                 'attendance_notification' => 'required|integer',
                 'institute_type' => 'required|integer',
-                ]
-            );
+            ];
+
+            if(AppHelper::getInstituteCategory() != 'college') {
+                $rules[ 'academic_year'] ='required|integer';
+            }
+            $this->validate($request, $rules, $messages);
+
+
 
             if($request->hasFile('logo')) {
                 $storagepath = $request->file('logo')->store('public/logo');
@@ -110,10 +118,15 @@ class SettingsController extends Controller
                 ['meta_key' => 'institute_settings'],
                 ['meta_value' => json_encode($data)]
             );
-            AppMeta::updateOrCreate(
-                ['meta_key' => 'academic_year'],
-                ['meta_value' => $request->get('academic_year', 0)]
-            );
+
+
+            if(AppHelper::getInstituteCategory() != 'college') {
+                AppMeta::updateOrCreate(
+                    ['meta_key' => 'academic_year'],
+                    ['meta_value' => $request->get('academic_year', 0)]
+                );
+            }
+
             AppMeta::updateOrCreate(
                 ['meta_key' => 'frontend_website'],
                 ['meta_value' => $request->has('frontend_website') ? 1 : 0]
@@ -150,16 +163,22 @@ class SettingsController extends Controller
         if($settings) {
             $info = json_decode($settings->meta_value);
         }
-        $settings = AppMeta::whereIn(
-            'meta_key', [
-            'academic_year',
+
+        $whereConditions = [
             'frontend_website',
             'language',
             'disable_language',
             'attendance_notification',
             'institute_type',
-            ]
-        )->get();
+        ];
+
+
+        if(AppHelper::getInstituteCategory() != 'college'){
+            $whereConditions[] = 'academic_year';
+
+        }
+
+        $settings = AppMeta::whereIn('meta_key', $whereConditions)->get();
 
         $metas = [];
         foreach ($settings as $setting){
@@ -167,9 +186,14 @@ class SettingsController extends Controller
         }
 
 
-        $academic_years = AcademicYear::where('status', '1')->orderBy('id', 'desc')->pluck('title', 'id');
-      
-        $academic_year = isset($metas['academic_year']) ? $metas['academic_year'] : 0;
+        //if its college then no need to setup up default academic year
+        $academic_years = [];
+        $academic_year = 0;
+        if(AppHelper::getInstituteCategory() != 'college') {
+            $academic_years = AcademicYear::where('status', '1')->orderBy('id', 'desc')->pluck('title', 'id');
+            $academic_year = isset($metas['academic_year']) ? $metas['academic_year'] : 0;
+        }
+
         $frontend_website = isset($metas['frontend_website']) ? $metas['frontend_website'] : 0;
         $language = isset($metas['language']) ? $metas['language'] : 0;
         $disable_language = isset($metas['disable_language']) ? $metas['disable_language'] : 0;

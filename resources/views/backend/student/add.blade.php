@@ -102,9 +102,9 @@
                                 <div class="col-md-3">
                                     <div class="form-group has-feedback">
                                         <label for="nationality">Nationality</label>
-                                        <input  type="text" class="form-control" name="nationality_other" readonly placeholder="Nationality" value="@if($student && $student->nationality == "Other"){{$student->nationality}}@else{{old('nationality')}}@endif" maxlength="50" >
+                                        <input  type="text" class="form-control" name="nationality_other" @if(!$student || $student->nationality == "Bangladeshi") readonly @endif placeholder="Nationality" value="@if($student && $student->nationality != "Bangladeshi"){{$student->nationality}}@else{{old('nationality')}}@endif" maxlength="50" >
                                         <span class="fa fa-map-marker form-control-feedback"></span>
-                                        <span class="text-danger">{{ $errors->first('nationality') }}</span>
+                                        <span class="text-danger">{{ $errors->first('nationality_other') }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -252,10 +252,10 @@
                                         @if($regiInfo)
                                             <br><span class="text-danger">Class can't be change.</span>
                                             @else
-                                        {!! Form::select('class_id', $classes, $iclass , ['placeholder' => 'Pick a class...','class' => 'form-control select2', 'required' => 'true']) !!}
+                                        {!! Form::select('class_id', $classes, $iclass , ['id' => 'student_add_edit_class_change', 'placeholder' => 'Pick a class...','class' => 'form-control select2', 'required' => 'true']) !!}
                                         <span class="form-control-feedback"></span>
                                         <span class="text-danger">{{ $errors->first('class_id') }}</span>
-                                            @endif
+                                        @endif
 
                                     </div>
                                 </div>
@@ -312,12 +312,44 @@
                                         <label for="fourth_subject">Elective/4th subject
                                             <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Select a subject if student have 4th/elective subject. like class 9,10,11,12 have that."></i>
                                         </label>
-                                        {!! Form::select('fourth_subject', [], null , ['placeholder' => 'Pick a subject...','class' => 'form-control select2']) !!}
+                                        {!! Form::select('fourth_subject', $electiveSubjects, $esubject , ['placeholder' => 'Pick a subject...','class' => 'form-control select2']) !!}
                                         <span class="fa form-control-feedback"></span>
                                         <span class="text-danger">{{ $errors->first('fourth_subject') }}</span>
                                     </div>
                                 </div>
                             </div>
+                            @if(AppHelper::getInstituteCategory() == 'college')
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group has-feedback">
+                                            <label for="academic_year">Academic Year
+                                                <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Set academic year"></i>
+                                            </label>
+                                            @if($regiInfo)
+                                                <br><span class="text-danger">Year can't be change.</span>
+                                            @else
+                                            {!! Form::select('academic_year', $academic_years, $acYear, ['placeholder' => 'Pick a year...','class' => 'form-control select2', 'required' => 'true']) !!}
+                                            <span class="form-control-feedback"></span>
+                                            <span class="text-danger">{{ $errors->first('academic_year') }}</span>
+                                                @endif
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-md-3">
+                                        <div class="form-group has-feedback">
+                                            <label for="fourth_subject">Alternate Elective/4th subject
+                                                <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title=" If student change 4th subject with other subject,
+                                            then select the 4th subject and alternate subject.
+                                            Otherwise don't select the alternate subject."></i>
+                                            </label>
+                                            {!! Form::select('alt_fourth_subject', $coreSubjects, $csubject , ['placeholder' => 'Pick a subject...','class' => 'form-control select2']) !!}
+                                            <span class="fa form-control-feedback"></span>
+                                            <span class="text-danger">{{ $errors->first('alt_fourth_subject') }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
                             @if(!$student)
                                 <p class="lead section-title">Access Info:</p>
                                 <div class="row">
@@ -364,6 +396,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
             window.section_list_url = '{{URL::Route("academic.section")}}';
+            window.subject_list_url = '{{URL::Route("academic.subject")}}';
             Academic.studentInit();
 
         });

@@ -177,7 +177,8 @@ export default class Generic {
                             toastr.error(status);
                         }
                     }).catch((error) => {
-                        let status = error.statusText;
+                        // console.log(error.response);
+                        let status = error.response.statusText;
                         if (stopchange === false) {
                             stopchange = true;
                             that.bootstrapToggle('toggle');

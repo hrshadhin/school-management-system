@@ -32,5 +32,6 @@ class BackendMasterComposer
         $view->with('appSettings', $appSettings);
         $view->with('languages', AppHelper::LANGUEAGES);
         $view->with('idc', '36237fc442afd31e37c0acab35ad6b19d96c232a');
+        $view->with('institute_category', AppHelper::getInstituteCategory());
     }
 }
