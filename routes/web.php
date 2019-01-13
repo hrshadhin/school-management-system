@@ -183,6 +183,17 @@ Route::group(
     Route::post('student/status/{id}', 'StudentController@changeStatus')
         ->name('student.status');
 
+    // student attendance routes
+    Route::resource('student-attendance', 'StudentAttendanceController')->names([
+        'create' => 'student_attendance.create',
+        'store' => 'student_attendance.store',
+        'index' => 'student_attendance.index',
+    ]);;
+    Route::post('student-attendance/status/{id}', 'StudentAttendanceController@changeStatus')
+        ->name('student_attendance.status');
+    Route::any('student-attendance/create-file', 'StudentAttendanceController@createFromFile')
+        ->name('student_attendance.create_file');
+
 }
 );
 

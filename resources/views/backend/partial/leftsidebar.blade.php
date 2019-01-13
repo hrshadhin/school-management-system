@@ -23,6 +23,24 @@
           </a>
         </li>
       @endcan
+      @can('student_attendance.index')
+        <li class="treeview">
+          <a href="#">
+            <i class="fa icon-attendance"></i>
+            <span>Attendance</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+          <li>
+            <a href="{{ URL::route('student_attendance.index') }}">
+              <i class="fa icon-student"></i> <span>Student Attendance</span>
+            </a>
+          </li>
+          </ul>
+          </li>
+      @endcan
       <li class="treeview">
         <a href="#">
           <i class="fa icon-academicmain"></i>

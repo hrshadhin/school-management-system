@@ -65,6 +65,11 @@ class AppHelper
         2 => 'Electives'
     ];
 
+    const ATTENDANCE_TYPE = [
+        0 => 'Absent',
+        1 => 'Present'
+    ];
+
 
     /**
      * Get institution category for app settings

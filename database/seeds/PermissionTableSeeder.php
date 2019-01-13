@@ -369,7 +369,25 @@ class PermissionTableSeeder extends Seeder
             [   "slug" => "teacher.edit",
                 "name" => "Teacher Edit",
                 "group" => "Academic"
-            ]
+            ],
+            // student attendance
+            [   "slug" => "student_attendance.index",
+                "name" => "Student Attendance View",
+                "group" => "Academic"
+            ],
+            [   "slug" => "student_attendance.store",
+                "name" => "Student Attendance Create",
+                "group" => "Academic"
+            ],
+            [   "slug" => "student_attendance.create",
+                "name" => "Student Attendance Create",
+                "group" => "Academic"
+            ],
+            [   "slug" => "student_attendance.status",
+                "name" => "Student Attendance Edit",
+                "group" => "Academic"
+            ],
+            //student attendance end
         ];
 
         $websitePermissionList = [
