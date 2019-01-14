@@ -152,6 +152,18 @@ export default class Academic {
           cb();
         }
     }
+    static getStudentByAcYearAndClassAndSection(acYear=0, classId, sectionId, cb=function(){}) {
+        let getUrl = window.getStudentAjaxUrl +"?academic_year="+acYear+"&class="+classId+"&section="+sectionId;
+        axios.get(getUrl)
+            .then((response) => {
+                    console.log(response);
+                    cb(response.data);
+            }).catch((error) => {
+                let status = error.response.statusText;
+                toastr.error(status);
+                cb([]);
+            });
+    }
 
     /**
      * Student Attendance
@@ -165,7 +177,57 @@ export default class Academic {
             Generic.loaderStart();
             Academic.getSection(class_id);
             Generic.loaderStop();
+        });
 
+        $('#attendance_list_filter').on('changeDate', function (event) {
+             let atDate = $(this).val();
+             let classId = $('select[name="class_id"]').val();
+             let sectionId = $('select[name="section_id"]').val();
+             let acYearId = $('select[name="academic_year"]').val();
+
+            //check year, class, section and date is fill up then procced
+             if(!atDate || !classId || !sectionId){
+                 toastr.warning('Fill up class, section and date first!');
+                 return false;
+             }
+             if(institute_category == "college" && !acYearId){
+                 toastr.warning('Select academic year first!');
+                 return false;
+             }
+
+            let queryString = "?class="+classId+"&section="+sectionId+"&attendance_date="+atDate;
+            if(institute_category == 'college'){
+                queryString +="&academic_year="+acYearId;
+            }
+
+            let getUrl = window.location.href.split('?')[0]+queryString;
+            window.location = getUrl;
+
+        });
+
+        $('#section_id_filter').on('change', function () {
+            let sectionId = $(this).val();
+            let classId =  $('select[name="class_id"]').val();
+            let acYearId =  $('select[name="academic_year"]').val();
+            //check year then procced
+            if(institute_category == "college"){
+                if(!acYearId) {
+                    toastr.warning('Select academic year first!');
+                    return false;
+                }
+            }
+            else {
+                acYearId = 0;
+            }
+
+            Generic.loaderStart();
+
+            Academic.getStudentByAcYearAndClassAndSection(acYearId, classId, sectionId, function (data) {
+                let students = data;
+                console.log(data);
+
+            });
+            Generic.loaderStop();
         });
     }
 }

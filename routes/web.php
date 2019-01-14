@@ -182,6 +182,8 @@ Route::group(
     Route::resource('student', 'StudentController');
     Route::post('student/status/{id}', 'StudentController@changeStatus')
         ->name('student.status');
+    Route::get('student-list-by-filter', 'StudentController@studentListByFitler')
+        ->name('student.list_by_fitler');
 
     // student attendance routes
     Route::resource('student-attendance', 'StudentAttendanceController')->names([

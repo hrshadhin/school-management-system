@@ -314,6 +314,10 @@ class PermissionTableSeeder extends Seeder
                 "name" => "Student View",
                 "group" => "Academic"
             ],
+            [   "slug" => "student.list_by_fitler",
+                "name" => "Student View",
+                "group" => "Academic"
+            ],
             [   "slug" => "student.create",
                 "name" => "Student Create",
                 "group" => "Academic"
