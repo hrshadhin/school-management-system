@@ -86,6 +86,11 @@ class AppHelper
         return $iCategory;
     }
 
+    public static function getAcademicYear() {
+        $settings = AppHelper::getAppSettings();
+        return isset($settings['academic_year']) ? intval($settings['academic_year']) : 0;
+    }
+
     /**
      * @return string
      */

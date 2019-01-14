@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\AcademicYear;
 use App\Http\Helpers\AppHelper;
 use App\IClass;
+use App\Section;
 use App\StudentAttendance;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -18,6 +19,11 @@ class StudentAttendanceController extends Controller
      */
     public function index(Request $request)
     {
+        // get query parameter for filter the fetch
+        $class_id = $request->query->get('class',0);
+        $section_id = $request->query->get('section',0);
+        $acYear = $request->query->get('academic_year',0);
+        $attendance_date = $request->query->get('attendance_date','');
 
         $classes = IClass::where('status', AppHelper::ACTIVE)
             ->pluck('name', 'id');
@@ -28,14 +34,22 @@ class StudentAttendanceController extends Controller
         if(AppHelper::getInstituteCategory() == 'college') {
             $academic_years = AcademicYear::where('status', '1')->orderBy('id', 'desc')->pluck('title', 'id');
         }
+        else{
 
-        // get query parameter for filter the fetch
-        $class_id = $request->query->get('class',0);
-        $section_id = $request->query->get('section',0);
-        $acYear = $request->query->get('academic_year',0);
-        $attendance_date = $request->query->get('attendance_date','');
+            $acYear = $request->query->get('academic_year',AppHelper::getAcademicYear());
+        }
 
+
+        //now fetch attendance data
         $attendances = [];
+        if($class_id && $section_id && $acYear && $attendance_date) {
+
+
+
+            $sections = Section::where('status', AppHelper::ACTIVE)
+                ->where('class_id', $class_id)
+                ->pluck('name', 'id');
+        }
 
 
         return view('backend.attendance.student.list', compact(
@@ -58,7 +72,19 @@ class StudentAttendanceController extends Controller
      */
     public function create()
     {
-        //
+        $classes = IClass::where('status', AppHelper::ACTIVE)
+            ->pluck('name', 'id');
+        //if its college then have to get those academic years
+        $academic_years = [];
+        if(AppHelper::getInstituteCategory() == 'college') {
+            $academic_years = AcademicYear::where('status', '1')->orderBy('id', 'desc')->pluck('title', 'id');
+        }
+
+        return view('backend.attendance.student.add', compact(
+            'academic_years',
+            'classes'
+        ));
+
     }
 
     /**

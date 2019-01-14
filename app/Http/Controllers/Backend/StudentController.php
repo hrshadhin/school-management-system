@@ -750,4 +750,30 @@ class StudentController extends Controller
 
 
     }
+
+    /**
+     * Get student list by filters
+     */
+    public function studentListByFitler(Request $request) {
+        $classId = $request->query->get('class',0);
+        $sectionId = $request->query->get('section',0);
+        $acYear = $request->query->get('academic_year',0);
+
+        if(AppHelper::getInstituteCategory() != 'college') {
+            $acYear = AppHelper::getAcademicYear();
+        }
+
+        $students = Registration::where('academic_year_id', $acYear)
+            ->where('class_id', $classId)
+            ->where('section_id', $sectionId)
+            ->where('status', AppHelper::ACTIVE)
+            ->with(['student' => function ($query) {
+                $query->select('name','id');
+            }])
+            ->select('id','roll_no','student_id')
+            ->get();
+
+        return response()->json($students);
+
+    }
 }

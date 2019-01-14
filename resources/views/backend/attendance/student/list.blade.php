@@ -41,12 +41,12 @@
                         </div>
                         <div class="col-md-2">
                             <div class="form-group has-feedback">
-                                {!! Form::select('section_id', $sections, $section_id , ['placeholder' => 'Pick a section...','class' => 'form-control select2', 'id' => 'student_list_filter', 'required' => 'true']) !!}
+                                {!! Form::select('section_id', $sections, $section_id , ['placeholder' => 'Pick a section...','class' => 'form-control select2', 'required' => 'true']) !!}
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group has-feedback">
-                                <input type='text' class="form-control date_picker"   name="attendance_date" placeholder="date" value="{{$attendance_date}}" required minlength="10" maxlength="11" />
+                                <input type='text' class="form-control date_picker" id="attendance_list_filter"  name="attendance_date" placeholder="date" value="{{$attendance_date}}" required minlength="10" maxlength="11" />
                             </div>
                         </div>
                         <div class="box-tools pull-right">
