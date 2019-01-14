@@ -41,9 +41,7 @@ export default class Academic {
 
         $('select[name="class_id"]').on('change', function () {
             let class_id = $(this).val();
-            Generic.loaderStart();
             Academic.getSection(class_id);
-            Generic.loaderStop();
 
         });
 
@@ -64,8 +62,8 @@ export default class Academic {
                     $('select[name="fourth_subject"]').empty().select2({placeholder: 'Pick a subject...'});
                     toastr.warning('This class have no subject!');
                 }
+                Generic.loaderStop();
             });
-            Generic.loaderStop();
             if(institute_category == "college") {
                 Generic.loaderStart();
                 Academic.getSubject(class_id, 1, function (res={}) {
@@ -80,8 +78,9 @@ export default class Academic {
                         $('select[name="alt_fourth_subject"]').empty().select2({placeholder: 'Pick a subject...'});
                         toastr.warning('This class have no subject!');
                     }
+                    Generic.loaderStop();
                 });
-                Generic.loaderStop();
+
             }
         });
 
@@ -114,18 +113,21 @@ export default class Academic {
     static  getSection(class_id) {
         let getUrl = window.section_list_url + "?class=" + class_id;
         if (class_id) {
+            Generic.loaderStart();
             axios.get(getUrl)
                 .then((response) => {
                     if (Object.keys(response.data).length) {
-                        $('select[name="section_id"]').empty().prepend('<option selected=""></option>').select2({placeholder: 'Pick a section...', data: response.data});
+                        $('select[name="section_id"]').empty().prepend('<option selected=""></option>').select2({allowClear: true,placeholder: 'Pick a section...', data: response.data});
                     }
                     else {
                         $('select[name="section_id"]').empty().select2({placeholder: 'Pick a section...'});
                         toastr.error('This class have no section!');
                     }
+                    Generic.loaderStop();
                 }).catch((error) => {
                 let status = error.response.statusText;
                 toastr.error(status);
+                Generic.loaderStop();
 
             });
         }
@@ -156,7 +158,7 @@ export default class Academic {
         let getUrl = window.getStudentAjaxUrl +"?academic_year="+acYear+"&class="+classId+"&section="+sectionId;
         axios.get(getUrl)
             .then((response) => {
-                    console.log(response);
+                    // console.log(response);
                     cb(response.data);
             }).catch((error) => {
                 let status = error.response.statusText;
@@ -174,9 +176,7 @@ export default class Academic {
 
         $('select[name="class_id"]').on('change', function () {
             let class_id = $(this).val();
-            Generic.loaderStart();
             Academic.getSection(class_id);
-            Generic.loaderStop();
         });
 
         $('#attendance_list_filter').on('changeDate', function (event) {
@@ -205,10 +205,24 @@ export default class Academic {
 
         });
 
+        $('#toggleCheckboxes').on('ifChecked ifUnchecked', function(event) {
+            if (event.type == 'ifChecked') {
+                $('input:checkbox').iCheck('check');
+            } else {
+                $('input:checkbox').iCheck('uncheck');
+            }
+        });
+
         $('#section_id_filter').on('change', function () {
+            //hide button
+            $('button[type="submit"]').hide();
             let sectionId = $(this).val();
             let classId =  $('select[name="class_id"]').val();
             let acYearId =  $('select[name="academic_year"]').val();
+            //validate input
+            if(!classId || !sectionId){
+                return false;
+            }
             //check year then procced
             if(institute_category == "college"){
                 if(!acYearId) {
@@ -221,13 +235,38 @@ export default class Academic {
             }
 
             Generic.loaderStart();
-
             Academic.getStudentByAcYearAndClassAndSection(acYearId, classId, sectionId, function (data) {
                 let students = data;
-                console.log(data);
+                $('#studentListTable tbody').empty();
+               if(students.length){
+                   students.forEach(function(item){
+                       let rowHtml = '<tr>\n' +
+                           '<td>\n' +
+                           '<span class="text-bold">'+item.student.name+'</span>\n' +
+                           '<input type="hidden" name="registrationIds[]" value="'+item.id+'" required>\n' +
+                           '</td>\n' +
+                           '<td><span class="text-bold">'+item.roll_no+'</span></td>\n' +
+                           '<td>\n' +
+                           '<div class="checkbox icheck inline_icheck">\n' +
+                           '<input type="checkbox" name="present['+item.id+']">\n' +
+                           '</div>\n' +
+                           '</td>\n' +
+                           '</tr>';
 
+                       $('#studentListTable tbody').append(rowHtml);
+                   });
+                   $('input:checkbox').not('.dont-style-notMe').iCheck({
+                       checkboxClass: 'icheckbox_square-blue',
+                       radioClass: 'iradio_square-blue',
+                       increaseArea: '20%' /* optional */
+                   });
+
+                   //now show the submit button
+                   $('button[type="submit"]').show();
+               }
+                Generic.loaderStop();
             });
-            Generic.loaderStop();
+
         });
     }
 }

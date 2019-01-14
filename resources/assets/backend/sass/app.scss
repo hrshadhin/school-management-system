@@ -375,6 +375,10 @@
              width: 100%;
 }
 
+ table.attendance-add tr th, table.attendance-add tr td:not(:first-child){
+     text-align: center;
+ }
+
 
 /**
  Mobile view element hide css

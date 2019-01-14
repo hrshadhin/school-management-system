@@ -42,8 +42,10 @@ export default class Generic {
                 format: {
                     body: function (data, row, column, node) {
                         if(typeof(window.changeExportColumnIndex) !== 'undefined') {
+                            var onValue = typeof window.changeExportColumnValue !== 'undefined' ? window.changeExportColumnValue[0] : 'Active';
+                            var offValue = typeof window.changeExportColumnValue !== 'undefined' ? window.changeExportColumnValue[1] : 'Inactive';
                             if (column === window.changeExportColumnIndex) {
-                                data = /checked/.test(data) ? 'Active' : 'Inactive';
+                                data = /checked/.test(data) ? onValue : offValue;
                             }
                         }
                         return data;
