@@ -65,7 +65,6 @@
                                     <th width="15%">Regi. No.</th>
                                     <th width="15%">Roll No.</th>
                                     <th width="20%">Status</th>
-                                    <th class="notexport" width="15%">Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -74,12 +73,12 @@
                                         <td>
                                             {{$loop->iteration}}
                                         </td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
+                                        <td>{{$attendance->student->name}}</td>
+                                        <td>{{$attendance->regi_no}}</td>
+                                        <td>{{$attendance->roll_no}}</td>
                                         <td>
                                             <!-- todo: have problem in mobile device -->
-                                            <input class="statusChange" type="checkbox" data-pk="{{$attendance->id}}" @if($attendance->status) checked @endif data-toggle="toggle" data-on="<i class='fa fa-check-circle'></i>" data-off="<i class='fa fa-ban'></i>" data-onstyle="success" data-offstyle="danger">
+                                            <input class="statusChange" type="checkbox" data-pk="{{$attendance->attendance()->first()->id}}" @if($attendance->attendance()->first()->getOriginal('present')) checked @endif data-toggle="toggle" data-on="Present" data-off="Absent" data-onstyle="success" data-offstyle="danger">
                                         </td>
 
                                     </tr>
@@ -90,10 +89,9 @@
                                 <tr>
                                     <th width="5%">#</th>
                                     <th width="50%">Name</th>
-                                    <th width="10%">Regi. No.</th>
+                                    <th width="15%">Regi. No.</th>
                                     <th width="10%">Roll No.</th>
-                                    <th width="10%">Status</th>
-                                    <th class="notexport" width="15%">Action</th>
+                                    <th width="20%">Status</th>
                                 </tr>
                                 </tfoot>
                             </table>
@@ -116,7 +114,8 @@
             window.postUrl = '{{URL::Route("student_attendance.status", 0)}}';
             window.section_list_url = '{{URL::Route("academic.section")}}';
             window.changeExportColumnIndex = 4;
-            window.excludeFilterComlumns = [0,5];
+            window.changeExportColumnValue = ['Present', 'Absent'];
+            window.excludeFilterComlumns = [0,4];
             Academic.attendanceInit();
             $('title').text($('title').text() + '-' + $('select[name="class_id"] option[selected]').text() + '(' + $('select[name="section_id"] option[selected]').text() +')');
         });

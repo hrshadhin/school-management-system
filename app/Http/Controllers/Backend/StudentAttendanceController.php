@@ -5,10 +5,13 @@ namespace App\Http\Controllers\Backend;
 use App\AcademicYear;
 use App\Http\Helpers\AppHelper;
 use App\IClass;
+use App\Registration;
 use App\Section;
 use App\StudentAttendance;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 
 class StudentAttendanceController extends Controller
 {
@@ -24,7 +27,6 @@ class StudentAttendanceController extends Controller
         $section_id = $request->query->get('section',0);
         $acYear = $request->query->get('academic_year',0);
         $attendance_date = $request->query->get('attendance_date','');
-
         $classes = IClass::where('status', AppHelper::ACTIVE)
             ->pluck('name', 'id');
         $sections = [];
@@ -42,9 +44,22 @@ class StudentAttendanceController extends Controller
 
         //now fetch attendance data
         $attendances = [];
-        if($class_id && $section_id && $acYear && $attendance_date) {
-
-
+        if($class_id && $section_id && $acYear && strlen($attendance_date) >= 10) {
+            $att_date = Carbon::createFromFormat('d/m/Y',$attendance_date)->toDateString();
+            $attendances = Registration::where('academic_year_id', $acYear)
+                ->where('class_id', $class_id)
+                ->where('section_id', $section_id)
+                ->where('status', AppHelper::ACTIVE)
+                ->with(['student' => function ($query) {
+                    $query->select('name','id');
+                }])
+                ->whereHas('attendance' , function ($query) use($att_date) {
+                    $query->select('id','present','registration_id')
+                    ->whereDate('attendance_date', $att_date);
+                })
+                ->select('id','regi_no','roll_no','student_id')
+                ->orderBy('roll_no','asc')
+                ->get();
 
             $sections = Section::where('status', AppHelper::ACTIVE)
                 ->where('class_id', $class_id)
@@ -95,7 +110,58 @@ class StudentAttendanceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //validate form
+        $messages = [
+            'registrationIds.required' => 'This section has no students!',
+        ];
+        $rules = [
+            'class_id' => 'required|integer',
+            'section_id' => 'required|integer',
+            'attendance_date' => 'required|min:10|max:11',
+            'registrationIds' => 'required',
+
+        ];
+        //if it college then need another 2 feilds
+        if(AppHelper::getInstituteCategory() == 'college') {
+            $rules['academic_year'] = 'required|integer';
+        }
+
+        $this->validate($request, $rules, $messages);
+
+        //process the insert data
+        $students = $request->get('registrationIds');
+        $present = $request->get('present');
+        $attendance_date = Carbon::createFromFormat('d/m/Y', $request->get('attendance_date'))->format('Y-m-d');
+        $dateTimeNow = Carbon::now(env('APP_TIMEZONE','Asia/Dhaka'));
+
+        $attendances = [];
+        foreach ($students as $student){
+            $attendances[] = [
+                "registration_id" => $student,
+                "attendance_date" => $attendance_date,
+                "present"   => isset($present[$student]) ? '1' : '0',
+                "created_at" => $dateTimeNow,
+                "created_by" => auth()->user()->id,
+            ];
+        }
+
+        DB::beginTransaction();
+        try {
+
+            StudentAttendance::insert($attendances);
+            DB::commit();
+        }
+        catch(\Exception $e){
+            DB::rollback();
+            $message = str_replace(array("\r", "\n","'","`"), ' ', $e->getMessage());
+            dd($message);
+            return redirect()->route('student_attendance.create')->with("error",$message);
+        }
+
+        //todo: now check if need to send sms
+        //then send via job in sms
+
+        return redirect()->route('student_attendance.create')->with("success","Attendance saved successfully.");
     }
 
 

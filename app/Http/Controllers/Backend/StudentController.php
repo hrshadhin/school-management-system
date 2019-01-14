@@ -187,7 +187,7 @@ class StudentController extends Controller
             'class_id' => 'required|integer',
             'section_id' => 'required|integer',
             'shift' => 'nullable|max:15',
-            'roll_no' => 'nullable|max:20',
+            'roll_no' => 'nullable|integer',
             'board_regi_no' => 'nullable|max:50',
             'fourth_subject' => 'nullable|integer',
 
@@ -457,7 +457,7 @@ class StudentController extends Controller
 //            'class_id' => 'required|integer',
             'section_id' => 'required|integer',
             'shift' => 'nullable|max:15',
-            'roll_no' => 'nullable|max:20',
+            'roll_no' => 'nullable|integer',
             'board_regi_no' => 'nullable|max:50',
             'fourth_subject' => 'nullable|integer',
 
@@ -771,6 +771,7 @@ class StudentController extends Controller
                 $query->select('name','id');
             }])
             ->select('id','roll_no','student_id')
+            ->orderBy('roll_no','asc')
             ->get();
 
         return response()->json($students);
