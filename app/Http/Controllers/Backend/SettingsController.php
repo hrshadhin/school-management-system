@@ -168,7 +168,8 @@ class SettingsController extends Controller
             'frontend_website',
             'language',
             'disable_language',
-            'attendance_notification',
+            'student_attendance_notification',
+            'employee_attendance_notification',
             'institute_type',
         ];
 
@@ -197,7 +198,8 @@ class SettingsController extends Controller
         $frontend_website = isset($metas['frontend_website']) ? $metas['frontend_website'] : 0;
         $language = isset($metas['language']) ? $metas['language'] : 0;
         $disable_language = isset($metas['disable_language']) ? $metas['disable_language'] : 0;
-        $attendance_notification = isset($metas['attendance_notification']) ? $metas['attendance_notification'] : 0;
+        $student_attendance_notification = isset($metas['student_attendance_notification']) ? $metas['student_attendance_notification'] : 0;
+        $employee_attendance_notification = isset($metas['employee_attendance_notification']) ? $metas['employee_attendance_notification'] : 0;
         $institute_type = isset($metas['institute_type']) ? $metas['institute_type'] : 1;
 
         return view(
@@ -207,7 +209,8 @@ class SettingsController extends Controller
                 'academic_year',
                 'frontend_website',
                 'disable_language',
-                'attendance_notification',
+                'student_attendance_notification',
+                'employee_attendance_notification',
                 'institute_type',
                 'language'
             )

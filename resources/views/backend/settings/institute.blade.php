@@ -209,21 +209,40 @@
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group has-feedback">
-                                        <label for="attendance_notification">Notification Type
+                                        <label for="student_attendance_notification">Student Attendance Notification Type
                                             <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="select attendance notificaton type"></i>
                                         </label>
-                                        {!! Form::select('attendance_notification', [0 => "None", 1 => "SMS", 2 => "Email"], $attendance_notification , ['class' => 'form-control select2']) !!}
+                                        {!! Form::select('student_attendance_notification', [0 => "None", 1 => "SMS", 2 => "Email"], $student_attendance_notification , ['class' => 'form-control select2']) !!}
                                         <span class="form-control-feedback"></span>
-                                        <span class="text-danger">{{ $errors->first('attendance_notification') }}</span>
+                                        <span class="text-danger">{{ $errors->first('student_attendance_notification') }}</span>
                                     </div>
                                 </div>
-                                <div id="divSmsGateWayList" class="col-md-4 @if(!$attendance_notification || $attendance_notification != 1) hide @endif">
+                                <div id="divSmsGateWayList_St" class="col-md-4 @if(!$student_attendance_notification || $student_attendance_notification != 1) hide @endif">
 
                                 </div>
-                                <div id="divTemplateList" class="col-md-4 @if(!$attendance_notification) hide @endif">
+                                <div id="divTemplateList_St" class="col-md-4 @if(!$student_attendance_notification) hide @endif">
 
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group has-feedback">
+                                        <label for="employee_attendance_notification">Employee Attendance Notification Type
+                                            <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="select attendance notificaton type"></i>
+                                        </label>
+                                        {!! Form::select('employee_attendance_notification', [0 => "None", 1 => "SMS", 2 => "Email"], $employee_attendance_notification , ['class' => 'form-control select2']) !!}
+                                        <span class="form-control-feedback"></span>
+                                        <span class="text-danger">{{ $errors->first('employee_attendance_notification') }}</span>
+                                    </div>
+                                </div>
+                                <div id="divSmsGateWayList_Emp" class="col-md-4 @if(!$employee_attendance_notification || $employee_attendance_notification != 1) hide @endif">
+
+                                </div>
+                                <div id="divTemplateList_Emp" class="col-md-4 @if(!$employee_attendance_notification) hide @endif">
+
+                                </div>
+                            </div>
+
                         </div>
                     </div>
 

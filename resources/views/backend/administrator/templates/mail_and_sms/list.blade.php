@@ -52,18 +52,18 @@
                                         </td>
                                         <td>{{ $template->name }}</td>
                                         <td>{{ $template->type }}</td>
-                                        <td>{{ $template->user }}</td>
+                                        <td>{{ $template->user->name }}</td>
                                         <td>{{ $template->content }}</td>
                                         <td>
                                             <div class="btn-group">
-                                                <a title="Edit" href="{{URL::route('administrator.template.mailsms.edit',$year->id)}}" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
+                                                <a title="Edit" href="{{URL::route('administrator.template.mailsms.edit',$template->id)}}" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
                                                 </a>
                                             </div>
                                             <!-- todo: have problem in mobile device -->
                                             <div class="btn-group">
                                                 <form  class="myAction" method="POST" action="{{URL::route('administrator.template.mailsms.destroy')}}">
                                                     @csrf
-                                                    <input type="hidden" name="hiddenId" value="{{$year->id}}">
+                                                    <input type="hidden" name="hiddenId" value="{{$template->id}}">
                                                     <button type="submit" class="btn btn-danger btn-sm" title="Delete">
                                                         <i class="fa fa-fw fa-trash"></i>
                                                     </button>

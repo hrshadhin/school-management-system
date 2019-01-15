@@ -30,7 +30,7 @@ class Template extends Model
 
     public function user()
     {
-        return $this->belongsTo('App\Role');
+        return $this->belongsTo('App\Role', 'role_id')->select('id','name');
     }
 
     public function getTypeAttribute($value)
