@@ -54,7 +54,7 @@ export default class Generic {
             }
         };
 
-       //table with out search
+        //table with out search
         var table = $('#listDataTable').DataTable({
             pageLength: 25,
             lengthChange: false,
@@ -92,7 +92,6 @@ export default class Generic {
             ]
         });
         table.buttons().container().appendTo($('.col-sm-6:eq(0)', table.table().container()));
-
 
 
         //style table with search
@@ -153,8 +152,6 @@ export default class Generic {
             ]
         });
         table2.buttons().container().appendTo($('.col-sm-6:eq(0)', table2.table().container()));
-
-
 
 
         let stopchange = false;

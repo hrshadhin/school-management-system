@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Helpers\AppHelper;
 use App\Registration;
 use App\Role;
+use App\Template;
 use App\User;
 use App\UserRole;
 use Carbon\Carbon;
@@ -370,6 +371,78 @@ class AdministratorController extends Controller
     }
 
 
+    /**
+     * Mail and sms template  manage
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function templateMailAndSmsIndex(Request $request)
+    {
+        //for save on POST request
+        if ($request->isMethod('post')) {//
+            $this->validate($request, [
+                'hiddenId' => 'required|integer',
+            ]);
+            $year = AcademicYear::findOrFail($request->get('hiddenId'));
+
+            // now check is academic year set or not
+            $settings = AppHelper::getAppSettings();
+            $haveStudent = Registration::where('academic_year_id', $year->id)->count();
+            if((isset($settings['academic_year']) && (int)$settings['academic_year'] == $year->id) || ($haveStudent > 0)){
+                return redirect()->route('administrator.academic_year')->with('error', 'Can not delete it because this year have student or have in default setting.');
+            }
+            $year->delete();
+
+            return redirect()->route('administrator.academic_year')->with('success', 'Record deleted!');
+        }
+
+        //for get request
+        // AppHelper::TEMPLATE_TYPE  1=SMS , 2=EMAIL
+        $templates = Template::whereIn('type',[1,2])->get();
+
+        return view('backend.administrator.templates.mail_and_sms.list', compact('templates'));
+    }
+
+    /**
+     * Mail and sms template  manage
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function templateMailAndSmsCru(Request $request, $id=0)
+    {
+        //for save on POST request
+        if ($request->isMethod('post')) {
+            ;
+            $this->validate($request, [
+                'title' => 'required|min:4|max:255',
+                'start_date' => 'required|min:10|max:255',
+                'end_date' => 'required|min:10|max:255',
+            ]);
+
+            $data = $request->all();
+            $datetime = Carbon::createFromFormat('d/m/Y',$data['start_date']);
+            $data['start_date'] = $datetime;
+            $datetime = Carbon::createFromFormat('d/m/Y',$data['end_date']);
+            $data['end_date'] = $datetime;
+            if(!$id){
+                $data['status'] = '1';
+            }
+
+            AcademicYear::updateOrCreate(
+                ['id' => $id],
+                $data
+            );
+            $msg = "Academic year ";
+            $msg .= $id ? 'updated.' : 'added.';
+
+            return redirect()->route('administrator.academic_year')->with('success', $msg);
+        }
+
+        //for get request
+        $roles = Role::pluck('name','id');
+        $role = null;
+        $template = Template::find($id);
+
+        return view('backend.administrator.templates.mail_and_sms.add', compact('roles', 'role', 'template'));
+    }
 
 
 
