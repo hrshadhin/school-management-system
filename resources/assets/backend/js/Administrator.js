@@ -116,4 +116,48 @@ export default class Administrator {
 
     }
 
+    /**
+     *  Mail and sms template
+     */
+
+    static templateMailSMSInit() {
+        Generic.initCommonPageJS();
+        Generic.initDeleteDialog();
+        $("#templateForm").validate({
+            ignore: ":hidden:not(textarea)",
+            rules: {},
+            messages: {},
+            errorElement: "em",
+            errorPlacement: function (error, element) {
+                // Add the `help-block` class to the error element
+                error.addClass("help-block");
+                error.insertAfter(element);
+
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).parents(".form-group").addClass("has-error").removeClass("has-success");
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).parents(".form-group").addClass("has-success").removeClass("has-error");
+            }
+        });
+        $('select[name="role_id"]').on('change', function () {
+           let value = $(this).val();
+           $('.emailtagdiv').css('display','none');
+           if(value){
+               $('#email_'+value).css('display', 'block');
+
+           }
+            $('.wysihtml5-sandbox').contents().find('body').html('');
+        });
+        // bootstrap WYSIHTML5 - text editor
+        $('#textareaEditor').wysihtml5();
+        $('input.email_alltag').click(function () {
+           var contents = $('.wysihtml5-sandbox').contents().find('body').html();
+           contents += $(this).val();
+            $('.wysihtml5-sandbox').contents().find('body').html(contents);
+        });
+
+    }
+
 }

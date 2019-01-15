@@ -96,6 +96,11 @@
               <i class="fa fa-calendar-plus-o"></i> <span>Academic Year</span>
             </a>
           </li>
+          <li>
+            <a href="{{ URL::route('administrator.template.mailsms.index') }}">
+              <i class="fa icon-template"></i> <span>Mail/SMS Template</span>
+            </a>
+          </li>
 
           <li>
             <a href="{{URL::route('administrator.user_index')}}">

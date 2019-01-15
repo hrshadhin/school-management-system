@@ -70,6 +70,12 @@ class AppHelper
         1 => 'Present'
     ];
 
+    const TEMPLATE_TYPE = [
+        1 => 'SMS',
+        2 => 'EMAIL',
+        3 => 'ID CARD'
+    ];
+
 
     /**
      * Get institution category for app settings

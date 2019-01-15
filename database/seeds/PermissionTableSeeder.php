@@ -94,7 +94,33 @@ class PermissionTableSeeder extends Seeder
             [   "slug" => "user.permission",
                 "name" => "User Edit",
                 "group" => "Administration"
+            ],
+            // mail / sms template
+            [   "slug" => "administrator.template.mailsms.index",
+                "name" => "Mail_and_SMS Template View",
+                "group" => "Administration"
+            ],
+            [   "slug" => "administrator.template.mailsms.create",
+                "name" => "Mail_and_SMS Template Create",
+                "group" => "Administration"
+            ],
+            [   "slug" => "administrator.template.mailsms.store",
+                "name" => "Mail_and_SMS Template Create",
+                "group" => "Administration"
+            ],
+            [   "slug" => "administrator.template.mailsms.edit",
+                "name" => "Mail_and_SMS Template Edit",
+                "group" => "Administration"
+            ],
+            [   "slug" => "administrator.template.mailsms.update",
+                "name" => "Mail_and_SMS Template Edit",
+                "group" => "Administration"
+            ],
+            [   "slug" => "administrator.template.mailsms.destroy",
+                "name" => "Mail_and_SMS Template Delete",
+                "group" => "Administration"
             ]
+            //mail / sms end
         ];
 
         $onlyAdminPermissions = [

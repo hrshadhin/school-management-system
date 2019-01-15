@@ -108,7 +108,7 @@ Route::group(
         ->name('settings.institute');
 
     // administrator routes
-    //academic year
+        //academic year
     Route::get('administrator/academic_year', 'AdministratorController@academicYearIndex')
         ->name('administrator.academic_year');
     Route::post('administrator/academic_year', 'AdministratorController@academicYearIndex')
@@ -123,6 +123,22 @@ Route::group(
         ->name('administrator.academic_year_update');
     Route::post('administrator/academic_year/status/{id}', 'AdministratorController@academicYearChangeStatus')
         ->name('administrator.academic_year_status');
+
+    // template
+        //mail and sms
+    Route::get('administrator/template/mailandsms', 'AdministratorController@templateMailAndSmsIndex')
+        ->name('administrator.template.mailsms.index');
+    Route::post('administrator/template/mailandsms', 'AdministratorController@templateMailAndSmsIndex')
+        ->name('administrator.template.mailsms.destroy');
+    Route::get('administrator/template/mailandsms/create', 'AdministratorController@templateMailAndSmsCru')
+        ->name('administrator.template.mailsms.create');
+    Route::post('administrator/template/mailandsms/create', 'AdministratorController@templateMailAndSmsCru')
+        ->name('administrator.template.mailsms.store');
+    Route::get('administrator/template/mailandsms/edit/{id}', 'AdministratorController@templateMailAndSmsCru')
+        ->name('administrator.template.mailsms.edit');
+    Route::post('administrator/template/mailandsms/update/{id}', 'AdministratorController@templateMailAndSmsCru')
+        ->name('administrator.template.mailsms.update');
+
 
     // academic routes
     // class
