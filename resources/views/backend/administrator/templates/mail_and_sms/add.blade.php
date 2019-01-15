@@ -25,8 +25,14 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="box box-info">
+                    <div class="box-header">
+                    <div class="callout callout-danger">
+                        <p><b>Note:</b> If you select student form user select box then some keyword will appear in tags box. You can click those any of tags for inserting into content field. if you insert [name] tag then when you send email/sms it will represent student name on that place.</p>
+                    </div>
+
                     <form novalidate id="templateForm" action="@if($template) {{URL::Route('administrator.template.mailsms.update', $template->id)}} @else {{URL::Route('administrator.template.mailsms.store')}} @endif" method="post" enctype="multipart/form-data">
                         @csrf
+                    </div>
                         <div class="box-body">
                             <div class="row">
                                 @if(!$template)
