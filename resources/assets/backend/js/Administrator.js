@@ -149,13 +149,38 @@ export default class Administrator {
 
            }
             $('.wysihtml5-sandbox').contents().find('body').html('');
+            $('#smsContentArea').val('');
         });
-        // bootstrap WYSIHTML5 - text editor
-        $('#textareaEditor').wysihtml5();
-        $('input.email_alltag').click(function () {
-           var contents = $('.wysihtml5-sandbox').contents().find('body').html();
-           contents += $(this).val();
-            $('.wysihtml5-sandbox').contents().find('body').html(contents);
+
+        $('input.keyword_tag').click(function () {
+            let formType = $('input[name="type"]:checked').val();
+            if(formType == "2") {
+                var contents = $('.wysihtml5-sandbox').contents().find('body').html();
+                contents += $(this).val();
+                $('.wysihtml5-sandbox').contents().find('body').html(contents);
+            }
+            else{
+                var contents = $('#smsContentArea').val();
+                contents += $(this).val();
+                $('#smsContentArea').val(contents);
+            }
+        });
+
+
+        $('input[name="type"]').on('ifClicked', function(event) {
+            let value = $(this).val();
+            if(value == "2"){
+                $('#emailContent').show();
+                $('#smsContent').hide();
+                $('#smsContentArea').removeAttr('required');
+                $('#textareaEditor').attr("required", true);
+            }
+            else{
+                $('#textareaEditor').removeAttr('required');
+                $('#smsContentArea').attr("required", true);
+                $('#emailContent').hide();
+                $('#smsContent').show();
+            }
         });
 
     }

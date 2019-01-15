@@ -382,22 +382,22 @@ class AdministratorController extends Controller
             $this->validate($request, [
                 'hiddenId' => 'required|integer',
             ]);
-            $year = AcademicYear::findOrFail($request->get('hiddenId'));
+            $template = Template::findOrFail($request->get('hiddenId'));
 
-            // now check is academic year set or not
-            $settings = AppHelper::getAppSettings();
-            $haveStudent = Registration::where('academic_year_id', $year->id)->count();
-            if((isset($settings['academic_year']) && (int)$settings['academic_year'] == $year->id) || ($haveStudent > 0)){
-                return redirect()->route('administrator.academic_year')->with('error', 'Can not delete it because this year have student or have in default setting.');
-            }
-            $year->delete();
+            // now check is tempalte currently used ??
+            //todo: need to protect deletion
+//            $settings = AppHelper::getAppSettings();
+//            if((isset($settings['attendance_template']))){
+//                return redirect()->route('administrator.template.mailsms.index')->with('error', 'Can not delete it because this template is being used.');
+//            }
+            $template->delete();
 
-            return redirect()->route('administrator.academic_year')->with('success', 'Record deleted!');
+            return redirect()->route('administrator.template.mailsms.index')->with('success', 'Template deleted!');
         }
 
         //for get request
         // AppHelper::TEMPLATE_TYPE  1=SMS , 2=EMAIL
-        $templates = Template::whereIn('type',[1,2])->get();
+        $templates = Template::whereIn('type',[1,2])->with('user')->get();
 
         return view('backend.administrator.templates.mail_and_sms.list', compact('templates'));
     }
@@ -410,36 +410,41 @@ class AdministratorController extends Controller
     {
         //for save on POST request
         if ($request->isMethod('post')) {
-            ;
             $this->validate($request, [
-                'title' => 'required|min:4|max:255',
-                'start_date' => 'required|min:10|max:255',
-                'end_date' => 'required|min:10|max:255',
+                'type' => 'required',
+                'name' => 'required|min:4|max:255',
+                'role_id' => 'required|integer',
             ]);
 
-            $data = $request->all();
-            $datetime = Carbon::createFromFormat('d/m/Y',$data['start_date']);
-            $data['start_date'] = $datetime;
-            $datetime = Carbon::createFromFormat('d/m/Y',$data['end_date']);
-            $data['end_date'] = $datetime;
-            if(!$id){
-                $data['status'] = '1';
-            }
 
-            AcademicYear::updateOrCreate(
+            $data = [
+                'name' => $request->get('name'),
+                'type' =>  (integer)$request->get('type'),
+                'role_id' => $request->get('role_id'),
+                'content' => ($request->get('type') == "2") ? $request->get('content_email') : $request->get('content')
+            ];
+
+
+            Template::updateOrCreate(
                 ['id' => $id],
                 $data
             );
-            $msg = "Academic year ";
+            $msg = "Template ";
             $msg .= $id ? 'updated.' : 'added.';
 
-            return redirect()->route('administrator.academic_year')->with('success', $msg);
+            if($id){
+                return redirect()->route('administrator.template.mailsms.index')->with('success', $msg);
+            }
+            return redirect()->route('administrator.template.mailsms.create')->with('success', $msg);
         }
 
         //for get request
         $roles = Role::pluck('name','id');
         $role = null;
         $template = Template::find($id);
+        if($template) {
+            $role = $template->role_id;
+        }
 
         return view('backend.administrator.templates.mail_and_sms.add', compact('roles', 'role', 'template'));
     }
