@@ -264,6 +264,14 @@
 <!-- BEGIN PAGE JS-->
 @section('extraScript')
     <script type="text/javascript">
+        window.smsGatewayListURL = '{{URL::route('settings.sms_gateway.index')}}';
+        window.templateListURL = '{{URL::route('administrator.template.mailsms.index')}}';
+
+        window.gatewaySt = @if(isset($metas['student_attendance_gateway'])) {{$metas['student_attendance_gateway']}}; @else 0; @endif
+        window.templateSt = @if(isset($metas['student_attendance_template'])) {{$metas['student_attendance_template']}}; @else 0; @endif
+        window.gatewayEmp = @if(isset($metas['employee_attendance_gateway'])) {{$metas['employee_attendance_gateway']}}; @else 0; @endif
+        window.templateEmp = @if(isset($metas['employee_attendance_template'])) {{$metas['employee_attendance_template']}}; @else 0; @endif
+
         $(document).ready(function () {
             Settings.instituteInit();
 
