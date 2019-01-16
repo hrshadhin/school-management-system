@@ -107,6 +107,21 @@ Route::group(
     Route::post('settings/institute', 'SettingsController@institute')
         ->name('settings.institute');
 
+    //sms gateways
+    Route::get('settings/sms-gateway', 'SettingsController@smsGatewayIndex')
+        ->name('settings.sms_gateway.index');
+    Route::post('settings/sms-gateway', 'SettingsController@smsGatewayIndex')
+        ->name('settings.sms_gateway.destroy');
+    Route::get('settings/sms-gateway/create', 'SettingsController@smsGatewayCru')
+        ->name('settings.sms_gateway.create');
+    Route::post('settings/sms-gateway/create', 'SettingsController@smsGatewayCru')
+        ->name('settings.sms_gateway.store');
+    Route::get('settings/sms-gateway/edit/{id}', 'SettingsController@smsGatewayCru')
+        ->name('settings.sms_gateway.edit');
+    Route::post('settings/sms-gateway/update/{id}', 'SettingsController@smsGatewayCru')
+        ->name('settings.sms_gateway.update');
+
+
     // administrator routes
         //academic year
     Route::get('administrator/academic_year', 'AdministratorController@academicYearIndex')

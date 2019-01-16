@@ -76,6 +76,14 @@ class AppHelper
         3 => 'ID CARD'
     ];
 
+    const SMS_GATEWAY_LIST = [
+        1 => 'Bulk SMS Route',
+        2 => 'IT Solutionbd',
+        3 => 'Zaman IT',
+        4 => 'MIM SMS',
+        5 => 'Twilio',
+    ];
+
 
     /**
      * Get institution category for app settings

@@ -155,28 +155,16 @@
               <i class="fa fa-building"></i> <span>Institute</span>
             </a>
           </li>
+          <li>
+            <a href="{{ URL::route('settings.sms_gateway.index') }}">
+              <i class="fa fa-external-link"></i> <span>SMS Gateways</span>
+            </a>
+          </li>
           @endrole
-          <li>
-            <a href="#">
-              <i class="fa fa-file-text"></i> <span>SMS</span>
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <i class="fa fa-envelope"></i> <span>Email</span>
-            </a>
-          </li>
 
-          <li>
-            <a href="#">
-              <i class="fa fa-certificate"></i> <span>Certificates</span>
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <i class="fa fa-files-o"></i> <span>Reports</span>
-            </a>
-          </li>
+
+
+
           {{--<li>--}}
           {{--<a href="#">--}}
           {{--<i class="fa fa-share-alt"></i><span>Miscellaneous</span>--}}
