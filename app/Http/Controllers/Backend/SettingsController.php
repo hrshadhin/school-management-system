@@ -216,4 +216,112 @@ class SettingsController extends Controller
             )
         );
     }
+
+
+    /**
+     * SMS Gateway settings  manage
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function smsGatewayIndex(Request $request)
+    {
+        //for save on POST request
+        if ($request->isMethod('post')) {//
+            $this->validate($request, [
+                'hiddenId' => 'required|integer',
+            ]);
+
+            $gateway = AppMeta::findOrFail($request->get('hiddenId'));
+
+            // now check is gateway currently used ??
+            //todo: need to protect deletion
+//            $settings = AppHelper::getAppSettings();
+//            if((isset($settings['attendance_template']))){
+//                return redirect()->route('administrator.template.mailsms.index')->with('error', 'Can not delete it because this template is being used.');
+//            }
+            if($gateway->meta_key == "sms_gateway"){
+                $gateway->delete();
+            }
+
+            return redirect()->route('settings.sms_gateway.index')->with('success', 'Gateway deleted!');
+        }
+
+        //for get request
+        $smsGateways = AppMeta::where('meta_key','sms_gateway')->get();
+
+        //if it is ajax request then send json response with formated data
+        if($request->ajax()){
+            $data = [];
+            foreach ($smsGateways as $gateway){
+                $json_data = json_decode($gateway->meta_value);
+                $data[] = [
+                    'id' => $json_data->gateway,
+                    'text' => $json_data->name,
+                ];
+            }
+
+            return response()->json($data);
+        }
+
+
+
+        return view('backend.settings.smsgateway_list', compact('smsGateways'));
+    }
+
+    /**
+     *  SMS Gateway settings   manage
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function smsGatewayCru(Request $request, $id=0)
+    {
+        //for save on POST request
+        if ($request->isMethod('post')) {
+            $this->validate($request, [
+                'gateway' => 'required|integer',
+                'name' => 'required|min:4|max:255',
+                'sender_id' => 'nullable',
+                'user' => 'required|max:255',
+                'password' => 'nullable|max:255',
+                'api_url' => 'required',
+            ]);
+
+
+            $data = [
+                'gateway' => $request->get('gateway',''),
+                'name' => $request->get('name',''),
+                'sender_id' => $request->get('sender_id',''),
+                'user' => $request->get('user',''),
+                'password' => $request->get('password',''),
+                'api_url' => $request->get('api_url',''),
+            ];
+
+
+            AppMeta::updateOrCreate(
+                ['id' => $id],
+                [
+                    'meta_key' => 'sms_gateway',
+                    'meta_value' => json_encode($data)
+                ]
+            );
+            $msg = "SMS Gateway ";
+            $msg .= $id ? 'updated.' : 'added.';
+
+            if($id){
+                return redirect()->route('settings.sms_gateway.index')->with('success', $msg);
+            }
+            return redirect()->route('settings.sms_gateway.create')->with('success', $msg);
+        }
+
+        //for get request
+        $gateways = AppHelper::SMS_GATEWAY_LIST;
+        $gateway_id = null;
+        $gateway = AppMeta::find($id);
+        if($gateway) {
+            $gateway_id = (json_decode($gateway->meta_value))->gateway;
+        }
+
+        return view('backend.settings.smsgateway_add', compact('gateways', 'gateway', 'gateway_id'));
+    }
+
+
+
 }

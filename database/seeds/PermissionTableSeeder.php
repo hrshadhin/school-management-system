@@ -94,33 +94,7 @@ class PermissionTableSeeder extends Seeder
             [   "slug" => "user.permission",
                 "name" => "User Edit",
                 "group" => "Administration"
-            ],
-            // mail / sms template
-            [   "slug" => "administrator.template.mailsms.index",
-                "name" => "Mail_and_SMS Template View",
-                "group" => "Administration"
-            ],
-            [   "slug" => "administrator.template.mailsms.create",
-                "name" => "Mail_and_SMS Template Create",
-                "group" => "Administration"
-            ],
-            [   "slug" => "administrator.template.mailsms.store",
-                "name" => "Mail_and_SMS Template Create",
-                "group" => "Administration"
-            ],
-            [   "slug" => "administrator.template.mailsms.edit",
-                "name" => "Mail_and_SMS Template Edit",
-                "group" => "Administration"
-            ],
-            [   "slug" => "administrator.template.mailsms.update",
-                "name" => "Mail_and_SMS Template Edit",
-                "group" => "Administration"
-            ],
-            [   "slug" => "administrator.template.mailsms.destroy",
-                "name" => "Mail_and_SMS Template Delete",
-                "group" => "Administration"
             ]
-            //mail / sms end
         ];
 
         $onlyAdminPermissions = [
@@ -220,6 +194,57 @@ class PermissionTableSeeder extends Seeder
             ],
             [   "slug" => "administrator.user_password_reset",
                 "name" => "User Password Reset",
+                "group" => "Admin Only"
+            ],
+            // mail / sms template
+            [   "slug" => "administrator.template.mailsms.index",
+                "name" => "Mail_and_SMS Template View",
+                "group" => "Admin Only"
+            ],
+            [   "slug" => "administrator.template.mailsms.create",
+                "name" => "Mail_and_SMS Template Create",
+                "group" => "Admin Only"
+            ],
+            [   "slug" => "administrator.template.mailsms.store",
+                "name" => "Mail_and_SMS Template Create",
+                "group" => "Admin Only"
+            ],
+            [   "slug" => "administrator.template.mailsms.edit",
+                "name" => "Mail_and_SMS Template Edit",
+                "group" => "Admin Only"
+            ],
+            [   "slug" => "administrator.template.mailsms.update",
+                "name" => "Mail_and_SMS Template Edit",
+                "group" => "Admin Only"
+            ],
+            [   "slug" => "administrator.template.mailsms.destroy",
+                "name" => "Mail_and_SMS Template Delete",
+                "group" => "Admin Only"
+            ],
+            //mail / sms end
+            //sms gateway
+            [   "slug" => "settings.sms_gateway.index",
+                "name" => "SMS Gateway View",
+                "group" => "Admin Only"
+            ],
+            [   "slug" => "settings.sms_gateway.create",
+                "name" => "SMS Gateway Create",
+                "group" => "Admin Only"
+            ],
+            [   "slug" => "settings.sms_gateway.store",
+                "name" => "SMS Gateway Create",
+                "group" => "Admin Only"
+            ],
+            [   "slug" => "settings.sms_gateway.edit",
+                "name" => "SMS Gateway Edit",
+                "group" => "Admin Only"
+            ],
+            [   "slug" => "settings.sms_gateway.update",
+                "name" => "SMS Gateway Edit",
+                "group" => "Admin Only"
+            ],
+            [   "slug" => "settings.sms_gateway.destroy",
+                "name" => "SMS Gateway Delete",
                 "group" => "Admin Only"
             ]
         ];
