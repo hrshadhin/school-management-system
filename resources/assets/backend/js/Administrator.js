@@ -166,7 +166,6 @@ export default class Administrator {
             }
         });
 
-
         $('input[name="type"]').on('ifClicked', function(event) {
             let value = $(this).val();
             if(value == "2"){

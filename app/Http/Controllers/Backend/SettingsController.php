@@ -46,7 +46,8 @@ class SettingsController extends Controller
                 'phone_no' => 'required|min:8|max:15',
                 'address' => 'required|max:500',
                 'language' => 'required|min:2',
-                'attendance_notification' => 'required|integer',
+                'student_attendance_notification' => 'required|integer',
+                'employee_attendance_notification' => 'required|integer',
                 'institute_type' => 'required|integer',
             ];
 
@@ -139,14 +140,40 @@ class SettingsController extends Controller
                 ['meta_key' => 'disable_language'],
                 ['meta_value' => $request->has('disable_language') ? 1 : 0]
             );
-            AppMeta::updateOrCreate(
-                ['meta_key' => 'attendance_notification'],
-                ['meta_value' => $request->get('attendance_notification', 0)]
-            );
+
             AppMeta::updateOrCreate(
                 ['meta_key' => 'institute_type'],
                 ['meta_value' => $request->get('institute_type', 1)]
             );
+
+            AppMeta::updateOrCreate(
+                ['meta_key' => 'student_attendance_notification'],
+                ['meta_value' => $request->get('student_attendance_notification', 0)]
+            );
+            AppMeta::updateOrCreate(
+                ['meta_key' => 'employee_attendance_notification'],
+                ['meta_value' => $request->get('employee_attendance_notification', 0)]
+            );
+
+            //if send notification then add settings
+            AppMeta::updateOrCreate(
+                ['meta_key' => 'student_attendance_gateway'],
+                ['meta_value' => $request->get('sms_gateway_St', 0)]
+            );
+            AppMeta::updateOrCreate(
+                ['meta_key' => 'student_attendance_template'],
+                ['meta_value' => $request->get('notification_template_St', 0)]
+            );
+            AppMeta::updateOrCreate(
+                ['meta_key' => 'employee_attendance_gateway'],
+                ['meta_value' => $request->get('sms_gateway_Emp', 0)]
+            );
+            AppMeta::updateOrCreate(
+                ['meta_key' => 'employee_attendance_template'],
+                ['meta_value' => $request->get('notification_template_Emp', 0)]
+            );
+
+
             Cache::forget('app_settings');
 
             //now notify the admins about this record
@@ -164,22 +191,8 @@ class SettingsController extends Controller
             $info = json_decode($settings->meta_value);
         }
 
-        $whereConditions = [
-            'frontend_website',
-            'language',
-            'disable_language',
-            'student_attendance_notification',
-            'employee_attendance_notification',
-            'institute_type',
-        ];
 
-
-        if(AppHelper::getInstituteCategory() != 'college'){
-            $whereConditions[] = 'academic_year';
-
-        }
-
-        $settings = AppMeta::whereIn('meta_key', $whereConditions)->get();
+        $settings = AppMeta::all();
 
         $metas = [];
         foreach ($settings as $setting){
@@ -212,7 +225,8 @@ class SettingsController extends Controller
                 'student_attendance_notification',
                 'employee_attendance_notification',
                 'institute_type',
-                'language'
+                'language',
+                'metas'
             )
         );
     }
@@ -255,7 +269,7 @@ class SettingsController extends Controller
                 $json_data = json_decode($gateway->meta_value);
                 $data[] = [
                     'id' => $json_data->gateway,
-                    'text' => $json_data->name,
+                    'text' => $json_data->name.'['.AppHelper::SMS_GATEWAY_LIST[$json_data->gateway].']',
                 ];
             }
 

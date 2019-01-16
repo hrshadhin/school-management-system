@@ -395,6 +395,35 @@ class AdministratorController extends Controller
             return redirect()->route('administrator.template.mailsms.index')->with('success', 'Template deleted!');
         }
 
+        //if it is ajax request then send json response with formated data
+        if($request->ajax()){
+
+            $userRole = $request->query->get('user','');
+
+            $userRoles = [];
+
+            if($userRole == "student"){
+                $userRoles[] = AppHelper::USER_STUDENT;
+            }
+            elseif ($userRole == "employee"){
+                $userRoles = Role::select('id')->whereNotIn('id', [AppHelper::USER_STUDENT, AppHelper::USER_ADMIN])->get()->pluck('id');
+            }
+
+            $templates = Template::where('type',$request->query->get('type',0))
+                ->whereIn('role_id', $userRoles)->get();
+
+            $data = [];
+            foreach ($templates as $template){
+                $data[] = [
+                    'id' => $template->id,
+                    'text' => $template->name
+                ];
+            }
+
+            return response()->json($data);
+        }
+
+
         //for get request
         // AppHelper::TEMPLATE_TYPE  1=SMS , 2=EMAIL
         $templates = Template::whereIn('type',[1,2])->with('user')->get();

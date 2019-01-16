@@ -30,9 +30,9 @@
                         <p><b>Note:</b> If you select student form user select box then some keyword will appear in tags box. You can click those any of tags for inserting into content field. if you insert [name] tag then when you send email/sms it will represent student name on that place.</p>
                     </div>
 
+                   </div>
                     <form novalidate id="templateForm" action="@if($template) {{URL::Route('administrator.template.mailsms.update', $template->id)}} @else {{URL::Route('administrator.template.mailsms.store')}} @endif" method="post" enctype="multipart/form-data">
                         @csrf
-                    </div>
                         <div class="box-body">
                             <div class="row">
                                 @if(!$template)
@@ -47,6 +47,7 @@
                                                 <input type="radio" name="type" value="2" class="minimal"> EMAIL
                                             </label>
                                         </div>
+                                        <span class="text-danger">{{ $errors->first('type') }}</span>
                                     </div>
                                 </div>
                                     @else
@@ -121,13 +122,13 @@
                             </div>
                             <div class="form-group has-feedback" id="emailContent" style="display: @if($template and $template->getOriginal('type') == 2) block; @else none; @endif">
                                 <label for="description">Content<span class="text-danger">*</span></label>
-                                <textarea id="textareaEditor"  name="content_email" class="form-control" @if($template and $template->getOriginal('type') == 2) required @elseif(!$template) required @endif minlength="5" >@if($template){{ $template->content }}@else{{ old('content') }} @endif</textarea>
+                                <textarea id="textareaEditor"  name="content_email" class="form-control" @if($template and $template->getOriginal('type') == 2) required @endif minlength="5" >@if($template){{ $template->content }}@else{{ old('content') }} @endif</textarea>
                                 <span class="glyphicon glyphicon-info form-control-feedback"></span>
                                 <span class="text-danger">{{ $errors->first('content_email') }}</span>
                             </div>
                             <div class="form-group has-feedback" id="smsContent" style="display: @if($template and $template->getOriginal('type') == 1) block; @elseif(!$template) block @else none; @endif">
                                 <label for="description">Content<span class="text-danger">*</span></label>
-                                <textarea id="smsContentArea"  name="content" class="form-control" @if($template and $template->getOriginal('type') == 1) required @endif minlength="5" >@if($template){{ $template->content }}@else{{ old('content') }} @endif</textarea>
+                                <textarea id="smsContentArea"  name="content" class="form-control" @if($template and $template->getOriginal('type') == 1) required @elseif(!$template) required @endif minlength="5" >@if($template){{ $template->content }}@else{{ old('content') }} @endif</textarea>
                                 <span class="glyphicon glyphicon-info form-control-feedback"></span>
                                 <span class="text-danger">{{ $errors->first('content') }}</span>
                             </div>
