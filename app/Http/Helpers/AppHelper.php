@@ -518,12 +518,10 @@ class AppHelper
 
             if($cellNumber){
 
-                //with out job hndler
+                //send sms via helper
                 $smsHelper = new SmsHelper($gateway);
                 $res = $smsHelper->sendSms($cellNumber, $message);
 
-                //send to a job handler
-//                ProcessSms::dispatch($gateway, $cellNumber, $message)->onQueue('sms');
             }
             else{
                 Log::channel('smsLog')->error("Invalid Cell No! ".$studentArray['student']['father_phone_no']);

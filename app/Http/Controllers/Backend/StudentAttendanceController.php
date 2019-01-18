@@ -7,6 +7,7 @@ use App\AppMeta;
 use App\Http\Helpers\AppHelper;
 use App\Http\Helpers\SmsHelper;
 use App\IClass;
+use App\Jobs\PushStudentAbsentJob;
 use App\Registration;
 use App\Section;
 use App\StudentAttendance;
@@ -170,32 +171,32 @@ class StudentAttendanceController extends Controller
 
         $message = "Attendance saved successfully.";
         //check if notification need to send?
-        $sendNotification = AppHelper::getAppSettings('student_attendance_notification');
-        if($sendNotification != "0") {
-            if($sendNotification == "1"){
-                //then send sms notification
+        //todo: need uncomment these code on client deploy
+//        $sendNotification = AppHelper::getAppSettings('student_attendance_notification');
+//        if($sendNotification != "0") {
+//            if($sendNotification == "1"){
+//                //then send sms notification
+//
+//                //get sms gateway information
+//                $gateway = AppMeta::where('id', AppHelper::getAppSettings('student_attendance_gateway'))->first();
+//                if(!$gateway){
+//                    redirect()->route('student_attendance.create')->with("warning",$message." But SMS Gateway not setup!");
+//                }
+//
+//                //get sms template information
+//                $template = Template::where('id', AppHelper::getAppSettings('student_attendance_template'))->first();
+//                if(!$template){
+//                    redirect()->route('student_attendance.create')->with("warning",$message." But SMS template not setup!");
+//                }
+//
+//                $res = AppHelper::sendAbsentNotificationForStudentViaSMS($absentIds, $attendance_date);
+//
+//            }
+//        }
 
-                //get sms gateway information
-                $gateway = AppMeta::where('id', AppHelper::getAppSettings('student_attendance_gateway'))->first();
-                if(!$gateway){
-                    redirect()->route('student_attendance.create')->with("warning",$message." But SMS Gateway not setup!");
-                }
-
-                //get sms template information
-                $template = Template::where('id', AppHelper::getAppSettings('student_attendance_template'))->first();
-                if(!$template){
-                    redirect()->route('student_attendance.create')->with("warning",$message." But SMS template not setup!");
-                }
-
-                $res = AppHelper::sendAbsentNotificationForStudentViaSMS($absentIds, $attendance_date);
-
-            }
-
-            if($sendNotification == "2"){
-                //then send email notification
-                //todo: need to implement email notification
-            }
-        }
+        //push job to queue
+        //todo: need comment these code on client deploy
+        PushStudentAbsentJob::dispatch($absentIds, $attendance_date);
 
 
         return redirect()->route('student_attendance.create')->with("success",$message);
