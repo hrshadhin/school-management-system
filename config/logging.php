@@ -48,6 +48,11 @@ return [
             'path' => storage_path('logs/sms.log'),
             'level' => 'debug',
         ],
+        'studentabsentlog' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/student-absent-job.log'),
+            'level' => 'debug',
+        ],
         'daily' => [
             'driver' => 'daily',
             'path' => storage_path('logs/laravel.log'),
