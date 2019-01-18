@@ -2,9 +2,12 @@
 namespace App\Http\Helpers;
 
 use App\Event;
+use App\Jobs\ProcessSms;
 use App\Notifications\UserActivity;
 use App\Permission;
+use App\Registration;
 use App\SiteMeta;
+use App\Template;
 use App\User;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
@@ -12,6 +15,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use App\AppMeta;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 
 
@@ -257,23 +261,13 @@ class AppHelper
      *    Application settings fetch
      *
      */
-    public static function getAppSettings(){
+    public static function getAppSettings($key=null){
         $appSettings = null;
         if (Cache::has('app_settings')) {
             $appSettings = Cache::get('app_settings');
         }
         else{
-            $settings = AppMeta::whereIn(
-                'meta_key', [
-                    'academic_year',
-                    'frontend_website',
-                    'language',
-                    'disable_language',
-                    'attendance_notification',
-                    'institute_type',
-                    'institute_settings'
-                ]
-            )->get();
+            $settings = AppMeta::all();
 
             $metas = [];
             foreach ($settings as $setting){
@@ -285,6 +279,10 @@ class AppHelper
             $appSettings = $metas;
             Cache::forever('app_settings', $metas);
 
+        }
+
+        if($key){
+            return $appSettings[$key] ?? 0;
         }
 
         return $appSettings;
@@ -472,6 +470,97 @@ class AppHelper
     public static function sendNotificationToAdmins($type, $message){
         $admins = AppHelper::getUsersByGroup(AppHelper::USER_ADMIN);
         return AppHelper::sendNotificationToUsers($admins, $type, $message);
+    }
+
+    /**
+     *  Send notification to student via sms
+     * @param $students
+     * @param $date
+     * @return bool
+     */
+    public static function sendAbsentNotificationForStudentViaSMS($studentIds, $date) {
+
+        $attendance_date = date('d/m/Y', strtotime($date));
+        $gateway = AppMeta::where('id', AppHelper::getAppSettings('student_attendance_gateway'))->first();
+        $gateway = json_decode($gateway->meta_value);
+
+        //pull students
+        $students = Registration::whereIn('id', $studentIds)
+            ->where('status', AppHelper::ACTIVE)
+            ->with(['class' => function($query) {
+                $query->select('name','id');
+            }])
+            ->with(['section' => function($query) {
+                $query->select('name','id');
+            }])
+            ->with('student')
+            ->select('id','regi_no','roll_no','student_id','class_id','section_id')
+            ->get();
+
+        //compile message
+        $template = Template::where('id', AppHelper::getAppSettings('student_attendance_template'))->first();
+
+        foreach ($students as $student){
+            $keywords['regi_no'] = $student->regi_no;
+            $keywords['roll_no'] = $student->roll_no;
+            $keywords['class'] = $student->class->name;
+            $keywords['section'] = $student->section->name;
+            $studentArray = $student->toArray();
+            $keywords = array_merge($keywords ,$studentArray['student']);
+            $keywords['date'] = $attendance_date;
+
+            $message = $template->content;
+            foreach ($keywords as $key => $value) {
+                $message = str_replace('{{' . $key . '}}', $value, $message);
+            }
+
+            $cellNumber = AppHelper::validateBangladeshiCellNo($studentArray['student']['father_phone_no']);
+
+            if($cellNumber){
+
+                //with out job hndler
+                $smsHelper = new SmsHelper($gateway);
+                $res = $smsHelper->sendSms($cellNumber, $message);
+
+                //send to a job handler
+//                ProcessSms::dispatch($gateway, $cellNumber, $message)->onQueue('sms');
+            }
+            else{
+                Log::channel('smsLog')->error("Invalid Cell No! ".$studentArray['student']['father_phone_no']);
+            }
+        }
+
+        return true;
+    }
+
+
+
+    public static function validateBangladeshiCellNo($number) {
+        $number = str_replace('+','',$number);
+
+        //
+        if (!preg_match("/^88/i", $number)){
+            $number = "88".$number;
+        }
+
+        if (preg_match("/^88017/i", $number)
+            or preg_match("/^88016/i", $number)
+            or preg_match("/^88015/i", $number)
+            or preg_match("/^88011/i", "$number")
+            or preg_match("/^88018/i", "$number")
+            or preg_match("/^88019/i", "$number")
+            or preg_match("/^88013/i", "$number")
+            or preg_match("/^88014/i", "$number")
+        ) {
+
+            return $number;
+
+
+        }
+
+        return false;
+
+
     }
 
 

@@ -268,7 +268,7 @@ class SettingsController extends Controller
             foreach ($smsGateways as $gateway){
                 $json_data = json_decode($gateway->meta_value);
                 $data[] = [
-                    'id' => $json_data->gateway,
+                    'id' => $gateway->id,
                     'text' => $json_data->name.'['.AppHelper::SMS_GATEWAY_LIST[$json_data->gateway].']',
                 ];
             }

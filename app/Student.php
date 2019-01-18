@@ -35,7 +35,6 @@ class Student extends Model
         'note',
         'father_name',
         'father_phone_no',
-        'father_phone_no',
         'mother_name',
         'mother_phone_no',
         'guardian',
