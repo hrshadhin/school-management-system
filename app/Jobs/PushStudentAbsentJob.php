@@ -79,7 +79,7 @@ class PushStudentAbsentJob implements ShouldQueue
         //get sms template information
         $template = Template::where('id', AppHelper::getAppSettings('student_attendance_template'))->first();
         if(!$template){
-            Log::channel('studentabsentlog')->error("SMS template not setup!");
+            Log::channel('studentabsentlog')->error("Template not setup!");
             return;
         }
 

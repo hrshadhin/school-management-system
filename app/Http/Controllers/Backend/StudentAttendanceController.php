@@ -5,9 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\AcademicYear;
 use App\AppMeta;
 use App\AttendanceFileQueue;
-use App\AttendanceSmsQueue;
 use App\Http\Helpers\AppHelper;
-use App\Http\Helpers\SmsHelper;
 use App\IClass;
 use App\Jobs\PushStudentAbsentJob;
 use App\Registration;
@@ -18,6 +16,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use Symfony\Component\Process\Process;
 
 class StudentAttendanceController extends Controller
 {
@@ -273,7 +272,7 @@ class StudentAttendanceController extends Controller
                     $linecount = $linecount + substr_count($line, PHP_EOL);
 
                     if($linecount == 1){
-                        $isValidFormat = AppHelper::getAttendanceFileFormat($line);
+                        $isValidFormat = AppHelper::isLineValid($line);
                         if(!$isValidFormat){
                             break;
                         }
@@ -294,22 +293,20 @@ class StudentAttendanceController extends Controller
                     'client_file_name' => $clientFileName,
                     'file_format' => $isValidFormat,
                     'total_rows' => 0,
-                    'send_sms' => 0,
                     'imported_rows' => 0,
                 ]);
 
 
                 // now start the command to proccess data
-//            $command = "php ".base_path()."/artisan attendance:seedStudent";
-//
-//            $process = new Process($command);
-//            $process->start();
+            $command = "php ".base_path()."/artisan attendance:seedStudent";
 
-                // debug code
+            $process = new Process($command);
+            $process->start();
+
+           // debug code
 //            $process->wait();
 //            echo $process->getOutput();
 //            echo $process->getErrorOutput();
-//
 
             } catch (\Exception $e) {
                 return redirect()->back()->with('error', $e->getMessage());
@@ -320,9 +317,6 @@ class StudentAttendanceController extends Controller
 
         $isProcessingFile = false;
         $pendingFile = AttendanceFileQueue::where('is_imported','=',0)
-            ->orWhere(function($query) {
-                $query->where(['send_sms'=> 1, "is_sms_send"=> 0]);
-            })
             ->orderBy('created_at', 'DESC')
             ->count();
 
@@ -357,25 +351,6 @@ class StudentAttendanceController extends Controller
         }
 
         if($pendingFile->is_imported === 1) {
-
-            if($pendingFile->send_sms === 1 && $pendingFile->is_sms_send === 0){
-                $message = 'Now sending sms to absent student parents.<br>';
-
-                $smsInfo = AttendanceSmsQueue::where('attendance_file_queue_id', $pendingFile->id)
-                    ->where('is_complete', 0)
-                    ->where('total_absent', '<>' ,0)
-                    ->where('total_absent','>=','send_sms')
-                    ->orderBy('id')->first();
-                if($smsInfo){
-                    $message .= $smsInfo->send_sms.' sms have been send out of '.$smsInfo->total_absent.' for class '.$smsInfo->class_name;
-                }
-                return [
-                    'msg' => $message,
-                    'success' => false,
-                    'status' => $pendingFile->is_sms_send
-                ];
-            }
-
             return [
                 'msg' => 'Attendance data processing complete. You can check the log.',
                 'success' => true
@@ -389,7 +364,10 @@ class StudentAttendanceController extends Controller
             ];
         }
         else {
-            $status = $pendingFile->imported_rows . '  attendance have been imported out of ' . $pendingFile->total_rows;
+            $status = $pendingFile->imported_rows . '  attendance has been imported out of ' . $pendingFile->total_rows;
+            if($pendingFile->imported_rows >= $pendingFile->total_rows) {
+                $status = "attendance has been imported. Now sending notification for absent students";
+            }
             return [
                 'msg' => $status,
                 'success' => false,

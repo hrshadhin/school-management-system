@@ -565,7 +565,7 @@ class AppHelper
     }
 
 
-    public static function getAttendanceFileFormat($lineContent) {
+    public static function isLineValid($lineContent) {
         // remove utf8 bom identify characters
         //clear invalid UTF8 characters
         $lineContent  = iconv("UTF-8","ISO-8859-1//IGNORE",$lineContent);
@@ -591,6 +591,47 @@ class AppHelper
 
     }
 
+    public static  function parseRow($lineContent, $fileFormat){
+        // remove utf8 bom identify characters
+        //clear invalid UTF8 characters
+        $lineContent  = iconv("UTF-8","ISO-8859-1//IGNORE",$lineContent);
+
+        if(!strlen($lineContent)){
+            return [];
+        }
+
+        $data = [];
+        if($fileFormat === 1){
+            $lineSplits = explode(':', $lineContent);
+            $id = trim(ltrim($lineSplits[1], '0'));
+            //only for student id , remove teacher ids
+            if(strlen($id) > 2){
+                //parse date
+                $atd = new \DateTime(date('Ymd', strtotime($lineSplits[2])));
+                $atndDate = $atd->format('Y-m-d');
+                $data = [
+                    'date' => $atndDate,
+                    'id' => $id,
+                ];
+            }
+
+        }
+
+        if($fileFormat === 2){
+            $lineSplits = preg_split("/\s+/", $lineContent);
+            $id = trim($lineSplits[0]);
+            //only for student id , remove teacher ids
+            if(strlen($id) > 2){
+                $data = [
+                    'date' => $lineSplits[1],
+                    'id' => $id,
+                ];
+            }
+        }
+
+        return $data;
+
+    }
 
 
 }

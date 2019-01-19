@@ -21,8 +21,6 @@ class CreateAttendanceFileQueuesTable extends Migration
             $table->integer('total_rows');
             $table->integer('imported_rows');
             $table->smallInteger('is_imported')->default(0);
-            $table->smallInteger('send_sms')->default(0);
-            $table->smallInteger('is_sms_send')->default(0);
             $table->timestamps();
             $table->softDeletes();
             $table->userstamps();
