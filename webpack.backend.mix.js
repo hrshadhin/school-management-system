@@ -44,9 +44,14 @@ mix.js('resources/assets/backend/js/app.js', 'public/js')
     .extract([
         'jquery', 'bootstrap', 'icheck', 'jquery-validation', 'slimscroll', 'fastclick',
         'datatables.net', 'datatables.net-bs', 'datatables.net-buttons', 'datatables.net-responsive-bs',
+        'colorpicker',
     ])
     .sass('resources/assets/backend/sass/app.scss', 'public/css')
     .sass('resources/assets/backend/sass/vendor.scss', 'public/css')
+    .sass('resources/assets/backend/sass/colorpicker.scss', 'public/css')
+    .js([
+        'resources/assets/backend/js/colorpicker.js',
+    ], 'public/js/colorpicker.js')
     .styles([
         'resources/assets/backend/css/AdminLTE.css',
         'resources/assets/backend/css/_all-skins.css',

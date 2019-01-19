@@ -184,4 +184,224 @@ export default class Administrator {
 
     }
 
+    /**
+     *  Id card tempalte
+     */
+
+    static templateIdcardInit() {
+        var templateMainUrl = window.templateUrl;
+        var logoDataImage = "";
+        var signatureDataImage = "";
+        var titleBgDataImage = "";
+
+        $('.select2').select2();
+
+        $('select[name="format_id"]').on('change', function () {
+            var format = $(this).val();
+            if(format) {
+                var fullTemplateUrl = templateMainUrl + format + ".html";
+                $('#idFrame').attr('src', fullTemplateUrl);
+            }
+            else{
+                $('#idFrame').attr('src', '');
+            }
+
+            if(format == 3){
+                $('.onlyFormat3').show();
+            }
+            else{
+                $('.onlyFormat3').hide();
+            }
+
+        });
+
+
+        $('iframe').on('load', function() {
+            //now fill colors
+            $('input[name="bg_color"]').trigger('change');
+            $('input[name="border_color"]').trigger('change');
+            $('input[name="body_text_color"]').trigger('change');
+            $('input[name="fs_title_color"]').trigger('change');
+            $('input[name="picture_border_color"]').trigger('change');
+            $('input[name="bs_title_color"]').trigger('change');
+            $('input[name="website_link_color"]').trigger('change');
+
+            if($('select[name="format_id"]').val() == 3) {
+                $('input[name="fs_titile_bg_color"]').trigger('change');
+            }
+
+            if($('#logoUp').val()) {
+                $('#logoUp').trigger('change');
+            }
+            if($('#signatureUp').val()) {
+                $('#signatureUp').trigger('change');
+            }
+            if($('#titleBgUp').val() && $('select[name="format_id"]').val() == 3) {
+                $('#titleBgUp').trigger('change');
+                $('input[name="fs_titile_bg_color"]').trigger('change');
+            }
+            logoDataImage = $('#idFrame').contents().find('body div.logo img').attr('src');
+            signatureDataImage = $('#idFrame').contents().find('body div.signature img').attr('src');
+            titleBgDataImage = $('#idFrame').contents().find('body img.id_bg').attr('src');
+        });
+
+        $('input[name="bg_color"]').on('change keyup paste', function () {
+            var color = $(this).val();
+            if(color) {
+                $('#idFrame').contents().find('body div.card').css('background-color', color);
+            }
+        });
+        $('input[name="border_color"]').on('change keyup paste', function () {
+            var color = $(this).val();
+            if(color) {
+                $('#idFrame').contents().find('body div.card').css('border-color', color);
+            }
+        });
+        $('input[name="body_text_color"]').on('change keyup paste', function () {
+            var color = $(this).val();
+            if(color) {
+                $('#idFrame').contents().find('body').css('color', color);
+            }
+        });
+
+        $('input[name="fs_title_color"]').on('change keyup paste', function () {
+            var color = $(this).val();
+            if(color) {
+                $('#idFrame').contents().find('body div.header div.title').css('color', color);
+            }
+        });
+
+        $('input[name="picture_border_color"]').on('change keyup paste', function () {
+            var color = $(this).val();
+            if(color) {
+                $('#idFrame').contents().find('body span.student_pic>img').css('border-color', color);
+            }
+        });
+
+        $('input[name="bs_title_color"]').on('change keyup paste', function () {
+            var color = $(this).val();
+            if(color) {
+                $('#idFrame').contents().find('body .back h2').css('color', color);
+            }
+        });
+
+        $('input[name="website_link_color"]').on('change keyup paste', function () {
+            var color = $(this).val();
+            if(color) {
+                $('#idFrame').contents().find('body .back a').css('color', color);
+            }
+        });
+        $('input[name="fs_titile_bg_color"]').on('change keyup paste', function () {
+            var color = $(this).val();
+            if(color) {
+                $('#idFrame').contents().find('body div.header div.title').css('background-color', color);
+            }
+        });
+
+        $('.my-colorpicker').colorpicker();
+
+        $('#logoUp').change(function(){
+            var input = this;
+            var url = $(this).val();
+            var ext = url.substring(url.lastIndexOf('.') + 1).toLowerCase();
+            if (input.files && input.files[0]&& (ext == "png" || ext == "jpeg" || ext == "jpg"))
+            {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#idFrame').contents().find('body div.logo img').attr('src', e.target.result);
+                    $('#idFrame').contents().find('body img.back-logo').attr('src', e.target.result);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+            else
+            {
+                if(logoDataImage) {
+                    $('#idFrame').contents().find('body div.logo img').attr('src', logoDataImage);
+                    $('#idFrame').contents().find('body img.back-logo').attr('src', logoDataImage);
+                }
+            }
+        });
+        $('#signatureUp').change(function(){
+            var input = this;
+            var url = $(this).val();
+            var ext = url.substring(url.lastIndexOf('.') + 1).toLowerCase();
+            if (input.files && input.files[0]&& (ext == "png" || ext == "jpeg" || ext == "jpg"))
+            {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#idFrame').contents().find('body div.signature img').attr('src', e.target.result);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+            else
+            {
+                if(signatureDataImage) {
+                    $('#idFrame').contents().find('body div.signature img').attr('src', signatureDataImage);
+                }
+            }
+        });
+        $('#titleBgUp').change(function(){
+            var input = this;
+            var url = $(this).val();
+            var ext = url.substring(url.lastIndexOf('.') + 1).toLowerCase();
+            if (input.files && input.files[0]&& (ext == "png" || ext == "jpeg" || ext == "jpg"))
+            {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#idFrame').contents().find('body img.id_bg').attr('src', e.target.result);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+            else
+            {
+                if(titleBgDataImage) {
+                    $('#idFrame').contents().find('body img.id_bg').attr('src', titleBgDataImage);
+                }
+            }
+        });
+
+        $('.btnReset').click(function () {
+            $('input[name="bg_color"]').val('');
+            $('input[name="border_color"]').val('');
+            $('input[name="body_text_color"]').val('');
+            $('input[name="fs_title_color"]').val('');
+            $('input[name="picture_border_color"]').val('');
+            $('input[name="bs_title_color"]').val('');
+            $('input[name="website_link_color"]').val('');
+            $('input[name="fs_titile_bg_color"]').val('');
+
+            $('#logoUp').val('');
+            $('#signatureUp').val('');
+            $('#titleBgUp').val('');
+            $('input[name="fs_titile_bg_color"]').val('');
+
+            logoDataImage = "";
+            signatureDataImage = "";
+            titleBgDataImage = "";
+
+            var format = $('select[name="format_id"]').val();
+            if(format) {
+                var fullTemplateUrl = templateMainUrl + format + ".html";
+                $('#idFrame').attr('src', fullTemplateUrl);
+            }
+
+        });
+
+        $("#templateForm").validate({
+            errorElement: "em",
+            errorPlacement: function (error, element) {
+                // Add the `help-block` class to the error element
+                error.addClass("help-block");
+                error.insertAfter(element);
+
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).parents(".form-group").addClass("has-error").removeClass("has-success");
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).parents(".form-group").addClass("has-success").removeClass("has-error");
+            }
+        });
+
+    }
 }

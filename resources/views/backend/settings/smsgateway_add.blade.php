@@ -46,7 +46,7 @@
                             <div class="col-md-4">
                                 <div class="form-group has-feedback">
                                     <label for="name">Name<span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" name="name" placeholder="title" value="@if($gateway){{ $values->name }}@else{{ old('name') }} @endif" required minlength="4" maxlength="255">
+                                    <input type="text" class="form-control" name="name" placeholder="title" value="@if($gateway){{ $values->name }}@else{{ old('name') }}@endif" required minlength="4" maxlength="255">
                                     <span class="fa fa-info form-control-feedback"></span>
                                     <span class="text-danger">{{ $errors->first('name') }}</span>
                                 </div>
@@ -54,7 +54,7 @@
                             <div class="col-md-4">
                                 <div class="form-group has-feedback">
                                     <label for="sender_id">Sender ID</label>
-                                    <input  type="text" class="form-control" name="sender_id" placeholder="sender_id" value="@if($gateway){{ $values->sender_id }}@else{{ old('sender_id') }} @endif">
+                                    <input  type="text" class="form-control" name="sender_id" placeholder="sender_id" value="@if($gateway){{ $values->sender_id }}@else{{ old('sender_id') }}@endif">
                                     <span class="fa fa-id-card form-control-feedback"></span>
                                     <span class="text-danger">{{ $errors->first('sender_id') }}</span>
                                 </div>
@@ -64,7 +64,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group has-feedback">
                                         <label for="user">User / API Key<span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" name="user" placeholder="user" value="@if($gateway){{ $values->user }}@else{{ old('user') }} @endif" required  maxlength="255">
+                                        <input type="text" class="form-control" name="user" placeholder="user" value="@if($gateway){{ $values->user }}@else{{ old('user') }}@endif" required  maxlength="255">
                                         <span class="fa fa-info form-control-feedback"></span>
                                         <span class="text-danger">{{ $errors->first('user') }}</span>
                                     </div>
@@ -72,7 +72,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group has-feedback">
                                         <label for="password">Password / Secret Key</label>
-                                        <input  type="text" class="form-control" name="password" placeholder="password" value="@if($gateway){{ $values->password }}@else{{ old('password') }} @endif" maxlength="255">
+                                        <input  type="text" class="form-control" name="password" placeholder="password" value="@if($gateway){{ $values->password }}@else{{ old('password') }}@endif" maxlength="255">
                                         <span class="fa fa-user-secret form-control-feedback"></span>
                                         <span class="text-danger">{{ $errors->first('password') }}</span>
                                     </div>
@@ -80,7 +80,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group has-feedback">
                                         <label for="api_url">API URL<span class="text-danger">*</span></label>
-                                        <input  type="url" class="form-control" name="api_url" placeholder="url" value="@if($gateway){{ $values->api_url }}@else{{ old('api_url') }} @endif" required>
+                                        <input  type="url" class="form-control" name="api_url" placeholder="url" value="@if($gateway){{ $values->api_url }}@else{{ old('api_url') }}@endif" required>
                                         <span class="fa fa-link form-control-feedback"></span>
                                         <span class="text-danger">{{ $errors->first('api_url') }}</span>
                                     </div>

@@ -342,10 +342,10 @@ class AdministratorController extends Controller
     }
 
 
-/* Handle an user password change
-*
-* @return Response
-*/
+    /* Handle an user password change
+    *
+    * @return Response
+    */
     public function userResetPassword(Request $request)
     {
 
@@ -365,7 +365,7 @@ class AdministratorController extends Controller
 
         }
 
-       $users = User::select(DB::raw("CONCAT(name,'[',username,']') AS name"),'id')->where('status', '1')->pluck('name','id');
+        $users = User::select(DB::raw("CONCAT(name,'[',username,']') AS name"),'id')->where('status', '1')->pluck('name','id');
 
         return view('backend.administrator.user.change_password', compact('users'));
     }
@@ -477,6 +477,113 @@ class AdministratorController extends Controller
 
         return view('backend.administrator.templates.mail_and_sms.add', compact('roles', 'role', 'template'));
     }
+
+
+    /**
+     * ID card template  manage
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function templateIdcardIndex(Request $request)
+    {
+        //for save on POST request
+        if ($request->isMethod('post')) {//
+            $this->validate($request, [
+                'hiddenId' => 'required|integer',
+            ]);
+            $template = Template::findOrFail($request->get('hiddenId'));
+
+            // now check is tempalte currently used ??
+            //todo: need to protect deletion
+//            $settings = AppHelper::getAppSettings();
+//            if((isset($settings['attendance_template']))){
+//                return redirect()->route('administrator.template.mailsms.index')->with('error', 'Can not delete it because this template is being used.');
+//            }
+            $template->delete();
+
+            return redirect()->route('administrator.template.mailsms.index')->with('success', 'Template deleted!');
+        }
+
+        //if it is ajax request then send json response with formated data
+        if($request->ajax()){
+
+            $userRole = $request->query->get('user','');
+
+            $userRoles = [];
+
+            if($userRole == "student"){
+                $userRoles[] = AppHelper::USER_STUDENT;
+            }
+            elseif ($userRole == "employee"){
+                $userRoles = Role::select('id')->whereNotIn('id', [AppHelper::USER_STUDENT, AppHelper::USER_ADMIN])->get()->pluck('id');
+            }
+
+            $templates = Template::where('type',$request->query->get('type',0))
+                ->whereIn('role_id', $userRoles)->get();
+
+            $data = [];
+            foreach ($templates as $template){
+                $data[] = [
+                    'id' => $template->id,
+                    'text' => $template->name
+                ];
+            }
+
+            return response()->json($data);
+        }
+
+
+        //for get request
+        // AppHelper::TEMPLATE_TYPE  1=SMS , 2=EMAIL, 3=Id card
+        $templates = Template::whereIn('type',[3])->with('user')->get();
+
+        return view('backend.administrator.templates.idcard.list', compact('templates'));
+    }
+
+    /**
+     * ID card template  manage
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function templateIdcardCru(Request $request, $id=0)
+    {
+        //for save on POST request
+        if ($request->isMethod('post')) {
+            dd($request->all());
+            $this->validate($request, [
+                'type' => 'required',
+                'name' => 'required|min:4|max:255',
+                'role_id' => 'required|integer',
+            ]);
+
+
+            $data = [
+                'name' => $request->get('name'),
+                'type' =>  (integer)$request->get('type'),
+                'role_id' => $request->get('role_id'),
+                'content' => ($request->get('type') == "2") ? $request->get('content_email') : $request->get('content')
+            ];
+
+
+            Template::updateOrCreate(
+                ['id' => $id],
+                $data
+            );
+            $msg = "Template ";
+            $msg .= $id ? 'updated.' : 'added.';
+
+            if($id){
+                return redirect()->route('administrator.template.mailsms.index')->with('success', $msg);
+            }
+            return redirect()->route('administrator.template.mailsms.create')->with('success', $msg);
+        }
+
+        $template = Template::find($id);
+
+        $formatNo = null;
+
+        return view('backend.administrator.templates.idcard.add', compact( 'template', 'formatNo'));
+    }
+
+
 
 
 
