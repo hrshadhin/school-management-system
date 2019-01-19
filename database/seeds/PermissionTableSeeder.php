@@ -442,6 +442,14 @@ class PermissionTableSeeder extends Seeder
                 "name" => "Student Attendance Edit",
                 "group" => "Academic"
             ],
+            [   "slug" => "student_attendance.create_file",
+                "name" => "Student Attendance Create",
+                "group" => "Academic"
+            ],
+            [   "slug" => "student_attendance.file_queue_status",
+                "name" => "Student Attendance Create",
+                "group" => "Academic"
+            ],
             //student attendance end
         ];
 

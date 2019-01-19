@@ -17,7 +17,7 @@ export default class Academic {
             let class_id = $(this).val();
             let getUrl = window.location.href.split('?')[0];
             if(class_id){
-               getUrl +="?class="+class_id;
+                getUrl +="?class="+class_id;
 
             }
             window.location = getUrl;
@@ -148,23 +148,23 @@ export default class Academic {
                 toastr.error(status);
                 cb();
 
-                });
+            });
         }
         else {
-          cb();
+            cb();
         }
     }
     static getStudentByAcYearAndClassAndSection(acYear=0, classId, sectionId, cb=function(){}) {
         let getUrl = window.getStudentAjaxUrl +"?academic_year="+acYear+"&class="+classId+"&section="+sectionId;
         axios.get(getUrl)
             .then((response) => {
-                    // console.log(response);
-                    cb(response.data);
+                // console.log(response);
+                cb(response.data);
             }).catch((error) => {
-                let status = error.response.statusText;
-                toastr.error(status);
-                cb([]);
-            });
+            let status = error.response.statusText;
+            toastr.error(status);
+            cb([]);
+        });
     }
 
     /**
@@ -180,20 +180,20 @@ export default class Academic {
         });
 
         $('#attendance_list_filter').on('changeDate', function (event) {
-             let atDate = $(this).val();
-             let classId = $('select[name="class_id"]').val();
-             let sectionId = $('select[name="section_id"]').val();
-             let acYearId = $('select[name="academic_year"]').val();
+            let atDate = $(this).val();
+            let classId = $('select[name="class_id"]').val();
+            let sectionId = $('select[name="section_id"]').val();
+            let acYearId = $('select[name="academic_year"]').val();
 
             //check year, class, section and date is fill up then procced
-             if(!atDate || !classId || !sectionId){
-                 toastr.warning('Fill up class, section and date first!');
-                 return false;
-             }
-             if(institute_category == "college" && !acYearId){
-                 toastr.warning('Select academic year first!');
-                 return false;
-             }
+            if(!atDate || !classId || !sectionId){
+                toastr.warning('Fill up class, section and date first!');
+                return false;
+            }
+            if(institute_category == "college" && !acYearId){
+                toastr.warning('Select academic year first!');
+                return false;
+            }
 
             let queryString = "?class="+classId+"&section="+sectionId+"&attendance_date="+atDate;
             if(institute_category == 'college'){
@@ -238,35 +238,65 @@ export default class Academic {
             Academic.getStudentByAcYearAndClassAndSection(acYearId, classId, sectionId, function (data) {
                 let students = data;
                 $('#studentListTable tbody').empty();
-               if(students.length){
-                   students.forEach(function(item){
-                       let rowHtml = '<tr>\n' +
-                           '<td>\n' +
-                           '<span class="text-bold">'+item.student.name+'</span>\n' +
-                           '<input type="hidden" name="registrationIds[]" value="'+item.id+'" required>\n' +
-                           '</td>\n' +
-                           '<td><span class="text-bold">'+item.roll_no+'</span></td>\n' +
-                           '<td>\n' +
-                           '<div class="checkbox icheck inline_icheck">\n' +
-                           '<input type="checkbox" name="present['+item.id+']">\n' +
-                           '</div>\n' +
-                           '</td>\n' +
-                           '</tr>';
+                if(students.length){
+                    students.forEach(function(item){
+                        let rowHtml = '<tr>\n' +
+                            '<td>\n' +
+                            '<span class="text-bold">'+item.student.name+'</span>\n' +
+                            '<input type="hidden" name="registrationIds[]" value="'+item.id+'" required>\n' +
+                            '</td>\n' +
+                            '<td><span class="text-bold">'+item.roll_no+'</span></td>\n' +
+                            '<td>\n' +
+                            '<div class="checkbox icheck inline_icheck">\n' +
+                            '<input type="checkbox" name="present['+item.id+']">\n' +
+                            '</div>\n' +
+                            '</td>\n' +
+                            '</tr>';
 
-                       $('#studentListTable tbody').append(rowHtml);
-                   });
-                   $('input:checkbox').not('.dont-style-notMe').iCheck({
-                       checkboxClass: 'icheckbox_square-blue',
-                       radioClass: 'iradio_square-blue',
-                       increaseArea: '20%' /* optional */
-                   });
+                        $('#studentListTable tbody').append(rowHtml);
+                    });
+                    $('input:checkbox').not('.dont-style-notMe').iCheck({
+                        checkboxClass: 'icheckbox_square-blue',
+                        radioClass: 'iradio_square-blue',
+                        increaseArea: '20%' /* optional */
+                    });
 
-                   //now show the submit button
-                   $('button[type="submit"]').show();
-               }
+                    //now show the submit button
+                    $('button[type="submit"]').show();
+                }
                 Generic.loaderStop();
             });
 
         });
+    }
+
+    static attendanceFileUploadStatus() {
+        // progress status js code here
+        $.ajax({
+            'url': window.fileUploadStatusURL,
+        }).done(function(r) {
+            if(r.success) {
+                $('#statusMessage').html(r.msg);
+                setTimeout(function () {
+                    window.location.reload();
+                }, 5000);
+            } else {
+                $('#statusMessage').html(r.msg);
+                if(r.status == 0){
+                    setTimeout(function () {
+                        Academic.attendanceFileUploadStatus();
+                    }, 500);
+                }
+                else if(r.status == -1){
+                    $('.progressDiv').removeClass('alert-info');
+                    $('.progressDiv').addClass('alert-danger');
+                    $('#spinnerspan').remove();
+                }
+
+            }
+        }).fail(function() {
+                $('#statusMessage').html("An error has occurred...Contact administrator" );
+            });
+
     }
 }
