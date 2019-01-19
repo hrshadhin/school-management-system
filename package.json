@@ -27,6 +27,7 @@
     },
     "dependencies": {
         "bootstrap": "^3.4.0",
+        "bootstrap-colorpicker": "^2.5.3",
         "bootstrap-datepicker": "^1.7.0",
         "bootstrap-daterangepicker": "^2.1.25",
         "chart.js": "^2.7.3",

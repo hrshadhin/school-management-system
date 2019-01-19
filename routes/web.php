@@ -153,6 +153,19 @@ Route::group(
         ->name('administrator.template.mailsms.edit');
     Route::post('administrator/template/mailandsms/update/{id}', 'AdministratorController@templateMailAndSmsCru')
         ->name('administrator.template.mailsms.update');
+        // id card
+    Route::get('administrator/template/idcard', 'AdministratorController@templateIdcardIndex')
+        ->name('administrator.template.idcard.index');
+    Route::post('administrator/template/idcard', 'AdministratorController@templateIdcardIndex')
+        ->name('administrator.template.idcard.destroy');
+    Route::get('administrator/template/idcard/create', 'AdministratorController@templateIdcardCru')
+        ->name('administrator.template.idcard.create');
+    Route::post('administrator/template/idcard/create', 'AdministratorController@templateIdcardCru')
+        ->name('administrator.template.idcard.store');
+    Route::get('administrator/template/idcard/edit/{id}', 'AdministratorController@templateIdcardCru')
+        ->name('administrator.template.idcard.edit');
+    Route::post('administrator/template/idcard/update/{id}', 'AdministratorController@templateIdcardCru')
+        ->name('administrator.template.idcard.update');
 
 
     // academic routes

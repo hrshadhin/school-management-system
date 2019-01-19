@@ -101,6 +101,11 @@
               <i class="fa icon-template"></i> <span>Mail/SMS Template</span>
             </a>
           </li>
+          <li>
+            <a href="{{ URL::route('administrator.template.idcard.index') }}">
+              <i class="fa fa-id-card"></i> <span>ID Card Template</span>
+            </a>
+          </li>
 
           <li>
             <a href="{{URL::route('administrator.user_index')}}">
