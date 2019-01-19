@@ -217,15 +217,15 @@ Route::group(
         ->name('student.list_by_fitler');
 
     // student attendance routes
-    Route::resource('student-attendance', 'StudentAttendanceController')->names([
-        'create' => 'student_attendance.create',
-        'store' => 'student_attendance.store',
-        'index' => 'student_attendance.index',
-    ]);;
+    Route::get('student-attendance', 'StudentAttendanceController@index')->name('student_attendance.index');
+    Route::get('student-attendance/create', 'StudentAttendanceController@create')->name('student_attendance.create');
+    Route::post('student-attendance/create', 'StudentAttendanceController@store')->name('student_attendance.store');
     Route::post('student-attendance/status/{id}', 'StudentAttendanceController@changeStatus')
         ->name('student_attendance.status');
-    Route::any('student-attendance/create-file', 'StudentAttendanceController@createFromFile')
+    Route::any('student-attendance/file-upload', 'StudentAttendanceController@createFromFile')
         ->name('student_attendance.create_file');
+    Route::get('student-attendance/file-queue-status', 'StudentAttendanceController@fileQueueStatus')
+        ->name('student_attendance.file_queue_status');
 
 }
 );
@@ -238,6 +238,27 @@ Route::get(
     return redirect()->back();
 }
 )->name('setLocale');
+
+//web artisan routes
+Route::get(
+    '/student-attendance-file-queue-start/{code}', function ($code) {
+    if($code == "hr799"){
+        try {
+            echo '<br>Started student attendance processing...<br>';
+            Artisan::call('attendance:seedStudent');
+            echo '<br>Student attendance processing completed.<br>You will be redirect in 5 seconds.<br>';
+            sleep(5);
+
+            return redirect()->route('student_attendance.create_file')->with("success", "Students attendance saved and send sms successfully.");
+
+        } catch (Exception $e) {
+            Response::make($e->getMessage(), 500);
+        }
+    }else{
+        App::abort(404);
+    }
+}
+)->name('student_attendance_seeder');
 
 
 //dev routes

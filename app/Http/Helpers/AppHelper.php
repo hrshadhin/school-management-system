@@ -532,7 +532,10 @@ class AppHelper
     }
 
 
-
+    /**
+     * @param $number
+     * @return bool|mixed|string
+     */
     public static function validateBangladeshiCellNo($number) {
         $number = str_replace('+','',$number);
 
@@ -562,7 +565,31 @@ class AppHelper
     }
 
 
+    public static function getAttendanceFileFormat($lineContent) {
+        // remove utf8 bom identify characters
+        //clear invalid UTF8 characters
+        $lineContent  = iconv("UTF-8","ISO-8859-1//IGNORE",$lineContent);
 
+        if(!strlen($lineContent)){
+            return 0;
+        }
+
+
+        $lineSplits = explode(':', $lineContent);
+        if(count($lineSplits) >= 4){
+            return 1;
+        }
+
+
+        $lineSplits = preg_split("/\s+/", $lineContent);
+        if(count($lineSplits)){
+            return 2;
+        }
+
+        return 0;
+
+
+    }
 
 
 
