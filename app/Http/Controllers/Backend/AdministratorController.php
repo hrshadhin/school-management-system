@@ -546,35 +546,35 @@ class AdministratorController extends Controller
     public function templateIdcardCru(Request $request, $id=0)
     {
         //for save on POST request
-        if ($request->isMethod('post')) {
-            dd($request->all());
-            $this->validate($request, [
-                'type' => 'required',
-                'name' => 'required|min:4|max:255',
-                'role_id' => 'required|integer',
-            ]);
-
-
-            $data = [
-                'name' => $request->get('name'),
-                'type' =>  (integer)$request->get('type'),
-                'role_id' => $request->get('role_id'),
-                'content' => ($request->get('type') == "2") ? $request->get('content_email') : $request->get('content')
-            ];
-
-
-            Template::updateOrCreate(
-                ['id' => $id],
-                $data
-            );
-            $msg = "Template ";
-            $msg .= $id ? 'updated.' : 'added.';
-
-            if($id){
-                return redirect()->route('administrator.template.mailsms.index')->with('success', $msg);
-            }
-            return redirect()->route('administrator.template.mailsms.create')->with('success', $msg);
-        }
+//        if ($request->isMethod('post')) {
+//            dd($request->all());
+//            $this->validate($request, [
+//                'type' => 'required',
+//                'name' => 'required|min:4|max:255',
+//                'role_id' => 'required|integer',
+//            ]);
+//
+//
+//            $data = [
+//                'name' => $request->get('name'),
+//                'type' =>  (integer)$request->get('type'),
+//                'role_id' => $request->get('role_id'),
+//                'content' => ($request->get('type') == "2") ? $request->get('content_email') : $request->get('content')
+//            ];
+//
+//
+//            Template::updateOrCreate(
+//                ['id' => $id],
+//                $data
+//            );
+//            $msg = "Template ";
+//            $msg .= $id ? 'updated.' : 'added.';
+//
+//            if($id){
+//                return redirect()->route('administrator.template.mailsms.index')->with('success', $msg);
+//            }
+//            return redirect()->route('administrator.template.mailsms.create')->with('success', $msg);
+//        }
 
         $template = Template::find($id);
 
