@@ -62,7 +62,7 @@ mix.js('resources/assets/backend/js/app.js', 'public/js')
     .styles('resources/assets/backend/css/pace.css', 'public/css/pace.css')
     .autoload({
         jquery: ['$', 'window.jQuery', 'jQuery', 'jquery'],
-        // moment: ['window.moment', 'moment'],
+        moment: ['window.moment', 'moment'],
     });
 
 
