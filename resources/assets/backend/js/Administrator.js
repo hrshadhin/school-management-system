@@ -190,13 +190,14 @@ export default class Administrator {
 
     static templateIdcardInit() {
         var templateMainUrl = window.templateUrl;
-        var logoDataImage = "";
-        var signatureDataImage = "";
-        var titleBgDataImage = "";
+        var logoDataImage = window.logoString || "";
+        var signatureDataImage = window.signatureString || "";
+        var titleBgDataImage = window.titleBgString || "";
 
         $('.select2').select2();
 
         $('select[name="format_id"]').on('change', function () {
+            console.log('format chagned');
             var format = $(this).val();
             if(format) {
                 var fullTemplateUrl = templateMainUrl + format + ".html";
@@ -227,22 +228,29 @@ export default class Administrator {
             $('input[name="website_link_color"]').trigger('change');
 
             if($('select[name="format_id"]').val() == 3) {
-                $('input[name="fs_titile_bg_color"]').trigger('change');
+                $('input[name="fs_title_bg_color"]').trigger('change');
+                $('input[name="id_title_color"]').trigger('change');
             }
 
-            if($('#logoUp').val()) {
+            if($('#logoUp').val() || !window.liveChange) {
                 $('#logoUp').trigger('change');
             }
-            if($('#signatureUp').val()) {
+            if($('#signatureUp').val() || !window.liveChange) {
                 $('#signatureUp').trigger('change');
             }
             if($('#titleBgUp').val() && $('select[name="format_id"]').val() == 3) {
                 $('#titleBgUp').trigger('change');
-                $('input[name="fs_titile_bg_color"]').trigger('change');
+                $('input[name="fs_title_bg_color"]').trigger('change');
+                $('input[name="id_title_color"]').trigger('change');
             }
-            logoDataImage = $('#idFrame').contents().find('body div.logo img').attr('src');
-            signatureDataImage = $('#idFrame').contents().find('body div.signature img').attr('src');
-            titleBgDataImage = $('#idFrame').contents().find('body img.id_bg').attr('src');
+
+            //if not edit form
+            console.log(window.liveChange);
+            if(window.liveChange) {
+                logoDataImage = $('#idFrame').contents().find('body div.logo img').attr('src');
+                signatureDataImage = $('#idFrame').contents().find('body div.signature img').attr('src');
+                titleBgDataImage = $('#idFrame').contents().find('body img.id_bg').attr('src');
+            }
         });
 
         $('input[name="bg_color"]').on('change keyup paste', function () {
@@ -291,10 +299,16 @@ export default class Administrator {
                 $('#idFrame').contents().find('body .back a').css('color', color);
             }
         });
-        $('input[name="fs_titile_bg_color"]').on('change keyup paste', function () {
+        $('input[name="fs_title_bg_color"]').on('change keyup paste', function () {
             var color = $(this).val();
             if(color) {
                 $('#idFrame').contents().find('body div.header div.title').css('background-color', color);
+            }
+        });
+        $('input[name="id_title_color"]').on('change keyup paste', function () {
+            var color = $(this).val();
+            if(color) {
+                $('#idFrame').contents().find('body span.id_title').css('color', color);
             }
         });
 
@@ -368,12 +382,13 @@ export default class Administrator {
             $('input[name="picture_border_color"]').val('');
             $('input[name="bs_title_color"]').val('');
             $('input[name="website_link_color"]').val('');
-            $('input[name="fs_titile_bg_color"]').val('');
+            $('input[name="fs_title_bg_color"]').val('');
 
             $('#logoUp').val('');
             $('#signatureUp').val('');
             $('#titleBgUp').val('');
-            $('input[name="fs_titile_bg_color"]').val('');
+            $('input[name="fs_title_bg_color"]').val('');
+            $('input[name="id_title_color"]').val('');
 
             logoDataImage = "";
             signatureDataImage = "";

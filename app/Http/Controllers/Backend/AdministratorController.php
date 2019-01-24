@@ -546,41 +546,122 @@ class AdministratorController extends Controller
     public function templateIdcardCru(Request $request, $id=0)
     {
         //for save on POST request
-//        if ($request->isMethod('post')) {
-//            dd($request->all());
-//            $this->validate($request, [
-//                'type' => 'required',
-//                'name' => 'required|min:4|max:255',
-//                'role_id' => 'required|integer',
-//            ]);
-//
-//
-//            $data = [
-//                'name' => $request->get('name'),
-//                'type' =>  (integer)$request->get('type'),
-//                'role_id' => $request->get('role_id'),
-//                'content' => ($request->get('type') == "2") ? $request->get('content_email') : $request->get('content')
-//            ];
-//
-//
-//            Template::updateOrCreate(
-//                ['id' => $id],
-//                $data
-//            );
-//            $msg = "Template ";
-//            $msg .= $id ? 'updated.' : 'added.';
-//
-//            if($id){
-//                return redirect()->route('administrator.template.mailsms.index')->with('success', $msg);
-//            }
-//            return redirect()->route('administrator.template.mailsms.create')->with('success', $msg);
-//        }
+        if ($request->isMethod('post')) {
 
+            $rules = [
+                'type' => 'required',
+                'name' => 'required|min:4|max:255',
+                'role_id' => 'required|integer',
+                'logo' => 'mimes:jpeg,jpg,png|max:200|dimensions:max_width=100,max_height=116',
+                'signature' => 'mimes:jpeg,jpg,png|max:200|dimensions:max_width=119,max_height=33',
+            ];
+
+            $message = [
+                'logo.max' => 'The :attribute size must be under 200kb.',
+                'logo.dimensions' => 'The :attribute dimensions max 100 X 116.',
+                'signature.max' => 'The :attribute size must be under 200kb.',
+                'signature.dimensions' => 'The :attribute dimensions max 119 X 33.',
+            ];
+
+            if($request->get('type',0) == 3){
+                $rules[] = [
+                    'title_bg_image' => 'mimes:jpeg,jpg,png|max:200|dimensions:max_width=320,max_height=92|dimensions:min_width=320,min_height=92',
+                ];
+
+                $message = [
+                    'title_bg_image.max' => 'The :attribute size must be under 200kb.',
+                    'title_bg_image.dimensions' => 'The :attribute dimensions exact 320 X 92.',
+                ];
+            }
+
+            $this->validate($request, $rules, $message);
+
+            $contents = $request->except([
+                '_token',
+                'type',
+                'name',
+                'role_id',
+                'logo',
+                'signature',
+                'title_bg_image',
+                ]);
+
+
+            if($id){
+                $oldTemplate = Template::findOrFail($id);
+                $oldContent = json_decode($oldTemplate->content);
+            }
+
+            //now upload logo and signature
+            if($request->hasFile('logo')) {
+                $logoString = base64_encode(file_get_contents($request->file('logo')));
+                $contents['logo'] = $logoString;
+            }
+            else{
+                if($id){
+                    $contents['logo'] = $oldContent->logo;
+                }
+            }
+
+            if($request->hasFile('signature')) {
+                $logoString = base64_encode(file_get_contents($request->file('signature')));
+                $contents['signature'] = $logoString;
+            }
+            else{
+                if($id){
+                    $contents['signature'] = $oldContent->signature;
+                }
+            }
+
+            if($request->hasFile('title_bg_image')) {
+                $signatureString = base64_encode(file_get_contents($request->file('title_bg_image')));
+                $contents['title_bg_image'] = $signatureString;
+            }else{
+                if($id){
+                    $contents['title_bg_image'] = $oldContent->title_bg_image;
+                }
+                else{
+                    $contents['title_bg_image'] = null;
+                }
+
+            }
+
+            $data = [
+                'name' => $request->get('name'),
+                'type' =>  (integer)$request->get('type'),
+                'role_id' => $request->get('role_id'),
+                'content' => json_encode($contents)
+            ];
+
+
+            Template::updateOrCreate(
+                ['id' => $id],
+                $data
+            );
+            $msg = "Template ";
+            $msg .= $id ? 'updated.' : 'added.';
+
+            if($id){
+                return redirect()->route('administrator.template.idcard.index')->with('success', $msg);
+            }
+            return redirect()->route('administrator.template.idcard.create')->with('success', $msg);
+        }
+
+        //for get request
         $template = Template::find($id);
-
         $formatNo = null;
+        $role = null;
+        $content = null;
 
-        return view('backend.administrator.templates.idcard.add', compact( 'template', 'formatNo'));
+        $roles = [  AppHelper::USER_TEACHER => "Teacher", AppHelper::USER_STUDENT => "Student" ];
+
+        if($template) {
+            $role = $template->role_id;
+            $content = json_decode($template->content);
+            $formatNo = $content->format_id;
+        }
+
+        return view('backend.administrator.templates.idcard.add', compact( 'template', 'formatNo', 'roles', 'role', 'content'));
     }
 
 

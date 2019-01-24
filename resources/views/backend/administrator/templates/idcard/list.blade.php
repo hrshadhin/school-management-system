@@ -53,7 +53,10 @@
                                         <td>{{ $template->name }}</td>
                                         <td>{{ $template->type }}</td>
                                         <td>{{ $template->user->name }}</td>
-                                        <td>{{ $template->content }}</td>
+                                        <td>
+                                            <a title="Preview" href="#" class="btn btn-info btn-sm"><i class="fa fa-eye-slash"></i></a>
+
+                                        </td>
                                         <td>
                                             <div class="btn-group">
                                                 <a title="Edit" href="{{URL::route('administrator.template.idcard.edit',$template->id)}}" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
