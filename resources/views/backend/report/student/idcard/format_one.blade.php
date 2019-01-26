@@ -49,6 +49,10 @@
             overflow: hidden;
         }
 
+        .barcode img {
+            background-color: #fff;
+        }
+
         .title {
             font-weight: bold;
             font-size: 14px;

@@ -101,7 +101,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group has-feedback">
                                         <label for="website_link">Website Link</label>
-                                        <input  type="url" class="form-control" name="website_link"  placeholder="url" value="@if($info) {{ $info->website_link }} @endif" maxlength="500">
+                                        <input  type="text" class="form-control" name="website_link"  placeholder="url" value="@if($info) {{ $info->website_link }} @endif" maxlength="500">
                                         <span class="fa fa-link form-control-feedback"></span>
                                         <span class="text-danger">{{ $errors->first('website_link') }}</span>
                                     </div>
@@ -117,7 +117,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group has-feedback">
                                         <label for="phone_no">Phone/Mobile No.<span class="text-danger">*</span></label>
-                                        <input  type="text" class="form-control" name="phone_no" required placeholder="phone or mobile number" value="@if($info) {{ $info->phone_no }} @endif" min="8" maxlength="255">
+                                        <input  type="text" class="form-control" name="phone_no" required placeholder="phone or mobile number" value="@if($info) {{ $info->phone_no }}@endif" minlength="8" maxlength="255">
                                         <span class="fa fa-phone form-control-feedback"></span>
                                         <span class="text-danger">{{ $errors->first('phone_no') }}</span>
                                     </div>

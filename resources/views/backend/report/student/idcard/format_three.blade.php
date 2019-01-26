@@ -100,6 +100,7 @@
 
         .barcode img {
             width: 100%;
+            background-color: #fff;
         }
 
         .barcode {
