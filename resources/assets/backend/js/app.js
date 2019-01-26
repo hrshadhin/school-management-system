@@ -44,3 +44,6 @@ window.Administrator = Administrator;
 
 import Academic from './Academic';
 window.Academic = Academic;
+
+import Reports from './reports';
+window.Reports = Reports;

@@ -145,6 +145,24 @@
           </a>
         </li>
       @endcan
+
+      <li class="treeview">
+        <a href="#">
+          <i class="fa fa-file-pdf-o"></i>
+          <span>Reports</span>
+          <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+        </a>
+        <ul class="treeview-menu">
+          <li>
+            <a href="{{ URL::route('report.student_idcard') }}">
+              <i class="fa fa-id-card"></i> <span>Student Idcard Print</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+
       <li class="treeview">
         <a href="#">
           <i class="fa fa-cogs"></i>
@@ -166,10 +184,6 @@
             </a>
           </li>
           @endrole
-
-
-
-
           {{--<li>--}}
           {{--<a href="#">--}}
           {{--<i class="fa fa-share-alt"></i><span>Miscellaneous</span>--}}

@@ -693,7 +693,7 @@ class UserController extends Controller
         $userPermissions = DB::table('users_permissions')->where('user_id', $user->id)
             ->whereNull('deleted_at')->pluck('permission_id')->toArray();
 
-        $permissions = Permission::select('id','name','group')->whereNotIn('group',['Admin Only','Common'])->get();
+        $permissions = Permission::select('id','name','group')->whereNotIn('group',['Admin Only','Common'])->orderBy('group','asc')->get();
 
         $permissionList = $this->formatPermissions($permissions, $userPermissions);
 
@@ -813,7 +813,7 @@ class UserController extends Controller
         }
 
 
-       $permissions = Permission::select('id','name','group')->whereNotIn('group',['Admin Only','Common'])->get();
+       $permissions = Permission::select('id','name','group')->whereNotIn('group',['Admin Only','Common'])->orderBy('group','asc')->get();
 
         $permissionList = $this->formatPermissions($permissions);
         $role = null;
@@ -879,7 +879,7 @@ class UserController extends Controller
 
         $rolePermissions = DB::table('roles_permissions')->where('role_id', $role->id)->whereNull('deleted_at')->pluck('permission_id')->toArray();
 
-        $permissions = Permission::select('id','name','group')->whereNotIn('group',['Admin Only','Common'])->get();
+        $permissions = Permission::select('id','name','group')->whereNotIn('group',['Admin Only','Common'])->orderBy('group','asc')->get();
 
         $permissionList = $this->formatPermissions($permissions, $rolePermissions);
 
