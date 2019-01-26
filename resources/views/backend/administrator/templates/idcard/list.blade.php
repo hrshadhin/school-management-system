@@ -40,7 +40,7 @@
                                     <th width="20%">Name</th>
                                     <th width="10%">Type</th>
                                     <th width="10%">User</th>
-                                    <th width="45%">Template</th>
+                                    <th width="45%" class="notexport">Template</th>
                                     <th class="notexport" width="10%">Action</th>
                                 </tr>
                                 </thead>
@@ -54,7 +54,7 @@
                                         <td>{{ $template->type }}</td>
                                         <td>{{ $template->user->name }}</td>
                                         <td>
-                                            <a title="Preview" href="#" class="btn btn-info btn-sm"><i class="fa fa-eye-slash"></i></a>
+                                            <a title="Preview" href="#" data-id="{{$template->id}}" class="btn btn-info btn-sm btnIdcardPreview"><i class="fa fa-eye-slash"></i></a>
 
                                         </td>
                                         <td>
@@ -84,7 +84,7 @@
                                     <th width="20%">Name</th>
                                     <th width="10%">Type</th>
                                     <th width="10%">User</th>
-                                    <th width="45%">Template</th>
+                                    <th width="45%" class="notexport">Template</th>
                                     <th class="notexport" width="10%">Action</th>
                                 </tr>
                                 </tfoot>
@@ -98,14 +98,40 @@
 
     </section>
     <!-- /.content -->
+
+    <!-- Preview Modal -->
+    <div class="modal fade" id="modalIdcardPreview">
+        <div class="modal-dialog">
+            <div class="modal-content" style="width: 500px;">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Idcard Template Preview</h4>
+                </div>
+                <div class="modal-body">
+
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+    <!-- /.Preview Modal -->
 @endsection
 <!-- END PAGE CONTENT-->
 
 <!-- BEGIN PAGE JS-->
 @section('extraScript')
     <script type="text/javascript">
+        window.templateGetURL = '{{URL::route('administrator.template.idcard.index')}}';
+        window.templateUrl = "{{asset('example/template')}}";
+
         $(document).ready(function () {
-            Administrator.templateMailSMSInit();
+            Generic.initCommonPageJS();
+            Generic.initDeleteDialog();
+            Administrator.templateIdcardPreview();
+
         });
     </script>
 @endsection

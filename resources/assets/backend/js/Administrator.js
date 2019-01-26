@@ -419,4 +419,118 @@ export default class Administrator {
         });
 
     }
+
+    static templateIdcardPreview() {
+        $('.btnIdcardPreview').click(function () {
+            //clear preview content
+            $('.modal-body').empty();
+            $('.modal-body').append(' <iframe id="idFrame" style="margin-left:22px;width: 100%; height: 350px;" src="" frameborder="0">\n' +
+                '                    </iframe>');
+
+            let pk = $(this).attr('data-id');
+            Generic.loaderStart();
+            Administrator.getTemplateIdcardData(pk)
+                .then((response) => {
+                    let template = response.data;
+                    // console.log(template);
+                    if (Object.keys(template).length) {
+                        let templateSample = window.templateUrl + template.format_id + ".html";
+                        //now feed data to iframe
+                        $('#idFrame').attr('src', templateSample);
+                        $('iframe').on('load', function() {
+                            // console.log('iframe load');
+                            //now fill colors
+                            Administrator.setidcardTemplateData(template);
+                        });
+
+                        //now show the modal
+                        Generic.loaderStop();
+                        $('#modalIdcardPreview').modal('show');
+                    }
+                    else {
+                        toastr.warning("Template content not found!");
+                    }
+                }).catch((error) => {
+
+                    console.log(error);
+                    Generic.loaderStop();
+
+             });
+
+        });
+    }
+
+    static getTemplateIdcardData(pk) {
+        //get template data
+        let getUrl = window.templateGetURL + "?pk=" + pk;
+        return axios.get(getUrl)
+            .then((response) => {
+               return response;
+            });
+    }
+
+    static setidcardTemplateData  (data) {
+            // console.log(data);
+            if(data.bg_color) {
+                $('#idFrame').contents().find('body div.card').css('background-color', data.bg_color);
+            }
+
+
+            if(data.body_text_color) {
+                $('#idFrame').contents().find('body').css('color', data.body_text_color);
+            }
+
+            if(data.border_color) {
+                $('#idFrame').contents().find('body div.card').css('border-color', data.border_color);
+            }
+
+
+            if(data.fs_title_color) {
+                $('#idFrame').contents().find('body div.header div.title').css('color', data.fs_title_color);
+            }
+
+            if(data.bs_title_color) {
+                $('#idFrame').contents().find('body .back h2').css('color', data.bs_title_color);
+            }
+
+
+            if(data.picture_border_color) {
+                $('#idFrame').contents().find('body span.student_pic>img').css('border-color', data.picture_border_color);
+            }
+
+             if(data.website_link_color) {
+                 $('#idFrame').contents().find('body .back a').css('color', data.website_link_color);
+            }
+
+            if(data.logo) {
+                let logoDataImage = "data:image/png;base64,"+data.logo;
+                $('#idFrame').contents().find('body div.logo img').attr('src', logoDataImage);
+                $('#idFrame').contents().find('body img.back-logo').attr('src', logoDataImage);
+            }
+            if(data.signature) {
+                let signatureDataImage = "data:image/png;base64,"+data.signature;
+                $('#idFrame').contents().find('body div.signature img').attr('src', signatureDataImage);
+            }
+
+
+
+
+            if(data.format_id == 3){
+                if(data.fs_title_bg_color) {
+                    $('#idFrame').contents().find('body div.header div.title').css('background-color', data.fs_title_bg_color);
+                }
+
+                if(data.id_title_color) {
+                    $('#idFrame').contents().find('body span.id_title').css('color', data.id_title_color);
+                }
+                if(data.title_bg_image) {
+                    let titleBgDataImage = "data:image/png;base64,"+data.title_bg_image;
+                    $('#idFrame').contents().find('body img.id_bg').attr('src', titleBgDataImage);
+                }
+            }
+
+
+        }
+
+
 }
