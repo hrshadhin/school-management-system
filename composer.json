@@ -49,7 +49,8 @@
         "hrshadhin/laravel-userstamps": "dev-master",
         "laravel/framework": "5.6.*",
         "laravel/tinker": "^1.0",
-        "laravelcollective/html": "^5.4.0"
+        "laravelcollective/html": "^5.4.0",
+        "picqer/php-barcode-generator": "^0.3.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.2",

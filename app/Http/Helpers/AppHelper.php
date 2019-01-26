@@ -17,6 +17,7 @@ use App\AppMeta;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
+use Picqer\Barcode\BarcodeGeneratorPNG;
 
 
 class AppHelper
@@ -631,6 +632,15 @@ class AppHelper
         }
 
         return $data;
+
+    }
+
+
+    public static function getIdcardBarCode($code) {
+        $generator = new BarcodeGeneratorPNG();
+        $imageString = 'data:image/png;base64,' . base64_encode($generator->getBarcode($code, $generator::TYPE_CODE_128,2,25));
+
+        return $imageString;
 
     }
 

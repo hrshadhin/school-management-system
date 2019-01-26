@@ -67,24 +67,53 @@ class ReportController extends Controller
             $classId = $request->get('class_id');
             $sectionId = $request->get('section_id');
 
-           $students = Registration::where('academic_year_id', $acYear)
-                ->where('class_id', $classId)
-                ->where('section_id', $sectionId)
-                ->where('status', AppHelper::ACTIVE)
-                ->with(['student' => function ($query) {
-                    $query->select('name','id');
-                }])
-                ->select('id','roll_no','student_id')
-                ->orderBy('roll_no','asc')
-                ->get();
+            $session = '';
+            $validity = '';
+            $totalStudent = 0;
 
-            $totalStudent = count($students);
+            if($side == "front") {
+                $students = Registration::where('academic_year_id', $acYear)
+                    ->where('class_id', $classId)
+                    ->where('section_id', $sectionId)
+                    ->where('status', AppHelper::ACTIVE)
+                    ->with(['student' => function ($query) {
+                        $query->select('name', 'blood_group', 'id');
+                    }])
+                    ->with(['class' => function ($query) {
+                        $query->select('name', 'group', 'id');
+                    }])
+                    ->select('id', 'roll_no', 'regi_no', 'student_id','class_id')
+                    ->orderBy('roll_no', 'asc')
+                    ->get();
+
+
+                $acYearInfo = AcademicYear::where('id', $acYear)->first();
+
+                $session = $acYearInfo->title;
+                $validity = $acYearInfo->end_date->format('Y');
+            }
+            else{
+                $students = Registration::where('academic_year_id', $acYear)
+                    ->where('class_id', $classId)
+                    ->where('section_id', $sectionId)
+                    ->where('status', AppHelper::ACTIVE)
+                    ->select('id', 'regi_no')
+                    ->orderBy('regi_no', 'asc')
+                    ->get();
+
+                $totalStudent = count($students);
+            }
+
+
 
             return view('backend.report.student.idcard.'.$format, compact(
                 'templateConfig',
                 'instituteInfo',
                 'side',
-                'totalStudent'
+                'students',
+                'totalStudent',
+                'session',
+                'validity'
             ));
 
         }
