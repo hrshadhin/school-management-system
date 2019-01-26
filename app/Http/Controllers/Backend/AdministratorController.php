@@ -500,13 +500,29 @@ class AdministratorController extends Controller
 //            }
             $template->delete();
 
-            return redirect()->route('administrator.template.mailsms.index')->with('success', 'Template deleted!');
+            return redirect()->route('administrator.template.idcard.index')->with('success', 'Template deleted!');
         }
 
         //if it is ajax request then send json response with formated data
         if($request->ajax()){
 
             $userRole = $request->query->get('user','');
+
+            $isSingle = $request->query->get('pk',0);
+
+            if($isSingle){
+                //if single template call then its preview
+                //sow only select on and return json
+                $template = Template::where('type',3)
+                    ->where('id', $isSingle)->first();
+                if(!$template){
+                    return response('Template Not Exists!', 404);
+                }
+                $data = json_decode($template->content);
+
+                return response()->json($data);
+
+            }
 
             $userRoles = [];
 
@@ -517,7 +533,7 @@ class AdministratorController extends Controller
                 $userRoles = Role::select('id')->whereNotIn('id', [AppHelper::USER_STUDENT, AppHelper::USER_ADMIN])->get()->pluck('id');
             }
 
-            $templates = Template::where('type',$request->query->get('type',0))
+            $templates = Template::where('type',3)
                 ->whereIn('role_id', $userRoles)->get();
 
             $data = [];
