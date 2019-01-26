@@ -699,8 +699,19 @@ class PermissionTableSeeder extends Seeder
             ]
         ];
 
+
+        $reportsPermissionList = [
+            // Report
+            [   "slug" => "report.student_idcard",
+                "name" => "Student Idcard View",
+                "group" => "Report"
+            ]
+            // Report
+        ];
+
         //merge all permissions and insert into db
-        $permissions = array_merge($commonPermissionList, $administratorPermissionList, $onlyAdminPermissions, $academicPermissionList, $websitePermissionList);
+        $permissions = array_merge($commonPermissionList, $administratorPermissionList, $onlyAdminPermissions,
+            $academicPermissionList, $websitePermissionList, $reportsPermissionList);
 
         echo PHP_EOL , 'seeding permissions...';
 

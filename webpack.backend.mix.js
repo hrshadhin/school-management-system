@@ -36,6 +36,9 @@ mix.js('resources/assets/backend/js/app.js', 'public/js')
         'resources/assets/backend/js/dashboard.js',
     ], 'public/js/dashboard.js')
     .js([
+        'resources/assets/backend/js/reports.js',
+    ], 'public/js/reports.js')
+    .js([
         'resources/assets/backend/js/adminlte.js',
         'resources/assets/backend/js/theme_settings.js',
         'resources/assets/backend/js/bootstrap-datetimepicker.min.js',

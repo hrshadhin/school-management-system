@@ -240,6 +240,12 @@ Route::group(
     Route::get('student-attendance/file-queue-status', 'StudentAttendanceController@fileQueueStatus')
         ->name('student_attendance.file_queue_status');
 
+
+    // Reporting
+        //student id card
+    Route::any('report/student-idcard', 'ReportController@studentIdcard')
+        ->name('report.student_idcard');
+
 }
 );
 
