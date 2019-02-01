@@ -33,7 +33,7 @@
         }
 
         .header {
-            margin-top: 11px;
+            margin-top: 10px;
         }
 
         .header,
@@ -43,6 +43,11 @@
         .barcode {
             width: 100%;
             overflow: hidden;
+        }
+
+        .footer {
+            bottom: 0;
+            position: absolute;
         }
 
         .title {
@@ -78,7 +83,7 @@
         .student_pic img {
             width: 100%;
             max-width: 53px;
-            margin: 5px auto;
+            margin: 4px auto;
             box-sizing: border-box;
         }
 
@@ -243,7 +248,7 @@
         }
 
         .hrbc .student_pic {
-            margin-top: -32px;
+            margin-top: -38px;
         }
 
         .hrbc.back h3 {
@@ -255,6 +260,11 @@
             margin-bottom: 5px;
             margin-top: 5px;
         }
+        /*table{padding-left:2px}*/
+        table td{line-height:1}
+        .hrbc tr td:first-child{width:54px}
+        .hrbc .student_pic img{margin:4px auto}
+
         @media print{
             @page {
                 size:  A4 landscape;
