@@ -256,22 +256,22 @@
     </style>
 </head>
 
-<body>
+<body @if($templateConfig->body_text_color) style="color:{{$templateConfig->body_text_color}};"@endif>
 <section class="main">
     <div class="row">
         <!-- mohila degree college-->
         @if($side == "front")
             @foreach($students as $student)
-                <div class="card yellow hrmdc">
+                <div class="card yellow hrmdc" style="@if($templateConfig->bg_color) background-color:{{$templateConfig->bg_color}}; @endif @if($templateConfig->border_color) border-color:{{$templateConfig->border_color}}; @endif">
                     <div class="header">
                         <div class="logo hrmdc-logo">
                             <img src="data:image/png;base64,{{$templateConfig->logo}}">
                         </div>
-                        <div class="title hrmghs">{{strtoupper($instituteInfo['name'])}}</div>
+                        <div class="title hrmghs" @if($templateConfig->fs_title_color) style="color:{{$templateConfig->fs_title_color}};"@endif>{{strtoupper($instituteInfo['name'])}}</div>
                     </div>
                     <div class="content">
                     <span class="student_pic">
-                        <img class="border_red" src="@if($student->student->photo ){{ asset('storage/student')}}/{{ $student->class_id }}/{{ $student->student->photo }} @else {{ asset('images/avatar.jpg')}} @endif" />
+                        <img class="border_red" @if($templateConfig->picture_border_color) style="border-color:{{$templateConfig->picture_border_color}};"@endif src="@if($student->student->photo ){{ asset('storage/student')}}/{{ $student->class_id }}/{{ $student->student->photo }} @else {{ asset('images/avatar.jpg')}} @endif" />
                     </span>
                         <table border="0" cellpadding="0" cellspaing="0">
                             <tr>
@@ -327,12 +327,12 @@
         @endif
         @if($side =="back")
             @for($count=0; $count < $totalStudent; $count++)
-                <div class="card back yellow hrmdc">
+                <div class="card back yellow hrmdc" style="@if($templateConfig->bg_color) background-color:{{$templateConfig->bg_color}}; @endif @if($templateConfig->border_color) border-color:{{$templateConfig->border_color}}; @endif">
                     <h3 class="bold">If Found Please Return the Card To</h3>
                     <img src="data:image/png;base64,{{$templateConfig->logo}}" class="back-logo" />
-                    <h2>{{strtoupper($instituteInfo['name'])}}</h2>
-                    <span class="address">{{$instituteInfo['address']}}, <br /> {{$instituteInfo['phone_no']}}</span>
-                    <a href="#">{{$instituteInfo['website_link']}}</a>
+                    <h2 @if($templateConfig->bs_title_color) style="color:{{$templateConfig->bs_title_color}};"@endif>{{strtoupper($instituteInfo['name'])}}</h2>
+                    <span class="address">{{$instituteInfo['address']}} <br /> {{$instituteInfo['phone_no']}}</span>
+                    <a href="#" @if($templateConfig->website_link_color) style="color:{{$templateConfig->website_link_color}};"@endif>{{$instituteInfo['website_link']}}</a>
                     <span>Email: {{$instituteInfo['email']}}</span>
                 </div>
         @endfor

@@ -82,7 +82,7 @@ class ReportController extends Controller
                     ->with(['class' => function ($query) {
                         $query->select('name', 'group', 'id');
                     }])
-                    ->select('id', 'roll_no', 'regi_no', 'student_id','class_id')
+                    ->select('id', 'roll_no', 'regi_no', 'student_id','class_id', 'house')
                     ->orderBy('roll_no', 'asc')
                     ->get();
 
@@ -91,6 +91,10 @@ class ReportController extends Controller
 
                 $session = $acYearInfo->title;
                 $validity = $acYearInfo->end_date->format('Y');
+
+                if($templateConfig->format_id == 3){
+                    $validity = $acYearInfo->end_date->format('F Y');
+                }
             }
             else{
                 $students = Registration::where('academic_year_id', $acYear)
@@ -103,7 +107,6 @@ class ReportController extends Controller
 
                 $totalStudent = count($students);
             }
-
 
 
             return view('backend.report.student.idcard.'.$format, compact(
