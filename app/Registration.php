@@ -30,6 +30,7 @@ class Registration extends Model
         'fourth_subject',
         'fourth_subject',
         'alt_fourth_subject',
+        'house',
         'status',
     ];
 
