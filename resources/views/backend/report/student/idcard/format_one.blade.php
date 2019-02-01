@@ -20,6 +20,7 @@
             margin-right: 15px;
             margin-bottom: 30px;
             box-sizing: border-box;
+            position: relative;
         }
 
         .blue {
@@ -37,7 +38,11 @@
         }
 
         .header {
-            margin-top: 11px;
+            margin-top: 10px;
+        }
+        .footer {
+            bottom: 0;
+            position: absolute;
         }
 
         .header,
@@ -86,7 +91,7 @@
         .student_pic img {
             width: 100%;
             max-width: 53px;
-            margin: 5px auto;
+            margin: 0;
             box-sizing: border-box;
         }
 
@@ -175,6 +180,10 @@
         .border_navy {
             border: 2px solid #3D49FC;
         }
+
+        /*table{padding-left:2px}*/
+        table td{line-height:1}
+        td:first-child{width:50px}
 
         .txt_full {
             letter-spacing: 14px;
