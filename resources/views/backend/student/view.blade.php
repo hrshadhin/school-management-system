@@ -5,8 +5,20 @@
 @section('pageTitle') student Profile @endsection
 <!-- End block -->
 
-<!-- Page body extra class -->
-@section('bodyCssClass') @endsection
+<!-- Page body extra css -->
+@section('extraStyle')
+    <style>
+        @media print {
+            @page {
+                size:  A4 landscape;
+                margin-top: 10mm;
+                margin-left: 0.10in;
+                margin-right: 0;
+                margin-bottom: 0;
+            }
+        }
+    </style>
+@endsection
 <!-- End block -->
 
 <!-- BEGIN PAGE CONTENT-->
@@ -14,7 +26,7 @@
     <!-- Section header -->
     <section class="content-header">
         <div class="btn-group">
-            <a href="#"  class="btn-ta btn-sm-ta btn-print"><i class="fa fa-print"></i> Print</a>
+            <a href="#"  class="btn-ta btn-sm-ta btn-print btnPrintInformation"><i class="fa fa-print"></i> Print</a>
         </div>
         <div class="btn-group">
             <button class="btn-ta btn-sm-ta" data-toggle="modal" data-target="#idCard"><span class="fa fa-floppy-o"></span> ID Card </button>
@@ -22,9 +34,7 @@
         <div class="btn-group">
             <a href="{{URL::route('student.edit',$student->id)}}" class="btn-ta btn-sm-ta"><i class="fa fa-edit"></i> Edit</a>
         </div>
-        <div class="btn-group">
-            <button class="btn-ta btn-sm-ta" data-toggle="modal" data-target="#mail"><span class="fa fa-envelope-o"></span> Send Pdf to Mail</button>
-        </div>
+
         <ol class="breadcrumb">
             <li><a href="{{URL::route('user.dashboard')}}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
             <li><a href="{{URL::route('student.index')}}"><i class="fa icon-student"></i> Student</a></li>
@@ -235,6 +245,12 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-3">
+                                    <label for="">Roll No.</label>
+                                </div>
+                                <div class="col-md-3">
+                                    <p for="">: {{$student->roll_no}}</p>
+                                </div>
+                                <div class="col-md-3">
                                     <label for="">Shift</label>
                                 </div>
                                 <div class="col-md-3">
@@ -243,10 +259,10 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-3">
-                                    <label for="">Roll No.</label>
+                                    <label for="">Board Registration No.</label>
                                 </div>
                                 <div class="col-md-3">
-                                    <p for="">: {{$student->roll_no}}</p>
+                                    <p for="">: {{$student->board_regi_no}}</p>
                                 </div>
                                 <div class="col-md-3">
                                     <label for="">Card No.</label>
@@ -257,18 +273,24 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-md-3">
-                                    <label for="">Board Registration No.</label>
-                                </div>
-                                <div class="col-md-3">
-                                    <p for="">: {{$student->board_regi_no}}</p>
-                                </div>
+                                @if($student->fourth_subject)
                                 <div class="col-md-3">
                                     <label for="">Fourth Subject</label>
                                 </div>
                                 <div class="col-md-3">
                                     <p for="">: {{$fourthSubject}}</p>
                                 </div>
+                                @endif
+
+                                @if($student->alt_fourth_subject)
+                                <div class="col-md-3">
+                                    <label for="">Alternative Fourth Subject</label>
+                                </div>
+                                <div class="col-md-3">
+                                    <p for="">: {{$altfourthSubject}}</p>
+                                </div>
+                                @endif
+
                             </div>
                             <div class="row">
                                 <div class="col-md-3">
@@ -356,6 +378,9 @@
 @section('extraScript')
     <script type="text/javascript">
         $(document).ready(function () {
+            $('.btnPrintInformation').click(function () {
+                window.print();
+            });
         });
     </script>
 @endsection

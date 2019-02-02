@@ -246,6 +246,38 @@
                         </div>
                     </div>
 
+
+                    <div class="box box-info">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Default Idcard templates</h3>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group has-feedback">
+                                        <label for="student_idcard_template">Student Idcard template
+                                            <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="select idcard template for student"></i>
+                                        </label>
+                                        {!! Form::select('student_idcard_template', $studentIdcardTemplates, $student_idcard_template , ['class' => 'form-control select2', 'required' => 'true']) !!}
+                                        <span class="form-control-feedback"></span>
+                                        <span class="text-danger">{{ $errors->first('student_idcard_template') }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group has-feedback">
+                                        <label for="teacher_idcard_template">Teacher Idcard template
+                                            <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="select idcard template for teacher"></i>
+                                        </label>
+                                        {!! Form::select('teacher_idcard_template', $teacherIdcardTemplates, $teacher_idcard_template , ['class' => 'form-control select2', 'required' => 'true']) !!}
+                                        <span class="form-control-feedback"></span>
+                                        <span class="text-danger">{{ $errors->first('teacher_idcard_template') }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="box">
                         <div class="box-footer">
                             <a href="{{URL::route('user.dashboard')}}" class="btn btn-default">Cancel</a>

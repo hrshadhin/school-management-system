@@ -336,12 +336,24 @@ class StudentController extends Controller
             abort(404);
         }
         $username = '';
-        $fourthSubject = $student->fourth_subject ? $student->fourth_subject : '';
+        $fourthSubject = '';
+        $altfourthSubject = '';
+
+        if($student->fourth_subject) {
+            $subjectInfo = Subject::where('id', $student->fourth_subject)->select('name')->first();
+            $fourthSubject = $subjectInfo->name;
+        }
+
+        if($student->alt_fourth_subject) {
+            $subjectInfo = Subject::where('id', $student->alt_fourth_subject)->select('name')->first();
+            $altfourthSubject = $subjectInfo->name;
+        }
+
         if($student->student->user_id){
             $user = User::find($student->student->user_id);
             $username = $user->username;
         }
-        return view('backend.student.view', compact('student', 'username', 'fourthSubject'));
+        return view('backend.student.view', compact('student', 'username', 'fourthSubject', 'altfourthSubject'));
 
 
     }
