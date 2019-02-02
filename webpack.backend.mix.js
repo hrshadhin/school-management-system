@@ -49,6 +49,7 @@ mix.js('resources/assets/backend/js/app.js', 'public/js')
         'datatables.net', 'datatables.net-bs', 'datatables.net-buttons', 'datatables.net-responsive-bs'
     ])
     .sass('resources/assets/backend/sass/app.scss', 'public/css')
+    .sass('resources/assets/backend/sass/print.scss', 'public/css')
     .sass('resources/assets/backend/sass/vendor.scss', 'public/css')
     .sass('resources/assets/backend/sass/colorpicker.scss', 'public/css')
     .js([

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\AcademicYear;
 use App\Http\Helpers\AppHelper;
+use App\Template;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\AppMeta;
@@ -49,6 +50,8 @@ class SettingsController extends Controller
                 'student_attendance_notification' => 'required|integer',
                 'employee_attendance_notification' => 'required|integer',
                 'institute_type' => 'required|integer',
+                'student_idcard_template' => 'required|integer',
+                'teacher_idcard_template' => 'required|integer',
             ];
 
             if(AppHelper::getInstituteCategory() != 'college') {
@@ -172,6 +175,14 @@ class SettingsController extends Controller
                 ['meta_key' => 'employee_attendance_template'],
                 ['meta_value' => $request->get('notification_template_Emp', 0)]
             );
+            AppMeta::updateOrCreate(
+                ['meta_key' => 'student_idcard_template'],
+                ['meta_value' => $request->get('student_idcard_template', 0)]
+            );
+            AppMeta::updateOrCreate(
+                ['meta_key' => 'teacher_idcard_template'],
+                ['meta_value' => $request->get('teacher_idcard_template', 0)]
+            );
 
 
             Cache::forget('app_settings');
@@ -215,6 +226,18 @@ class SettingsController extends Controller
         $employee_attendance_notification = isset($metas['employee_attendance_notification']) ? $metas['employee_attendance_notification'] : 0;
         $institute_type = isset($metas['institute_type']) ? $metas['institute_type'] : 1;
 
+
+        //get idcard templates
+        // AppHelper::TEMPLATE_TYPE  1=SMS , 2=EMAIL, 3=Id card
+        $studentIdcardTemplates = Template::whereIn('type',[3])->where('role_id', AppHelper::USER_STUDENT)
+            ->pluck('name','id')->prepend('None', 0);
+        $teacherIdcardTemplates = Template::whereIn('type',[3])->where('role_id', AppHelper::USER_TEACHER)
+            ->pluck('name','id')->prepend('None', 0);
+
+        $student_idcard_template = $metas['student_idcard_template'] ?? 0;
+        $teacher_idcard_template = $metas['teacher_idcard_template'] ?? 0;
+
+
         return view(
             'backend.settings.institute', compact(
                 'info',
@@ -226,7 +249,11 @@ class SettingsController extends Controller
                 'employee_attendance_notification',
                 'institute_type',
                 'language',
-                'metas'
+                'metas',
+                'studentIdcardTemplates',
+                'teacherIdcardTemplates',
+                'student_idcard_template',
+                'teacher_idcard_template'
             )
         );
     }

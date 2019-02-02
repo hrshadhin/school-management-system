@@ -318,8 +318,9 @@
                                     </div>
                                 </div>
                             </div>
-                            @if(AppHelper::getInstituteCategory() == 'college')
+
                                 <div class="row">
+                                    @if(AppHelper::getInstituteCategory() == 'college')
                                     <div class="col-md-3">
                                         <div class="form-group has-feedback">
                                             <label for="academic_year">Academic Year
@@ -348,8 +349,20 @@
                                             <span class="text-danger">{{ $errors->first('alt_fourth_subject') }}</span>
                                         </div>
                                     </div>
+                                    @endif
+                                    <div class="col-md-3">
+                                        <div class="form-group has-feedback">
+                                            <label for="house">House Name
+                                                <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="if student group by its hostel name"></i>
+                                            </label>
+                                            <input  type="text" class="form-control" value="@if($regiInfo){{$regiInfo->house}}@else{{old('house')}}@endif" name="house" placeholder="leave blank if not needed"  maxlength="100">
+                                            <span class="glyphicon glyphicon-info-sign form-control-feedback"></span>
+                                            <span class="text-danger">{{ $errors->first('house') }}</span>
+                                        </div>
+                                    </div>
+
                                 </div>
-                            @endif
+
                             @if(!$student)
                                 <p class="lead section-title">Access Info:</p>
                                 <div class="row">
