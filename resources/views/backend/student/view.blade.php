@@ -78,7 +78,7 @@
                     <ul class="nav nav-tabs">
                         <li class="active"><a href="#information" data-toggle="tab">Profile</a></li>
                         {{--<li><a href="#routine" data-toggle="tab">Routine</a></li>--}}
-                        <li><a href="#attendance" data-toggle="tab">Attendance</a></li>
+                        <li><a href="#attendance" id="tabAttendance" data-pk="{{$student->id}}" data-toggle="tab">Attendance</a></li>
                         <li><a href="#mark" data-toggle="tab">Mark</a></li>
                         <li><a href="#invoice" data-toggle="tab">Invoice</a></li>
                         <li><a href="#payment" data-toggle="tab">Payment</a></li>
@@ -320,7 +320,17 @@
                         {{--<div class="tab-pane" id="routine">--}}
                         {{--</div>--}}
                         <div class="tab-pane" id="attendance">
+                            <table id="attendanceTable" class="table table-responsive table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">Date</th>
+                                        <th class="text-center">Status</th>
+                                    </tr>
+                                <tbody>
 
+                                </tbody>
+                                </thead>
+                            </table>
                         </div>
                         <div class="tab-pane" id="mark">
 
@@ -379,10 +389,9 @@
 <!-- BEGIN PAGE JS-->
 @section('extraScript')
     <script type="text/javascript">
+        window.attendanceUrl = '{{route('student_attendance.index')}}';
         $(document).ready(function () {
-            $('.btnPrintInformation').click(function () {
-                window.print();
-            });
+           Academic.studentProfileInit();
         });
     </script>
 @endsection

@@ -27,6 +27,20 @@ class StudentAttendanceController extends Controller
      */
     public function index(Request $request)
     {
+
+        //if its a ajax request that means come from student profile
+        // show fetch the attendance and send json response
+        if($request->ajax()){
+
+            $id = $request->query->get('student_id', 0);
+            $attendances = StudentAttendance::where('registration_id', $id)
+            ->select('attendance_date', 'present','registration_id')
+                ->orderBy('attendance_date', 'asc')
+            ->get();
+
+            return response()->json($attendances);
+        }
+
         // get query parameter for filter the fetch
         $class_id = $request->query->get('class',0);
         $section_id = $request->query->get('section',0);

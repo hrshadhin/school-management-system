@@ -14,7 +14,6 @@ class StudentAttendance extends Model
     use SoftDeletes;
     use UserstampsTrait;
 
-    protected $dates = ['attendance_date'];
 
     /**
      * The attributes that are mass assignable.
@@ -42,7 +41,8 @@ class StudentAttendance extends Model
 
     public function getAttendanceDateAttribute($value)
     {
-        return $value->format('d/m/Y');
+        return Carbon::parse($value)->format('d/m/Y');
+
     }
 
     public function getPresentAttribute($value)
