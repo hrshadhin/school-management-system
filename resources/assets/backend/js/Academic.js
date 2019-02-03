@@ -1,3 +1,5 @@
+import Generic from "./Generic";
+
 export default class Academic {
     /**
      * academic related codes
@@ -298,5 +300,39 @@ export default class Academic {
                 $('#statusMessage').html("An error has occurred...Contact administrator" );
             });
 
+    }
+
+    static studentProfileInit() {
+        $('.btnPrintInformation').click(function () {
+            window.print();
+        });
+
+        $('#tabAttendance').click(function () {
+            let id = $(this).attr('data-pk');
+            let geturl = window.attendanceUrl+'?student_id='+id;
+            Generic.loaderStart();
+            $('#attendanceTable tbody').empty();
+            axios.get(geturl)
+                .then((response) => {
+                   // console.log(response);
+                   if(response.data.length){
+                       response.data.forEach(function (item) {
+                           let color = item.present == "Present" ? 'bg-green' : 'bg-red';
+                          let trrow = ' <tr>\n' +
+                              '  <td class="text-center">'+item.attendance_date+'</td>\n' +
+                              '  <td class="text-center"> <span class="badge '+ color+'">'+item.present+'</span></td>\n' +
+                              '</tr>';
+
+                           $('#attendanceTable tbody').append(trrow);
+                       });
+                   }
+
+                    Generic.loaderStop();
+                }).catch((error) => {
+                let status = error.response.statusText;
+                toastr.error(status);
+                Generic.loaderStop();
+            });
+        });
     }
 }
