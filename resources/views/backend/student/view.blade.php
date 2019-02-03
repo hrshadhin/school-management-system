@@ -29,7 +29,9 @@
             <a href="#"  class="btn-ta btn-sm-ta btn-print btnPrintInformation"><i class="fa fa-print"></i> Print</a>
         </div>
         <div class="btn-group">
-            <button class="btn-ta btn-sm-ta" data-toggle="modal" data-target="#idCard"><span class="fa fa-floppy-o"></span> ID Card </button>
+            <a href="{{URL::route('student.show',$student->id)}}?print_idcard=1" target="_blank" class="btn-ta btn-sm-ta"><i class="fa fa-id-card"></i> ID Card</a>
+
+
         </div>
         <div class="btn-group">
             <a href="{{URL::route('student.edit',$student->id)}}" class="btn-ta btn-sm-ta"><i class="fa fa-edit"></i> Edit</a>
