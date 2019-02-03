@@ -9,6 +9,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use Twilio\Rest\Client as twilioClient;
 
 class SmsHelper
 {
@@ -26,7 +27,6 @@ class SmsHelper
             if(!$this->gateway){
                 throw new Exception('SMS gateway not defined!');
             }
-
             // list is here AppHelper::SMS_GATEWAY_LIST
             if($this->gateway->gateway == 1){
                 return $this->sendSmsViaBulkSmsRoute($number, $message);
@@ -123,24 +123,95 @@ class SmsHelper
 
     }
 
-
     private function sendSmsViaItSolutionbd($number, $message) {
+        try {
+            $client = new Client();
+            $uri = $this->gateway->api_url."?user=".urlencode($this->gateway->user)."&password=".urlencode($this->gateway->password)."&sender=".urlencode($this->gateway->sender_id)."&SMSText=".urlencode($message)."&GSM=".$number."&type=longSMS";
+            $response = $client->get($uri);
+            $status = $response->getBody()->getContents();
+            if($status !="-5" && $status !="5")
+            {
+                $log = $this->logSmsToDB($number, $message, "SMS SEND");
+            }
+            else{
+                Log::channel('smsLog')->warning($status.". url=".$uri);
+            }
 
-        return true;
+            return true;
+
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
     }
 
     private function sendSmsViaZamanIt($number, $message) {
+        try {
 
-        return true;
+            $client = new Client();
+            $uri = $this->gateway->api_url."?user=".urlencode($this->gateway->user)."&password=".urlencode($this->gateway->password)."&sender=".urlencode($this->gateway->sender_id)."&SMSText=".urlencode($message)."&GSM=".$number."&type=longSMS";
+            $response = $client->get($uri);
+            $status = $this->parseXmlResponse($response->getBody()->getContents());
+
+            if($status !="-5" && $status !="5")
+            {
+                $log = $this->logSmsToDB($number, $message, "SMS SEND");
+            }
+            else{
+                Log::channel('smsLog')->warning($status.". url=".$uri);
+            }
+
+            return true;
+
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
     }
 
     private function sendSmsViaMimSms($number, $message) {
+        try {
+            $client = new Client();
+            $uri = $this->gateway->api_url."?user=".urlencode($this->gateway->user)."&password=".urlencode($this->gateway->password)."&sender=".urlencode($this->gateway->sender_id)."&SMSText=".urlencode($message)."&GSM=".$number."&type=longSMS";
+            $response = $client->get($uri);
+            $status = $response->getBody()->getContents();
+            if($status !="-5" && $status !="5")
+            {
+                $log = $this->logSmsToDB($number, $message, "SMS SEND");
+            }
+            else{
+                Log::channel('smsLog')->warning($status.". url=".$uri);
+            }
 
-        return true;
+            return true;
+
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
     }
 
     private function sendSmsViaTwilio($number, $message) {
 
+        if (!preg_match("/^\+/i", $number)){
+            $number = "+".$number;
+        }
+
+        $sid    = $this->gateway->user;
+        $token  = $this->gateway->password;
+        $twilio = new twilioClient($sid, $token);
+        $data = [
+            "body" => $message
+        ];
+
+        if(strlen($this->gateway->sender_id)){
+            $data["from"] = $this->gateway->sender_id ;
+        }
+
+        $response = $twilio->messages->create($number, $data);
+        if(!$response->errorCode){
+            $log = $this->logSmsToDB($number, $message, "SMS SEND");
+        }
+        else{
+            Log::channel('smsLog')->warning($response->errorMessage.". url=twilio api");
+        }
         return true;
     }
 
@@ -152,6 +223,21 @@ class SmsHelper
             'message' => $message,
             'status' => $status,
         ]);
+
+    }
+
+    private function parseXmlResponse($response) {
+        try {
+            $responseXml = simplexml_load_string($response);
+            if ($responseXml instanceof \SimpleXMLElement) {
+                $status = (string)$responseXml->result->status;
+                return $status;
+            }
+        }
+        catch (Exception $e)
+        {
+            throw new Exception($e->getMessage());
+        }
 
     }
 

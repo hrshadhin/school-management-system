@@ -123,7 +123,7 @@ Route::group(
 
 
     // administrator routes
-        //academic year
+    //academic year
     Route::get('administrator/academic_year', 'AdministratorController@academicYearIndex')
         ->name('administrator.academic_year');
     Route::post('administrator/academic_year', 'AdministratorController@academicYearIndex')
@@ -140,7 +140,7 @@ Route::group(
         ->name('administrator.academic_year_status');
 
     // template
-        //mail and sms
+    //mail and sms
     Route::get('administrator/template/mailandsms', 'AdministratorController@templateMailAndSmsIndex')
         ->name('administrator.template.mailsms.index');
     Route::post('administrator/template/mailandsms', 'AdministratorController@templateMailAndSmsIndex')
@@ -153,7 +153,7 @@ Route::group(
         ->name('administrator.template.mailsms.edit');
     Route::post('administrator/template/mailandsms/update/{id}', 'AdministratorController@templateMailAndSmsCru')
         ->name('administrator.template.mailsms.update');
-        // id card
+    // id card
     Route::get('administrator/template/idcard', 'AdministratorController@templateIdcardIndex')
         ->name('administrator.template.idcard.index');
     Route::post('administrator/template/idcard', 'AdministratorController@templateIdcardIndex')
@@ -242,7 +242,7 @@ Route::group(
 
 
     // Reporting
-        //student id card
+    //student id card
     Route::any('report/student-idcard', 'ReportController@studentIdcard')
         ->name('report.student_idcard');
 
@@ -336,5 +336,23 @@ Route::get(
     AppHelper::createTriggers();
 
     return 'Triggers created :)';
+}
+);
+//test sms send
+Route::get(
+    '/test-sms/{code}', function ($code) {
+    if($code !== '007') {
+        return 'Wrong code!';
+    }
+    //check if developer mode enabled?
+    if(!env('DEVELOPER_MODE_ENABLED', false)) {
+        return "Please enable developer mode in '.env' file.".PHP_EOL."set 'DEVELOPER_MODE_ENABLED=true'";
+    }
+
+    $gateway = \App\AppMeta::where('id', AppHelper::getAppSettings('student_attendance_gateway'))->first();
+    $gateway = json_decode($gateway->meta_value);
+    $smsHelper = new \App\Http\Helpers\SmsHelper($gateway);
+    $res = $smsHelper->sendSms('8801722813644','test sms vai');
+    dd($res);
 }
 );
