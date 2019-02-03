@@ -207,6 +207,20 @@ export default class Academic {
 
         });
 
+        $('.attendanceExistsChecker').on('changeDate', function (event) {
+            Academic.checkAttendanceExists(function (data) {
+                    if(data>0){
+                        toastr.error('Attendance already exists!');
+                        $('#studentListTable tbody').empty();
+                        $('button[type="submit"]').hide();
+                    }
+                    else{
+                        $('#section_id_filter').trigger('change');
+                    }
+            });
+
+        });
+
         $('#toggleCheckboxes').on('ifChecked ifUnchecked', function(event) {
             if (event.type == 'ifChecked') {
                 $('input:checkbox').iCheck('check');
@@ -237,39 +251,72 @@ export default class Academic {
             }
 
             Generic.loaderStart();
-            Academic.getStudentByAcYearAndClassAndSection(acYearId, classId, sectionId, function (data) {
-                let students = data;
-                $('#studentListTable tbody').empty();
-                if(students.length){
-                    students.forEach(function(item){
-                        let rowHtml = '<tr>\n' +
-                            '<td>\n' +
-                            '<span class="text-bold">'+item.student.name+'</span>\n' +
-                            '<input type="hidden" name="registrationIds[]" value="'+item.id+'" required>\n' +
-                            '</td>\n' +
-                            '<td><span class="text-bold">'+item.roll_no+'</span></td>\n' +
-                            '<td>\n' +
-                            '<div class="checkbox icheck inline_icheck">\n' +
-                            '<input type="checkbox" name="present['+item.id+']">\n' +
-                            '</div>\n' +
-                            '</td>\n' +
-                            '</tr>';
+            Academic.checkAttendanceExists(function (data) {
+                if(data==0){
+                    Academic.getStudentByAcYearAndClassAndSection(acYearId, classId, sectionId, function (data) {
+                        let students = data;
+                        $('#studentListTable tbody').empty();
+                        if(students.length){
+                            students.forEach(function(item){
+                                let rowHtml = '<tr>\n' +
+                                    '<td>\n' +
+                                    '<span class="text-bold">'+item.student.name+'</span>\n' +
+                                    '<input type="hidden" name="registrationIds[]" value="'+item.id+'" required>\n' +
+                                    '</td>\n' +
+                                    '<td><span class="text-bold">'+item.roll_no+'</span></td>\n' +
+                                    '<td>\n' +
+                                    '<div class="checkbox icheck inline_icheck">\n' +
+                                    '<input type="checkbox" name="present['+item.id+']">\n' +
+                                    '</div>\n' +
+                                    '</td>\n' +
+                                    '</tr>';
 
-                        $('#studentListTable tbody').append(rowHtml);
-                    });
-                    $('input:checkbox').not('.dont-style-notMe').iCheck({
-                        checkboxClass: 'icheckbox_square-blue',
-                        radioClass: 'iradio_square-blue',
-                        increaseArea: '20%' /* optional */
-                    });
+                                $('#studentListTable tbody').append(rowHtml);
+                            });
+                            $('input:checkbox').not('.dont-style-notMe').iCheck({
+                                checkboxClass: 'icheckbox_square-blue',
+                                radioClass: 'iradio_square-blue',
+                                increaseArea: '20%' /* optional */
+                            });
 
-                    //now show the submit button
-                    $('button[type="submit"]').show();
+                            //now show the submit button
+                            $('button[type="submit"]').show();
+                        }
+                        Generic.loaderStop();
+                    });
                 }
-                Generic.loaderStop();
+                else{
+                    toastr.error('Attendance already exists!');
+                    Generic.loaderStop();
+                }
             });
 
+
         });
+    }
+
+    static checkAttendanceExists(cb={}) {
+        let atDate = $('input[name="attendance_date"]').val();
+        let classId = $('select[name="class_id"]').val();
+        let sectionId = $('select[name="section_id"]').val();
+        let acYearId = $('select[name="academic_year"]').val();
+        let queryString = "?class="+classId+"&section="+sectionId+"&attendance_date="+atDate;
+
+        if(institute_category == 'college'){
+            queryString +="&academic_year="+acYearId;
+        }
+
+        let getUrl = window.attendanceUrl + queryString;
+        axios.get(getUrl)
+            .then((response) => {
+              cb(response.data);
+            }).catch((error) => {
+            let status = error.response.statusText;
+            toastr.error(status);
+            cb(0);
+            Generic.loaderStop();
+        });
+
     }
 
     static attendanceFileUploadStatus() {
