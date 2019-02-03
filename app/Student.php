@@ -46,7 +46,6 @@ class Student extends Model
 
     public function registration()
     {
-        // todo: need to add relation ship for academic year wise student select
         return $this->hasMany('App\Registration', 'student_id');
     }
     public function getGenderAttribute($value)

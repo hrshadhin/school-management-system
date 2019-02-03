@@ -385,11 +385,12 @@ class AdministratorController extends Controller
             $template = Template::findOrFail($request->get('hiddenId'));
 
             // now check is tempalte currently used ??
-            //todo: need to protect deletion
-//            $settings = AppHelper::getAppSettings();
-//            if((isset($settings['attendance_template']))){
-//                return redirect()->route('administrator.template.mailsms.index')->with('error', 'Can not delete it because this template is being used.');
-//            }
+            $studnetAttendaceTeplate = AppHelper::getAppSettings('student_attendance_template');
+            $employeeAttendaceTeplate = AppHelper::getAppSettings('employee_attendance_template');
+
+            if($template->id == $studnetAttendaceTeplate || $template->id == $employeeAttendaceTeplate){
+                return redirect()->route('administrator.template.mailsms.index')->with('error', 'Can not delete it because this template is being used.');
+            }
             $template->delete();
 
             return redirect()->route('administrator.template.mailsms.index')->with('success', 'Template deleted!');
@@ -493,11 +494,13 @@ class AdministratorController extends Controller
             $template = Template::findOrFail($request->get('hiddenId'));
 
             // now check is tempalte currently used ??
-            //todo: need to protect deletion
-//            $settings = AppHelper::getAppSettings();
-//            if((isset($settings['attendance_template']))){
-//                return redirect()->route('administrator.template.mailsms.index')->with('error', 'Can not delete it because this template is being used.');
-//            }
+            $studnetIdcardTeplate = AppHelper::getAppSettings('student_idcard_template');
+            $employeeIdcardTeplate = AppHelper::getAppSettings('teacher_idcard_template');
+
+            if($template->id == $studnetIdcardTeplate || $template->id == $employeeIdcardTeplate){
+                return redirect()->route('administrator.template.idcard.index')->with('error', 'Can not delete it because this template is being used.');
+            }
+
             $template->delete();
 
             return redirect()->route('administrator.template.idcard.index')->with('success', 'Template deleted!');

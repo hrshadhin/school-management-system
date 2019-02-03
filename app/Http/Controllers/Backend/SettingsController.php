@@ -274,11 +274,11 @@ class SettingsController extends Controller
             $gateway = AppMeta::findOrFail($request->get('hiddenId'));
 
             // now check is gateway currently used ??
-            //todo: need to protect deletion
-//            $settings = AppHelper::getAppSettings();
-//            if((isset($settings['attendance_template']))){
-//                return redirect()->route('administrator.template.mailsms.index')->with('error', 'Can not delete it because this template is being used.');
-//            }
+            $stGateway = AppHelper::getAppSettings('student_attendance_gateway');
+            $empGateway = AppHelper::getAppSettings('employee_attendance_gateway');
+            if($gateway->id == $stGateway || $gateway->id == $empGateway){
+                return redirect()->route('settings.sms_gateway.index')->with('error', 'Can not delete it because this gateway is being used.');
+            }
             if($gateway->meta_key == "sms_gateway"){
                 $gateway->delete();
             }
