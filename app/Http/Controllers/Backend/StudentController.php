@@ -9,6 +9,7 @@ use App\Registration;
 use App\Section;
 use App\Student;
 use App\Subject;
+use App\Template;
 use App\User;
 use App\UserRole;
 use Carbon\Carbon;
@@ -116,7 +117,7 @@ class StudentController extends Controller
         // check for institute type and set gender default value
         $settings = AppHelper::getAppSettings();
         if(isset($settings['institute_type']) && intval($settings['institute_type']) == 2){
-          $gender = 2;
+            $gender = 2;
         }
 
         if(AppHelper::getInstituteCategory() == 'college') {
@@ -323,8 +324,76 @@ class StudentController extends Controller
      * @param  \App\Item  $item
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
+        // if print id card of this student then
+        // Do here
+        if($request->query->get('print_idcard',0)) {
+
+            $templateId = AppHelper::getAppSettings('student_idcard_template');
+            $templateConfig = Template::where('id', $templateId)->where('type',3)->where('role_id', AppHelper::USER_STUDENT)->first();
+
+            if(!$templateConfig){
+                return redirect()->route('administrator.report.student_idcard')->with('error', 'Template not found!');
+            }
+
+            $templateConfig = json_decode($templateConfig->content);
+
+            $format = "format_";
+            if($templateConfig->format_id == 2){
+                $format .="two";
+            }
+            else if($templateConfig->format_id == 3){
+                $format .="three";
+            }
+            else {
+                $format .="one";
+            }
+
+            //get institute information
+            $instituteInfo = AppHelper::getAppSettings('institute_settings');
+
+
+            $students = Registration::where('id', $id)
+                ->where('status', AppHelper::ACTIVE)
+                ->with(['student' => function ($query) {
+                    $query->select('name', 'blood_group', 'id');
+                }])
+                ->with(['class' => function ($query) {
+                    $query->select('name', 'group', 'id');
+                }])
+                ->select('id', 'roll_no', 'regi_no', 'student_id','class_id', 'house', 'academic_year_id')
+                ->orderBy('roll_no', 'asc')
+                ->get();
+
+            if(!$students){
+                abort(404);
+            }
+
+
+            $acYearInfo = AcademicYear::where('id', $students[0]->academic_year_id)->first();
+            $session = $acYearInfo->title;
+            $validity = $acYearInfo->end_date->format('Y');
+
+            if($templateConfig->format_id == 3){
+                $validity = $acYearInfo->end_date->format('F Y');
+            }
+
+
+            $totalStudent = count($students);
+
+            $side = 'both';
+            return view('backend.report.student.idcard.'.$format, compact(
+                'templateConfig',
+                'instituteInfo',
+                'side',
+                'students',
+                'totalStudent',
+                'session',
+                'validity'
+            ));
+        }
+
         //get student
         $student = Registration::where('id', $id)
             ->with('student')
@@ -667,7 +736,7 @@ class StudentController extends Controller
     {
         $registration = Registration::find($id);
         if(!$registration){
-           abort(404);
+            abort(404);
         }
         $student =  Student::find($registration->student_id);
         if(!$student){

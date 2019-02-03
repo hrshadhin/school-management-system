@@ -1,6 +1,7 @@
 <html>
 <head>
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700" rel="stylesheet">
+    <title>Id Card</title>
     <style>
         body {
             font-family: 'Source Sans Pro', serif;
@@ -260,7 +261,7 @@
 <section class="main">
     <div class="row">
         <!-- mohila degree college-->
-        @if($side == "front")
+        @if($side == "front" || $side=="both")
             @foreach($students as $student)
                 <div class="card yellow hrmdc" style="@if($templateConfig->bg_color) background-color:{{$templateConfig->bg_color}}; @endif @if($templateConfig->border_color) border-color:{{$templateConfig->border_color}}; @endif">
                     <div class="header">
@@ -325,7 +326,7 @@
                 </div>
             @endforeach
         @endif
-        @if($side =="back")
+        @if($side =="back" || $side=="both")
             @for($count=0; $count < $totalStudent; $count++)
                 <div class="card back yellow hrmdc" style="@if($templateConfig->bg_color) background-color:{{$templateConfig->bg_color}}; @endif @if($templateConfig->border_color) border-color:{{$templateConfig->border_color}}; @endif">
                     <h3 class="bold">If Found Please Return the Card To</h3>
@@ -342,8 +343,11 @@
 
     </div>
 </section>
-<script>
-    window.print();
+<script type="text/javascript">
+    window.onload = function () {
+        window.print();
+        window.close();
+    };
 </script>
 </body>
 </html>

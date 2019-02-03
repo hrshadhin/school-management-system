@@ -24,7 +24,7 @@ class ReportController extends Controller
         if($request->isMethod('post')){
             $templateId = $request->get('template_id', 0);
             $side = $request->get('side', 'back');
-            $howMany = intval($request->get('how_many', 0));
+//            $howMany = intval($request->get('how_many', 0));
 
             $templateConfig = Template::where('id', $templateId)->where('type',3)->where('role_id', AppHelper::USER_STUDENT)->first();
 
