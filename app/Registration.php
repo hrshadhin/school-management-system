@@ -67,4 +67,13 @@ class Registration extends Model
 
         return $query;
     }
+
+    public function scopeCountOrGet($query, $isCount)
+    {
+        if($isCount){
+            return $query->count();
+        }
+
+        return $query->get();
+    }
 }
