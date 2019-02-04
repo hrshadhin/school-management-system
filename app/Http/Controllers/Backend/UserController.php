@@ -246,7 +246,11 @@ class UserController extends Controller
     {
 
         $isPost = false;
-        $user = auth()->user();
+
+        $user = User::where('id',auth()->user()->id)->with('role')->first();
+
+
+        $userRole = Role::findOrFail($user->role->role_id)->first();
 
 
         if ($request->isMethod('post')) {
@@ -292,7 +296,7 @@ class UserController extends Controller
 
         }
 
-        return view('backend.user.profile', compact('user','isPost'));
+        return view('backend.user.profile', compact('user','isPost', 'userRole'));
     }/**
 
 
