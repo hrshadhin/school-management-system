@@ -403,6 +403,17 @@ class AppHelper
         DB::unprepared("CREATE TRIGGER section__au AFTER UPDATE ON sections FOR EACH ROW
     INSERT INTO section_history SELECT 'update', NULL, d.*
     FROM sections AS d WHERE d.id = NEW.id;");
+
+        //subject history table trigger
+        DB::unprepared("DROP TRIGGER IF EXISTS subject_ai;");
+        DB::unprepared("DROP TRIGGER IF EXISTS subject_au;");
+        //create after insert trigger
+        DB::unprepared("CREATE TRIGGER subject_ai AFTER INSERT ON subjects FOR EACH ROW
+    INSERT INTO subject_history SELECT 'insert', NULL, d.* 
+    FROM subjects AS d WHERE d.id = NEW.id;");
+        DB::unprepared("CREATE TRIGGER subject_au AFTER UPDATE ON subjects FOR EACH ROW
+    INSERT INTO subject_history SELECT 'update', NULL, d.*
+    FROM subjects AS d WHERE d.id = NEW.id;");
     }
 
 
