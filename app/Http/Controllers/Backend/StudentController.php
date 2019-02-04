@@ -334,7 +334,7 @@ class StudentController extends Controller
             $templateConfig = Template::where('id', $templateId)->where('type',3)->where('role_id', AppHelper::USER_STUDENT)->first();
 
             if(!$templateConfig){
-                return redirect()->route('administrator.report.student_idcard')->with('error', 'Template not found!');
+                return redirect()->route('administrator.template.idcard.index')->with('error', 'Template not found!');
             }
 
             $templateConfig = json_decode($templateConfig->content);
