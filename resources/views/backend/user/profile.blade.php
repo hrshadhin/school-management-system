@@ -33,7 +33,7 @@
                         <img class="profile-user-img img-responsive img-circle" src="{{ asset('images/avatar.jpg') }}" alt="User profile picture">
 
                         <h3 class="profile-username text-center">{{$user->name}}</h3>
-                        <p class="text-muted text-center">{{$user->role}}</p>
+                        <p class="text-muted text-center">{{$userRole->name}}</p>
 
                         <strong><i class="fa fa-user margin-r-5"></i>Username</strong>
                         <p class="text-muted">{{$user->username}}</p>
@@ -41,7 +41,7 @@
                         <hr>
                         <strong><i class="fa fa-info-circle margin-r-5"></i>Full name</strong>
                         <p class="text-muted">
-                           {{$user->name}}
+                            {{$user->name}}
                         </p>
 
                         <hr>
@@ -52,7 +52,7 @@
                         <hr>
 
                         <strong><i class="fa fa-clock-o margin-r-5"></i>Created At</strong>
-                        <p class="text-muted">{{$user->created_at->format('F j,Y')}}</p>
+                        <p class="text-muted">{{date('F j,Y', strtotime($user->created_at))}}</p>
                         <a href="#" class="btn btn-primary btn-block btnUpdate"><b>Update</b></a>
                     </div>
                     <!-- /.box-body -->
@@ -92,9 +92,9 @@
                 </div>
                 <!-- /.box -->
             </div>
-                <div class="col-md-3"></div>
+            <div class="col-md-3"></div>
 
-                <!-- /.box -->
+            <!-- /.box -->
         </div>
         <!-- /.row -->
     </section>
