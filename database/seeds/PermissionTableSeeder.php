@@ -222,6 +222,32 @@ class PermissionTableSeeder extends Seeder
                 "group" => "Admin Only"
             ],
             //mail / sms end
+            // idcard template
+            [   "slug" => "administrator.template.idcard.index",
+                "name" => "Idcard Template View",
+                "group" => "Admin Only"
+            ],
+            [   "slug" => "administrator.template.idcard.create",
+                "name" => "Idcard Template Create",
+                "group" => "Admin Only"
+            ],
+            [   "slug" => "administrator.template.idcard.store",
+                "name" => "Idcard Template Create",
+                "group" => "Admin Only"
+            ],
+            [   "slug" => "administrator.template.idcard.edit",
+                "name" => "Idcard Template Edit",
+                "group" => "Admin Only"
+            ],
+            [   "slug" => "administrator.template.idcard.update",
+                "name" => "Idcard Template Edit",
+                "group" => "Admin Only"
+            ],
+            [   "slug" => "administrator.template.idcard.destroy",
+                "name" => "Idcard Template Delete",
+                "group" => "Admin Only"
+            ],
+            //idcard end
             //sms gateway
             [   "slug" => "settings.sms_gateway.index",
                 "name" => "SMS Gateway View",
