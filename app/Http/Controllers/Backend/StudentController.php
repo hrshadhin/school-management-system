@@ -570,7 +570,7 @@ class StudentController extends Controller
             $data['nationality']  = $data['nationality_other'];
         }
 
-        $imgStorePath = "public/student/".$request->get('class_id',0);
+        $imgStorePath = "public/student/".$regiInfo->class_id;
         if($request->hasFile('photo')) {
             $storagepath = $request->file('photo')->store($imgStorePath);
             $fileName = basename($storagepath);
