@@ -77,7 +77,7 @@ class ReportController extends Controller
                     ->where('section_id', $sectionId)
                     ->where('status', AppHelper::ACTIVE)
                     ->with(['student' => function ($query) {
-                        $query->select('name', 'blood_group', 'id');
+                        $query->select('name', 'blood_group', 'id', 'photo');
                     }])
                     ->with(['class' => function ($query) {
                         $query->select('name', 'group', 'id');
