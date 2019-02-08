@@ -39,6 +39,10 @@ if you need production use please wait for completion of the project or use vers
 
 
 ```
+$ git clone https://github.com/hrshadhin/school-management-system.git
+
+OR development branch
+
 $ git clone https://github.com/hrshadhin/school-management-system.git -b v2.0-dev --single-branch
 ```
 ```
@@ -60,6 +64,10 @@ $ php artisan db:seed
 **Load demo data**
 ```
 $ php artisan db:seed --class DemoSiteDataSeeder
+```
+**Clear cache**
+```
+$ sudo php artisan cache:clear
 ```
 ```
 $ npm install
