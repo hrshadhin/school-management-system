@@ -45,6 +45,16 @@
     display: flex;
   }
 
+  body {
+    margin: 0;
+    padding: 0;
+  }
+
+  #printableArea, section.main-contents{
+    margin: 0;
+    padding: 0;
+  }
+
   .row {
     margin-right: -15px;
     margin-left: -15px;
