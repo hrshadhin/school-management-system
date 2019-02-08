@@ -109,7 +109,6 @@
 
 <!-- BEGIN PAGE JS-->
 @section('extraScript')
-    <script src="{{ asset(mix('/js/reports.js')) }}"></script>
     <script type="text/javascript">
         window.section_list_url = '{{URL::Route("academic.section")}}';
         $(document).ready(function () {
