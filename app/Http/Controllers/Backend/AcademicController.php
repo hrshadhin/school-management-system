@@ -214,7 +214,7 @@ class AcademicController extends Controller
         //for get request
         $section = Section::find($id);
 
-        $teachers = Employee::where('emp_type', AppHelper::EMP_TEACHER)
+        $teachers = Employee::where('role_id', AppHelper::EMP_TEACHER)
             ->where('status', AppHelper::ACTIVE)
             ->pluck('name', 'id');
         $teacher = null;
@@ -349,7 +349,7 @@ class AcademicController extends Controller
         //for get request
         $subject = Subject::find($id);
 
-        $teachers = Employee::where('emp_type', AppHelper::EMP_TEACHER)
+        $teachers = Employee::where('role_id', AppHelper::EMP_TEACHER)
             ->where('status', AppHelper::ACTIVE)
             ->pluck('name', 'id');
         $teacher = null;

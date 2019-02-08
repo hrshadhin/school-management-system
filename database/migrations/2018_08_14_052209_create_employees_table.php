@@ -15,8 +15,8 @@ class CreateEmployeesTable extends Migration
     {
         Schema::create('employees', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('user_id');
-            $table->enum('emp_type',[1,2])->default(1);
+            $table->unsignedInteger('user_id')->nullable();
+            $table->unsignedInteger('role_id');
             $table->string('id_card',50)->unique();
             $table->string('name');
             $table->string('designation')->nullable();
@@ -30,6 +30,9 @@ class CreateEmployeesTable extends Migration
             $table->string('joining_date',10);
             $table->string('photo')->nullable();
             $table->string('signature')->nullable();
+            $table->enum('shift', [1,2])->default(1);
+            $table->time('duty_start')->nullable();
+            $table->time('duty_end')->nullable();
             $table->enum('status', [0,1])->default(1);
             $table->timestamps();
             $table->softDeletes();
@@ -37,6 +40,7 @@ class CreateEmployeesTable extends Migration
 
 
             $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('role_id')->references('id')->on('roles');
         });
     }
 

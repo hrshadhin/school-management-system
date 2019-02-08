@@ -36,8 +36,11 @@ class AppHelper
     const USER_RECEPTIONIST = 7;
     const ACTIVE = '1';
     const INACTIVE = '0';
-    const EMP_TEACHER = 1;
-    const EMP_STAFF = 2;
+    const EMP_TEACHER = AppHelper::USER_TEACHER;
+    const EMP_SHIFTS = [
+        1 => 'Day',
+        2 => 'Night'
+    ];
     const GENDER = [
         1 => 'Male',
         2 => 'Female'
@@ -48,10 +51,6 @@ class AppHelper
         3 => 'Cristian',
         4 => 'Buddhist',
         5 => 'Other',
-    ];
-    const EMP_TYPES = [
-        1 => 'Teacher',
-        2 => 'Staff'
     ];
 
     const BLOOD_GROUP = [

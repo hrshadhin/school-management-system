@@ -23,7 +23,7 @@ class Employee extends Model
      */
     protected $fillable = [
         'user_id',
-        'emp_type',
+        'role_id',
         'id_card',
         'name',
         'designation',
@@ -37,6 +37,9 @@ class Employee extends Model
         'joining_date',
         'photo',
         'signature',
+        'shift',
+        'duty_start',
+        'duty_end',
         'status'
     ];
 
@@ -52,10 +55,6 @@ class Employee extends Model
         return Arr::get(AppHelper::GENDER, $value);
     }
 
-    public function getEmpTypeAttribute($value)
-    {
-        return Arr::get(AppHelper::EMP_TYPES, $value);
-    }
 
     public function getReligionAttribute($value)
     {
@@ -71,5 +70,11 @@ class Employee extends Model
     {
         return $this->hasMany('App\Section', 'teacher_id');
     }
+
+    public function role()
+    {
+        return $this->belongsTo('App\Role', 'role_id');
+    }
+
 
 }
