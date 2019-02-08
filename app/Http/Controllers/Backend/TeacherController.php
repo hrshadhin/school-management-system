@@ -24,7 +24,7 @@ class TeacherController extends Controller
     public function index()
     {
 
-        $teachers = Employee::where('emp_type', AppHelper::EMP_TEACHER)->get();
+        $teachers = Employee::where('role_id', AppHelper::EMP_TEACHER)->get();
 
         return view('backend.teacher.list', compact('teachers'));
 
@@ -110,7 +110,7 @@ class TeacherController extends Controller
         $data['address'] = $request->get('address');
         $data['joining_date'] = $request->get('joining_date');
         $data['id_card'] = $request->get('id_card');
-        $data['emp_type'] = AppHelper::EMP_TEACHER;
+        $data['role_id'] = AppHelper::EMP_TEACHER;
 
         DB::beginTransaction();
         try {
@@ -167,7 +167,7 @@ class TeacherController extends Controller
      */
     public function show($id)
     {
-        $teacher = Employee::with('user')->where('emp_type', AppHelper::EMP_TEACHER)->where('id', $id)->first();
+        $teacher = Employee::with('user')->where('role_id', AppHelper::EMP_TEACHER)->where('id', $id)->first();
         if(!$teacher){
             abort(404);
         }
@@ -186,7 +186,7 @@ class TeacherController extends Controller
      */
     public function edit($id)
     {
-        $teacher = Employee::where('emp_type', AppHelper::EMP_TEACHER)->where('id', $id)->first();
+        $teacher = Employee::where('role_id', AppHelper::EMP_TEACHER)->where('id', $id)->first();
 
         if(!$teacher){
             abort(404);
@@ -208,7 +208,7 @@ class TeacherController extends Controller
      */
     public function update(Request $request, $id)
     {
-       $teacher = Employee::where('emp_type', AppHelper::EMP_TEACHER)->where('id', $id)->first();
+       $teacher = Employee::where('role_id', AppHelper::EMP_TEACHER)->where('id', $id)->first();
 
         if(!$teacher){
             abort(404);
@@ -301,7 +301,7 @@ class TeacherController extends Controller
      */
     public function destroy($id)
     {
-        $teacher = Employee::where('emp_type', AppHelper::EMP_TEACHER)->where('id', $id)->first();
+        $teacher = Employee::where('role_id', AppHelper::EMP_TEACHER)->where('id', $id)->first();
 
         if(!$teacher){
             abort(404);

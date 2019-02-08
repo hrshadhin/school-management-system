@@ -230,7 +230,7 @@ class UserController extends Controller
 //        die();
 
 
-        $teachers = Employee::where('emp_type', AppHelper::EMP_TEACHER)->count();
+        $teachers = Employee::where('role_id', AppHelper::EMP_TEACHER)->count();
         $students = Student::count();
         $subjects = Subject::count();
 
