@@ -1,0 +1,396 @@
+<?php
+
+namespace App\Http\Controllers\Backend;
+
+use App\Employee;
+use App\Http\Helpers\AppHelper;
+use App\Role;
+use App\User;
+use App\UserRole;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
+
+class EmployeeController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+
+        $employees = Employee::with('role')->get();
+
+        return view('backend.hrm.employee.list', compact('employees'));
+
+    }
+
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        $employee = null;
+        $gender = 1;
+        $religion = 1;
+        $role = 0;
+        $shift = 1;
+        $roles = Role::whereNotIn('id', [AppHelper::USER_ADMIN, AppHelper::USER_TEACHER, AppHelper::USER_STUDENT, AppHelper::USER_PARENTS])->pluck('name', 'id');
+        return view('backend.hrm.employee.add', compact('employee', 'gender', 'religion', 'role', 'roles', 'shift'));
+    }
+
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        //validate form
+        $messages = [
+            'photo.max' => 'The :attribute size must be under 200kb.',
+            'signature.max' => 'The :attribute size must be under 200kb.',
+            'photo.dimensions' => 'The :attribute dimensions min 150 X 150.',
+            'signature.dimensions' => 'The :attribute dimensions max 160 X 80.',
+        ];
+
+        $rules =  [
+            'name' => 'required|min:5|max:255',
+            'photo' => 'mimes:jpeg,jpg,png|max:200|dimensions:min_width=150,min_height=150',
+            'signature' => 'nullable|mimes:jpeg,jpg,png|max:200|dimensions:max_width=160,max_height=80',
+            'designation' => 'max:255',
+            'qualification' => 'max:255',
+            'dob' => 'min:10',
+            'gender' => 'required|integer',
+            'religion' => 'required|integer',
+            'email' => 'nullable|email|max:255|unique:employees,email|unique:users,email',
+            'phone_no' => 'required|min:8|max:255',
+            'address' => 'max:500',
+            'id_card' => 'required|min:4|max:50|unique:employees,id_card',
+            'joining_date' => 'min:10',
+            'username' => 'nullable|min:5|max:255|unique:users,username',
+            'password' => 'nullable|min:6|max:50',
+            'shift' => 'nullable|integer',
+            'duty_start' => 'nullable|max:8',
+            'duty_end' => 'nullable|max:8',
+
+        ];
+
+        $this->validate($request, $rules);
+
+        $createUser = false;
+
+        if(strlen($request->get('username',''))){
+            $rules['email' ] = 'email|max:255|unique:students,email|unique:users,email';
+            $createUser = true;
+
+        }
+
+
+        if($request->hasFile('photo')) {
+            $storagepath = $request->file('photo')->store('public/employee');
+            $fileName = basename($storagepath);
+            $data['photo'] = $fileName;
+        }
+        else{
+            $data['photo'] = $request->get('oldPhoto','');
+        }
+
+        if($request->hasFile('signature')) {
+            $storagepath = $request->file('signature')->store('public/employee/signature');
+            $fileName = basename($storagepath);
+            $data['signature'] = $fileName;
+        }
+        else{
+            $data['signature'] = $request->get('oldSignature','');
+        }
+
+        $data['name'] = $request->get('name');
+        $data['designation'] = $request->get('designation');
+        $data['qualification'] = $request->get('qualification');
+        $data['dob'] = $request->get('dob');
+        $data['gender'] = $request->get('gender');
+        $data['religion'] = $request->get('religion');
+        $data['email'] = $request->get('email');
+        $data['phone_no'] = $request->get('phone_no');
+        $data['address'] = $request->get('address');
+        $data['joining_date'] = $request->get('joining_date');
+        $data['id_card'] = $request->get('id_card');
+        $data['role_id'] = $request->get('role_id', 0);
+
+        DB::beginTransaction();
+        try {
+            //now create user
+            if ($createUser) {
+                $user = User::create(
+                    [
+                        'name' => $data['name'],
+                        'username' => $request->get('username'),
+                        'email' => $data['email'],
+                        'password' => bcrypt($request->get('password')),
+                        'remember_token' => null,
+                    ]
+                );
+                //now assign the user to role
+                UserRole::create(
+                    [
+                        'user_id' => $user->id,
+                        'role_id' => $data['role_id']
+                    ]
+                );
+                $data['user_id'] = $user->id;
+            }
+            // now save employee
+            Employee::create($data);
+
+            DB::commit();
+
+            //now notify the admins about this record
+            $msg = $data['name']." Employee added by ".auth()->user()->name;
+            $nothing = AppHelper::sendNotificationToAdmins('info', $msg);
+            // Notification end
+
+            return redirect()->route('hrm.employee.create')->with('success', 'Employee added!');
+
+
+        }
+        catch(\Exception $e){
+            DB::rollback();
+            $message = str_replace(array("\r", "\n","'","`"), ' ', $e->getMessage());
+            return $message;
+            return redirect()->route('hrm.employee.create')->with("error",$message);
+        }
+
+        return redirect()->route('hrm.employee.create');
+
+
+    }
+
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Item  $item
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        $employee = Employee::with('user')->with('role')->where('id', $id)->first();
+        if(!$employee){
+            abort(404);
+        }
+
+        return view('backend.hrm.employee.view', compact('employee'));
+
+
+    }
+
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Item  $item
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        $employee = Employee::where('role_id', '!=', AppHelper::EMP_TEACHER)->where('id', $id)->first();
+
+        if(!$employee){
+            abort(404);
+        }
+        $gender = $employee->getOriginal('gender');
+        $religion = $employee->getOriginal('religion');
+        $role = $employee->role_id;
+        $shift = $employee->getOriginal('shift');
+
+        $roles = Role::whereNotIn('id', [AppHelper::USER_ADMIN, AppHelper::USER_TEACHER, AppHelper::USER_STUDENT, AppHelper::USER_PARENTS])->pluck('name', 'id');
+
+        return view('backend.hrm.employee.add', compact('employee', 'gender', 'religion', 'role', 'roles', 'shift'));
+
+    }
+
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Item  $item
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        $employee = Employee::where('role_id', '!=', AppHelper::EMP_TEACHER)->where('id', $id)->first();
+
+        if(!$employee){
+            abort(404);
+        }
+        //validate form
+        $messages = [
+            'photo.max' => 'The :attribute size must be under 200kb.',
+            'signature.max' => 'The :attribute size must be under 200kb.',
+            'photo.dimensions' => 'The :attribute dimensions min 150 X 150.',
+            'signature.dimensions' => 'The :attribute dimensions max 160 X 80.',
+        ];
+        $this->validate(
+            $request, [
+                'name' => 'required|min:5|max:255',
+                'photo' => 'mimes:jpeg,jpg,png|max:200|dimensions:min_width=150,min_height=150',
+                'signature' => 'mimes:jpeg,jpg,png|max:200|dimensions:max_width=160,max_height=80',
+                'designation' => 'max:255',
+                'qualification' => 'max:255',
+                'dob' => 'min:10',
+                'gender' => 'required|integer',
+                'religion' => 'required|integer',
+                'email' => 'nullable|email|max:255|unique:employees,email,'.$employee->id.'|unique:users,email,'.$employee->user_id,
+                'phone_no' => 'required|min:8|max:255',
+                'address' => 'max:500',
+                'id_card' => 'required|min:4|max:50|unique:employees,id_card,'.$employee->id,
+                'joining_date' => 'min:10',
+                'shift' => 'nullable|integer',
+                'duty_start' => 'nullable|max:8',
+                'duty_end' => 'nullable|max:8',
+
+            ]
+        );
+
+        if($request->hasFile('photo')) {
+            $storagepath = $request->file('photo')->store('public/employee');
+            $fileName = basename($storagepath);
+            $data['photo'] = $fileName;
+
+            //if file change then delete old one
+            $oldFile = $request->get('oldPhoto','');
+            if( $oldFile != ''){
+                $file_path = "public/employee/".$oldFile;
+                Storage::delete($file_path);
+            }
+        }
+        else{
+            $data['photo'] = $request->get('oldPhoto','');
+        }
+
+        if($request->hasFile('signature')) {
+            $storagepath = $request->file('signature')->store('public/employee/signature');
+            $fileName = basename($storagepath);
+            $data['signature'] = $fileName;
+
+            //if file change then delete old one
+            $oldFile = $request->get('oldSignature','');
+            if( $oldFile != ''){
+                $file_path = "public/employee/signature/".$oldFile;
+                Storage::delete($file_path);
+            }
+        }
+        else{
+            $data['signature'] = $request->get('oldSignature','');
+        }
+
+
+        $data['name'] = $request->get('name');
+        $data['designation'] = $request->get('designation');
+        $data['qualification'] = $request->get('qualification');
+        $data['dob'] = $request->get('dob');
+        $data['gender'] = $request->get('gender');
+        $data['religion'] = $request->get('religion');
+        $data['email'] = $request->get('email');
+        $data['phone_no'] = $request->get('phone_no');
+        $data['address'] = $request->get('address');
+        $data['joining_date'] = $request->get('joining_date');
+        $data['id_card'] = $request->get('id_card');
+        $data['role_id'] = $request->get('role_id', 0);
+        $data['shift'] = $request->get('shift', 1);
+        $data['duty_start'] = $request->get('duty_start', '');
+        $data['duty_end'] = $request->get('duty_end', '');
+
+        $employee->fill($data);
+        $employee->save();
+
+        return redirect()->route('hrm.employee.index')->with('success', 'Employee updated!');
+
+
+    }
+
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Item  $item
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        $employee = Employee::where('role_id', '!=', AppHelper::EMP_TEACHER)->where('id', $id)->first();
+
+        if(!$employee){
+            abort(404);
+        }
+
+        $message = "Something went wrong!";
+        DB::beginTransaction();
+        try {
+
+            if($employee->user_id) {
+                User::destroy($employee->user_id);
+                DB::table('user_roles')->where('user_id', $employee->user_id)->update([
+                    'deleted_by' => auth()->user()->id,
+                    'deleted_at' => Carbon::now()
+                ]);
+            }
+            $employee->delete();
+
+            DB::commit();
+
+            //now notify the admins about this record
+            $msg = $employee->name." Employee deleted by ".auth()->user()->name;
+            $nothing = AppHelper::sendNotificationToAdmins('info', $msg);
+            // Notification end
+
+            return redirect()->route('hrm.employee.index')->with('success', 'Employee deleted.');
+
+        }
+        catch(\Exception $e){
+            DB::rollback();
+            $message = str_replace(array("\r", "\n","'","`"), ' ', $e->getMessage());
+        }
+
+
+
+
+        return redirect()->route('hrm.employee.index')->with('error', $message);
+
+    }
+
+    /**
+     * status change
+     * @return mixed
+     */
+    public function changeStatus(Request $request, $id=0)
+    {
+
+        $employee =  Employee::findOrFail($id);
+        if(!$employee){
+            return [
+                'success' => false,
+                'message' => 'Record not found!'
+            ];
+        }
+
+        $employee->status = (string)$request->get('status');
+
+        $employee->save();
+
+        return [
+            'success' => true,
+            'message' => 'Status updated.'
+        ];
+
+    }
+}
