@@ -363,10 +363,10 @@
 
                                 </div>
 
-                            @if(!$student)
                                 <p class="lead section-title">Access Info:</p>
                                 <div class="row">
-                                <div class="col-md-4">
+                                    @if(!$student)
+                                    <div class="col-md-4">
                                     <div class="form-group has-feedback">
                                         <label for="username">Username</label>
                                         <input  type="text" class="form-control" value="" name="username" placeholder="leave blank if not need to create user"  minlength="5" maxlength="255">
@@ -382,11 +382,21 @@
                                         <span class="text-danger">{{ $errors->first('password') }}</span>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-
-                                </div>
+                                    @endif
+                                    @if($student && !$student->user_id)
+                                        <div class="col-md-4">
+                                            <div class="form-group has-feedback">
+                                                <label for="user_id">User
+                                                    <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Leave as it is, if not need user"></i>
+                                                </label>
+                                                {!! Form::select('user_id', $users, null , ['placeholder' => 'Pick if needed','class' => 'form-control select2']) !!}
+                                                <span class="form-control-feedback"></span>
+                                                <span class="text-danger">{{ $errors->first('user_id') }}</span>
+                                            </div>
+                                        </div>
+                                    @endif
                             </div>
-                                @endif
+
 
                         </div>
                         <!-- /.box-body -->

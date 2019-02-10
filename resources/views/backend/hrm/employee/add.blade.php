@@ -202,9 +202,10 @@
                                 </div>
 
                             </div>
-                            @if(!$employee)
+
                             <hr>
                             <div class="row">
+                                @if(!$employee)
                                 <div class="col-md-4">
                                     <div class="form-group has-feedback">
                                         <label for="username">Username</label>
@@ -221,11 +222,20 @@
                                         <span class="text-danger">{{ $errors->first('password') }}</span>
                                     </div>
                                 </div>
+                            @endif
+                            @if($employee && !$employee->user_id)
                                 <div class="col-md-4">
-
+                                    <div class="form-group has-feedback">
+                                        <label for="user_id">User
+                                            <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Leave as it is, if not need user"></i>
+                                        </label>
+                                        {!! Form::select('user_id', $users, null , ['placeholder' => 'Pick if needed','class' => 'form-control select2']) !!}
+                                        <span class="form-control-feedback"></span>
+                                        <span class="text-danger">{{ $errors->first('user_id') }}</span>
+                                    </div>
                                 </div>
-                            </div>
-                                @endif
+
+                            @endif
                         </div>
                         <!-- /.box-body -->
                         <div class="box-footer">

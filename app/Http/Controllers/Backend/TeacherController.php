@@ -241,7 +241,17 @@ class TeacherController extends Controller
         $gender = $teacher->getOriginal('gender');
         $religion = $teacher->getOriginal('religion');
 
-        return view('backend.teacher.add', compact('teacher', 'gender', 'religion'));
+        $users = [];
+        if(!$teacher->user_id){
+            $users = User::doesnthave('employee')
+                ->doesnthave('student')
+                ->whereHas('role' , function ($query) {
+                    $query->where('role_id', AppHelper::USER_TEACHER);
+                })
+                ->pluck('name', 'id');
+        }
+
+        return view('backend.teacher.add', compact('teacher', 'gender', 'religion', 'users'));
 
     }
 
@@ -282,6 +292,7 @@ class TeacherController extends Controller
                 'address' => 'max:500',
                 'id_card' => 'required|min:4|max:50|unique:employees,id_card,'.$teacher->id,
                 'joining_date' => 'min:10',
+                'user_id' => 'nullable|integer',
 
             ]
         );
@@ -330,6 +341,12 @@ class TeacherController extends Controller
         $data['address'] = $request->get('address');
         $data['joining_date'] = $request->get('joining_date');
         $data['id_card'] = $request->get('id_card');
+
+        //
+        if(!$teacher->user_id && $request->get('user_id', 0)){
+            $data['user_id'] = $request->get('user_id');
+        }
+
 
         $teacher->fill($data);
         $teacher->save();

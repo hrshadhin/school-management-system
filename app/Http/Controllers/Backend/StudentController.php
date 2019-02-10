@@ -191,6 +191,7 @@ class StudentController extends Controller
             'roll_no' => 'nullable|integer',
             'board_regi_no' => 'nullable|max:50',
             'fourth_subject' => 'nullable|integer',
+            'house' => 'nullable|max:100',
 
         ];
         //if it college then need another 2 feilds
@@ -287,8 +288,9 @@ class StudentController extends Controller
                 'shift' => $data['shift'],
                 'card_no' => $data['card_no'],
                 'board_regi_no' => $data['board_regi_no'],
-                'fourth_subject' => $data['fourth_subject'] ? $data['fourth_subject'] : 0,
-                'alt_fourth_subject' => $data['alt_fourth_subject'] ??  0
+                'fourth_subject' => $data['fourth_subject'] ??  0,
+                'alt_fourth_subject' => $data['alt_fourth_subject'] ??  0,
+                'house' => $data['house'] ??  ''
             ];
 
             Registration::create($registrationData);
@@ -470,6 +472,17 @@ class StudentController extends Controller
         $esubject = $regiInfo->fourth_subject;
         $csubject = $regiInfo->alt_fourth_subject;
 
+        $users = [];
+        if(!$student->user_id){
+            $users = User::doesnthave('employee')
+                ->doesnthave('student')
+                ->whereHas('role' , function ($query) {
+                    $query->where('role_id', AppHelper::USER_STUDENT);
+                })
+                ->pluck('name', 'id');
+        }
+
+
         return view('backend.student.add', compact(
             'regiInfo',
             'student',
@@ -485,7 +498,8 @@ class StudentController extends Controller
             'electiveSubjects',
             'coreSubjects',
             'esubject',
-            'csubject'
+            'csubject',
+            'users'
         ));
 
     }
@@ -541,6 +555,8 @@ class StudentController extends Controller
             'roll_no' => 'nullable|integer',
             'board_regi_no' => 'nullable|max:50',
             'fourth_subject' => 'nullable|integer',
+            'user_id' => 'nullable|integer',
+            'house' => 'nullable|max:100',
 
         ];
 
@@ -597,7 +613,8 @@ class StudentController extends Controller
             'card_no' => $data['card_no'],
             'board_regi_no' => $data['board_regi_no'],
             'fourth_subject' => $data['fourth_subject'] ? $data['fourth_subject'] : 0,
-            'alt_fourth_subject' => $data['alt_fourth_subject'] ?? 0
+            'alt_fourth_subject' => $data['alt_fourth_subject'] ?? 0,
+            'house' => $data['house'] ??  ''
         ];
 
         // now check if student academic information changed, if so then log it
@@ -697,6 +714,12 @@ class StudentController extends Controller
             // save registration data
             $regiInfo->fill($registrationData);
             $regiInfo->save();
+
+            //
+            if(!$student->user_id && $request->get('user_id', 0)){
+                $data['user_id'] = $request->get('user_id');
+            }
+
 
             // now save student
             $student->fill($data);
