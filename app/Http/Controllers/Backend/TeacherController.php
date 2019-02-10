@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Helpers\AppHelper;
 use App\Section;
 use App\Subject;
+use App\Template;
 use App\User;
 use App\UserRole;
 use Carbon\Carbon;
@@ -165,8 +166,54 @@ class TeacherController extends Controller
      * @param  \App\Item  $item
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
+        // if print id card of this student then
+        // Do here
+        if($request->query->get('print_idcard',0)) {
+
+            $templateId = AppHelper::getAppSettings('employee_idcard_template');
+            $templateConfig = Template::where('id', $templateId)->where('type',3)->where('role_id', AppHelper::USER_TEACHER)->first();
+
+            if(!$templateConfig){
+                return redirect()->route('administrator.template.idcard.index')->with('error', 'Template not found!');
+            }
+
+            $templateConfig = json_decode($templateConfig->content);
+
+            $format = "format_";
+            if($templateConfig->format_id == 2){
+                $format .="two";
+            }
+            else if($templateConfig->format_id == 3){
+                $format .="three";
+            }
+            else {
+                $format .="one";
+            }
+
+            //get institute information
+            $instituteInfo = AppHelper::getAppSettings('institute_settings');
+
+
+            $employees = Employee::where('id', $id)->get();
+
+            if(!$employees){
+                abort(404);
+            }
+
+
+            $side = 'both';
+            return view('backend.report.hrm.employee.idcard.'.$format, compact(
+                'templateConfig',
+                'instituteInfo',
+                'side',
+                'employees'
+            ));
+        }
+
+
+
         $teacher = Employee::with('user')->where('role_id', AppHelper::EMP_TEACHER)->where('id', $id)->first();
         if(!$teacher){
             abort(404);

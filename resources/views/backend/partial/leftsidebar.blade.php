@@ -178,6 +178,11 @@
               <i class="fa fa-id-card"></i> <span>Student Idcard Print</span>
             </a>
           </li>
+          <li>
+            <a href="{{ URL::route('report.employee_idcard') }}">
+              <i class="fa fa-id-card"></i> <span>Employee Idcard Print</span>
+            </a>
+          </li>
         </ul>
       </li>
 
