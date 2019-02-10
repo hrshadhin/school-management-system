@@ -41,10 +41,10 @@
                             <tr>
                                 <th width="5%">#</th>
                                 <th class="notexport" width="10%">Photo</th>
-                                <th width="8%">ID Card</th>
-                                <th width="25%">Name</th>
-                                <th width="8%">Phone No</th>
-                                <th width="19%">Email</th>
+                                <th width="10%">ID Card</th>
+                                <th width="30%">Name</th>
+                                <th width="10%">Phone No</th>
+                                <th width="10%">Type</th>
                                 <th width="10%">Status</th>
                                 <th class="notexport" width="15%">Action</th>
                             </tr>
@@ -55,29 +55,37 @@
                                     <td>
                                         {{$loop->iteration}}
                                     </td>
+
                                     <td>
                                         <img class="img-responsive center" style="height: 35px; width: 35px;" src="@if($employee->photo ){{ asset('storage/employee')}}/{{ $employee->photo }} @else {{ asset('images/avatar.jpg')}} @endif" alt="">
                                     </td>
                                     <td>{{ $employee->id_card }}</td>
                                     <td>{{ $employee->name }}</td>
                                     <td>{{ $employee->phone_no }}</td>
-                                    <td>{{ $employee->email }}</td>
+                                    <td>{{ $employee->role->name }}</td>
                                     <td>
+                                        @if($employee->role->id == AppHelper::USER_TEACHER)
+                                            <input disabled="disabled" type="checkbox" @if($employee->status) checked @endif data-toggle="toggle" data-on="<i class='fa fa-check-circle'></i>" data-off="<i class='fa fa-ban'></i>" data-onstyle="success" data-offstyle="danger">
+
+                                        @else
                                         <!-- todo: have problem in mobile device -->
                                         <input class="statusChange" type="checkbox" data-pk="{{$employee->id}}" @if($employee->status) checked @endif data-toggle="toggle" data-on="<i class='fa fa-check-circle'></i>" data-off="<i class='fa fa-ban'></i>" data-onstyle="success" data-offstyle="danger">
+                                        @endif
                                     </td>
                                     <td>
+                                        
                                         <div class="btn-group">
-                                            <a title="Details"  href="{{URL::route('teacher.show',$employee->id)}}"  class="btn btn-primary btn-sm"><i class="fa fa-eye"></i>
+                                            <a title="Details"  href="{{URL::route('hrm.employee.show',$employee->id)}}"  class="btn btn-primary btn-sm"><i class="fa fa-eye"></i>
                                             </a>
                                         </div>
+                                        @if($employee->role->id != AppHelper::USER_TEACHER)
                                         <div class="btn-group">
-                                            <a title="Edit" href="{{URL::route('teacher.edit',$employee->id)}}" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
+                                            <a title="Edit" href="{{URL::route('hrm.employee.edit',$employee->id)}}" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
                                             </a>
                                         </div>
                                         <!-- todo: have problem in mobile device -->
                                         <div class="btn-group">
-                                            <form  class="myAction" method="POST" action="{{URL::route('teacher.destroy', $employee->id)}}">
+                                            <form  class="myAction" method="POST" action="{{URL::route('hrm.employee.destroy', $employee->id)}}">
                                                 @csrf
                                                 <input name="_method" type="hidden" value="DELETE">
                                                 <button type="submit" class="btn btn-danger btn-sm" title="Delete">
@@ -85,6 +93,7 @@
                                                 </button>
                                             </form>
                                         </div>
+                                        @endif
 
                                     </td>
                                 </tr>
@@ -95,10 +104,10 @@
                             <tr>
                                 <th width="5%">#</th>
                                 <th class="notexport" width="10%">Photo</th>
-                                <th width="8%">ID Card</th>
-                                <th width="25%">Name</th>
-                                <th width="8%">Phone No</th>
-                                <th width="15%">Email</th>
+                                <th width="10%">ID Card</th>
+                                <th width="30%">Name</th>
+                                <th width="10%">Phone No</th>
+                                <th width="10%">Type</th>
                                 <th width="10%">Status</th>
                                 <th class="notexport" width="15%">Action</th>
                             </tr>

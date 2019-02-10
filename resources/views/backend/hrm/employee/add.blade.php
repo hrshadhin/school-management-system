@@ -94,8 +94,11 @@
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group has-feedback">
-                                        <label for="email">Email<span class="text-danger">*</span></label>
-                                        <input  type="email" class="form-control" name="email"  placeholder="email address" value="@if($employee){{$employee->email}}@else{{old('email')}}@endif" maxlength="100" required>
+                                        <label for="email">Email<span class="text-black">*</span>
+                                            <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Only required when create user."></i>
+
+                                        </label>
+                                        <input  type="email" class="form-control" name="email"  placeholder="email address" value="@if($employee){{$employee->email}}@else{{old('email')}}@endif" maxlength="100">
                                         <span class="fa fa-envelope form-control-feedback"></span>
                                         <span class="text-danger">{{ $errors->first('email') }}</span>
                                     </div>
@@ -120,6 +123,17 @@
                             </div>
 
                             <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group has-feedback">
+                                        <label for="role_id">Employee Type/Role<span class="text-danger">*</span>
+                                            <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Set a employee Type"></i>
+                                        </label>
+                                        {!! Form::select('role_id', $roles, $role , ['placeholder' => 'Pick a type...','class' => 'form-control select2', 'required' => 'true']) !!}
+                                        <span class="form-control-feedback"></span>
+                                        <span class="text-danger">{{ $errors->first('role_id') }}</span>
+                                    </div>
+                                </div>
+
                                 <div class="col-md-2">
                                     <div class="form-group has-feedback">
                                         <label for="joining_date">Joining Date<span class="text-danger">*</span></label>
@@ -128,6 +142,34 @@
                                         <span class="text-danger">{{ $errors->first('joining_date') }}</span>
                                     </div>
                                 </div>
+                                <div class="col-md-2">
+                                    <div class="form-group has-feedback">
+                                        <label for="shift">Shift<span class="text-danger">*</span>
+                                            <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="select shift"></i>
+                                        </label>
+                                        {!! Form::select('shift', AppHelper::EMP_SHIFTS, $shift , ['class' => 'form-control select2', 'required' => 'true']) !!}
+                                        <span class="form-control-feedback"></span>
+                                        <span class="text-danger">{{ $errors->first('shift') }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group has-feedback">
+                                        <label for="duty_start">Duty Start</label>
+                                        <input type='text' class="form-control time_picker"  readonly name="duty_start" placeholder="time" value="@if($employee){{$employee->duty_start}}@else{{ old('duty_start') }}@endif" maxlength="8" />
+                                        <span class="fa fa-clock-o form-control-feedback"></span>
+                                        <span class="text-danger">{{ $errors->first('duty_start') }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group has-feedback">
+                                        <label for="duty_end">Duty End</label>
+                                        <input type='text' class="form-control time_picker"  readonly name="duty_end" placeholder="time" value="@if($employee){{$employee->duty_end}}@else{{ old('duty_end') }}@endif" maxlength="8" />
+                                        <span class="fa fa-clock-o form-control-feedback"></span>
+                                        <span class="text-danger">{{ $errors->first('duty_end') }}</span>
+                                    </div>
+                                </div>
+                                </div>
+                            <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group has-feedback">
                                         <label for="address">Address</label>
@@ -136,9 +178,9 @@
                                         <span class="text-danger">{{ $errors->first('address') }}</span>
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <div class="form-group has-feedback">
-                                        <label for="photo">Photo<br><span class="text-danger">[min 150 X 150 size and max 200kb]</span></label>
+                                        <label for="photo">Photo<br><span class="text-black">[min 150 X 150 size and max 200kb]</span></label>
                                         <input  type="file" class="form-control" accept=".jpeg, .jpg, .png" name="photo" placeholder="Photo image">
                                         @if($employee && isset($employee->photo))
                                             <input type="hidden" name="oldPhoto" value="{{$employee->photo}}">
@@ -147,9 +189,9 @@
                                         <span class="text-danger">{{ $errors->first('photo') }}</span>
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <div class="form-group has-feedback">
-                                        <label for="photo">Signature<br><span class="text-danger">[max 160 X 80 size and max 200kb]</span></label>
+                                        <label for="photo">Signature<br><span class="text-black">[max 160 X 80 size and max 200kb]</span></label>
                                         <input  type="file" class="form-control" accept=".jpeg, .jpg, .png" name="signature" placeholder="Signature image">
                                         @if($employee && isset($employee->signature))
                                             <input type="hidden" name="oldSignature" value="{{$employee->signature}}">
@@ -166,7 +208,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group has-feedback">
                                         <label for="username">Username</label>
-                                        <input  type="text" class="form-control" value="" name="username" minlength="5" maxlength="255">
+                                        <input  type="text" class="form-control" value="" name="username" placeholder="leave blank if not need to create user" minlength="5" maxlength="255">
                                         <span class="glyphicon glyphicon-info-sign form-control-feedback"></span>
                                         <span class="text-danger">{{ $errors->first('username') }}</span>
                                     </div>
@@ -174,7 +216,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group has-feedback">
                                         <label for="password">Passwrod</label>
-                                        <input type="password" class="form-control" name="password" placeholder="Password" minlength="6" maxlength="50">
+                                        <input type="password" class="form-control" name="password" placeholder="leave blank if not need to create user" minlength="6" maxlength="50">
                                         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
                                         <span class="text-danger">{{ $errors->first('password') }}</span>
                                     </div>
@@ -184,7 +226,6 @@
                                 </div>
                             </div>
                                 @endif
-
                         </div>
                         <!-- /.box-body -->
                         <div class="box-footer">
@@ -205,7 +246,7 @@
 @section('extraScript')
     <script type="text/javascript">
         $(document).ready(function () {
-            Generic.initCommonPageJS();
+           HRM.employeeInit();
         });
     </script>
 @endsection

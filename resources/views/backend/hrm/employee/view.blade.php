@@ -31,9 +31,11 @@
         <div class="btn-group">
             <button class="btn-ta btn-sm-ta" data-toggle="modal" data-target="#idCard"><span class="fa fa-floppy-o"></span> ID Card </button>
         </div>
+        @if($employee->role->id != AppHelper::USER_TEACHER)
         <div class="btn-group">
-            <a href="{{URL::route('teacher.edit',$employee->id)}}" class="btn-ta btn-sm-ta"><i class="fa fa-edit"></i> Edit</a>
+            <a href="{{URL::route('hrm.employee.edit',$employee->id)}}" class="btn-ta btn-sm-ta"><i class="fa fa-edit"></i> Edit</a>
         </div>
+        @endif
 
         <ol class="breadcrumb">
             <li><a href="{{URL::route('user.dashboard')}}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
@@ -98,6 +100,18 @@
 
                                     <strong><i class="fa fa-calendar margin-r-5"></i> Join Date</strong>
                                     <p class="text-muted">{{$employee->joining_date}}</p>
+
+                                    <hr>
+                                    <strong><i class="fa fa-clock-o margin-r-5"></i> Shift</strong>
+                                    <p class="text-muted">{{$employee->shift}}</p>
+
+                                    <hr>
+                                    <strong><i class="fa fa-clock-o margin-r-5"></i> Duty Start</strong>
+                                    <p class="text-muted">{{$employee->duty_start}}</p>
+
+                                    <hr>
+                                    <strong><i class="fa fa-clock-o margin-r-5"></i> Duty End</strong>
+                                    <p class="text-muted">{{$employee->duty_end}}</p>
 
                                     <hr>
                                     <strong><i class="fa fa-sign-in margin-r-5"></i> Username</strong>

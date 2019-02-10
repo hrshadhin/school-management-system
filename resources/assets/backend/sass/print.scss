@@ -68,9 +68,9 @@
     padding-left: 15px;
   }
 
-  div{
-    page-break-inside: avoid;
-  }
+  //div{
+  //  page-break-inside: avoid;
+  //}
   * {
     -webkit-print-color-adjust: exact !important;   /* Chrome, Safari */
     color-adjust: exact !important;                 /*Firefox*/
