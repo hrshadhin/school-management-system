@@ -81,6 +81,24 @@
 
         </ul>
       </li>
+      <li class="treeview">
+        <a href="#">
+          <i class="fa fa-users"></i>
+          <span>HRM</span>
+          <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+        </a>
+        <ul class="treeview-menu">
+          @can('hrm.employee.index')
+            <li>
+              <a href="{{ URL::route('hrm.employee.index') }}">
+                <i class="fa icon-member"></i> <span>Employee</span>
+              </a>
+            </li>
+          @endcan
+        </ul>
+      </li>
       @role('Admin')
       <li class="treeview">
         <a href="#">

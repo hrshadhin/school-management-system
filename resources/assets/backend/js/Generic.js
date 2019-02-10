@@ -36,6 +36,17 @@ export default class Generic {
             todayBtn: true
         });
 
+        $(".time_picker").datetimepicker({
+            pickDate: false,
+            minuteStep: 30,
+            pickerPosition: 'bottom-right',
+            format: 'HH:ii p',
+            autoclose: true,
+            showMeridian: true,
+            startView: 1,
+            maxView: 1,
+        });
+
         var buttonCommon = {
             exportOptions: {
                 columns: ':not(.notexport)',

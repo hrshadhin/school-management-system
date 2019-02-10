@@ -725,6 +725,42 @@ class PermissionTableSeeder extends Seeder
             ]
         ];
 
+        $hrmPermissionList = [
+            // Employee
+            [   "slug" => "hrm.employee.index",
+                "name" => "Employee View",
+                "group" => "HRM"
+            ],
+            [   "slug" => "hrm.employee.store",
+                "name" => "Employee Create",
+                "group" => "HRM"
+            ],
+            [   "slug" => "hrm.employee.create",
+                "name" => "Employee Create",
+                "group" => "HRM"
+            ],
+            [   "slug" => "hrm.employee.status",
+                "name" => "Employee Edit",
+                "group" => "HRM"
+            ],
+            [   "slug" => "hrm.employee.destroy",
+                "name" => "Employee Delete",
+                "group" => "HRM"
+            ],
+            [   "slug" => "hrm.employee.update",
+                "name" => "Employee Edit",
+                "group" => "HRM"
+            ],
+            [   "slug" => "hrm.employee.show",
+                "name" => "Employee View",
+                "group" => "HRM"
+            ],
+            [   "slug" => "hrm.employee.edit",
+                "name" => "Employee Edit",
+                "group" => "HRM"
+            ],
+            // Employee
+        ];
 
         $reportsPermissionList = [
             // Report
@@ -737,7 +773,7 @@ class PermissionTableSeeder extends Seeder
 
         //merge all permissions and insert into db
         $permissions = array_merge($commonPermissionList, $administratorPermissionList, $onlyAdminPermissions,
-            $academicPermissionList, $websitePermissionList, $reportsPermissionList);
+            $academicPermissionList, $websitePermissionList, $hrmPermissionList, $reportsPermissionList);
 
         echo PHP_EOL , 'seeding permissions...';
 

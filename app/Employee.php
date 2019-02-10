@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Http\Helpers\AppHelper;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Hrshadhin\Userstamps\UserstampsTrait;
@@ -53,6 +54,44 @@ class Employee extends Model
     public function getGenderAttribute($value)
     {
         return Arr::get(AppHelper::GENDER, $value);
+    }
+
+    public function getShiftAttribute($value)
+    {
+        return Arr::get(AppHelper::EMP_SHIFTS, $value);
+    }
+    public function setDutyStartAttribute($value)
+    {
+        if(strlen($value)){
+            $this->attributes['duty_start'] = Carbon::createFromFormat('h:i a', $value)->format('H:i:s');
+        }
+
+    }
+
+    public function getDutyStartAttribute($value)
+    {
+        if(!strlen($value)){
+            return null;
+        }
+        return Carbon::parse($value)->format('h:i a');
+
+    }
+
+    public function setDutyEndAttribute($value)
+    {
+        if(strlen($value)){
+            $this->attributes['duty_end'] = Carbon::createFromFormat('h:i a', $value)->format('H:i:s');
+        }
+
+    }
+
+    public function getDutyEndAttribute($value)
+    {
+        if(!strlen($value)){
+            return null;
+        }
+        return Carbon::parse($value)->format('h:i a');
+
     }
 
 

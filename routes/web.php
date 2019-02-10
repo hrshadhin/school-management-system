@@ -240,6 +240,11 @@ Route::group(
     Route::get('student-attendance/file-queue-status', 'StudentAttendanceController@fileQueueStatus')
         ->name('student_attendance.file_queue_status');
 
+    // HRM
+        //Employee
+    Route::resource('hrm/employee', 'EmployeeController', ['as' => 'hrm']);
+    Route::post('hrm/employee/status/{id}', 'EmployeeController@changeStatus')
+        ->name('hrm.employee.status');
 
     // Reporting
     //student id card

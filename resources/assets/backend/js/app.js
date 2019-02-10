@@ -47,3 +47,6 @@ window.Academic = Academic;
 
 import Reports from './reports';
 window.Reports = Reports;
+
+import HRM from './hrm';
+window.HRM = HRM;
