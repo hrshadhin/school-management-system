@@ -29,7 +29,7 @@
             <a href="#"  class="btn-ta btn-sm-ta btn-print btnPrintInformation"><i class="fa fa-print"></i> Print</a>
         </div>
         <div class="btn-group">
-            <button class="btn-ta btn-sm-ta" data-toggle="modal" data-target="#idCard"><span class="fa fa-floppy-o"></span> ID Card </button>
+            <a  href="{{URL::route('hrm.employee.show',$employee->id)}}?print_idcard=1" class="btn-ta btn-sm-ta" target="_blank"><span class="fa fa-floppy-o"></span> ID Card </a>
         </div>
         @if($employee->role->id != AppHelper::USER_TEACHER)
         <div class="btn-group">
@@ -112,11 +112,11 @@
                                     <hr>
                                     <strong><i class="fa fa-clock-o margin-r-5"></i> Duty End</strong>
                                     <p class="text-muted">{{$employee->duty_end}}</p>
-
+                                    @if($employee->user)
                                     <hr>
                                     <strong><i class="fa fa-sign-in margin-r-5"></i> Username</strong>
                                     <p class="text-muted">{{$employee->user->username}}</p>
-
+                                    @endif
                                     <hr>
                                     <strong><i class="fa fa-pencil margin-r-5"></i> Signature</strong>
                                     @if($employee->signature )

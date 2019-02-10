@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\AcademicYear;
+use App\Employee;
 use App\Http\Helpers\AppHelper;
 use App\IClass;
 use App\Registration;
@@ -29,7 +30,7 @@ class ReportController extends Controller
             $templateConfig = Template::where('id', $templateId)->where('type',3)->where('role_id', AppHelper::USER_STUDENT)->first();
 
             if(!$templateConfig){
-                return redirect()->route('administrator.report.student_idcard')->with('error', 'Template not found!');
+                return redirect()->route('report.student_idcard')->with('error', 'Template not found!');
             }
 
             $templateConfig = json_decode($templateConfig->content);
@@ -137,6 +138,77 @@ class ReportController extends Controller
         return view('backend.report.student.idcard.form', compact(
             'academic_years',
             'classes',
+            'templates'
+        ));
+
+    }
+
+    /**
+     *  Employee ID card print.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function employeeIdcard(Request $request)
+    {
+
+
+
+        if($request->isMethod('post')){
+            $templateId = $request->get('template_id', 0);
+            $side = $request->get('side', 'back');
+
+            $templateConfig = Template::where('id', $templateId)->where('type',3)->where('role_id', AppHelper::USER_TEACHER)->first();
+
+            if(!$templateConfig){
+                return redirect()->route('report.employee_idcard')->with('error', 'Template not found!');
+            }
+
+            $templateConfig = json_decode($templateConfig->content);
+
+            $format = "format_";
+            if($templateConfig->format_id == 2){
+                $format .="two";
+            }
+            else if($templateConfig->format_id == 3){
+                $format .="three";
+            }
+            else {
+                $format .="one";
+            }
+
+            //get institute information
+            $instituteInfo = AppHelper::getAppSettings('institute_settings');
+
+
+            //pull employee
+            if($side == "front") {
+                $employees = Employee::orderBy('id_card', 'asc')->get();
+
+            }
+            else{
+
+                $employees = Employee::select('id_card')->orderBy('id_card', 'asc')->get();
+            }
+
+
+            return view('backend.report.hrm.employee.idcard.'.$format, compact(
+                'templateConfig',
+                'instituteInfo',
+                'side',
+                'employees',
+                ''
+            ));
+
+        }
+
+
+
+
+        //get templates for students
+        // AppHelper::TEMPLATE_TYPE  1=SMS , 2=EMAIL, 3=Id card
+        $templates = Template::whereIn('type',[3])->where('role_id', AppHelper::USER_TEACHER)->pluck('name','id');
+
+        return view('backend.report.hrm.employee.idcard.form', compact(
             'templates'
         ));
 
