@@ -259,7 +259,17 @@ class EmployeeController extends Controller
 
         $roles = Role::whereNotIn('id', [AppHelper::USER_ADMIN, AppHelper::USER_TEACHER, AppHelper::USER_STUDENT, AppHelper::USER_PARENTS])->pluck('name', 'id');
 
-        return view('backend.hrm.employee.add', compact('employee', 'gender', 'religion', 'role', 'roles', 'shift'));
+        $users = [];
+        if(!$employee->user_id){
+            $users = User::doesnthave('employee')
+            ->doesnthave('student')
+               ->whereHas('role' , function ($query) {
+                   $query->whereNotIn('role_id', [AppHelper::USER_ADMIN, AppHelper::USER_TEACHER, AppHelper::USER_STUDENT, AppHelper::USER_PARENTS]);
+               })
+               ->pluck('name', 'id');
+        }
+
+        return view('backend.hrm.employee.add', compact('employee', 'gender', 'religion', 'role', 'roles', 'shift','users'));
 
     }
 
@@ -303,6 +313,7 @@ class EmployeeController extends Controller
                 'shift' => 'nullable|integer',
                 'duty_start' => 'nullable|max:8',
                 'duty_end' => 'nullable|max:8',
+                'user_id' => 'nullable|integer',
 
             ]
         );
@@ -355,6 +366,12 @@ class EmployeeController extends Controller
         $data['shift'] = $request->get('shift', 1);
         $data['duty_start'] = $request->get('duty_start', '');
         $data['duty_end'] = $request->get('duty_end', '');
+
+        //
+        if(!$employee->user_id && $request->get('user_id', 0)){
+            $data['user_id'] = $request->get('user_id');
+        }
+
 
         $employee->fill($data);
         $employee->save();

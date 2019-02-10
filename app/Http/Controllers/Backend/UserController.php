@@ -568,6 +568,12 @@ class UserController extends Controller
                 'deleted_by' => auth()->user()->id,
                 'deleted_at' => Carbon::now()
             ]);
+
+            //delink related child record
+            //employee and student
+            $user->employee()->update(['user_id' => null]);
+            $user->student()->update(['user_id' => null]);
+
             $user->delete();
 
             DB::commit();
