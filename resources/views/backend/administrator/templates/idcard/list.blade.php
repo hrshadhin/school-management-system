@@ -52,7 +52,15 @@
                                         </td>
                                         <td>{{ $template->name }}</td>
                                         <td>{{ $template->type }}</td>
-                                        <td>{{ $template->user->name }}</td>
+                                        <td>
+                                            @if(AppHelper::USER_TEACHER == $template->role_id)
+                                                Employee
+                                            @else
+                                                Student
+                                            @endif
+
+
+                                        </td>
                                         <td>
                                             <a title="Preview" href="#" data-id="{{$template->id}}" class="btn btn-info btn-sm btnIdcardPreview"><i class="fa fa-eye-slash"></i></a>
 

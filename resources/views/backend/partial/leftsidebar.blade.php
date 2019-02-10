@@ -116,7 +116,7 @@
           </li>
           <li>
             <a href="{{ URL::route('administrator.template.mailsms.index') }}">
-              <i class="fa icon-template"></i> <span>Mail/SMS Template</span>
+              <i class="fa icon-mailandsms"></i> <span>Mail/SMS Template</span>
             </a>
           </li>
           <li>

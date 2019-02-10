@@ -553,7 +553,7 @@ class AdministratorController extends Controller
 
         //for get request
         // AppHelper::TEMPLATE_TYPE  1=SMS , 2=EMAIL, 3=Id card
-        $templates = Template::whereIn('type',[3])->with('user')->get();
+        $templates = Template::whereIn('type',[3])->get();
 
         return view('backend.administrator.templates.idcard.list', compact('templates'));
     }
@@ -672,7 +672,7 @@ class AdministratorController extends Controller
         $role = null;
         $content = null;
 
-        $roles = [  AppHelper::USER_TEACHER => "Teacher", AppHelper::USER_STUDENT => "Student" ];
+        $roles = [  AppHelper::USER_TEACHER => "Employee", AppHelper::USER_STUDENT => "Student" ];
 
         if($template) {
             $role = $template->role_id;

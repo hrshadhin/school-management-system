@@ -51,7 +51,7 @@ class SettingsController extends Controller
                 'employee_attendance_notification' => 'required|integer',
                 'institute_type' => 'required|integer',
                 'student_idcard_template' => 'required|integer',
-                'teacher_idcard_template' => 'required|integer',
+                'employee_idcard_template' => 'required|integer',
             ];
 
             if(AppHelper::getInstituteCategory() != 'college') {
@@ -180,8 +180,8 @@ class SettingsController extends Controller
                 ['meta_value' => $request->get('student_idcard_template', 0)]
             );
             AppMeta::updateOrCreate(
-                ['meta_key' => 'teacher_idcard_template'],
-                ['meta_value' => $request->get('teacher_idcard_template', 0)]
+                ['meta_key' => 'employee_idcard_template'],
+                ['meta_value' => $request->get('employee_idcard_template', 0)]
             );
 
 
@@ -231,11 +231,11 @@ class SettingsController extends Controller
         // AppHelper::TEMPLATE_TYPE  1=SMS , 2=EMAIL, 3=Id card
         $studentIdcardTemplates = Template::whereIn('type',[3])->where('role_id', AppHelper::USER_STUDENT)
             ->pluck('name','id')->prepend('None', 0);
-        $teacherIdcardTemplates = Template::whereIn('type',[3])->where('role_id', AppHelper::USER_TEACHER)
+        $employeIdcardTemplates = Template::whereIn('type',[3])->where('role_id', AppHelper::USER_TEACHER)
             ->pluck('name','id')->prepend('None', 0);
 
         $student_idcard_template = $metas['student_idcard_template'] ?? 0;
-        $teacher_idcard_template = $metas['teacher_idcard_template'] ?? 0;
+        $employee_idcard_template = $metas['employee_idcard_template'] ?? 0;
 
 
         return view(
@@ -251,9 +251,9 @@ class SettingsController extends Controller
                 'language',
                 'metas',
                 'studentIdcardTemplates',
-                'teacherIdcardTemplates',
+                'employeIdcardTemplates',
                 'student_idcard_template',
-                'teacher_idcard_template'
+                'employee_idcard_template'
             )
         );
     }
