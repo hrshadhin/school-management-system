@@ -97,6 +97,20 @@
               </a>
             </li>
           @endcan
+            @can('hrm.leave.index')
+              <li>
+                <a href="{{ URL::route('hrm.leave.index') }}">
+                  <i class="fa fa-bed"></i> <span>Leave</span>
+                </a>
+              </li>
+            @endcan
+            @can('hrm.policy')
+              <li>
+                <a href="{{ URL::route('hrm.policy') }}">
+                  <i class="fa fa-cogs"></i> <span>Policy</span>
+                </a>
+              </li>
+            @endcan
         </ul>
       </li>
       @role('Admin')

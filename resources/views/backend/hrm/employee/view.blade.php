@@ -131,16 +131,30 @@
                         <div class="col-sm-9">
                             <div class="nav-tabs-custom">
                                 <ul class="nav nav-tabs">
-                                    {{--<li><a href="#routine" data-toggle="tab">Routine</a></li>--}}
-                                    <li class="active"><a href="#attendance" data-toggle="tab">Attendance</a></li>
+                                    <li class="active"><a href="#leaveStats" data-toggle="tab">Leave Balance</a></li>
+                                    <li><a href="#attendance" data-toggle="tab">Attendance</a></li>
                                     {{--<li><a href="#salary" data-toggle="tab">Salary</a></li>--}}
                                     {{--<li><a href="#payment" data-toggle="tab">Payment</a></li>--}}
                                     <li><a href="#document" data-toggle="tab">Document</a></li>
                                 </ul>
 
                                 <div class="tab-content">
-                                    {{--<div class="tab-pane" id="routine">--}}
-                                    {{--</div>--}}
+                                    <div class="tab-pane active" id="leaveStats">
+                                        <div class="row tile_count text-center">
+                                            <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count tile_stats_count_nb">
+                                                <span class="count_top"><i class="fa fa-2x fa-level-down text-green"></i><b class="text-info"> Casual Leave(CL)</b></span>
+                                                <div class="count text-blue">@if(isset($usedLeaves[1])){{$usedLeaves[1]}}@else 0 @endif/@if(isset($metas['total_casual_leave'])){{$metas['total_casual_leave']}}@else 0 @endif</div>
+                                            </div>
+                                            <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
+                                                <span class="count_top"><i class="fa fa-2x fa-level-down text-green"></i><b class="text-info"> Sick Leave(SL)</b></span>
+                                                <div class="count text-red">@if(isset($usedLeaves[2])){{$usedLeaves[2]}}@else 0 @endif/@if(isset($metas['total_sick_leave'])){{$metas['total_sick_leave']}}@else 0 @endif</div>
+                                            </div>
+                                            <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
+                                                <span class="count_top"><i class="fa fa-2x fa-level-down text-green"></i><b class="text-info"> Undefined Leave(UL)</b></span>
+                                                <div class="count text-purple">@if(isset($usedLeaves[3])){{$usedLeaves[3]}}@else 0 @endif/∞</div>
+                                            </div>
+                                        </div>
+                                    </div>
 
                                     <div class="tab-pane" id="attendance">
 
