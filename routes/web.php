@@ -247,6 +247,7 @@ Route::group(
         ->name('hrm.employee.status');
     // Leave
     Route::resource('hrm/leave', 'LeaveController', ['as' => 'hrm']);
+    Route::resource('hrm/work_outside', 'WorkOutsideController', ['as' => 'hrm']);
     // policy
     Route::get('hrm/policy', 'EmployeeController@hrmPolicy')
         ->name('hrm.policy');

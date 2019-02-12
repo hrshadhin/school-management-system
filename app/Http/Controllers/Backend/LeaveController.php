@@ -6,7 +6,6 @@ use App\Employee;
 use App\Http\Helpers\AppHelper;
 use App\Leave;
 use Carbon\Carbon;
-use function GuzzleHttp\Psr7\str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
@@ -65,6 +64,7 @@ class LeaveController extends Controller
         $leave = null;
         $leave_type = null;
         return view('backend.hrm.leave.add', compact('leave', 'employees', 'leave_type'));
+
     }
 
     /**

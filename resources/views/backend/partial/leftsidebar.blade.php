@@ -104,6 +104,14 @@
                 </a>
               </li>
             @endcan
+
+            @can('hrm.work_outside.index')
+              <li>
+                <a href="{{ URL::route('hrm.work_outside.index') }}">
+                  <i class="glyphicon glyphicon-log-out"></i> <span>Work Outside</span>
+                </a>
+              </li>
+            @endcan
             @can('hrm.policy')
               <li>
                 <a href="{{ URL::route('hrm.policy') }}">
