@@ -81,7 +81,7 @@
                                     <th width="25%">Employee</th>
                                     <th width="10%">Type</th>
                                     <th width="10%">Date</th>
-                                    <th width="5%">Document</th>
+                                    <th class="notexport" width="5%">Document</th>
                                     <th width="20%">Note</th>
                                     <th width="5%">Status</th>
                                     <th class="notexport" width="20%">Action</th>
@@ -163,7 +163,7 @@
                                     <th width="25%">Employee</th>
                                     <th width="10%">Type</th>
                                     <th width="10%">Date</th>
-                                    <th width="5%">Document</th>
+                                    <th class="notexport" width="5%">Document</th>
                                     <th width="20%">Note</th>
                                     <th width="5%">Status</th>
                                     <th class="notexport" width="20%">Action</th>

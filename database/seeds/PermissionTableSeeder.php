@@ -800,6 +800,36 @@ class PermissionTableSeeder extends Seeder
                 "group" => "HRM"
             ],
             // Policy
+            // Work Outside
+            [   "slug" => "hrm.work_outside.index",
+                "name" => "Work Outside View",
+                "group" => "HRM"
+            ],
+            [   "slug" => "hrm.work_outside.store",
+                "name" => "Work Outside Create",
+                "group" => "HRM"
+            ],
+            [   "slug" => "hrm.work_outside.create",
+                "name" => "Work Outside Create",
+                "group" => "HRM"
+            ],
+            [   "slug" => "hrm.work_outside.destroy",
+                "name" => "Work Outside Delete",
+                "group" => "HRM"
+            ],
+            [   "slug" => "hrm.work_outside.update",
+                "name" => "Work Outside Edit",
+                "group" => "HRM"
+            ],
+            [   "slug" => "hrm.work_outside.show",
+                "name" => "Work Outside View",
+                "group" => "HRM"
+            ],
+            [   "slug" => "hrm.work_outside.edit",
+                "name" => "Work Outside Edit",
+                "group" => "HRM"
+            ],
+            // Work Outside
         ];
 
         $reportsPermissionList = [
