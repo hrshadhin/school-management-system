@@ -73,6 +73,14 @@
             </li>
           @endcan
 
+          @can('academic.holiday')
+            <li>
+              <a href="{{ URL::route('academic.holiday') }}">
+                <i class="fa fa-lightbulb-o"></i> <span>Holiday</span>
+              </a>
+            </li>
+          @endcan
+
           {{--<li>--}}
           {{--<a href="#">--}}
           {{--<i class="fa fa-clock-o"></i><span>Routine</span>--}}

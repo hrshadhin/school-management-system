@@ -217,6 +217,14 @@ Route::group(
     Route::post('academic/subject/status/{id}', 'AcademicController@subjectStatus')
         ->name('academic.subject_status');
 
+    // holiday
+    Route::get('academic/holiday', 'AcademicController@holidayCru')
+        ->name('academic.holiday');
+    Route::post('academic/holiday', 'AcademicController@holidayCru')
+        ->name('academic.holiday');
+    Route::post('academic/holiday-delete/{id}', 'AcademicController@holidayDestroy')
+        ->name('academic.holiday_destroy');
+
     // teacher routes
     Route::resource('teacher', 'TeacherController');
     Route::post('teacher/status/{id}', 'TeacherController@changeStatus')
