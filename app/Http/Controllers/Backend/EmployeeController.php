@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\AppMeta;
 use App\Employee;
 use App\Http\Helpers\AppHelper;
+use App\Leave;
 use App\Role;
 use App\Template;
 use App\User;
 use App\UserRole;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class EmployeeController extends Controller
@@ -233,7 +236,26 @@ class EmployeeController extends Controller
             abort(404);
         }
 
-        return view('backend.hrm.employee.view', compact('employee'));
+        //get leave information
+        $usedLeaves = Leave::where('employee_id',$employee->id)
+           ->where('status','2')
+            ->select('leave_type', DB::raw('count(*) as total'))
+            ->groupBy('leave_type')
+            ->pluck('total','leave_type')
+            ->all();
+
+        $policies = AppMeta::whereIn('meta_key',
+            ['total_casual_leave', 'total_sick_leave']
+        )->get();
+
+        $metas = [];
+        foreach ($policies as $policy){
+            $metas[$policy->meta_key] = $policy->meta_value;
+        }
+
+
+
+        return view('backend.hrm.employee.view', compact('employee','usedLeaves', 'metas'));
 
 
     }
@@ -455,5 +477,62 @@ class EmployeeController extends Controller
             'message' => 'Status updated.'
         ];
 
+    }
+
+    /**
+     *  HRM policy setting
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
+
+    public function hrmPolicy(Request $request)
+    {
+
+        //for save on POST request
+        if ($request->isMethod('post')) {
+
+            $rules = [
+                'total_casual_leave' => 'required|integer',
+                'total_sick_leave' => 'required|integer'
+                ];
+
+
+            $this->validate($request, $rules);
+
+            //now crate
+            AppMeta::updateOrCreate(
+                ['meta_key' => 'total_casual_leave'],
+                ['meta_value' => $request->get('total_casual_leave', 0)]
+            );
+            AppMeta::updateOrCreate(
+                ['meta_key' => 'total_sick_leave'],
+                ['meta_value' => $request->get('total_sick_leave', 0)]
+            );
+
+
+
+            Cache::forget('app_settings');
+
+            //now notify the admins about this record
+            $msg = "HR policy updated by ".auth()->user()->name;
+            $nothing = AppHelper::sendNotificationToAdmins('info', $msg);
+            // Notification end
+
+            return redirect()->route('hrm.policy')->with('success', 'Policy updated!');
+        }
+
+
+        $policies = AppMeta::whereIn('meta_key',
+            ['total_casual_leave', 'total_sick_leave']
+        )->get();
+
+        $metas = [];
+        foreach ($policies as $policy){
+            $metas[$policy->meta_key] = $policy->meta_value;
+        }
+
+        return view('backend.hrm.policy', compact(
+            'metas'
+        ));
     }
 }

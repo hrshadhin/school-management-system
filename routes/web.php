@@ -245,6 +245,13 @@ Route::group(
     Route::resource('hrm/employee', 'EmployeeController', ['as' => 'hrm']);
     Route::post('hrm/employee/status/{id}', 'EmployeeController@changeStatus')
         ->name('hrm.employee.status');
+    // Leave
+    Route::resource('hrm/leave', 'LeaveController', ['as' => 'hrm']);
+    // policy
+    Route::get('hrm/policy', 'EmployeeController@hrmPolicy')
+        ->name('hrm.policy');
+    Route::post('hrm/policy', 'EmployeeController@hrmPolicy')
+        ->name('hrm.policy');
 
     // Reporting
     //student id card

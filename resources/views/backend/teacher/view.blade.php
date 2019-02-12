@@ -118,58 +118,21 @@
                             <div class="nav-tabs-custom">
                                 <ul class="nav nav-tabs">
                                     {{--<li><a href="#routine" data-toggle="tab">Routine</a></li>--}}
-                                    <li class="active"><a href="#attendance" data-toggle="tab">Attendance</a></li>
-                                    {{--<li><a href="#salary" data-toggle="tab">Salary</a></li>--}}
-                                    {{--<li><a href="#payment" data-toggle="tab">Payment</a></li>--}}
-                                    <li><a href="#document" data-toggle="tab">Document</a></li>
+                                    <li class="active"><a href="#classList" data-toggle="tab">Class & Section</a></li>
+                                    <li><a href="#subjects" data-toggle="tab">Subjects</a></li>
                                 </ul>
 
                                 <div class="tab-content">
                                     {{--<div class="tab-pane" id="routine">--}}
                                     {{--</div>--}}
 
-                                    <div class="tab-pane" id="attendance">
-
+                                    <div class="tab-pane active" id="classList">
+                                        <!-- todo: need to implement -->
                                     </div>
-
-                                    {{--<div class="tab-pane" id="salary">--}}
-                                    {{----}}
-                                    {{--</div>--}}
-                                    {{--<div class="tab-pane" id="payment">--}}
-                                    {{----}}
-                                    {{--</div>--}}
+                                    <div class="tab-pane" id="subjects">
+                                        <!-- todo: need to implement -->
 
 
-                                    <div class="tab-pane" id="document">
-                                        {{--<input class="btn btn-success btn-sm" style="margin-bottom: 10px" type="button" value="Add Document" data-toggle="modal" data-target="#documentupload">--}}
-                                        {{--<div id="hide-table">--}}
-                                        {{--<table class="table table-striped table-bordered table-hover">--}}
-                                        {{--<thead>--}}
-                                        {{--<tr>--}}
-                                        {{--<th>#</th>--}}
-                                        {{--<th>Title</th>--}}
-                                        {{--<th>Date</th>--}}
-                                        {{--<th>Action</th>--}}
-                                        {{--</tr>--}}
-                                        {{--</thead>--}}
-                                        {{--<tbody>--}}
-                                        {{--<tr>--}}
-                                        {{--<td data-title="#">--}}
-                                        {{--1                                                    </td>--}}
-
-                                        {{--<td data-title="Title">--}}
-                                        {{--Computer                                                    </td>--}}
-
-                                        {{--<td data-title="Date">--}}
-                                        {{--05 Jun 2018                                                    </td>--}}
-                                        {{--<td data-title="Action">--}}
-                                        {{--<a href="" class="btn btn-success btn-xs mrg" data-placement="top" data-toggle="tooltip" data-original-title="Download"><i class="fa fa-download"></i></a>--}}
-                                        {{--<a href="" onclick="return confirm('you are about to delete a record. This cannot be undone. are you sure?')" class="btn btn-danger btn-xs mrg" data-placement="top" data-toggle="tooltip" data-original-title="Delete"><i class="fa fa-trash-o"></i></a>  --}}
-                                        {{--</td>--}}
-                                        {{--</tr>--}}
-                                        {{--</tbody>--}}
-                                        {{--</table>--}}
-                                        {{--</div>--}}
                                     </div>
 
                                 </div>

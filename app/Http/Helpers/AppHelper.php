@@ -89,6 +89,12 @@ class AppHelper
         6 => 'Log Locally',
     ];
 
+    const LEAVE_TYPES = [
+        1 => 'Casual leave (CL)',
+        2 => 'Sick leave (SL)',
+        3 => 'Undefined leave (UL)'
+    ];
+
 
     /**
      * Get institution category for app settings

@@ -760,6 +760,46 @@ class PermissionTableSeeder extends Seeder
                 "group" => "HRM"
             ],
             // Employee
+            // Leave
+            [   "slug" => "hrm.leave.index",
+                "name" => "Leave View",
+                "group" => "HRM"
+            ],
+            [   "slug" => "hrm.leave.store",
+                "name" => "Leave Create",
+                "group" => "HRM"
+            ],
+            [   "slug" => "hrm.leave.create",
+                "name" => "Leave Create",
+                "group" => "HRM"
+            ],
+            [   "slug" => "hrm.leave.destroy",
+                "name" => "Leave Delete",
+                "group" => "HRM"
+            ],
+            [   "slug" => "hrm.leave.update",
+                "name" => "Leave Edit",
+                "group" => "HRM"
+            ],
+            [   "slug" => "hrm.leave.show",
+                "name" => "Leave View",
+                "group" => "HRM"
+            ],
+            [   "slug" => "hrm.leave.edit",
+                "name" => "Leave Edit",
+                "group" => "HRM"
+            ],
+            // Leave
+            // Policy
+            [   "slug" => "hrm.policy",
+                "name" => "Policy View",
+                "group" => "HRM"
+            ],
+            [   "slug" => "hrm.policy",
+                "name" => "Policy Create",
+                "group" => "HRM"
+            ],
+            // Policy
         ];
 
         $reportsPermissionList = [

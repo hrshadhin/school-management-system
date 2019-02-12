@@ -27,6 +27,15 @@ export default class Generic {
             autoclose: true,
             todayBtn: true
         });
+        $(".date_picker_with_clear").datetimepicker({
+            format: "dd/mm/yyyy",
+            startView: 'month',
+            minView: 'month',
+            maxView: 'decade',
+            autoclose: true,
+            todayBtn: true,
+            clearBtn: true
+        });
         $(".date_picker2").datetimepicker({
             format: "dd/mm/yyyy",
             startView: 'decade',
