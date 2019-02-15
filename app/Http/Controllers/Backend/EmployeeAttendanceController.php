@@ -83,10 +83,9 @@ class EmployeeAttendanceController extends Controller
      */
     public function create()
     {
-        $employees = Employee::where('status', AppHelper::ACTIVE)
-        ->pluck('name', 'id');
-
-        //if its college then have to get those academic years
+        $employees = Employee::select('name','id','id_card')
+        ->where('status', AppHelper::ACTIVE)
+        ->get();
 
         return view('backend.attendance.employee.add', compact(
             'employees'
@@ -102,66 +101,75 @@ class EmployeeAttendanceController extends Controller
      */
     public function store(Request $request)
     {
-        //validate form
-        $messages = [
-            'registrationIds.required' => 'This section has no students!',
-        ];
+
+
         $rules = [
-            'class_id' => 'required|integer',
-            'section_id' => 'required|integer',
             'attendance_date' => 'required|min:10|max:11',
-            'registrationIds' => 'required',
+            'employeeIds' => 'required',
+            'inTime' => 'required',
+            'outTime' => 'required',
+            'workingHours' => 'required',
 
         ];
-        //if it college then need another 2 feilds
-        if(AppHelper::getInstituteCategory() == 'college') {
-            $rules['academic_year'] = 'required|integer';
-        }
 
-        $this->validate($request, $rules, $messages);
+        $this->validate($request, $rules);
 
 
         //check attendance exists or not
-        $class_id = $request->get('class_id',0);
-        $section_id = $request->get('section_id',0);
         $attendance_date = $request->get('attendance_date','');
-        if(AppHelper::getInstituteCategory() == 'college') {
-            $acYear =  $request->query->get('academic_year',0);
-        }
-        else{
-
-            $acYear = AppHelper::getAcademicYear();
-        }
-        $attendances = $this->getAttendanceByFilters($class_id, $section_id, $acYear, $attendance_date, true);
-
+        $attendances = $this->getAttendanceByFilters(null, $attendance_date, true);
         if($attendances){
-            return redirect()->route('student_attendance.create')->with("error","Attendance already exists!");
+            return redirect()->route('employee_attendance.create')->with("error","Attendance already exists!");
         }
 
 
         //process the insert data
-        $students = $request->get('registrationIds');
-        $present = $request->get('present');
+        $employees = $request->get('employeeIds');
+        $inTimes = $request->get('inTime');
+        $outTimes = $request->get('outTime');
+        $workingHours = $request->get('workingHours');
+
         $attendance_date = Carbon::createFromFormat('d/m/Y', $request->get('attendance_date'))->format('Y-m-d');
         $dateTimeNow = Carbon::now(env('APP_TIMEZONE','Asia/Dhaka'));
 
         $attendances = [];
         $absentIds = [];
-        foreach ($students as $student){
-            $isPresent = isset($present[$student]) ? '1' : '0';
+        $parseError = false;
+        foreach ($employees as $employee){
+
+            $inTime = Carbon::createFromFormat('d/m/Y h:i a', $inTimes[$employee]);
+            $outTime = Carbon::createFromFormat('d/m/Y h:i a', $outTimes[$employee]);
+
+            if($outTime->lessThan($inTime)){
+                $message = "Out time can't be less than in time!";
+                $parseError = true;
+            }
+
+            $timeDiff  = $inTime->diff($outTime)->format('%H:%I');
+            $isPresent = ($timeDiff == "00:00") ? "0" : "1";
 
             $attendances[] = [
-                "registration_id" => $student,
+                "employee_id" => $employee,
                 "attendance_date" => $attendance_date,
+                "in_time" => $inTime,
+                "out_time" => $outTime,
+                "working_hour" => $timeDiff,
                 "present"   => $isPresent,
                 "created_at" => $dateTimeNow,
                 "created_by" => auth()->user()->id,
             ];
 
             if(!$isPresent){
-                $absentIds[] = $student;
+                $absentIds[] = $employee;
             }
         }
+
+        if($parseError){
+            return redirect()->route('employee_attendance.create')->with("error",$message);
+        }
+
+//        dd($attendances);
+//        dd($absentIds);
 
         DB::beginTransaction();
         try {
@@ -172,7 +180,7 @@ class EmployeeAttendanceController extends Controller
         catch(\Exception $e){
             DB::rollback();
             $message = str_replace(array("\r", "\n","'","`"), ' ', $e->getMessage());
-            return redirect()->route('student_attendance.create')->with("error",$message);
+            return redirect()->route('employee_attendance.create')->with("error",$message);
         }
 
 
@@ -206,7 +214,7 @@ class EmployeeAttendanceController extends Controller
 //        PushStudentAbsentJob::dispatch($absentIds, $attendance_date);
 
 
-        return redirect()->route('student_attendance.create')->with("success",$message);
+        return redirect()->route('employee_attendance.create')->with("success",$message);
     }
 
 

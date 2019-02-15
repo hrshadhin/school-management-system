@@ -463,6 +463,17 @@
     color: #2e6da4;
 }
 
+table.attendance-add tr td div.input-group {
+    margin: auto;
+    cursor: text;
+}
+table.attendance-add tr td input.noinput {
+    cursor: not-allowed;
+}
+table.attendance-add tr td .help-block{
+   color:red;
+}
+
 /**
  Mobile view element hide css
  */

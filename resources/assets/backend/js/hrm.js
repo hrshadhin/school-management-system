@@ -25,7 +25,6 @@ export default class HRM {
 
             //check employee Id and date is fill up then procced
             if(!atDate){
-                toastr.warning('Fill up date!');
                 return false;
             }
 
@@ -41,104 +40,47 @@ export default class HRM {
         });
 
         $('.attendanceExistsChecker').on('changeDate', function (event) {
-            Academic.checkAttendanceExists(function (data) {
+            let atDate = $('input[name="attendance_date"]').val();
+            let inOutDateTime = atDate + " 00:00 am";
+            $('input.date_time_picker').val(inOutDateTime);
+            $('input[name="workingHours"]').val("0.00");
+            HRM.checkAttendanceExists(function (data) {
                 if(data>0){
                     toastr.error('Attendance already exists!');
-                    $('#studentListTable tbody').empty();
                     $('button[type="submit"]').hide();
                 }
                 else{
-                    $('#section_id_filter').trigger('change');
+                    $('button[type="submit"]').show();
                 }
             });
 
         });
 
-        $('#toggleCheckboxes').on('ifChecked ifUnchecked', function(event) {
-            if (event.type == 'ifChecked') {
-                $('input:checkbox').iCheck('check');
-            } else {
-                $('input:checkbox').iCheck('uncheck');
-            }
-        });
+        $('input.outTime').on('changeDate', function (event) {
+            let inTime = window.moment($(this).parents('tr').find('input.inTime').val(),'DD-MM-YYYY, hh:mm A');
+            let outTime =  window.moment(event.date,'DD-MM-YYYY, hh:mm A');
 
-        $('#section_id_filter').on('change', function () {
-            //hide button
-            $('button[type="submit"]').hide();
-            let sectionId = $(this).val();
-            let classId =  $('select[name="class_id"]').val();
-            let acYearId =  $('select[name="academic_year"]').val();
-            //validate input
-            if(!classId || !sectionId){
+            if(outTime.isBefore(inTime)){
+                toastr.error('Out time can\'t be less than in time!');
+                $(this).datetimepicker("update",($(this).parents('tr').find('input.inTime').val()));
                 return false;
             }
-            //check year then procced
-            if(institute_category == "college"){
-                if(!acYearId) {
-                    toastr.warning('Select academic year first!');
-                    return false;
-                }
+            let timeDiff = window.moment.duration(outTime.diff(inTime));
+            if(timeDiff.days()>0){
+                toastr.error('Can\'t work more than 24 hrs!');
+                $(this).datetimepicker("update",($(this).parents('tr').find('input.inTime').val()));
+                return false;
             }
-            else {
-                acYearId = 0;
-            }
+            let workingHours = [timeDiff.hours(), timeDiff.minutes()].join(':');
 
-            Generic.loaderStart();
-            Academic.checkAttendanceExists(function (data) {
-                if(data==0){
-                    Academic.getStudentByAcYearAndClassAndSection(acYearId, classId, sectionId, function (data) {
-                        let students = data;
-                        $('#studentListTable tbody').empty();
-                        if(students.length){
-                            students.forEach(function(item){
-                                let rowHtml = '<tr>\n' +
-                                    '<td>\n' +
-                                    '<span class="text-bold">'+item.student.name+'</span>\n' +
-                                    '<input type="hidden" name="registrationIds[]" value="'+item.id+'" required>\n' +
-                                    '</td>\n' +
-                                    '<td><span class="text-bold">'+item.roll_no+'</span></td>\n' +
-                                    '<td>\n' +
-                                    '<div class="checkbox icheck inline_icheck">\n' +
-                                    '<input type="checkbox" name="present['+item.id+']">\n' +
-                                    '</div>\n' +
-                                    '</td>\n' +
-                                    '</tr>';
-
-                                $('#studentListTable tbody').append(rowHtml);
-                            });
-                            $('input:checkbox').not('.dont-style-notMe').iCheck({
-                                checkboxClass: 'icheckbox_square-blue',
-                                radioClass: 'iradio_square-blue',
-                                increaseArea: '20%' /* optional */
-                            });
-
-                            //now show the submit button
-                            $('button[type="submit"]').show();
-                        }
-                        Generic.loaderStop();
-                    });
-                }
-                else{
-                    toastr.error('Attendance already exists!');
-                    Generic.loaderStop();
-                }
-            });
-
+            $(this).parents('tr').find('input.workingHour').val(workingHours);
 
         });
     }
 
     static checkAttendanceExists(cb={}) {
         let atDate = $('input[name="attendance_date"]').val();
-        let classId = $('select[name="class_id"]').val();
-        let sectionId = $('select[name="section_id"]').val();
-        let acYearId = $('select[name="academic_year"]').val();
-        let queryString = "?class="+classId+"&section="+sectionId+"&attendance_date="+atDate;
-
-        if(institute_category == 'college'){
-            queryString +="&academic_year="+acYearId;
-        }
-
+        let queryString = "?attendance_date="+atDate;
         let getUrl = window.attendanceUrl + queryString;
         axios.get(getUrl)
             .then((response) => {

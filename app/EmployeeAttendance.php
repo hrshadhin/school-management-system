@@ -30,7 +30,7 @@ class EmployeeAttendance extends Model
         'present'
     ];
 
-    protected $dates = ['attendance_date'];
+    protected $dates = ['attendance_date','in_time','out_time'];
 
 
     public function employee()
