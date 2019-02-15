@@ -49,10 +49,13 @@
                                 <thead>
                                 <tr>
                                     <th width="5%">#</th>
-                                    <th width="50%">Name</th>
-                                    <th width="15%">Card. No.</th>
-                                    <th width="15%">Designation</th>
-                                    <th width="20%">Status</th>
+                                    <th width="25%">Name</th>
+                                    <th width="10%">Card. No.</th>
+                                    <th width="10%">Designation</th>
+                                    <th width="15%">In Time</th>
+                                    <th width="15%">Out Time</th>
+                                    <th width="5%">Working Hours</th>
+                                    <th width="15%">Status</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -64,6 +67,9 @@
                                         <td>{{$attendance->employee->name}}</td>
                                         <td>{{$attendance->employee->id_card}}</td>
                                         <td>{{$attendance->employee->designation}}</td>
+                                        <td>{{$attendance->in_time->format('d/m/y h:i a')}}</td>
+                                        <td>{{$attendance->out_time->format('d/m/y h:i a')}}</td>
+                                        <td>{{date('H\H i\M',strtotime($attendance->working_hour))}}</td>
                                         <td>
                                             <!-- todo: have problem in mobile device -->
                                             <input class="statusChange" type="checkbox" data-pk="{{$attendance->id}}" @if($attendance->getOriginal('present')) checked @endif data-toggle="toggle" data-on="Present" data-off="Absent" data-onstyle="success" data-offstyle="danger">
@@ -76,10 +82,13 @@
                                 <tfoot>
                                 <tr>
                                     <th width="5%">#</th>
-                                    <th width="50%">Name</th>
-                                    <th width="15%">Card. No.</th>
-                                    <th width="15%">Designation</th>
-                                    <th width="20%">Status</th>
+                                    <th width="25%">Name</th>
+                                    <th width="10%">Card. No.</th>
+                                    <th width="10%">Designation</th>
+                                    <th width="15%">In Time</th>
+                                    <th width="15%">Out Time</th>
+                                    <th width="5%">Working Hours</th>
+                                    <th width="15%">Status</th>
                                 </tr>
                                 </tfoot>
                             </table>
@@ -100,9 +109,9 @@
     <script type="text/javascript">
         $(document).ready(function () {
             window.postUrl = '{{URL::Route("employee_attendance.status", 0)}}';
-            window.changeExportColumnIndex = 4;
+            window.changeExportColumnIndex = 7;
             window.changeExportColumnValue = ['Present', 'Absent'];
-            window.excludeFilterComlumns = [0,4];
+            window.excludeFilterComlumns = [0,4,5,6,7];
             HRM.attendanceInit();
         });
     </script>

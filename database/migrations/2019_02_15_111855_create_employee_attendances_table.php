@@ -17,11 +17,11 @@ class CreateEmployeeAttendancesTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('employee_id');
             $table->date('attendance_date');
-            $table->time('in_time');
-            $table->time('out_time');
-            $table->decimal('working_hour',6,2);
-            $table->enum('in_late',[0,1])->default(1);
-            $table->enum('present', [0,1])->default(1);
+            $table->dateTime('in_time');
+            $table->dateTime('out_time');
+            $table->time('working_hour');
+            $table->enum('in_late',[0,1])->default(0);
+            $table->enum('present', [0,1])->default(0);
             $table->timestamps();
             $table->softDeletes();
             $table->userstamps();

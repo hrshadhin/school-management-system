@@ -55,6 +55,13 @@ export default class Generic {
             startView: 1,
             maxView: 1,
         });
+        $(".date_time_picker").datetimepicker({
+            pickerPosition: 'bottom-right',
+            format: 'dd/mm/yyyy HH:ii p',
+            autoclose: true,
+            showMeridian: true,
+            startView: 'day',
+        });
 
         var buttonCommon = {
             exportOptions: {

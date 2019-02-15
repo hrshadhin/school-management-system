@@ -2,7 +2,7 @@
 @extends('backend.layouts.master')
 
 <!-- Page title -->
-@section('pageTitle') Student Attendance @endsection
+@section('pageTitle') Employee Attendance @endsection
 <!-- End block -->
 
 <!-- BEGIN PAGE CONTENT-->
@@ -10,13 +10,13 @@
     <!-- Section header -->
     <section class="content-header">
         <h1>
-            Student Attendance
+            Employee Attendance
             <small>Add New</small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="{{URL::route('user.dashboard')}}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
             <li><i class="fa icon-attendance"></i> Attendance</li>
-            <li><a href="{{URL::route('student_attendance.index')}}"><i class="fa icon-student"></i>Student</a></li>
+            <li><a href="{{URL::route('employee_attendance.index')}}"><i class="fa icon-student"></i>Employee</a></li>
             <li class="active">Add</li>
         </ol>
     </section>
@@ -26,12 +26,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="box box-info">
-                    <form novalidate id="entryForm" action="{{URL::Route('student_attendance.store')}}" method="post" enctype="multipart/form-data">
-                        <div class="box-header">
-                            <div class="callout callout-danger">
-                                <p><b>Note:</b> Fill up the form first, then it will shows student list.</p>
-                            </div>
-                        </div>
+                    <form novalidate id="entryForm" action="{{URL::Route('employee_attendance.store')}}" method="post" enctype="multipart/form-data">
                         <div class="box-body">
                             @csrf
                             @if(count($errors->all()))
@@ -43,64 +38,61 @@
                                     </ul>
                                 </div>
                             @endif
-                            <p class="lead section-title-top-zero">Academic Info:</p>
                             <div class="row">
-                                @if(AppHelper::getInstituteCategory() == 'college')
-                                    <div class="col-md-3">
-                                        <div class="form-group has-feedback">
-                                            <label for="academic_year">Academic Year<span class="text-danger">*</span></label>
-                                            {!! Form::select('academic_year', $academic_years, null , ['placeholder' => 'Pick a year...','class' => 'form-control select2', 'required' => 'true']) !!}
-                                            <span class="form-control-feedback"></span>
-                                            <span class="text-danger">{{ $errors->first('academic_year') }}</span>
-                                        </div>
-                                    </div>
-                                @endif
-                                <div class="col-md-4">
-                                    <div class="form-group has-feedback">
-                                        <label for="class_id">Class<span class="text-danger">*</span></label>
-                                        {!! Form::select('class_id', $classes, null , ['placeholder' => 'Pick a class...','class' => 'form-control select2', 'required' => 'true']) !!}
-                                        <span class="form-control-feedback"></span>
-                                        <span class="text-danger">{{ $errors->first('class_id') }}</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group has-feedback">
-                                        <label for="section_id">Section<span class="text-danger">*</span></label>
-                                        {!! Form::select('section_id', [], null , ['placeholder' => 'Pick a section...','class' => 'form-control select2', 'id' => 'section_id_filter', 'required' => 'true']) !!}
-                                        <span class="form-control-feedback"></span>
-                                        <span class="text-danger">{{ $errors->first('section_id') }}</span>
-                                    </div>
-                                </div>
                                 <div class="col-md-2">
                                     <div class="form-group has-feedback">
                                         <label for="attendance_date">Date<span class="text-danger">*</span></label>
-                                        <input type='text' class="form-control date_picker attendanceExistsChecker"  name="attendance_date" placeholder="date" value="{{date('d/m/Y')}}" required minlength="10" maxlength="11" />
+                                        <input type='text' class="form-control date_picker attendanceExistsChecker"  name="attendance_date" placeholder="date" value="{{date('d/m/Y')}}" required minlength="10" maxlength="10" />
                                         <span class="fa fa-calendar form-control-feedback"></span>
                                         <span class="text-danger">{{ $errors->first('attendance_date') }}</span>
                                     </div>
                                 </div>
                             </div>
 
-                            <p class="lead section-title-top-zero">Student List:</p>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <table id="studentListTable" class="table table-bordered table-striped table-responsive attendance-add">
+                                    <table id="employeeListTable" class="table table-bordered table-striped table-responsive attendance-add">
                                         <thead>
                                         <tr>
-                                            <th width="60%">Name</th>
-                                            <th width="10%">Roll No.</th>
-                                            <th width="30%">
-                                                Is Present?
-                                                <div class="checkbox icheck inline_icheck">
-                                                    <label>
-                                                        <input type="checkbox" id="toggleCheckboxes" class="dont-style-notMe"> <span class="text-bold">Select or Deselect All</span>
-                                                    </label>
-                                                </div>
-                                            </th>
+                                            <th width="5%">#</th>
+                                            <th width="25%">Name</th>
+                                            <th width="10%">Card No.</th>
+                                            <th width="15%">In Time</th>
+                                            <th width="15%">Out Time</th>
+                                            <th width="5%">Working Hours</th>
                                         </tr>
                                         </thead>
                                         <tbody>
+                                            @foreach($employees as $employee)
+                                                <tr>
+                                                    <td>
+                                                        {{$loop->iteration}}
+                                                    </td>
+                                                    <td>
+                                                        <span>{{$employee->name}}</span>
+                                                        <input type="hidden" name="employeeIds[]" value="{{$employee->id}}">
+                                                    </td>
+                                                    <td>
+                                                        {{$employee->id_card}}
+                                                    </td>
+                                                    <td>
+                                                        <div class="input-group">
+                                                            <input type='text' class="form-control date_time_picker inTime" readonly  name="inTime[{{$employee->id}}]" placeholder="date time" value="{{date('d/m/Y')}} 00:00 am" required minlength="19" maxlength="19" />
+                                                            <span class="fa fa-calendar form-control-feedback"></span>
+                                                        </div>
 
+                                                    </td>
+                                                    <td>
+                                                        <div class="input-group">
+                                                        <input type='text' class="form-control date_time_picker outTime" readonly  name="outTime[{{$employee->id}}]" placeholder="date time" value="{{date('d/m/Y')}} 00:00 am" required minlength="19" maxlength="19" />
+                                                        <span class="fa fa-calendar form-control-feedback"></span>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" class="form-control noinput workingHour" readonly name="workingHours[{{$employee->id}}]" value="00:00" required minlength="3" maxlength="5">
+                                                    </td>
+                                                </tr>
+                                            @endforeach
                                         </tbody>
                                     </table>
 
@@ -110,8 +102,8 @@
                         </div>
                         <!-- /.box-body -->
                         <div class="box-footer">
-                            <a href="{{URL::route('student_attendance.index')}}" class="btn btn-default">Cancel</a>
-                            <button type="submit" class="btn btn-info pull-right" style="display: none;"><i class="fa fa-plus-circle"></i> Save</button>
+                            <a href="{{URL::route('employee_attendance.index')}}" class="btn btn-default">Cancel</a>
+                            <button type="submit" class="btn btn-info pull-right"><i class="fa fa-plus-circle"></i> Save</button>
 
                         </div>
                     </form>
@@ -126,11 +118,9 @@
 <!-- BEGIN PAGE JS-->
 @section('extraScript')
     <script type="text/javascript">
-        window.section_list_url = '{{URL::Route("academic.section")}}';
-        window.getStudentAjaxUrl = '{{URL::route('student.list_by_fitler')}}';
-        window.attendanceUrl = '{{route('student_attendance.index')}}';
+        window.attendanceUrl = '{{route('employee_attendance.index')}}';
         $(document).ready(function () {
-            Academic.attendanceInit();
+            HRM.attendanceInit();
         });
     </script>
 @endsection
