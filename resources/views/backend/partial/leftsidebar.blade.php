@@ -23,7 +23,7 @@
           </a>
         </li>
       @endcan
-      @can('student_attendance.index')
+      @canany(['student_attendance.index', 'employee_attendance.index'])
         <li class="treeview">
           <a href="#">
             <i class="fa icon-attendance"></i>
@@ -38,9 +38,14 @@
               <i class="fa icon-student"></i> <span>Student Attendance</span>
             </a>
           </li>
+            <li>
+            <a href="{{ URL::route('employee_attendance.index') }}">
+              <i class="fa icon-member"></i> <span>Employee Attendance</span>
+            </a>
+          </li>
           </ul>
           </li>
-      @endcan
+      @endcanany
       <li class="treeview">
         <a href="#">
           <i class="fa icon-academicmain"></i>
