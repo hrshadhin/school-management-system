@@ -844,6 +844,32 @@ class PermissionTableSeeder extends Seeder
                 "group" => "HRM"
             ],
             // Work Outside
+            // employee attendance
+            [   "slug" => "employee_attendance.index",
+                "name" => "Employee Attendance View",
+                "group" => "HRM"
+            ],
+            [   "slug" => "employee_attendance.store",
+                "name" => "Employee Attendance Create",
+                "group" => "HRM"
+            ],
+            [   "slug" => "employee_attendance.create",
+                "name" => "Employee Attendance Create",
+                "group" => "HRM"
+            ],
+            [   "slug" => "employee_attendance.status",
+                "name" => "Employee Attendance Edit",
+                "group" => "HRM"
+            ],
+            [   "slug" => "employee_attendance.create_file",
+                "name" => "Employee Attendance Create",
+                "group" => "HRM"
+            ],
+            [   "slug" => "employee_attendance.file_queue_status",
+                "name" => "Employee Attendance Create",
+                "group" => "HRM"
+            ],
+            //employee attendance end
         ];
 
         $reportsPermissionList = [

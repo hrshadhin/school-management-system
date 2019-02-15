@@ -262,6 +262,17 @@ Route::group(
     Route::post('hrm/policy', 'EmployeeController@hrmPolicy')
         ->name('hrm.policy');
 
+    // employee attendance routes
+    Route::get('employee-attendance', 'EmployeeAttendanceController@index')->name('employee_attendance.index');
+    Route::get('employee-attendance/create', 'EmployeeAttendanceController@create')->name('employee_attendance.create');
+    Route::post('employee-attendance/create', 'EmployeeAttendanceController@store')->name('employee_attendance.store');
+    Route::post('employee-attendance/status/{id}', 'EmployeeAttendanceController@changeStatus')
+        ->name('employee_attendance.status');
+    Route::any('employee-attendance/file-upload', 'EmployeeAttendanceController@createFromFile')
+        ->name('employee_attendance.create_file');
+    Route::get('employee-attendance/file-queue-status', 'EmployeeAttendanceController@fileQueueStatus')
+        ->name('employee_attendance.file_queue_status');
+
     // Reporting
     //student id card
     Route::any('report/student-idcard', 'ReportController@studentIdcard')
