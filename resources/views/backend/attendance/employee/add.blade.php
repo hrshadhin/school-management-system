@@ -89,7 +89,7 @@
                                                         </div>
                                                     </td>
                                                     <td>
-                                                        <input type="text" class="form-control noinput workingHour" readonly name="workingHours[{{$employee->id}}]" value="00:00" required minlength="3" maxlength="5">
+                                                        <span class="text-bold workingHour">00:00</span>
                                                     </td>
                                                 </tr>
                                             @endforeach

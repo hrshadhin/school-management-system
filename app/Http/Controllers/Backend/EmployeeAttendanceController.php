@@ -107,9 +107,7 @@ class EmployeeAttendanceController extends Controller
             'attendance_date' => 'required|min:10|max:11',
             'employeeIds' => 'required',
             'inTime' => 'required',
-            'outTime' => 'required',
-            'workingHours' => 'required',
-
+            'outTime' => 'required'
         ];
 
         $this->validate($request, $rules);
@@ -127,11 +125,22 @@ class EmployeeAttendanceController extends Controller
         $employees = $request->get('employeeIds');
         $inTimes = $request->get('inTime');
         $outTimes = $request->get('outTime');
-        $workingHours = $request->get('workingHours');
 
         $attendance_date = Carbon::createFromFormat('d/m/Y', $request->get('attendance_date'))->format('Y-m-d');
-        $dateTimeNow = Carbon::now(env('APP_TIMEZONE','Asia/Dhaka'));
 
+        //fetch employee working hours
+        $workTimes = Employee::where('status', AppHelper::ACTIVE)->get()->reduce(function ($workTimes, $employee) {
+            $workTimes[$employee->id] = [
+                'in_time' => $employee->duty_start,
+                'out_time' => $employee->duty_end,
+            ];
+
+            return $workTimes;
+        });
+
+//        dd($workTimes);
+
+        $dateTimeNow = Carbon::now(env('APP_TIMEZONE','Asia/Dhaka'));
         $attendances = [];
         $absentIds = [];
         $parseError = false;
@@ -148,12 +157,29 @@ class EmployeeAttendanceController extends Controller
             $timeDiff  = $inTime->diff($outTime)->format('%H:%I');
             $isPresent = ($timeDiff == "00:00") ? "0" : "1";
 
+            $status = [];
+            //late or early out find
+            if($timeDiff != "00:00" && isset($workTimes[$employee]) && $workTimes[$employee]['in_time'] && $workTimes[$employee]['out_time']){
+
+                    if($inTime->greaterThan($workTimes[$employee]['in_time'])){
+                        $status[] = 1;
+                    }
+
+                    if($outTime->lessThan($workTimes[$employee]['out_time'])){
+                        $status[] = 2;
+                    }
+
+
+
+            }
+
             $attendances[] = [
                 "employee_id" => $employee,
                 "attendance_date" => $attendance_date,
                 "in_time" => $inTime,
                 "out_time" => $outTime,
                 "working_hour" => $timeDiff,
+                "status" => implode(',',$status),
                 "present"   => $isPresent,
                 "created_at" => $dateTimeNow,
                 "created_by" => auth()->user()->id,
@@ -168,7 +194,7 @@ class EmployeeAttendanceController extends Controller
             return redirect()->route('employee_attendance.create')->with("error",$message);
         }
 
-//        dd($attendances);
+        dd($attendances);
 //        dd($absentIds);
 
         DB::beginTransaction();

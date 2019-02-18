@@ -26,7 +26,7 @@ class EmployeeAttendance extends Model
         'in_time',
         'out_time',
         'working_hour',
-        'in_late',
+        'status',
         'present'
     ];
 
