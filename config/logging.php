@@ -53,6 +53,11 @@ return [
             'path' => storage_path('logs/student-absent-job.log'),
             'level' => 'debug',
         ],
+        'employeeabsentlog' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/employee-absent-job.log'),
+            'level' => 'debug',
+        ],
         'studentattendancelog' => [
             'driver' => 'single',
             'path' => storage_path('logs/student-attendance-upload.log'),

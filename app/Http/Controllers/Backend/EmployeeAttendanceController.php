@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\AppMeta;
 use App\Employee;
 use App\EmployeeAttendance;
 use App\Http\Helpers\AppHelper;
+use App\Jobs\PushEmployeeAbsentJob;
+use App\Template;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -194,7 +197,7 @@ class EmployeeAttendanceController extends Controller
             return redirect()->route('employee_attendance.create')->with("error",$message);
         }
 
-        dd($attendances);
+//        dd($attendances);
 //        dd($absentIds);
 
         DB::beginTransaction();
@@ -213,31 +216,31 @@ class EmployeeAttendanceController extends Controller
         $message = "Attendance saved successfully.";
         //check if notification need to send?
         //todo: need uncomment these code on client deploy
-//        $sendNotification = AppHelper::getAppSettings('student_attendance_notification');
+//        $sendNotification = AppHelper::getAppSettings('employee_attendance_notification');
 //        if($sendNotification != "0") {
 //            if($sendNotification == "1"){
 //                //then send sms notification
 //
 //                //get sms gateway information
-//                $gateway = AppMeta::where('id', AppHelper::getAppSettings('student_attendance_gateway'))->first();
+//                $gateway = AppMeta::where('id', AppHelper::getAppSettings('employee_attendance_gateway'))->first();
 //                if(!$gateway){
-//                    redirect()->route('student_attendance.create')->with("warning",$message." But SMS Gateway not setup!");
+//                    redirect()->route('employee_attendance.create')->with("warning",$message." But SMS Gateway not setup!");
 //                }
 //
 //                //get sms template information
-//                $template = Template::where('id', AppHelper::getAppSettings('student_attendance_template'))->first();
+//                $template = Template::where('id', AppHelper::getAppSettings('employee_attendance_template'))->first();
 //                if(!$template){
-//                    redirect()->route('student_attendance.create')->with("warning",$message." But SMS template not setup!");
+//                    redirect()->route('employee_attendance.create')->with("warning",$message." But SMS template not setup!");
 //                }
 //
-//                $res = AppHelper::sendAbsentNotificationForStudentViaSMS($absentIds, $attendance_date);
+//                $res = AppHelper::sendAbsentNotificationForEmployeeViaSMS($absentIds, $attendance_date);
 //
 //            }
 //        }
 
         //push job to queue
         //todo: need comment these code on client deploy
-//        PushStudentAbsentJob::dispatch($absentIds, $attendance_date);
+        PushEmployeeAbsentJob::dispatch($absentIds, $attendance_date);
 
 
         return redirect()->route('employee_attendance.create')->with("success",$message);

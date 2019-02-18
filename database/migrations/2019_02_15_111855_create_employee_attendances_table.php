@@ -20,7 +20,7 @@ class CreateEmployeeAttendancesTable extends Migration
             $table->dateTime('in_time');
             $table->dateTime('out_time');
             $table->time('working_hour');
-            $table->enum('status',[0,1,2])->default(0);
+            $table->string('status',20)->nullable();//1 = in late, 2 = out early
             $table->enum('present', [0,1])->default(0);
             $table->timestamps();
             $table->softDeletes();

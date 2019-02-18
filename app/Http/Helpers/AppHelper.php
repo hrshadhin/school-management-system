@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Helpers;
 
+use App\Employee;
 use App\Event;
 use App\Jobs\ProcessSms;
 use App\Notifications\UserActivity;
@@ -543,6 +544,57 @@ class AppHelper
             }
             else{
                 Log::channel('smsLog')->error("Invalid Cell No! ".$studentArray['student']['father_phone_no']);
+            }
+        }
+
+        return true;
+    }
+
+  /**
+     *  Send notification to employee via sms
+     * @param $students
+     * @param $date
+     * @return bool
+     */
+    public static function sendAbsentNotificationForEmployeeViaSMS($employeeIds, $date) {
+
+        $attendance_date = date('d/m/Y', strtotime($date));
+        $gateway = AppMeta::where('id', AppHelper::getAppSettings('employee_attendance_gateway'))->first();
+        $gateway = json_decode($gateway->meta_value);
+
+        //pull employee
+        $employees = Employee::whereIn('id', $employeeIds)
+            ->where('status', AppHelper::ACTIVE)
+            ->with('user')
+            ->select('id','name','designation','dob','gender','religion','email','phone_no','address','joining_date','user_id')
+            ->get();
+
+        //compile message
+        $template = Template::where('id', AppHelper::getAppSettings('employee_attendance_template'))->first();
+
+        foreach ($employees as $employee){
+
+            $keywords = $employee->toArray();
+            $keywords['date'] = $attendance_date;
+            $keywords['username'] = $keywords['user']['username'];
+            unset($keywords['user']);
+
+            $message = $template->content;
+            foreach ($keywords as $key => $value) {
+                $message = str_replace('{{' . $key . '}}', $value, $message);
+            }
+
+            $cellNumber = AppHelper::validateBangladeshiCellNo($employee->phone_no);
+
+            if($cellNumber){
+
+                //send sms via helper
+                $smsHelper = new SmsHelper($gateway);
+                $res = $smsHelper->sendSms($cellNumber, $message);
+
+            }
+            else{
+                Log::channel('smsLog')->error("Invalid Cell No! ".$employee->phone_no);
             }
         }
 
