@@ -274,7 +274,7 @@ class StudentController extends Controller
             $regiNo = $academicYearInfo->start_date->format('y') . (string)$classInfo->numeric_value;
 
             $totalStudent = Registration::where('academic_year_id', $academicYearInfo->id)
-                ->where('class_id', $classInfo->id)->count();
+                ->where('class_id', $classInfo->id)->withTrashed()->count();
             $regiNo .= str_pad(++$totalStudent,3,'0',STR_PAD_LEFT);
 
 
