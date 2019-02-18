@@ -612,7 +612,7 @@ class StudentController extends Controller
             'shift' => $data['shift'],
             'card_no' => $data['card_no'],
             'board_regi_no' => $data['board_regi_no'],
-            'fourth_subject' => $data['fourth_subject'] ? $data['fourth_subject'] : 0,
+            'fourth_subject' => $data['fourth_subject'] ?? 0,
             'alt_fourth_subject' => $data['alt_fourth_subject'] ?? 0,
             'house' => $data['house'] ??  ''
         ];
