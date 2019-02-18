@@ -73,7 +73,7 @@ export default class HRM {
             }
             let workingHours = [timeDiff.hours(), timeDiff.minutes()].join(':');
 
-            $(this).parents('tr').find('input.workingHour').val(workingHours);
+            $(this).parents('tr').find('span.workingHour').text(workingHours);
 
         });
     }
