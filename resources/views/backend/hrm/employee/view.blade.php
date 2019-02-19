@@ -132,10 +132,10 @@
                             <div class="nav-tabs-custom">
                                 <ul class="nav nav-tabs">
                                     <li class="active"><a href="#leaveStats" data-toggle="tab">Leave Balance</a></li>
-                                    <li><a href="#attendance" data-toggle="tab">Attendance</a></li>
+                                    <li><a href="#attendance" id="tabAttendance" data-pk="{{$employee->id}}" data-toggle="tab">Attendance</a></li>
                                     {{--<li><a href="#salary" data-toggle="tab">Salary</a></li>--}}
                                     {{--<li><a href="#payment" data-toggle="tab">Payment</a></li>--}}
-                                    <li><a href="#document" data-toggle="tab">Document</a></li>
+                                    {{--<li><a href="#document" data-toggle="tab">Document</a></li>--}}
                                 </ul>
 
                                 <div class="tab-content">
@@ -157,7 +157,17 @@
                                     </div>
 
                                     <div class="tab-pane" id="attendance">
+                                        <table id="attendanceTable" class="table table-responsive table-bordered table-hover">
+                                            <thead>
+                                            <tr>
+                                                <th class="text-center">Date</th>
+                                                <th class="text-center">Status</th>
+                                            </tr>
+                                            <tbody>
 
+                                            </tbody>
+                                            </thead>
+                                        </table>
                                     </div>
 
                                     {{--<div class="tab-pane" id="salary">--}}
@@ -168,7 +178,7 @@
                                     {{--</div>--}}
 
 
-                                    <div class="tab-pane" id="document">
+                                    {{--<div class="tab-pane" id="document">--}}
                                         {{--<input class="btn btn-success btn-sm" style="margin-bottom: 10px" type="button" value="Add Document" data-toggle="modal" data-target="#documentupload">--}}
                                         {{--<div id="hide-table">--}}
                                         {{--<table class="table table-striped table-bordered table-hover">--}}
@@ -198,7 +208,7 @@
                                         {{--</tbody>--}}
                                         {{--</table>--}}
                                         {{--</div>--}}
-                                    </div>
+                                    {{--</div>--}}
 
                                 </div>
                             </div>
@@ -216,10 +226,9 @@
 <!-- BEGIN PAGE JS-->
 @section('extraScript')
     <script type="text/javascript">
+        window.attendanceUrl = '{{route('employee_attendance.index')}}';
         $(document).ready(function () {
-            $('.btnPrintInformation').click(function () {
-                window.print();
-            });
+            HRM.employeeProfileInit();
         });
     </script>
 @endsection

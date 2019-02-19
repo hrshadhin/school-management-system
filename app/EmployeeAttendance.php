@@ -43,6 +43,11 @@ class EmployeeAttendance extends Model
         $this->attributes['attendance_date'] = Carbon::createFromFormat('d/m/Y', $value)->format('Y-m-d');
     }
 
+    public function getAttendanceDateAttribute($value)
+    {
+        return Carbon::parse($value)->format('d/m/Y');
+    }
+
 
     public function getPresentAttribute($value)
     {

@@ -131,8 +131,6 @@
                                     </div>
                                     <div class="tab-pane" id="subjects">
                                         <!-- todo: need to implement -->
-
-
                                     </div>
 
                                 </div>

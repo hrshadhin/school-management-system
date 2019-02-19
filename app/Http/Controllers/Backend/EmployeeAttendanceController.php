@@ -32,6 +32,7 @@ class EmployeeAttendanceController extends Controller
         if($request->ajax() && $request->query->get('employee_id', 0)){
             $id = $request->query->get('employee_id', 0);
             $attendances = EmployeeAttendance::where('employee_id', $id)
+                ->whereYear('attendance_date', date('Y'))
                 ->select('attendance_date', 'present','employee_id')
                 ->orderBy('attendance_date', 'asc')
                 ->get();

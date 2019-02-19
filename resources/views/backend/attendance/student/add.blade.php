@@ -74,7 +74,7 @@
                                 <div class="col-md-2">
                                     <div class="form-group has-feedback">
                                         <label for="attendance_date">Date<span class="text-danger">*</span></label>
-                                        <input type='text' class="form-control date_picker attendanceExistsChecker"  name="attendance_date" placeholder="date" value="{{date('d/m/Y')}}" required minlength="10" maxlength="11" />
+                                        <input type='text' class="form-control date_picker attendanceExistsChecker"readonly  name="attendance_date" placeholder="date" value="{{date('d/m/Y')}}" required minlength="10" maxlength="11" />
                                         <span class="fa fa-calendar form-control-feedback"></span>
                                         <span class="text-danger">{{ $errors->first('attendance_date') }}</span>
                                     </div>
