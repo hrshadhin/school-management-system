@@ -124,14 +124,14 @@ export default class HRM {
 
     }
 
-    static studentProfileInit() {
+    static employeeProfileInit() {
         $('.btnPrintInformation').click(function () {
             window.print();
         });
 
         $('#tabAttendance').click(function () {
             let id = $(this).attr('data-pk');
-            let geturl = window.attendanceUrl+'?student_id='+id;
+            let geturl = window.attendanceUrl+'?employee_id='+id;
             Generic.loaderStart();
             $('#attendanceTable tbody').empty();
             axios.get(geturl)

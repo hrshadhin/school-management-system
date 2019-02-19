@@ -82,7 +82,7 @@
                         <li><a href="#mark" data-toggle="tab">Mark</a></li>
                         <li><a href="#invoice" data-toggle="tab">Invoice</a></li>
                         <li><a href="#payment" data-toggle="tab">Payment</a></li>
-                        <li><a href="#document" data-toggle="tab">Document</a></li>
+                        {{--<li><a href="#document" data-toggle="tab">Document</a></li>--}}
                     </ul>
 
                     <div class="tab-content">
@@ -341,7 +341,7 @@
                         <div class="tab-pane" id="payment">
 
                         </div>
-                        <div class="tab-pane" id="document">
+                        {{--<div class="tab-pane" id="document">--}}
                             {{--<input class="btn btn-success btn-sm" style="margin-bottom: 10px" type="button" value="Add Document" data-toggle="modal" data-target="#documentupload">--}}
                             {{--<div id="hide-table">--}}
                             {{--<table class="table table-striped table-bordered table-hover">--}}
@@ -371,7 +371,7 @@
                             {{--</tbody>--}}
                             {{--</table>--}}
                             {{--</div>--}}
-                        </div>
+                        {{--</div>--}}
 
                     </div>
                 </div>
