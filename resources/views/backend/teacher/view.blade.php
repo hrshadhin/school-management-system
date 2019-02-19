@@ -127,10 +127,48 @@
                                     {{--</div>--}}
 
                                     <div class="tab-pane active" id="classList">
-                                        <!-- todo: need to implement -->
+                                        <table class="table table-responsive table-bordered table-hover">
+                                            <thead>
+                                            <tr>
+                                                <th class="text-center">Class</th>
+                                                <th class="text-center">Section</th>
+                                            </tr>
+                                            <tbody>
+                                            @foreach($sections as $section)
+                                                <tr>
+                                                    <td class="text-center">
+                                                        {{$section->class->name}}
+                                                    </td>
+                                                    <td class="text-center">
+                                                        {{$section->name}}
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                            </tbody>
+                                            </thead>
+                                        </table>
                                     </div>
                                     <div class="tab-pane" id="subjects">
-                                        <!-- todo: need to implement -->
+                                        <table class="table table-responsive table-bordered table-hover">
+                                            <thead>
+                                            <tr>
+                                                <th class="text-center">Class</th>
+                                                <th class="text-center">Subject</th>
+                                            </tr>
+                                            <tbody>
+                                            @foreach($subjects as $subject)
+                                                <tr>
+                                                    <td class="text-center">
+                                                        {{$subject->class->name}}
+                                                    </td>
+                                                    <td class="text-center">
+                                                        {{$subject->name}}[{{$subject->code}}]
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                            </tbody>
+                                            </thead>
+                                        </table>
                                     </div>
 
                                 </div>
