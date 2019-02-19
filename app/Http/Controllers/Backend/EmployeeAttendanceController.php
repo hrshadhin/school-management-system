@@ -346,10 +346,9 @@ class EmployeeAttendanceController extends Controller
 
 
                 // now start the command to proccess data
-//                $command = "php ".base_path()."/artisan attendance:seedEmployee";
-//
-//                $process = new Process($command);
-//                $process->start();
+                $command = "php ".base_path()."/artisan attendance:seedEmployee";
+                $process = new Process($command);
+                $process->start();
 
                 // debug code
 //            $process->wait();

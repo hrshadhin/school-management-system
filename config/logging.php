@@ -63,6 +63,11 @@ return [
             'path' => storage_path('logs/student-attendance-upload.log'),
             'level' => 'debug',
         ],
+        'employeeattendancelog' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/employee-attendance-upload.log'),
+            'level' => 'debug',
+        ],
         'daily' => [
             'driver' => 'daily',
             'path' => storage_path('logs/laravel.log'),
