@@ -20,7 +20,7 @@ class AttendanceFileQueue extends Model
         'imported_rows',
         'send_sms',
         'is_imported',
-        'is_sms_send'
+        'attendance_type',
     ];
 
 }

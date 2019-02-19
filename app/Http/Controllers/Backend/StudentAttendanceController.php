@@ -341,6 +341,7 @@ class StudentAttendanceController extends Controller
                     'file_format' => $isValidFormat,
                     'total_rows' => 0,
                     'imported_rows' => 0,
+                    'attendance_type' => 1,
                 ]);
 
 
@@ -363,7 +364,8 @@ class StudentAttendanceController extends Controller
         }
 
         $isProcessingFile = false;
-        $pendingFile = AttendanceFileQueue::where('is_imported','=',0)
+        $pendingFile = AttendanceFileQueue::where('attendance_type',1)
+            ->where('is_imported','=',0)
             ->orderBy('created_at', 'DESC')
             ->count();
 
@@ -386,12 +388,12 @@ class StudentAttendanceController extends Controller
      */
     public function fileQueueStatus(Request $request)
     {
-        $pendingFile = AttendanceFileQueue::orderBy('created_at', 'DESC')
+        $pendingFile = AttendanceFileQueue::where('attendance_type',1)->orderBy('created_at', 'DESC')
             ->first();
 
         if(empty($pendingFile)) {
             return [
-                'msg' => 'No file in queue to proccess. Reload the page.',
+                'msg' => 'No file in queue to process. Reload the page.',
                 'success' => true
             ];
             //nothing to do

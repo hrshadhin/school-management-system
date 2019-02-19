@@ -108,7 +108,7 @@ export default class HRM {
                 $('#statusMessage').html(r.msg);
                 if(r.status == 0){
                     setTimeout(function () {
-                        Academic.attendanceFileUploadStatus();
+                        HRM.attendanceFileUploadStatus();
                     }, 500);
                 }
                 else if(r.status == -1){

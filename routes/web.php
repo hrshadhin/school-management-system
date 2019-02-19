@@ -314,6 +314,26 @@ Route::get(
 }
 )->name('student_attendance_seeder');
 
+Route::get(
+    '/employee-attendance-file-queue-start/{code}', function ($code) {
+    if($code == "hr799"){
+        try {
+            echo '<br>Started employee attendance processing...<br>';
+            Artisan::call('attendance:seedEmployee');
+            echo '<br>Employee attendance processing completed.<br>You will be redirect in 5 seconds.<br>';
+            sleep(5);
+
+            return redirect()->route('employee_attendance.create_file')->with("success", "Employee attendance saved and notify successfully.");
+
+        } catch (Exception $e) {
+            Response::make($e->getMessage(), 500);
+        }
+    }else{
+        App::abort(404);
+    }
+}
+)->name('employee_attendance_seeder');
+
 
 //dev routes
 Route::get(

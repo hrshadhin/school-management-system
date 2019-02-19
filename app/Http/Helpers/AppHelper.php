@@ -703,6 +703,50 @@ class AppHelper
 
     }
 
+    public static  function parseRowForEmployee($lineContent, $fileFormat){
+        // remove utf8 bom identify characters
+        //clear invalid UTF8 characters
+        $lineContent  = iconv("UTF-8","ISO-8859-1//IGNORE",$lineContent);
+
+        if(!strlen($lineContent)){
+            return [];
+        }
+
+        $data = [];
+        if($fileFormat === 1){
+            $lineSplits = explode(':', $lineContent);
+            $id = trim(ltrim($lineSplits[1], '0'));
+            //only for employee id , remove student ids
+            if(strlen($id) == 2){
+                $data = [
+                    'date' => $lineSplits[2],
+                    'time' => trim($lineSplits[3]),
+                    'id' => str_pad($id, 10, "0", STR_PAD_LEFT),
+                ];
+            }
+
+        }
+
+        if($fileFormat === 2){
+            $lineSplits = preg_split("/\s+/", $lineContent);
+            $id = trim($lineSplits[0]);
+            //only for employee id , remove student ids
+            if(strlen($id) == 2){
+                $aDate = str_replace('-','',$lineSplits[1]);
+                $aTime = str_replace(':','',$lineSplits[2]);
+
+                $data = [
+                    'date' => $aDate,
+                    'time' => $aTime,
+                    'id' => str_pad($id, 10, "0", STR_PAD_LEFT)
+                ];
+            }
+        }
+
+        return $data;
+
+    }
+
 
     public static function getIdcardBarCode($code) {
         $generator = new BarcodeGeneratorPNG();

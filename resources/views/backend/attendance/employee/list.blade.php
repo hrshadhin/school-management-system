@@ -34,7 +34,10 @@
                         </div>
                         <div class="col-md-2">
                             <div class="form-group has-feedback">
-                                <input type='text' class="form-control date_picker" id="attendance_list_filter"  name="attendance_date" placeholder="date" value="{{$attendance_date}}" required minlength="10" maxlength="11" />
+                                <div class="input-group">
+                                <input type='text' class="form-control date_picker" readonly id="attendance_list_filter"  name="attendance_date" placeholder="date" value="{{$attendance_date}}" required minlength="10" maxlength="11" />
+                                <span class="fa fa-calendar form-control-feedback"></span>
+                                </div>
                             </div>
                         </div>
                         <div class="box-tools pull-right">
