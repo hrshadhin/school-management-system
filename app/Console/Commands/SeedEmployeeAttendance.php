@@ -7,6 +7,7 @@ use App\AttendanceFileQueue;
 use App\Employee;
 use App\EmployeeAttendance;
 use App\Http\Helpers\AppHelper;
+use App\Jobs\PushEmployeeAbsentJob;
 use App\Jobs\PushStudentAbsentJob;
 use App\Registration;
 use App\StudentAttendance;
@@ -98,26 +99,17 @@ class SeedEmployeeAttendance extends Command
                 }
 
                 $row = AppHelper::parseRowForEmployee($line, $this->fileFormatType);
+
                 if(count($row)){
                     $dateWiseData[$row['date']][] = [
                         'empId' => $row['id'],
                         'time' => $row['time']
                     ];
-                    $totalValidRows++;
+
                 }
             }
             fclose($handle);
 
-
-            $pendingFile->total_rows = $totalValidRows;
-            if(!$totalValidRows){
-                $pendingFile->is_imported = -1;
-                $pendingFile->save();
-                throw new Exception('There are no valid data in this file.');
-            }
-
-            $pendingFile->updated_by = $this->createdBy;
-            $pendingFile->save();
 
 
             $isFail = false;
@@ -151,11 +143,25 @@ class SeedEmployeeAttendance extends Command
                         'workingHours' => $workTime
                     ];
 
+                    $totalValidRows++;
+
                 }
 
                 //now push back one day data to $dateWiseDate  array
                 $dateWiseData[$atndDate] = $cleanEmpWiseData;
             }
+
+            $pendingFile->total_rows = $totalValidRows;
+            $pendingFile->imported_rows = 0;
+            if(!$totalValidRows){
+                $pendingFile->is_imported = -1;
+                $pendingFile->save();
+                throw new Exception('There are no valid data in this file.');
+            }
+
+            $pendingFile->updated_by = $this->createdBy;
+            $pendingFile->save();
+
 
             //fetch all employees
             $employeesData = Employee::where('status', AppHelper::ACTIVE)->get()->reduce(function ($employeesData, $employee) {
@@ -177,13 +183,14 @@ class SeedEmployeeAttendance extends Command
                 foreach ($dateWiseData as $date => $employees) {
                     $atd = new \DateTime(date('Ymd', strtotime($date)));
                     $attendance_date = $atd->format('Y-m-d');
+                    $attendances = [];
 
                     //check if this date data exists on db or not
                     $entryExists = $this->isAttendanceExists($attendance_date);
                     if ($entryExists) {
                         $msg =   "Date '".$atd->format('d/m/Y')."' > attendance override by multiple upload.";
                         Log::channel('employeeattendancelog')->warning($msg);
-                        DB::table('employee_attendances')->whereDate('date', '=', $attendance_date)->delete();
+                        DB::table('employee_attendances')->whereDate('attendance_date', '=', $attendance_date)->delete();
                     }
 
                     DB::beginTransaction();
@@ -193,31 +200,29 @@ class SeedEmployeeAttendance extends Command
                             $isPresent = "0";
                             $status = [];
 
-                            $inTimeObject = Carbon::createFromFormat('YmdHis', $attendance_date."00:00:00");
-                            $outTimeObject = Carbon::createFromFormat('YmdHis', $attendance_date."00:00:00");
+                            $inTimeObject = Carbon::createFromFormat('Y-m-dH:i:s', $attendance_date."00:00:00");
+                            $outTimeObject = Carbon::createFromFormat('Y-m-dH:i:s', $attendance_date."00:00:00");
                             $workingHours  = $inTimeObject->diff($outTimeObject)->format('%H:%I');
 
                             //check is this employee present
                             if (array_key_exists($employee, $employees)) {
                                 $isPresent = "1";
-                                $inTimeObject = $employees[$employee]['in_time'];
-                                $outTimeObject = $employees[$employee]['out_time'];
+                                $inTimeObject = $employees[$employee]['inTime'];
+                                $outTimeObject = $employees[$employee]['outTime'];
                                 $workingHours  = $employees[$employee]['workingHours'];
 
                                 //late or early out find
-                                if($inTimeObject->greaterThan($employeeData[$employee]['in_time'])){
-                                    $status[] = 1;
+                                if($employeeData['in_time'] && $employeeData['out_time']) {
+                                    if ($inTimeObject->greaterThan($employeeData['in_time'])) {
+                                        $status[] = 1;
+                                    }
+
+                                    if ($outTimeObject->lessThan($employeeData['out_time'])) {
+                                        $status[] = 2;
+                                    }
                                 }
-
-                                if($outTimeObject->lessThan($employeeData[$employee]['out_time'])){
-                                    $status[] = 2;
-                                }
-
-
-
 
                             }
-
 
                             $attendances[] = [
                                 "employee_id" => $employeeData['id'],
@@ -232,25 +237,30 @@ class SeedEmployeeAttendance extends Command
                             ];
 
                             if(!$isPresent){
-                                $absentIds[] = $employeeData['id'];
+                                $absentIds[$attendance_date][] = $employeeData['id'];
                             }
 
                         }
-
+                        EmployeeAttendance::insert($attendances);
                         DB::commit();
                         $msg =  "Date '".$atd->format('d/m/Y')."' Total ".$totalEmployee." entry successfully stored.";
                         Log::channel('employeeattendancelog')->info($msg);
 
 
-                    }catch (\Exception $e) {
+                    }
+                    catch (\Exception $e) {
                         DB::rollback();
                         $msg =  "Date '".$atd->format('d/m/Y')."' data insert problem. ".$e->getMessage();
                         Log::channel('employeeattendancelog')->error($msg);
                     }
 
 
-                    //write log in more entry found rather than db employee list
+
                     $totalEmployeeInFile = count($employees);
+                    $pendingFile->imported_rows += $totalEmployeeInFile;
+                    $pendingFile->save();
+
+                    //write log in more entry found rather than db employee list
                     if($totalEmployee<$totalEmployeeInFile){
                         $msg =   "Date '".$atd->format('d/m/Y')."' > ".($totalEmployeeInFile-$totalEmployee)." employee not found in db but found in attendance file!";
                         Log::channel('employeeattendancelog')->warning($msg);
@@ -272,7 +282,7 @@ class SeedEmployeeAttendance extends Command
             }
 
         }
-        catch (Exception $e){
+        catch (\Exception $e){
             $pendingFile->is_imported = -1;
             $pendingFile->updated_by = $this->createdBy;
             $pendingFile->save();
@@ -281,98 +291,53 @@ class SeedEmployeeAttendance extends Command
             return false;
         }
 
-        //process absent attendance student
-        $absentStudentIdsByDate = [];
-        try {
-            //find absent students
-            foreach ($presentStudentsByClass as $pDate => $stClasses){
-                $absentAttendances = [];
-                $dateTimeNow = Carbon::now(env('APP_TIMEZONE','Asia/Dhaka'));
-
-                foreach ($stClasses as $class_id => $value){
-                    $absentStudents = Registration::where('status', AppHelper::ACTIVE)
-                        ->where('class_id', $class_id)
-                        ->whereDoesntHave('attendance' , function ($query) use($pDate) {
-                            $query->select('registration_id')
-                                ->whereDate('attendance_date', $pDate);
-                        })
-                        ->select('id','regi_no','roll_no')
-                        ->get();
-
-                    foreach ($absentStudents as $student){
-                        $absentAttendances[] = [
-                            "registration_id" => $student->id,
-                            "attendance_date" => $pDate,
-                            "present"   => "0",
-                            "created_at" => $dateTimeNow,
-                            "created_by" => $this->createdBy,
-                        ];
-
-                        $absentStudentIdsByDate[$pDate][] = $student->id;
-                    }
-                }
-
-                StudentAttendance::insert($absentAttendances);
-                Log::channel('studentattendancelog')->info('Total '.count($absentAttendances).' absent student attendance insert for '.$pDate);
-            }
-        }
-        catch (Exception $e){
-            $pendingFile->is_imported = -1;
-            $pendingFile->updated_by = $this->createdBy;
-            $pendingFile->save();
-            $errorMSG = $e->getMessage();
-            Log::channel('studentattendancelog')->critical($errorMSG);
-            return false;
-        }
-
         //send notification for absent
         try {
-            foreach ($absentStudentIdsByDate as $attendance_date => $absentIds) {
-
+            foreach ($absentIds as $attendance_date => $employeeIds) {
                 //todo: need uncomment these code on client deploy
-//                $sendNotification = AppHelper::getAppSettings('student_attendance_notification');
+//                $sendNotification = AppHelper::getAppSettings('employee_attendance_notification');
 //                if ($sendNotification != "0") {
 //                    if ($sendNotification == "1") {
 //                        //then send sms notification
 //                        //get sms gateway information
-//                        $gateway = AppMeta::where('id', AppHelper::getAppSettings('student_attendance_gateway'))->first();
+//                        $gateway = AppMeta::where('id', AppHelper::getAppSettings('employee_attendance_gateway'))->first();
 //                        if (!$gateway) {
-//                            Log::channel('studentabsentlog')->error("SMS Gateway not setup!");
+//                            Log::channel('employeeattendancelog')->error("SMS Gateway not setup!");
 //                        }
 //
 //                        //get sms template information
-//                        $template = Template::where('id', AppHelper::getAppSettings('student_attendance_template'))->first();
+//                        $template = Template::where('id', AppHelper::getAppSettings('employee_attendance_template'))->first();
 //                        if (!$template) {
-//                            Log::channel('studentabsentlog')->error("Template not setup!");
+//                            Log::channel('employeeattendancelog')->error("Template not setup!");
 //                        }
 //
-//                        $res = AppHelper::sendAbsentNotificationForStudentViaSMS($absentIds, $attendance_date);
+//                        $res = AppHelper::sendAbsentNotificationForEmployeeViaSMS($employeeIds, $attendance_date);
 //
 //                    }
 //                }
 
                 //push job to queue
                 //todo: need comment these code on client deploy
-                PushStudentAbsentJob::dispatch($absentIds, $attendance_date);
+                PushEmployeeAbsentJob::dispatch($employeeIds, $attendance_date);
             }
             $pendingFile->is_imported = 1;
             $pendingFile->updated_by = $this->createdBy;
             $pendingFile->save();
         }
-        catch (Exception $e){
+        catch (\Exception $e){
 
             $pendingFile->is_imported = -1;
             $pendingFile->updated_by = $this->createdBy;
             $pendingFile->save();
 
             $errorMSG = $e->getMessage();
-            Log::channel('studentattendancelog')->critical($errorMSG);
+            Log::channel('employeeattendancelog')->critical($errorMSG);
             return false;
         }
 
 
         $msg = "========File Queue Command Complete========";
-        Log::channel('studentattendancelog')->info($msg);
+        Log::channel('employeeattendancelog')->info($msg);
 
 
     }
