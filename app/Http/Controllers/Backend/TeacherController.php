@@ -219,7 +219,24 @@ class TeacherController extends Controller
             abort(404);
         }
 
-        return view('backend.teacher.view', compact('teacher'));
+        $sections = Section::with(['class' => function($query){
+                    $query->select('name','id');
+            }])
+            ->where('teacher_id', $teacher->id)
+            ->select('name','class_id')
+            ->orderBy('name','asc')
+            ->get();
+
+        $subjects = Subject::with(['class' => function($query){
+            $query->select('name','id');
+            }])
+            ->where('teacher_id', $teacher->id)
+            ->select('name','class_id','code')
+            ->orderBy('name','asc')
+            ->get();
+
+
+        return view('backend.teacher.view', compact('teacher','sections', 'subjects'));
 
 
     }
