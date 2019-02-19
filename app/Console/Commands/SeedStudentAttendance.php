@@ -50,7 +50,8 @@ class SeedStudentAttendance extends Command
     public function handle()
     {
 
-        $pendingFile = AttendanceFileQueue::where('is_imported','=',0)
+        $pendingFile = AttendanceFileQueue::where('attendance_type',1)
+            ->where('is_imported','=',0)
             ->orderBy('created_at', 'DESC')
             ->first();
 

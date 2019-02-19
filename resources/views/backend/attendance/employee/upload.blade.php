@@ -2,7 +2,7 @@
 @extends('backend.layouts.master')
 
 <!-- Page title -->
-@section('pageTitle') Student Attendance @endsection
+@section('pageTitle') Employee Attendance @endsection
 <!-- End block -->
 
 <!-- BEGIN PAGE CONTENT-->
@@ -10,13 +10,13 @@
     <!-- Section header -->
     <section class="content-header">
         <h1>
-            Student Attendance
+            Employee Attendance
             <small>Add New</small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="{{URL::route('user.dashboard')}}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
             <li><i class="fa icon-attendance"></i> Attendance</li>
-            <li><a href="{{URL::route('student_attendance.index')}}"><i class="fa icon-student"></i>Student</a></li>
+            <li><a href="{{URL::route('employee_attendance.index')}}"><i class="fa icon-teacher"></i>Employee</a></li>
             <li class="active">Upload</li>
         </ol>
     </section>
@@ -26,7 +26,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="box box-info">
-                    <form id="entryForm" action="{{URL::Route('student_attendance.create_file')}}" method="post" enctype="multipart/form-data">
+                    <form id="entryForm" action="{{URL::Route('employee_attendance.create_file')}}" method="post" enctype="multipart/form-data">
 
                         <div class="box-body">
                             @csrf
@@ -50,7 +50,7 @@
                                         <h5 class="text-danger"> <i class="glyphicon glyphicon-hand-right"></i> Please be carefull about file size.It must be less than or equal 1MB!</h5>
                                         <h5 class="text-danger"> <i class="glyphicon glyphicon-hand-right"></i> File should be text file and get from attendance machine.</h5>
                                         <h5 class="text-danger"> <i class="glyphicon glyphicon-hand-right"></i> Currently this system support 2 type of files, download the sample if you needed.</h5>
-                                        <h5 class="text-danger"> <i class="glyphicon glyphicon-hand-right"></i> Log file found at <b>storage/logs/student-attendance-upload.log</b></h5>
+                                        <h5 class="text-danger"> <i class="glyphicon glyphicon-hand-right"></i> Log file found at <b>storage/logs/employee-attendance-upload.log</b></h5>
                                     </div>
                                 </div>
                             </div>
@@ -74,7 +74,7 @@
                                         <div class="alert alert-info keepIt progressDiv">
                                             {{--<span>File has been uploaded. Now need to process the data.</span>--}}
                                             {{--<a href="{{$queueFireUrl}}" class="btn btn-primary btn-link startBtn">Start Now</a>--}}
-                                            <span id="spinnerspan"><i class="glyphicon glyphicon-refresh spinning"></i> Uploaded attendance is being proccessing...</span><br>
+                                            <span id="spinnerspan"><i class="glyphicon glyphicon-refresh spinning"></i> Uploaded attendance is being processing...</span><br>
                                             <span id="statusMessage"></span>
                                         </div>
                                     </div>
@@ -85,7 +85,7 @@
                         </div>
                         <!-- /.box-body -->
                         <div class="box-footer">
-                            <a href="{{URL::route('student_attendance.index')}}" class="btn btn-default">Cancel</a>
+                            <a href="{{URL::route('employee_attendance.index')}}" class="btn btn-default">Cancel</a>
                             @if(!$isProcessingFile)
                             <button type="submit" class="btn btn-info pull-right"><i class="fa fa-upload"></i> Upload</button>
                             @endif
@@ -102,10 +102,10 @@
 <!-- BEGIN PAGE JS-->
 @section('extraScript')
     <script type="text/javascript">
-        window.fileUploadStatusURL = '{{URL::route('student_attendance.file_queue_status')}}';
+        window.fileUploadStatusURL = '{{URL::route('employee_attendance.file_queue_status')}}';
         $(document).ready(function () {
             @if($isProcessingFile)
-                Academic.attendanceFileUploadStatus();
+                HRM.attendanceFileUploadStatus();
             @endif
 
         });

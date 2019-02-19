@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\AppMeta;
+use App\AttendanceFileQueue;
 use App\Employee;
 use App\EmployeeAttendance;
 use App\Http\Helpers\AppHelper;
@@ -12,6 +13,8 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use Symfony\Component\Process\Process;
+
 
 class EmployeeAttendanceController extends Controller
 {
@@ -271,6 +274,155 @@ class EmployeeAttendanceController extends Controller
             'message' => 'Status updated.'
         ];
 
+    }
+
+
+    /**
+     * Upload file for add attendance
+     * @return mixed
+     */
+    public function createFromFile(Request $request)
+    {
+        if ($request->isMethod('post')) {
+
+            //validate form
+            $messages = [
+                'file.max' => 'The :attribute size must be under 1mb.',
+            ];
+            $rules = [
+                'file' => 'mimetypes:text/plain|max:1024',
+
+            ];
+
+            $this->validate($request, $rules, $messages);
+
+            $clientFileName = $request->file('file')->getClientOriginalName();
+
+            // again check for file extention manually
+            $ext = strtolower($request->file('file')->getClientOriginalExtension());
+            if($ext != 'txt'){
+                return redirect()->back()->with('error', 'File must be a .txt file');
+            }
+
+            try {
+                $storagepath = $request->file('file')->store('employee-attendance');
+                $fileName = basename($storagepath);
+
+                $fullPath = storage_path('app/').$storagepath;
+
+                //check file content
+                $linecount = 0;
+                $isValidFormat = 0;
+                $handle = fopen($fullPath, "r");
+                while(!feof($handle)){
+                    $line = fgets($handle, 4096);
+                    $linecount = $linecount + substr_count($line, PHP_EOL);
+
+                    if($linecount == 1){
+                        $isValidFormat = AppHelper::isLineValid($line);
+                        if(!$isValidFormat){
+                            break;
+                        }
+                    }
+                }
+                fclose($handle);
+
+                if(!$linecount){
+                    throw new Exception("File is empty.");
+                }
+
+                if(!$isValidFormat){
+                    throw new Exception("File content format is not valid.");
+                }
+
+                AttendanceFileQueue::create([
+                    'file_name' => $fileName,
+                    'client_file_name' => $clientFileName,
+                    'file_format' => $isValidFormat,
+                    'total_rows' => 0,
+                    'imported_rows' => 0,
+                    'attendance_type' => 2,
+                ]);
+
+
+                // now start the command to proccess data
+//                $command = "php ".base_path()."/artisan attendance:seedEmployee";
+//
+//                $process = new Process($command);
+//                $process->start();
+
+                // debug code
+//            $process->wait();
+//            echo $process->getOutput();
+//            echo $process->getErrorOutput();
+
+            } catch (\Exception $e) {
+                return redirect()->back()->with('error', $e->getMessage());
+            }
+
+            return redirect()->back();
+        }
+
+        $isProcessingFile = false;
+        $pendingFile = AttendanceFileQueue::where('attendance_type',2)
+            ->where('is_imported','=',0)
+            ->orderBy('created_at', 'DESC')
+            ->count();
+
+        if($pendingFile){
+            $isProcessingFile = true;
+
+        }
+
+        $queueFireUrl = route('employee_attendance_seeder',['code' => 'hr799']);
+        return view('backend.attendance.employee.upload', compact(
+            'isProcessingFile',
+            'queueFireUrl'
+        ));
+    }
+
+    /**
+     * Uploaded file status
+     * @param Request $request
+     * @return array
+     */
+    public function fileQueueStatus(Request $request)
+    {
+        $pendingFile = AttendanceFileQueue::where('attendance_type',2)->orderBy('created_at', 'DESC')
+            ->first();
+
+        if(empty($pendingFile)) {
+            return [
+                'msg' => 'No file in queue to process. Reload the page.',
+                'success' => true
+            ];
+            //nothing to do
+        }
+
+        if($pendingFile->is_imported === 1) {
+            return [
+                'msg' => 'Attendance data processing complete. You can check the log.',
+                'success' => true
+            ];
+        }
+        else if($pendingFile->is_imported === -1) {
+            return [
+                'msg' => 'Something went wrong to import data, check log file.',
+                'success' => false,
+                'status' => $pendingFile->is_imported
+            ];
+        }
+        else {
+            $status = $pendingFile->imported_rows . '  attendance has been imported out of ' . $pendingFile->total_rows;
+            if($pendingFile->imported_rows >= $pendingFile->total_rows) {
+                $status = "attendance has been imported. Now sending notification for absent employees";
+            }
+            return [
+                'msg' => $status,
+                'success' => false,
+                'status' => $pendingFile->is_imported
+            ];
+        }
     }
 
 }
