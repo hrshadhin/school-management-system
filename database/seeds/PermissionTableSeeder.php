@@ -872,6 +872,40 @@ class PermissionTableSeeder extends Seeder
             //employee attendance end
         ];
 
+        $examPermissionList = [
+            // Exam
+            [   "slug" => "exam.index",
+                "name" => "Exam View",
+                "group" => "Exam"
+            ],
+            [   "slug" => "exam.create",
+                "name" => "Exam Create",
+                "group" => "Exam"
+            ],
+            [   "slug" => "exam.store",
+                "name" => "Exam Create",
+                "group" => "Exam"
+            ],
+            [   "slug" => "exam.edit",
+                "name" => "Exam Edit",
+                "group" => "Exam"
+            ],
+            [   "slug" => "exam.update",
+                "name" => "Exam Edit",
+                "group" => "Exam"
+            ],
+            [   "slug" => "exam.status",
+                "name" => "Exam Edit",
+                "group" => "Exam"
+            ],
+            [   "slug" => "exam.destroy",
+                "name" => "Exam Delete",
+                "group" => "Exam"
+            ],
+            // Exam End
+        ];
+
+
         $reportsPermissionList = [
             // Report
             [   "slug" => "report.student_idcard",
@@ -887,7 +921,7 @@ class PermissionTableSeeder extends Seeder
 
         //merge all permissions and insert into db
         $permissions = array_merge($commonPermissionList, $administratorPermissionList, $onlyAdminPermissions,
-            $academicPermissionList, $websitePermissionList, $hrmPermissionList, $reportsPermissionList);
+            $academicPermissionList, $websitePermissionList, $hrmPermissionList, $examPermissionList, $reportsPermissionList);
 
         echo PHP_EOL , 'seeding permissions...';
 

@@ -96,6 +96,15 @@ class AppHelper
         3 => 'Undefined leave (UL)'
     ];
 
+    const MARKS_DISTRIBUTION_TYPES = [
+      1 => "Written",
+      2 => "MCQ",
+      3 => "Attendance",
+      4 => "Assignment",
+      5 => "Lab Report",
+      6 => "Practical",
+    ];
+
 
     /**
      * Get institution category for app settings
