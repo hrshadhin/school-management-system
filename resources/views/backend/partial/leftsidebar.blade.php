@@ -96,6 +96,38 @@
       </li>
       <li class="treeview">
         <a href="#">
+          <i class="fa icon-exam"></i>
+          <span>Exam</span>
+          <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+        </a>
+        <ul class="treeview-menu">
+          @can('exam.index')
+            <li>
+              <a href="{{ URL::route('exam.index') }}">
+                <i class="fa icon-exam"></i> <span>Exam</span>
+              </a>
+            </li>
+          @endcan
+          @can('exam.grade.index')
+            <li>
+              <a href="{{ URL::route('exam.grade.index') }}">
+                <i class="fa fa-bar-chart"></i> <span>Grade</span>
+              </a>
+            </li>
+          @endcan
+          @can('exam.rule.index')
+            <li>
+              <a href="{{ URL::route('exam.rule.index') }}">
+                <i class="fa fa-cog"></i> <span>Rule</span>
+              </a>
+            </li>
+          @endcan
+        </ul>
+      </li>
+      <li class="treeview">
+        <a href="#">
           <i class="fa fa-users"></i>
           <span>HRM</span>
           <span class="pull-right-container">

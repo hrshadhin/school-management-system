@@ -15,7 +15,17 @@ class CreateResultsTable extends Migration
     {
         Schema::create('results', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('registration_id');
+            $table->unsignedInteger('exam_id');
+            $table->integer('total_marks');
+            $table->string('grade');
+            $table->decimal('point',5,2);
             $table->timestamps();
+            $table->softDeletes();
+            $table->userstamps();
+
+            $table->foreign('registration_id')->references('id')->on('registrations');
+            $table->foreign('exam_id')->references('id')->on('exams');
         });
     }
 
