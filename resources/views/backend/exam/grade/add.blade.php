@@ -15,7 +15,7 @@
         </h1>
         <ol class="breadcrumb">
             <li><a href="{{URL::route('user.dashboard')}}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-            <li><a href="{{URL::route('exam.index')}}"><i class="fa fa-bar-chart"></i> Grade</a></li>
+            <li><a href="{{URL::route('exam.grade.index')}}"><i class="fa fa-bar-chart"></i> Grade</a></li>
             <li class="active">@if($grade) Update @else Add @endif</li>
         </ol>
     </section>
@@ -53,10 +53,13 @@
                                                 Grade
                                             </th>
                                             <th>
-                                                Mark From
+                                                Point
                                             </th>
                                             <th>
-                                                Mark Upto
+                                                Marks From
+                                            </th>
+                                            <th>
+                                                Marks Upto
                                             </th>
                                         </tr>
                                         </thead>
@@ -66,7 +69,7 @@
                                                     $rules = json_decode($grade->rules);
                                                     $formatedRules = [];
                                                     foreach ($rules as $rule){
-                                                        $formatedRules[$rule->grade] = ['marks_from' => $rule->marks_from, 'marks_upto' => $rule->marks_upto];
+                                                        $formatedRules[$rule->grade] = ['point' => $rule->point,'marks_from' => $rule->marks_from,'marks_upto' => $rule->marks_upto];
                                                     }
                                                 @endphp
                                             @endif
@@ -75,6 +78,9 @@
                                                     <td>
                                                         <span>{{$rgrade}}</span>
                                                         <input type="hidden" name="grade[]" value="{{$key}}">
+                                                    </td>
+                                                    <td>
+                                                        <input type="number" class="form-control" name="point[]" value="@if($grade){{$formatedRules[$key]['point']}}@else{{0}}@endif" placeholder="" required min="0">
                                                     </td>
                                                     <td>
                                                         <input type="number" class="form-control" name="marks_from[]" value="@if($grade){{$formatedRules[$key]['marks_from']}}@else{{0}}@endif" placeholder="" required min="0">
@@ -87,6 +93,7 @@
                                         </tbody>
                                     </table>
                                     <span class="text-danger">{{ $errors->first('grade') }}</span>
+                                    <span class="text-danger">{{ $errors->first('point') }}</span>
                                     <span class="text-danger">{{ $errors->first('marks_from') }}</span>
                                     <span class="text-danger">{{ $errors->first('marks_upto') }}</span>
                                 </div>

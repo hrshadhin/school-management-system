@@ -60,10 +60,13 @@
                                                         Grade
                                                     </th>
                                                     <th>
-                                                        Mark From
+                                                        Point
                                                     </th>
                                                     <th>
-                                                        Mark Upto
+                                                        Marks From
+                                                    </th>
+                                                    <th>
+                                                        Marks Upto
                                                     </th>
                                                 </tr>
                                                 </thead>
@@ -72,6 +75,10 @@
                                                     <tr>
                                                         <td>
                                                             {{AppHelper::GRADE_TYPES[$rule->grade]}}
+                                                        </td>
+
+                                                        <td>
+                                                            {{$rule->point}}
                                                         </td>
                                                         <td>
                                                             {{$rule->marks_from}}

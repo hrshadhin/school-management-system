@@ -211,6 +211,7 @@ class ExamController extends Controller
             $this->validate($request, [
                 'name' => 'required|max:255',
                 'grade' => 'required|array',
+                'point' => 'required|array',
                 'marks_from' => 'required|array',
                 'marks_upto' => 'required|array',
             ]);
@@ -220,6 +221,7 @@ class ExamController extends Controller
             foreach ($inputs['grade'] as $key => $value){
                 $rules[] = [
                     'grade' => $value,
+                    'point' => $inputs['point'][$key],
                     'marks_from' => $inputs['marks_from'][$key],
                     'marks_upto' => $inputs['marks_upto'][$key]
                 ];
