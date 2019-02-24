@@ -289,6 +289,19 @@ Route::group(
         ->name('exam.status');
     Route::post('exam/delete/{id}', 'ExamController@destroy')
         ->name('exam.destroy');
+    //grade
+    Route::get('exam/grade', 'ExamController@gradeIndex')
+        ->name('exam.grade.index');
+    Route::post('exam/grade', 'ExamController@gradeIndex')
+        ->name('exam.grade.destroy');
+    Route::get('exam/grade/create', 'ExamController@gradeCru')
+        ->name('exam.grade.create');
+    Route::post('exam/grade/create', 'ExamController@gradeCru')
+        ->name('exam.grade.store');
+    Route::get('exam/grade/edit/{id}', 'ExamController@gradeCru')
+        ->name('exam.grade.edit');
+    Route::post('exam/grade/update/{id}', 'ExamController@gradeCru')
+        ->name('exam.grade.update');
 
     // Reporting
     //student id card

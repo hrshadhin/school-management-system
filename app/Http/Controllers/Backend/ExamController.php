@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Exam;
+use App\ExamRule;
+use App\Grade;
 use Illuminate\Http\Request;
 use App\Http\Helpers\AppHelper;
 use App\IClass;
@@ -150,4 +152,115 @@ class ExamController extends Controller
         ];
 
     }
+
+
+    /**
+     * grade  manage
+     * @return \Illuminate\Http\Response
+     */
+    public function gradeIndex(Request $request)
+    {
+        //for save on POST request
+        if ($request->isMethod('post')) {//
+            $this->validate($request, [
+                'hiddenId' => 'required|integer',
+            ]);
+            $grade = Grade::findOrFail($request->get('hiddenId'));
+            $haveRules = ExamRule::where('grade_id', $grade->id)->count();
+            if($haveRules){
+                return redirect()->route('exam.grade.index')->with('error', 'Can not delete! Grade used in exam rules.');
+            }
+
+            $grade->delete();
+
+            //now notify the admins about this record
+            $msg = $grade->name." grade deleted by ".auth()->user()->name;
+            $nothing = AppHelper::sendNotificationToAdmins('info', $msg);
+            // Notification end
+
+            return redirect()->route('exam.grade.index')->with('success', 'Record deleted!');
+        }
+
+        //for get request
+        $grades = Grade::get();
+        return view('backend.exam.grade.list', compact('grades'));
+    }
+
+    /**
+     * grade create, read, update manage
+     * @return \Illuminate\Http\Response
+     */
+    public function gradeCru(Request $request, $id=0)
+    {
+        //for save on POST request
+        if ($request->isMethod('post')) {
+
+            //protection to prevent massy event. Like edit grade after its use in rules
+            // or marks entry
+            if($id){
+                $grade = Grade::find($id);
+                //if grade use then can't edit it
+                if($grade) {
+                    $haveRules = ExamRule::where('grade_id', $grade->id)->count();
+                    if ($haveRules) {
+                        return redirect()->route('exam.grade.index')->with('error', 'Can not Edit! Grade used in exam rules.');
+                    }
+                }
+            }
+
+            $this->validate($request, [
+                'name' => 'required|max:255',
+                'grade' => 'required|array',
+                'marks_from' => 'required|array',
+                'marks_upto' => 'required|array',
+            ]);
+
+            $rules = [];
+            $inputs = $request->all();
+            foreach ($inputs['grade'] as $key => $value){
+                $rules[] = [
+                    'grade' => $value,
+                    'marks_from' => $inputs['marks_from'][$key],
+                    'marks_upto' => $inputs['marks_upto'][$key]
+                ];
+            }
+
+            $data = [
+                'name' => $request->get('name'),
+                'rules' => json_encode($rules)
+            ];
+
+            Grade::updateOrCreate(
+                ['id' => $id],
+                $data
+            );
+
+            if(!$id){
+                //now notify the admins about this record
+                $msg = $data['name']." graded added by ".auth()->user()->name;
+                $nothing = AppHelper::sendNotificationToAdmins('info', $msg);
+                // Notification end
+            }
+
+
+            $msg = "Grade ";
+            $msg .= $id ? 'updated.' : 'added.';
+
+            return redirect()->route('exam.grade.index')->with('success', $msg);
+        }
+
+        //for get request
+        $grade = Grade::find($id);
+
+        //if grade use then can't edit it
+        if($grade) {
+            $haveRules = ExamRule::where('grade_id', $grade->id)->count();
+            if ($haveRules) {
+                return redirect()->route('exam.grade.index')->with('error', 'Can not Edit! Grade used in exam rules.');
+            }
+        }
+
+        return view('backend.exam.grade.add', compact('grade'));
+    }
+
 }

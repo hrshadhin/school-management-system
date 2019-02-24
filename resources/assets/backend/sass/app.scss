@@ -474,6 +474,17 @@ table.attendance-add tr td .help-block{
    color:red;
 }
 
+table.haveForm tr td, table.haveForm tr th{
+    text-align: center;
+}
+table.haveForm tr td input {
+   margin: auto;
+    max-width: 120px;
+}
+table.haveForm tr td .help-block{
+   color:red;
+}
+
 /**
  Mobile view element hide css
  */

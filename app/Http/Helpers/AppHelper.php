@@ -105,6 +105,16 @@ class AppHelper
       6 => "Practical",
     ];
 
+    const GRADE_TYPES = [
+        1 => 'A+',
+        2 => 'A',
+        3 => 'A-',
+        4 => 'B',
+        5 => 'C',
+        6 => 'D',
+        7 => 'F',
+    ];
+
 
     /**
      * Get institution category for app settings
