@@ -470,7 +470,7 @@ export default class Academic {
 
             if(subjectId==combineSujectId){
                 toastr.error("Same subject can not be a combine subject!");
-                $('select[name="combine_subject_id"]').val('');
+                $('select[name="combine_subject_id"]').val('').trigger('change');
             }
         });
         $('select[name="passing_rule"]').on('change', function () {
@@ -479,12 +479,13 @@ export default class Academic {
                 // individual pass
                 $('input[name="over_all_pass"]').val(0);
                 $('input[name="pass_marks[]"]').prop('readonly', false);
-                $('input[name="pass_marks[]"]').val('');
+                $('input[name="pass_marks[]"]').val(0);
             }
             else{
                 if($('input[name="over_all_pass"]').val() == 0){
                     fetchGradeInfo();
                 }
+                $('.overAllPassDiv').show();
             }
 
             if(passingRule == 1){
@@ -492,7 +493,7 @@ export default class Academic {
             }
             else{
                 $('input[name="pass_marks[]"]').prop('readonly', false);
-                $('input[name="pass_marks[]"]').val('');
+                $('input[name="pass_marks[]"]').val(0);
             }
         });
 
@@ -508,7 +509,7 @@ export default class Academic {
             // console.log(grandTotalMakrs, distributionTotalMarks);
             if(distributionTotalMarks> grandTotalMakrs){
                 toastr.error("Marks distribution is wrong! Not match with total marks.");
-                $('input[name="total_marks[]"]').val('');
+                $('input[name="total_marks[]"]').val(0);
             }
         });
 

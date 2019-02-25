@@ -5,11 +5,11 @@ namespace App\Http\Controllers\Backend;
 use App\Exam;
 use App\ExamRule;
 use App\Grade;
-use App\Subject;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Http\Helpers\AppHelper;
 use App\IClass;
-use App\Http\Controllers\Controller;
+use App\Subject;
+use Illuminate\Http\Request;
 
 class ExamController extends Controller
 {
@@ -151,7 +151,7 @@ class ExamController extends Controller
     public function destroy($id) {
         $exam = Exam::findOrFail($id);
         $exam->delete();
-                //todo: need protection to massy events. like modify after used or delete after user
+        //todo: need protection to massy events. like modify after used or delete after user
         return redirect()->route('exam.index')->with('success', 'Exam Deleted!');
     }
 
@@ -322,7 +322,7 @@ class ExamController extends Controller
     }
 
     /**
-     * grade  manage
+     * rule  manage
      * @return \Illuminate\Http\Response
      */
     public function ruleIndex(Request $request)
@@ -350,7 +350,7 @@ class ExamController extends Controller
         $exam_id = $request->query->get('exam_id',0);
 
         if($class_id && $exam_id){
-             $rules = ExamRule::where('class_id', $class_id)
+            $rules = ExamRule::where('class_id', $class_id)
                 ->where('exam_id', $exam_id)
                 ->with(['subject' => function($query){
                     $query->select('name','id');
@@ -373,7 +373,7 @@ class ExamController extends Controller
     }
 
     /**
-     * grade create, read, update manage
+     * rule create, read manage
      * @return \Illuminate\Http\Response
      */
     public function ruleCreate(Request $request)
@@ -385,86 +385,6 @@ class ExamController extends Controller
                 'subject_id' => 'required|integer',
                 'exam_id' => 'required|integer',
                 'grade_id' => 'required|integer',
-                'combine_subject_id' => 'nullable|integer',
-                'passing_rule' => 'required|integer',
-                'total_exam_marks' => 'required|numeric',
-                'over_all_pass' => 'required|numeric',
-                'type' => 'required|array',
-                'total_marks' => 'required|array',
-                'pass_marks' => 'required|array',
-            ];
-
-            $this->validate($request, $validateRules);
-
-            $inputs = $request->all();
-
-                //validation check of existing rule
-                $entryExists = ExamRule::where('subject_id', $inputs['subject_id'])
-                    ->where('exam_id', $inputs['exam_id'])->count();
-                if($entryExists){
-                    return redirect()->route('exam.rule.create')->with('error', 'Rule already exists for this subject and exam!');
-                }
-
-            //validation end
-
-            $marksDistribution = [];
-            foreach ($inputs['type'] as $key => $value){
-                $marksDistribution[] = [
-                    'type' => $value,
-                    'total_marks' => $inputs['total_marks'][$key],
-                    'pass_marks' => $inputs['pass_marks'][$key],
-                ];
-            }
-
-            $inputs['marks_distribution'] = json_encode($marksDistribution);
-
-            ExamRule::create($inputs);
-
-
-            //now notify the admins about this record
-            $msg = "Exam rule added by ".auth()->user()->name;
-            $nothing = AppHelper::sendNotificationToAdmins('info', $msg);
-            // Notification end
-
-            $msg = "New exam rule added.";
-            return redirect()->route('exam.rule.create')->with('success', $msg);
-        }
-
-        //for get request
-        $rule = null;
-        $combine_subject = null;
-        $passing_rule = null;
-        $classes = null;
-        $exams = null;
-        $grades = null;
-
-        $classes = IClass::where('status', AppHelper::ACTIVE)
-            ->pluck('name', 'id');
-        $exams = Exam::where('status', AppHelper::ACTIVE)
-            ->pluck('name', 'id');
-        $grades = Grade::pluck('name', 'id');;
-        $subjects = [];
-
-
-        return view('backend.exam.rule.add', compact('rule','combine_subject','passing_rule','classes','exams','grades','subjects'));
-    }
-
-    public function ruleEdit(Request $request, $id=0){
-
-        $rule = ExamRule::findOrFail($id);
-
-        //todo: below logic
-        //validation start
-        //protection to prevent massy event. Like edit grade after its use in rules
-        // or marks entry
-//            if($id){
-//                //new protection by marks entry
-//                //with exam and subject
-//            }
-
-        //for save on POST request
-        if ($request->isMethod('post')) {
-            $validateRules = [
                 'combine_subject_id' => 'nullable|integer',
                 'passing_rule' => 'required|integer',
                 'total_exam_marks' => 'required|numeric',
@@ -510,15 +430,112 @@ class ExamController extends Controller
             return redirect()->route('exam.rule.create')->with('success', $msg);
         }
 
+        //for get request
+        $rule = null;
+        $combine_subject = null;
+        $subject_id = null;
+        $passing_rule = null;
+        $exam_id = null;
+        $grade_id = null;
+
+        $classes = IClass::where('status', AppHelper::ACTIVE)
+            ->pluck('name', 'id');
+        $exams = Exam::where('status', AppHelper::ACTIVE)
+            ->pluck('name', 'id');
+        $grades = Grade::pluck('name', 'id');;
+        $subjects = [];
+
+
+        return view('backend.exam.rule.add', compact('rule',
+            'combine_subject',
+            'subject_id',
+            'exam_id',
+            'grade_id',
+            'passing_rule',
+            'classes',
+            'exams',
+            'grades',
+            'subjects'
+        ));
+    }
+
+    /**
+     * rule update and edit manage
+     * @return \Illuminate\Http\Response
+     */
+    public function ruleEdit(Request $request, $id=0){
+
+        $rule = ExamRule::findOrFail($id);
+
+
+        //for save on POST request
+        if ($request->isMethod('post')) {
+            $validateRules = [
+                'exam_id' => 'required|integer',
+                'grade_id' => 'required|integer',
+                'combine_subject_id' => 'nullable|integer',
+                'passing_rule' => 'required|integer',
+                'total_exam_marks' => 'required|numeric',
+                'over_all_pass' => 'required|numeric',
+                'type' => 'required|array',
+                'total_marks' => 'required|array',
+                'pass_marks' => 'required|array',
+            ];
+
+            $this->validate($request, $validateRules);
+
+            $inputs = $request->all();
+            unset($inputs['subject_id']);
+            //validation end
+
+            $marksDistribution = [];
+            foreach ($inputs['type'] as $key => $value){
+                $marksDistribution[] = [
+                    'type' => $value,
+                    'total_marks' => $inputs['total_marks'][$key],
+                    'pass_marks' => $inputs['pass_marks'][$key],
+                ];
+            }
+
+            $inputs['marks_distribution'] = json_encode($marksDistribution);
+
+            $rule->fill($inputs);
+            $rule->save();
+
+
+            //now notify the admins about this record
+            $msg = "Exam rule updated by ".auth()->user()->name;
+            $nothing = AppHelper::sendNotificationToAdmins('info', $msg);
+            // Notification end
+
+            $msg = "Exam rule updated.";
+            return redirect()->route('exam.rule.index')->with('success', $msg);
+        }
+
 
         $combine_subject = $rule->combine_subject_id;
         $passing_rule = $rule->passing_rule;
+        $subject_id = $rule->subject_id;
+        $exam_id = $rule->exam_id;
+        $grade_id = $rule->grade_id;
 
         $subjects = Subject::where('class_id', $rule->class_id)
             ->where('status', AppHelper::ACTIVE)
             ->pluck('name', 'id');
+        $exams = Exam::where('status', AppHelper::ACTIVE)
+            ->pluck('name', 'id');
+        $grades = Grade::pluck('name', 'id');;
 
-        return view('backend.exam.rule.add', compact('rule','combine_subject','passing_rule','subjects'));
+        return view('backend.exam.rule.add', compact('rule',
+            'combine_subject',
+            'subject_id',
+            'exam_id',
+            'grade_id',
+            'passing_rule',
+            'subjects',
+            'exams',
+            'grades'
+        ));
 
     }
 

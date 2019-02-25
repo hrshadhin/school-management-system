@@ -33,8 +33,9 @@
                     <form novalidate id="entryForm" action="@if($rule) {{URL::Route('exam.rule.update', $rule->id)}} @else {{URL::Route('exam.rule.store')}} @endif" method="post" enctype="multipart/form-data">
                         @csrf
                     <div class="box-body">
-                        @if(!$rule)
+
                         <div class="row">
+                            @if(!$rule)
                             <div class="col-md-3">
                                 <div class="form-group has-feedback">
                                     <label for="class_id">Class Name<span class="text-danger">*</span></label>
@@ -43,10 +44,17 @@
                                         <span class="text-danger">{{ $errors->first('class_id') }}</span>
                                 </div>
                             </div>
+                            @endif
                             <div class="col-md-3">
+                                @php
+                                    $readonly = [];
+                                    if($rule){
+                                        $readonly = ['readonly' => true];
+                                     }
+                                @endphp
                                 <div class="form-group has-feedback">
                                     <label for="subject_id">Subject<span class="text-danger">*</span></label>
-                                    {!! Form::select('subject_id', [], null , ['placeholder' => 'Pick a subject...','class' => 'form-control select2', 'required' => 'true']) !!}
+                                    {!! Form::select('subject_id', $subjects, $subject_id , ['placeholder' => 'Pick a subject...', 'class' => 'form-control select2', 'required' => 'true'] + $readonly) !!}
                                     <span class="fa form-control-feedback"></span>
                                     <span class="text-danger">{{ $errors->first('subject_id') }}</span>
                                 </div>
@@ -54,7 +62,7 @@
                             <div class="col-md-3">
                                 <div class="form-group has-feedback">
                                     <label for="exam_id">Exam<span class="text-danger">*</span></label>
-                                    {!! Form::select('exam_id', $exams, null , ['placeholder' => 'Pick a exam...','class' => 'form-control select2', 'required' => 'true']) !!}
+                                    {!! Form::select('exam_id', $exams, $exam_id , ['placeholder' => 'Pick a exam...','class' => 'form-control select2', 'required' => 'true']) !!}
                                     <span class="fa form-control-feedback"></span>
                                     <span class="text-danger">{{ $errors->first('exam_id') }}</span>
                                 </div>
@@ -62,13 +70,13 @@
                             <div class="col-md-3">
                                 <div class="form-group has-feedback">
                                     <label for="grade_id">Marks Grading<span class="text-danger">*</span></label>
-                                    {!! Form::select('grade_id', $grades, null , ['placeholder' => 'Pick a grade...','class' => 'form-control select2', 'required' => 'true']) !!}
+                                    {!! Form::select('grade_id', $grades, $grade_id , ['placeholder' => 'Pick a grade...','class' => 'form-control select2', 'required' => 'true']) !!}
                                     <span class="fa form-control-feedback"></span>
                                     <span class="text-danger">{{ $errors->first('grade_id') }}</span>
                                 </div>
                             </div>
                         </div>
-                        @endif
+
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="form-group has-feedback">
@@ -123,7 +131,26 @@
                                         </tr>
                                         </thead>
                                         <tbody>
+                                          @if($rule)
+                                              @php
+                                                  $distribution = json_decode($rule->marks_distribution);
+                                              @endphp
+                                              @foreach($distribution as $dist)
+                                                  <tr>
+                                                      <td>
+                                                          <span>{{AppHelper::MARKS_DISTRIBUTION_TYPES[$dist->type]}}</span>
+                                                          <input type="hidden" name="type[]" value="{{$dist->type}}">
+                                                      </td>
 
+                                                      <td>
+                                                          <input type="number" class="form-control" name="total_marks[]" value="{{$dist->total_marks}}" required min="0">
+                                                      </td>
+                                                      <td>
+                                                          <input type="number" class="form-control" name="pass_marks[]" value="{{$dist->pass_marks}}" required min="0">
+                                                      </td>
+                                                  </tr>
+                                              @endforeach
+                                          @endif
                                         </tbody>
                                     </table>
                                     <span class="text-danger">{{ $errors->first('type') }}</span>
@@ -158,6 +185,9 @@
         window.grade_details_url = '{{URL::Route("exam.grade.index")}}';
         $(document).ready(function () {
             Academic.examRuleInit();
+            @if($rule)
+                $('select[name="subject_id"]').prop('readonly', true);
+            @endif
         });
     </script>
 @endsection
