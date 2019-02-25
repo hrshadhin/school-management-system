@@ -99,10 +99,11 @@ class AppHelper
     const MARKS_DISTRIBUTION_TYPES = [
       1 => "Written",
       2 => "MCQ",
-      3 => "Attendance",
-      4 => "Assignment",
-      5 => "Lab Report",
-      6 => "Practical",
+      3 => "SBA",
+      4 => "Attendance",
+      5 => "Assignment",
+      6 => "Lab Report",
+      7 => "Practical",
     ];
 
     const GRADE_TYPES = [
@@ -114,6 +115,7 @@ class AppHelper
         6 => 'D',
         7 => 'F',
     ];
+    const PASSING_RULES = [1 => 'Over All', 2 => 'Individual', 3 => 'Over All & Individual' ];
 
 
     /**

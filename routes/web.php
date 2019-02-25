@@ -302,6 +302,19 @@ Route::group(
         ->name('exam.grade.edit');
     Route::post('exam/grade/update/{id}', 'ExamController@gradeCru')
         ->name('exam.grade.update');
+    //exam rules
+    Route::get('exam/rule', 'ExamController@ruleIndex')
+        ->name('exam.rule.index');
+    Route::post('exam/rule', 'ExamController@ruleIndex')
+        ->name('exam.rule.destroy');
+    Route::get('exam/rule/create', 'ExamController@ruleCreate')
+        ->name('exam.rule.create');
+    Route::post('exam/rule/create', 'ExamController@ruleCreate')
+        ->name('exam.rule.store');
+    Route::get('exam/rule/edit/{id}', 'ExamController@ruleEdit')
+        ->name('exam.rule.edit');
+    Route::post('exam/rule/update/{id}', 'ExamController@ruleEdit')
+        ->name('exam.rule.update');
 
     // Reporting
     //student id card

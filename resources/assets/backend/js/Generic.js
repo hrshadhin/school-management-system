@@ -120,6 +120,22 @@ export default class Generic {
         });
         table.buttons().container().appendTo($('.col-sm-6:eq(0)', table.table().container()));
 
+        //table custom
+        var table33 = $('#listDataTableOnlyPrint').DataTable({
+            lengthChange: false,
+            responsive: true,
+            paging: false,
+            filter: false,
+            buttons: [
+                $.extend(true, {}, buttonCommon, {
+                    extend: 'print',
+                    text: '<i class="fa fa-print"></i>',
+                    titleAttr: 'print',
+                })
+            ]
+        });
+        table33.buttons().container().appendTo($('.col-sm-6:eq(0)', table33.table().container()));
+
 
         //style table with search
         // Setup - add a text input to each footer cell
@@ -236,7 +252,7 @@ export default class Generic {
     }
 
     static initDeleteDialog() {
-        $('html #listDataTableWithSearch, html #listDataTable').on('submit', 'form.myAction', function (e) {
+        $('html #listDataTableWithSearch, html #listDataTable, html #listDataTableOnlyPrint').on('submit', 'form.myAction', function (e) {
             e.preventDefault();
             var that = this;
             swal({

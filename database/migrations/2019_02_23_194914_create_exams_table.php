@@ -15,6 +15,7 @@ class CreateExamsTable extends Migration
     {
         Schema::create('exams', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('class_id');
             $table->string('name');
             $table->decimal('elective_subject_point_addition',5,2)->default(0.00);
             $table->text('marks_distribution_types');
@@ -22,6 +23,9 @@ class CreateExamsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
             $table->userstamps();
+
+            $table->foreign('class_id')->references('id')->on('i_classes');
+
         });
     }
 

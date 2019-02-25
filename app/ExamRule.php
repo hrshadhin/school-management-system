@@ -18,15 +18,21 @@ class ExamRule extends Model
      * @var array
      */
     protected $fillable = [
+        'class_id',
         'subject_id',
         'exam_id',
         'grade_id',
         'combine_subject_id',
         'marks_distribution',
         'passing_rule',
+        'total_exam_marks',
         'over_all_pass',
     ];
 
+    public function class()
+    {
+        return $this->belongsTo('App\IClass', 'class_id');
+    }
     public function exam()
     {
         return $this->belongsTo('App\Exam', 'exam_id');

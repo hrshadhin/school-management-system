@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Exam;
 use App\ExamRule;
 use App\Grade;
+use App\Subject;
 use Illuminate\Http\Request;
 use App\Http\Helpers\AppHelper;
 use App\IClass;
@@ -17,9 +18,29 @@ class ExamController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $exams = Exam::get();
+        // check for ajax request here
+        if($request->ajax()){
+            $exam_id = $request->query->get('exam_id', 0);
+            $examInfo = Exam::select('marks_distribution_types')
+                ->where('id',$exam_id)
+                ->where('status', AppHelper::ACTIVE)
+                ->first();
+            if($examInfo){
+                $marksDistributionTypes = [];
+                foreach (json_decode($examInfo->marks_distribution_types) as $type){
+                    $marksDistributionTypes[] = [
+                        'id' => $type,
+                        'text' => AppHelper::MARKS_DISTRIBUTION_TYPES[$type]
+                    ];
+                }
+
+                return response()->json($marksDistributionTypes);
+            }
+            return response('Exam not found!', 404);
+        }
+        $exams = Exam::with('class')->get();
         return view('backend.exam.list', compact('exams'));
     }
 
@@ -31,9 +52,12 @@ class ExamController extends Controller
     public function create()
     {
         $exam = null;
-        $marksDistributionTypes = [1,2,6];
+        $marksDistributionTypes = [1,2];
 
-        return view('backend.exam.add', compact('exam', 'marksDistributionTypes'));
+        $classes = IClass::where('status', AppHelper::ACTIVE)
+            ->pluck('name', 'id');
+
+        return view('backend.exam.add', compact('exam', 'marksDistributionTypes','classes'));
     }
 
     /**
@@ -48,6 +72,7 @@ class ExamController extends Controller
         $this->validate(
             $request, [
                 'name' => 'required|max:255',
+                'class_id' => 'required|integer',
                 'elective_subject_point_addition' => 'required|numeric',
                 'marks_distribution_types' => 'required|array',
             ]
@@ -109,7 +134,10 @@ class ExamController extends Controller
 
 
         $data = $request->all();
+        unset($data['class_id']);
         $data['marks_distribution_types'] = json_encode($data['marks_distribution_types']);
+
+
         $exam->fill($data);
         $exam->save();
 
@@ -181,6 +209,34 @@ class ExamController extends Controller
             return redirect()->route('exam.grade.index')->with('success', 'Record deleted!');
         }
 
+        // check for ajax request here
+        if($request->ajax()){
+            $grade_id = $request->query->get('grade_id', 0);
+            $gradeInfo = Grade::select('rules')
+                ->where('id',$grade_id)
+                ->first();
+            if($gradeInfo){
+                $marks = [];
+                foreach (json_decode($gradeInfo->rules) as $rule){
+                    $marks[] = $rule->marks_from;
+                    $marks[] = $rule->marks_upto;
+                }
+
+                sort($marks);
+                //passing marks will be the last position in the array
+                $totalMarks = $marks[count($marks) - 1];
+                //passing marks will be the 3rd position in the array
+                $passingMarks = $marks[2];
+
+                $data = [
+                    'totalMarks' => $totalMarks,
+                    'passingMarks' => $passingMarks,
+                ];
+
+                return response()->json($data);
+            }
+            return response('Grade not found!', 404);
+        }
         //for get request
         $grades = Grade::get();
         return view('backend.exam.grade.list', compact('grades'));
@@ -264,5 +320,207 @@ class ExamController extends Controller
 
         return view('backend.exam.grade.add', compact('grade'));
     }
+
+    /**
+     * grade  manage
+     * @return \Illuminate\Http\Response
+     */
+    public function ruleIndex(Request $request)
+    {
+        //for save on POST request
+        if ($request->isMethod('post')) {//
+            $this->validate($request, [
+                'hiddenId' => 'required|integer',
+            ]);
+            $rules = ExamRule::findOrFail($request->get('hiddenId'));
+            $rules->delete();
+
+            //now notify the admins about this record
+            $msg = "Exam rules deleted by ".auth()->user()->name;
+            $nothing = AppHelper::sendNotificationToAdmins('info', $msg);
+            // Notification end
+
+            return redirect()->route('exam.rule.index')->with('success', 'Record deleted!');
+        }
+
+        //for get request
+        $rules = collect();
+
+        $class_id = $request->query->get('class_id',0);
+        $exam_id = $request->query->get('exam_id',0);
+
+        if($class_id && $exam_id){
+             $rules = ExamRule::where('class_id', $class_id)
+                ->where('exam_id', $exam_id)
+                ->with(['subject' => function($query){
+                    $query->select('name','id');
+                }])
+                ->with(['grade' => function($query){
+                    $query->select('name','id');
+                }])
+                ->with(['combineSubject' => function($query){
+                    $query->select('name','id');
+                }])
+                ->get();
+        }
+
+        $classes = IClass::where('status', AppHelper::ACTIVE)
+            ->pluck('name', 'id');
+        $exams = Exam::where('status', AppHelper::ACTIVE)
+            ->pluck('name', 'id');;
+
+        return view('backend.exam.rule.list', compact('rules', 'classes', 'exams','class_id','exam_id'));
+    }
+
+    /**
+     * grade create, read, update manage
+     * @return \Illuminate\Http\Response
+     */
+    public function ruleCreate(Request $request)
+    {
+        //for save on POST request
+        if ($request->isMethod('post')) {
+            $validateRules = [
+                'class_id' => 'required|integer',
+                'subject_id' => 'required|integer',
+                'exam_id' => 'required|integer',
+                'grade_id' => 'required|integer',
+                'combine_subject_id' => 'nullable|integer',
+                'passing_rule' => 'required|integer',
+                'total_exam_marks' => 'required|numeric',
+                'over_all_pass' => 'required|numeric',
+                'type' => 'required|array',
+                'total_marks' => 'required|array',
+                'pass_marks' => 'required|array',
+            ];
+
+            $this->validate($request, $validateRules);
+
+            $inputs = $request->all();
+
+                //validation check of existing rule
+                $entryExists = ExamRule::where('subject_id', $inputs['subject_id'])
+                    ->where('exam_id', $inputs['exam_id'])->count();
+                if($entryExists){
+                    return redirect()->route('exam.rule.create')->with('error', 'Rule already exists for this subject and exam!');
+                }
+
+            //validation end
+
+            $marksDistribution = [];
+            foreach ($inputs['type'] as $key => $value){
+                $marksDistribution[] = [
+                    'type' => $value,
+                    'total_marks' => $inputs['total_marks'][$key],
+                    'pass_marks' => $inputs['pass_marks'][$key],
+                ];
+            }
+
+            $inputs['marks_distribution'] = json_encode($marksDistribution);
+
+            ExamRule::create($inputs);
+
+
+            //now notify the admins about this record
+            $msg = "Exam rule added by ".auth()->user()->name;
+            $nothing = AppHelper::sendNotificationToAdmins('info', $msg);
+            // Notification end
+
+            $msg = "New exam rule added.";
+            return redirect()->route('exam.rule.create')->with('success', $msg);
+        }
+
+        //for get request
+        $rule = null;
+        $combine_subject = null;
+        $passing_rule = null;
+        $classes = null;
+        $exams = null;
+        $grades = null;
+
+        $classes = IClass::where('status', AppHelper::ACTIVE)
+            ->pluck('name', 'id');
+        $exams = Exam::where('status', AppHelper::ACTIVE)
+            ->pluck('name', 'id');
+        $grades = Grade::pluck('name', 'id');;
+        $subjects = [];
+
+
+        return view('backend.exam.rule.add', compact('rule','combine_subject','passing_rule','classes','exams','grades','subjects'));
+    }
+
+    public function ruleEdit(Request $request, $id=0){
+
+        $rule = ExamRule::findOrFail($id);
+
+        //todo: below logic
+        //validation start
+        //protection to prevent massy event. Like edit grade after its use in rules
+        // or marks entry
+//            if($id){
+//                //new protection by marks entry
+//                //with exam and subject
+//            }
+
+        //for save on POST request
+        if ($request->isMethod('post')) {
+            $validateRules = [
+                'combine_subject_id' => 'nullable|integer',
+                'passing_rule' => 'required|integer',
+                'total_exam_marks' => 'required|numeric',
+                'over_all_pass' => 'required|numeric',
+                'type' => 'required|array',
+                'total_marks' => 'required|array',
+                'pass_marks' => 'required|array',
+            ];
+
+            $this->validate($request, $validateRules);
+
+            $inputs = $request->all();
+
+            //validation check of existing rule
+            $entryExists = ExamRule::where('subject_id', $inputs['subject_id'])
+                ->where('exam_id', $inputs['exam_id'])->count();
+            if($entryExists){
+                return redirect()->route('exam.rule.create')->with('error', 'Rule already exists for this subject and exam!');
+            }
+
+            //validation end
+
+            $marksDistribution = [];
+            foreach ($inputs['type'] as $key => $value){
+                $marksDistribution[] = [
+                    'type' => $value,
+                    'total_marks' => $inputs['total_marks'][$key],
+                    'pass_marks' => $inputs['pass_marks'][$key],
+                ];
+            }
+
+            $inputs['marks_distribution'] = json_encode($marksDistribution);
+
+            ExamRule::create($inputs);
+
+
+            //now notify the admins about this record
+            $msg = "Exam rule added by ".auth()->user()->name;
+            $nothing = AppHelper::sendNotificationToAdmins('info', $msg);
+            // Notification end
+
+            $msg = "New exam rule added.";
+            return redirect()->route('exam.rule.create')->with('success', $msg);
+        }
+
+
+        $combine_subject = $rule->combine_subject_id;
+        $passing_rule = $rule->passing_rule;
+
+        $subjects = Subject::where('class_id', $rule->class_id)
+            ->where('status', AppHelper::ACTIVE)
+            ->pluck('name', 'id');
+
+        return view('backend.exam.rule.add', compact('rule','combine_subject','passing_rule','subjects'));
+
+    }
+
 
 }
