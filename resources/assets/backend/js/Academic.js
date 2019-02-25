@@ -382,4 +382,147 @@ export default class Academic {
             });
         });
     }
+
+    static examRuleInit() {
+        Generic.initCommonPageJS();
+        Generic.initDeleteDialog();
+        $('#exam_rules_add_class_change').on('change', function () {
+            //get subject of requested class
+            Generic.loaderStart();
+            let class_id = $(this).val();
+            Academic.getSubject(class_id, 0, function (res={}) {
+                // console.log(res);
+                if (Object.keys(res).length){
+                    $('select[name="subject_id"]').empty().prepend('<option selected=""></option>').select2({placeholder: 'Pick a subject...', data: res});
+                    $('select[name="combine_subject_id"]').empty().prepend('<option selected=""></option>').select2({placeholder: 'Pick a subject...', data: res});
+                }
+                else{
+                    // clear subject list dropdown
+                    $('select[name="subject_id"]').empty().select2({placeholder: 'Pick a subject...'});
+                    $('select[name="combine_subject_id"]').empty().select2({placeholder: 'Pick a subject...'});
+                    toastr.warning('This class have no subject!');
+                }
+                Generic.loaderStop();
+            });
+
+        });
+
+        $('select[name="exam_id"]').on('change', function () {
+            $('#distributionTypeTable tbody').empty();
+            if($(this).val()) {
+                let getUrl = window.exam_details_url + "?exam_id=" + $(this).val();
+                Generic.loaderStart();
+                axios.get(getUrl)
+                    .then((response) => {
+                        // console.log(response.data);
+                        response.data.forEach(function (item) {
+                            let trrow = '<tr>\n' +
+                                ' <td>\n' +
+                                ' <span>' + item.text + '</span>\n' +
+                                ' <input type="hidden" name="type[]" value="' + item.id + '">\n' +
+                                ' </td>\n' +
+                                ' <td>\n' +
+                                '<input type="number" class="form-control" name="total_marks[]" value="" required min="0">\n' +
+                                '</td>\n' +
+                                ' <td>\n' +
+                                '<input type="number" class="form-control" name="pass_marks[]" value="0" required min="0">\n' +
+                                '</td>\n' +
+                                '</tr>';
+
+                            $('#distributionTypeTable tbody').append(trrow);
+                        });
+                        Generic.loaderStop();
+                    }).catch((error) => {
+                    let status = error.response.statusText;
+                    toastr.error(status);
+                    Generic.loaderStop();
+                });
+            }
+        });
+
+        function fetchGradeInfo() {
+            $('input[name="total_exam_marks"]').val('');
+            $('input[name="over_all_pass"]').val('');
+            let gradeId =  $('select[name="grade_id"]').val();
+            if(gradeId) {
+                let getUrl = window.grade_details_url + "?grade_id=" + gradeId;
+                Generic.loaderStart();
+                axios.get(getUrl)
+                    .then((response) => {
+                        // console.log(response.data);
+                        $('input[name="total_exam_marks"]').val(response.data.totalMarks);
+                        $('input[name="over_all_pass"]').val(response.data.passingMarks);
+                        Generic.loaderStop();
+                    }).catch((error) => {
+                    let status = error.response.statusText;
+                    toastr.error(status);
+                    Generic.loaderStop();
+                });
+            }
+        }
+
+        $('select[name="grade_id"]').on('change', function () {
+            fetchGradeInfo();
+        });
+        $('select[name="combine_subject_id"]').on('change', function () {
+            let subjectId =  $('select[name="subject_id"]').val();
+            let combineSujectId = $(this).val();
+
+            if(subjectId==combineSujectId){
+                toastr.error("Same subject can not be a combine subject!");
+                $('select[name="combine_subject_id"]').val('');
+            }
+        });
+        $('select[name="passing_rule"]').on('change', function () {
+            let passingRule = $(this).val();
+            if(passingRule == 2) {
+                // individual pass
+                $('input[name="over_all_pass"]').val(0);
+                $('input[name="pass_marks[]"]').prop('readonly', false);
+                $('input[name="pass_marks[]"]').val('');
+            }
+            else{
+                if($('input[name="over_all_pass"]').val() == 0){
+                    fetchGradeInfo();
+                }
+            }
+
+            if(passingRule == 1){
+                $('input[name="pass_marks[]"]').prop('readonly', true);
+            }
+            else{
+                $('input[name="pass_marks[]"]').prop('readonly', false);
+                $('input[name="pass_marks[]"]').val('');
+            }
+        });
+
+        //
+        $('html').on('change keyup paste','input[name="total_marks[]"]', function(){
+            let grandTotalMakrs = parseInt($('input[name="total_exam_marks"]').val());
+            let distributionTotalMarks = 0;
+            $('input[name="total_marks[]"]').each(function (index,element) {
+                if($(element).val().length) {
+                    distributionTotalMarks += parseInt($(element).val());
+                }
+            });
+            // console.log(grandTotalMakrs, distributionTotalMarks);
+            if(distributionTotalMarks> grandTotalMakrs){
+                toastr.error("Marks distribution is wrong! Not match with total marks.");
+                $('input[name="total_marks[]"]').val('');
+            }
+        });
+
+        //list page js
+        $('select[name="class"]').on('change', function () {
+            $('#exam_rule_list_filter').trigger('change');
+        });
+        $('#exam_rule_list_filter').on('change', function () {
+            let classId =  $('select[name="class"]').val();
+            let examId =  $('select[name="exam"]').val();
+            if(classId && examId){
+                let getUrl = window.location.href.split('?')[0]+"?class_id="+classId+"&exam_id="+examId;
+                window.location = getUrl;
+            }
+        });
+    }
 }

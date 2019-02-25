@@ -37,8 +37,9 @@
                                 <thead>
                                 <tr>
                                     <th width="5%">#</th>
+                                    <th width="10%">Class</th>
                                     <th width="20%">Name</th>
-                                    <th width="20%">Elective Subject Point Above Addition</th>
+                                    <th width="10%">Elective Subject Point Above Addition</th>
                                     <th width="35%">Marks Distribution Types</th>
                                     <th width="10%">Status</th>
                                     <th class="notexport" width="10%">Action</th>
@@ -53,6 +54,7 @@
                                         <td>
                                             {{$loop->iteration}}
                                         </td>
+                                        <td>{{ $exam->class->name }}</td>
                                         <td>{{ $exam->name }}</td>
                                         <td>{{ $exam->elective_subject_point_addition }}</td>
                                         <td>
@@ -87,8 +89,9 @@
                                 <tfoot>
                                 <tr>
                                     <th width="5%">#</th>
+                                    <th width="10%">Class</th>
                                     <th width="20%">Name</th>
-                                    <th width="20%">Elective Subject Point Above Addition</th>
+                                    <th width="10%">Elective Subject Point Above Addition</th>
                                     <th width="35%">Marks Distribution Types</th>
                                     <th width="10%">Status</th>
                                     <th class="notexport" width="10%">Action</th>
@@ -111,7 +114,7 @@
 @section('extraScript')
     <script type="text/javascript">
         window.postUrl = '{{URL::Route("exam.status", 0)}}';
-        window.changeExportColumnIndex = 4;
+        window.changeExportColumnIndex = 5;
         $(document).ready(function () {
             Generic.initCommonPageJS();
             Generic.initDeleteDialog();

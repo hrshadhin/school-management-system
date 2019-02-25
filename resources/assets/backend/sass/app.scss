@@ -478,8 +478,9 @@ table.haveForm tr td, table.haveForm tr th{
     text-align: center;
 }
 table.haveForm tr td input {
-   margin: auto;
+    margin: auto;
     max-width: 120px;
+    padding-right: 0 !important;
 }
 table.haveForm tr td .help-block{
    color:red;

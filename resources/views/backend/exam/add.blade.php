@@ -29,6 +29,16 @@
                         @csrf
                     <div class="box-body">
                         <div class="row">
+                            @if(!$exam)
+                                <div class="col-md-4">
+                                    <div class="form-group has-feedback">
+                                        <label for="class_id">Class Name<span class="text-danger">*</span></label>
+                                        {!! Form::select('class_id', $classes, null , ['placeholder' => 'Pick a class...','class' => 'form-control select2', 'required' => 'true']) !!}
+                                        <span class="form-control-feedback"></span>
+                                        <span class="text-danger">{{ $errors->first('class_id') }}</span>
+                                    </div>
+                                </div>
+                            @endif
                             <div class="col-md-4">
                                 <div class="form-group has-feedback">
                                     <label for="name">Name<span class="text-danger">*</span></label>
@@ -47,7 +57,9 @@
                                     <span class="text-danger">{{ $errors->first('elective_subject_point_addition') }}</span>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
                                 <div class="form-group has-feedback">
                                     <label for="marks_distribution_types">Marks Distribution Types<span class="text-danger">*</span>
                                         <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Each subject total marks is divided in multiple categories."></i>
@@ -57,8 +69,6 @@
                                     <span class="text-danger">{{ $errors->first('marks_distribution_types') }}</span>
                                 </div>
                             </div>
-
-
                         </div>
 
                     </div>

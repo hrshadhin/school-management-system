@@ -18,9 +18,16 @@ class Exam extends Model
      * @var array
      */
     protected $fillable = [
+        'class_id',
         'name',
         'elective_subject_point_addition',
         'marks_distribution_types',
         'status',
     ];
+
+
+    public function class()
+    {
+        return $this->belongsTo('App\IClass', 'class_id');
+    }
 }
