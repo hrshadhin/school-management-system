@@ -526,4 +526,85 @@ export default class Academic {
             }
         });
     }
+
+    static getExam(class_id) {
+        let getUrl = window.exam_list_url + "?class_id=" + class_id;
+        if (class_id) {
+            Generic.loaderStart();
+            axios.get(getUrl)
+                .then((response) => {
+                    if (Object.keys(response.data).length) {
+                        $('select[name="exam_id"]').empty().prepend('<option selected=""></option>').select2({allowClear: true,placeholder: 'Pick a exam...', data: response.data});
+                    }
+                    else {
+                        $('select[name="exam_id"]').empty().select2({placeholder: 'Pick a exam...'});
+                        toastr.error('This class have no exam!');
+                    }
+                    Generic.loaderStop();
+                }).catch((error) => {
+                let status = error.response.statusText;
+                toastr.error(status);
+                Generic.loaderStop();
+
+            });
+        }
+        else {
+            // clear section list dropdown
+            $('select[name="exam_id"]').empty().select2({placeholder: 'Pick a exam...'});
+        }
+    }
+
+    static marksInit() {
+        Generic.initCommonPageJS();
+        $("#markForm").validate({
+            errorElement: "em",
+            errorPlacement: function (error, element) {
+                // Add the `help-block` class to the error element
+                error.addClass("help-block");
+                error.insertAfter(element);
+
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).parents(".form-group").addClass("has-error").removeClass("has-success");
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).parents(".form-group").addClass("has-success").removeClass("has-error");
+            }
+        });
+
+        $('#class_change').on('change', function () {
+            let class_id = $(this).val();
+            if(class_id) {
+                //get sections
+                Academic.getSection(class_id);
+                //get subject of requested class
+                Generic.loaderStart();
+                Academic.getSubject(class_id, 0, function (res = {}) {
+                    // console.log(res);
+                    if (Object.keys(res).length) {
+                        $('select[name="subject_id"]').empty().prepend('<option selected=""></option>').select2({
+                            allowClear: true,
+                            placeholder: 'Pick a subject...',
+                            data: res
+                        });
+                    }
+                    else {
+                        // clear subject list dropdown
+                        $('select[name="subject_id"]').empty().select2({placeholder: 'Pick a subject...'});
+                        toastr.warning('This class have no subject!');
+                    }
+                    Generic.loaderStop();
+                });
+
+                //get sections
+                Academic.getExam(class_id);
+            }
+            else{
+                $('select[name="section_id"]').empty().select2({placeholder: 'Pick a section...'});
+                $('select[name="subject_id"]').empty().select2({placeholder: 'Pick a subject...'});
+                $('select[name="exam_id"]').empty().select2({placeholder: 'Pick a exam...'});
+            }
+
+        });
+    }
 }

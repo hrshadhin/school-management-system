@@ -27,6 +27,17 @@ class CreateResultsTable extends Migration
             $table->foreign('registration_id')->references('id')->on('registrations');
             $table->foreign('exam_id')->references('id')->on('exams');
         });
+
+        Schema::create('result_publish', function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('academic_year_id');
+            $table->unsignedInteger('class_id');
+            $table->unsignedInteger('exam_id');
+
+            $table->foreign('academic_year_id')->references('id')->on('academic_years');
+            $table->foreign('class_id')->references('id')->on('i_classes');
+            $table->foreign('exam_id')->references('id')->on('exams');
+        });
     }
 
     /**
@@ -36,6 +47,7 @@ class CreateResultsTable extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('result_publish');
         Schema::dropIfExists('results');
     }
 }

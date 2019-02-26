@@ -22,6 +22,19 @@ class ExamController extends Controller
     {
         // check for ajax request here
         if($request->ajax()){
+
+            //exam list by class
+            $class_id = $request->query->get('class_id', 0);
+            if($class_id){
+                $exams = Exam::where('status', AppHelper::ACTIVE)
+                    ->where('class_id', $class_id)
+                    ->select('name as text', 'id')
+                    ->orderBy('name', 'asc')->get();
+
+                return response()->json($exams);
+            }
+
+            // single exam details
             $exam_id = $request->query->get('exam_id', 0);
             $examInfo = Exam::select('marks_distribution_types')
                 ->where('id',$exam_id)

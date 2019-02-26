@@ -39,6 +39,11 @@ class Registration extends Model
         return $this->belongsTo('App\Student', 'student_id');
     }
 
+    public function info()
+    {
+        return $this->belongsTo('App\Student', 'student_id');
+    }
+
     public function class()
     {
         return $this->belongsTo('App\IClass', 'class_id');

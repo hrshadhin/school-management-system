@@ -128,6 +128,24 @@
       </li>
       <li class="treeview">
         <a href="#">
+          <i class="fa icon-markmain"></i>
+          <span>Marks</span>
+          <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+        </a>
+        <ul class="treeview-menu">
+          @can('marks.index')
+            <li>
+              <a href="{{ URL::route('marks.index') }}">
+                <i class="fa icon-markmain"></i> <span>Marks</span>
+              </a>
+            </li>
+          @endcan
+        </ul>
+      </li>
+      <li class="treeview">
+        <a href="#">
           <i class="fa fa-users"></i>
           <span>HRM</span>
           <span class="pull-right-container">
