@@ -18,6 +18,9 @@ class Mark extends Model
      * @var array
      */
     protected $fillable = [
+        'academic_year_id',
+        'class_id',
+        'section_id',
         'registration_id',
         'exam_id',
         'subject_id',
@@ -25,6 +28,7 @@ class Mark extends Model
         'total_marks',
         'grade',
         'point',
+        'present',
     ];
 
 

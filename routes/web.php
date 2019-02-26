@@ -316,6 +316,20 @@ Route::group(
     Route::post('exam/rule/update/{id}', 'ExamController@ruleEdit')
         ->name('exam.rule.update');
 
+    //Marks
+    Route::any('marks', 'MarkController@index')
+        ->name('marks.index');
+    Route::any('marks/create', 'MarkController@create')
+        ->name('marks.create');
+    Route::post('marks/store', 'MarkController@store')
+        ->name('marks.store');
+    Route::get('marks/edit/{id}', 'MarkController@edit')
+        ->name('marks.edit');
+    Route::post('marks/update/{id}', 'MarkController@update')
+        ->name('marks.update');
+    Route::get('marks/show/{id}', 'MarkController@show')
+        ->name('marks.show');
+
     // Reporting
     //student id card
     Route::any('report/student-idcard', 'ReportController@studentIdcard')

@@ -955,6 +955,32 @@ class PermissionTableSeeder extends Seeder
                 "group" => "Exam"
             ],
             // Exam rule End
+            // Exam Marks
+            [   "slug" => "marks.index",
+                "name" => "Marks View",
+                "group" => "Exam"
+            ],
+            [   "slug" => "marks.create",
+                "name" => "Marks Create",
+                "group" => "Exam"
+            ],
+            [   "slug" => "marks.store",
+                "name" => "Marks Create",
+                "group" => "Exam"
+            ],
+            [   "slug" => "marks.edit",
+                "name" => "Marks Edit",
+                "group" => "Exam"
+            ],
+            [   "slug" => "marks.update",
+                "name" => "Marks Edit",
+                "group" => "Exam"
+            ],
+            [   "slug" => "marks.show",
+                "name" => "Marks View",
+                "group" => "Exam"
+            ],
+            // Exam Marks End
         ];
 
 

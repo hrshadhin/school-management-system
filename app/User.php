@@ -60,4 +60,9 @@ class User extends Authenticatable
     {
         return $this->hasOne('App\UserRole');
     }
+
+    public function teacher()
+    {
+        return $this->hasOne('App\Employee');
+    }
 }

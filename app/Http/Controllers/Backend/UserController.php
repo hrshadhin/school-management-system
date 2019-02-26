@@ -66,6 +66,7 @@ class UserController extends Controller
 
         if (Auth::attempt(['username' => $username, 'password' => $password, 'status' => AppHelper::ACTIVE], $remember)) {
             session(['user_session_sha1' => AppHelper::getUserSessionHash()]);
+            session(['user_role_id' => auth()->user()->role->role_id]);
 
             $appSettings = AppHelper::getAppSettings();
 
@@ -216,9 +217,6 @@ class UserController extends Controller
      */
     public function dashboard(Request $request)
     {
-
-
-
 //        $user = auth()->user();
 //        foreach ($user->unreadNotifications->take(2) as $notification) {
 //            print_r($notification->data);

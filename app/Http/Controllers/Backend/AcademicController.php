@@ -296,7 +296,19 @@ class AcademicController extends Controller
         if($request->ajax()){
             $class_id = $request->query->get('class', 0);
             $subjectType = $request->query->get('type', 0);
-            $subjects = Subject::select('id', 'name as text')->where('class_id',$class_id)->sType($subjectType)->where('status', AppHelper::ACTIVE)->orderBy('name', 'asc')->get();
+            $teacherId = 0;
+            if(session('user_role_id',0) == AppHelper::USER_TEACHER){
+                $teacherId = auth()->user()->teacher->id;
+            }
+            $subjects = Subject::select('id', 'name as text')
+                ->where('class_id',$class_id)
+                ->sType($subjectType)
+                ->when($teacherId, function ($query) use($teacherId){
+                    $query->where('teacher_id', $teacherId);
+                })
+                ->where('status', AppHelper::ACTIVE)
+                ->orderBy('name', 'asc')
+                ->get();
             return $subjects;
         }
 
