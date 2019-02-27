@@ -129,7 +129,7 @@
       <li class="treeview">
         <a href="#">
           <i class="fa icon-markmain"></i>
-          <span>Marks</span>
+          <span>Marks & Result</span>
           <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
@@ -139,6 +139,13 @@
             <li>
               <a href="{{ URL::route('marks.index') }}">
                 <i class="fa icon-markmain"></i> <span>Marks</span>
+              </a>
+            </li>
+          @endcan
+            @can('result.index')
+            <li>
+              <a href="{{ URL::route('result.index') }}">
+                <i class="fa icon-markpercentage"></i> <span>Result</span>
               </a>
             </li>
           @endcan

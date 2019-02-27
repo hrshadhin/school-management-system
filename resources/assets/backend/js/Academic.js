@@ -617,5 +617,36 @@ export default class Academic {
             });
             $(this).closest('tr').find('input.totalMarks').val(totalMarks.toFixed(2));
         });
+
+        var title = $('title').text() + $('select[name="class_id"] option[selected]').text();
+        title += '-'+ $('select[name="section_id"] option[selected]').text();
+        title += '-'+ $('select[name="subject_id"] option[selected]').text();
+        title += '-'+ $('select[name="exam_id"] option[selected]').text();
+        $('title').text(title);
+
+    }
+
+    static resultInit() {
+        Generic.initCommonPageJS();
+        $('#class_change').on('change', function () {
+            let class_id = $(this).val();
+            if(class_id) {
+                if(!window.generatePage) {
+                    //get sections
+                    Academic.getSection(class_id);
+                }
+                //get sections
+                Academic.getExam(class_id);
+            }
+            else{
+                $('select[name="section_id"]').empty().select2({placeholder: 'Pick a section...'});
+                $('select[name="exam_id"]').empty().select2({placeholder: 'Pick a exam...'});
+            }
+
+        });
+        var title = $('title').text() + $('select[name="class_id"] option[selected]').text();
+        title += '-'+ $('select[name="section_id"] option[selected]').text();
+        title += '-'+ $('select[name="exam_id"] option[selected]').text();
+        $('title').text(title);
     }
 }

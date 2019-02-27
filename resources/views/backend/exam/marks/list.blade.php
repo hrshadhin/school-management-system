@@ -181,11 +181,6 @@
         window.changeExportColumnIndex = -1;
         $(document).ready(function () {
             Academic.marksInit();
-            var title = $('title').text() + $('select[name="class_id"] option[selected]').text();
-             title += '-'+ $('select[name="section_id"] option[selected]').text();
-             title += '-'+ $('select[name="subject_id"] option[selected]').text();
-             title += '-'+ $('select[name="exam_id"] option[selected]').text();
-            $('title').text(title);
 
         });
     </script>

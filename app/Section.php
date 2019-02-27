@@ -35,4 +35,9 @@ class Section extends Model
     {
         return $this->belongsTo('App\IClass', 'class_id');
     }
+
+    public function marks()
+    {
+        return $this->hasMany('App\Mark', 'section_id');
+    }
 }

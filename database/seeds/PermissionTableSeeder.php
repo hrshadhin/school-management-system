@@ -976,10 +976,6 @@ class PermissionTableSeeder extends Seeder
                 "name" => "Marks Edit",
                 "group" => "Exam"
             ],
-            [   "slug" => "marks.show",
-                "name" => "Marks View",
-                "group" => "Exam"
-            ],
             // Exam Marks End
         ];
 

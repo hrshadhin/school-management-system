@@ -64,6 +64,11 @@ class Registration extends Model
         return $this->hasMany('App\StudentAttendance', 'registration_id');
     }
 
+    public function result()
+    {
+        return $this->hasMany('App\Result', 'registration_id');
+    }
+
     public function scopeSection($query, $section)
     {
         if($section){

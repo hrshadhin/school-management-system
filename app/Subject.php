@@ -39,6 +39,11 @@ class Subject extends Model
         return $this->belongsTo('App\IClass', 'class_id');
     }
 
+    public function marks()
+    {
+        return $this->hasMany('App\Mark', 'subject_id');
+    }
+
     public function getTypeAttribute($value)
     {
         return Arr::get(AppHelper::SUBJECT_TYPE, $value);
