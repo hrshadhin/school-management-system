@@ -15,7 +15,6 @@ use Illuminate\Http\Request;
 use App\Http\Helpers\AppHelper;
 use App\IClass;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 
 class MarkController extends Controller
@@ -476,18 +475,53 @@ class MarkController extends Controller
      */
     public function edit($id)
     {
-        $marksEntry = Mark::with('subject')->findOrFail($id);
+        $marks = Mark::with(['subject' => function($query){
+            $query->select('id','teacher_id');
+        }])
+            ->with(['student' => function($query){
+                $query->with(['info' => function($query){
+                    $query->select('name','id');
+                }])->select('regi_no','student_id','roll_no','id');
+            }])
+            ->where('id',$id)
+            ->select( 'id','academic_year_id','class_id','subject_id','exam_id','registration_id', 'marks', 'total_marks', 'present')
+            ->first();
+
+        if(!$marks){
+            abort(404);
+        }
+
+        //these code for security purpose,
+        // if some user try to edir other user data
+        if(session('user_role_id',0) == AppHelper::USER_TEACHER){
+            $teacherId = auth()->user()->teacher->id;
+            if($marks->subject->teacher_id != $teacherId){
+                abort(401);
+            }
+        }
 
         //check is result is published?
         $isPublish = DB::table('result_publish')
-            ->where('academic_year_id', $acYear)
-            ->where('class_id', $class_id)
-            ->where('exam_id', $exam_id)
+            ->where('academic_year_id', $marks->academic_year_id)
+            ->where('class_id', $marks->class_id)
+            ->where('exam_id', $marks->exam_id)
             ->count();
 
         if($isPublish){
-            $editMode = 0;
+            return redirect()->route('marks.index')->with('error', 'Can\'t edit marks, because result is published for this exam!');
         }
+
+        $examRule = ExamRule::where('exam_id', $marks->exam_id)
+            ->where('subject_id', $marks->subject_id)
+            ->first();
+        if(!$examRule) {
+            return redirect()->route('marks.index')->with('error', 'Exam rules not found for this subject and exam!');
+        }
+
+
+        return view('backend.exam.marks.edit', compact('marks',
+            'examRule'
+        ));
 
 
     }
@@ -501,6 +535,98 @@ class MarkController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $marks = Mark::with(['subject' => function($query){
+            $query->select('id','teacher_id','name');
+            }])
+            ->with(['class' => function($query){
+                $query->select('id','name');
+            }])
+            ->with(['exam' => function($query){
+                $query->select('id','name');
+            }])
+            ->where('id',$id)
+            ->first();
+
+        if(!$marks){
+            abort(404);
+        }
+
+        //these code for security purpose,
+        // if some user try to edir other user data
+        if(session('user_role_id',0) == AppHelper::USER_TEACHER){
+            $teacherId = auth()->user()->teacher->id;
+            if($marks->subject->teacher_id != $teacherId){
+                abort(401);
+            }
+        }
+
+        //check is result is published?
+        $isPublish = DB::table('result_publish')
+            ->where('academic_year_id', $marks->academic_year_id)
+            ->where('class_id', $marks->class_id)
+            ->where('exam_id', $marks->exam_id)
+            ->count();
+
+        if($isPublish){
+            return redirect()->route('marks.index')->with('error', 'Can\'t edit marks, because result is published for this exam!');
+        }
+
+        $examRule = ExamRule::where('exam_id', $marks->exam_id)
+            ->where('subject_id', $marks->subject_id)
+            ->first();
+        if(!$examRule) {
+            return redirect()->route('marks.index')->with('error', 'Exam rules not found for this subject and exam!');
+        }
+
+        $validateRules = [
+            'type' => 'required|array',
+            'absent' => 'nullable',
+        ];
+
+        $this->validate($request, $validateRules);
+
+        //pull grading information
+        $grade = Grade::where('id', $examRule->grade_id)->first();
+        if(!$grade){
+            return redirect()->route('marks.create')->with('error','Grading information not found!');
+        }
+        $gradingRules = json_decode($grade->rules);
+
+        //exam distributed marks rules
+        $distributeMarksRules = [];
+        foreach (json_decode($examRule->marks_distribution) as $rule){
+            $distributeMarksRules[$rule->type] = [
+                'total_marks' => $rule->total_marks,
+                'pass_marks' => $rule->pass_marks
+            ];
+        }
+
+
+        [$isInvalid, $message, $totalMarks, $grade, $point] = $this->processMarksAndCalculateResult($examRule,
+            $gradingRules, $distributeMarksRules, $request->get('type'));
+
+        if($isInvalid){
+            return redirect()->back()->with('error', $message);
+        }
+
+        $data = [
+            'marks' => json_encode($request->get('type')),
+            'total_marks' => $totalMarks,
+            'grade' => $grade,
+            'point' => $point,
+            'present' => $request->has('absent') ? '0' : '1',
+        ];
+
+        $marks->fill($data);
+        $marks->save();
+
+        //now notify the admins about this record
+        $msg = "Class {$marks->class->name},  {$marks->subject->name} subject marks updated for {$marks->exam->name} exam  by ".auth()->user()->name;
+        $nothing = AppHelper::sendNotificationToAdmins('info', $msg);
+        // Notification end
+
+        return redirect()->route('marks.index')->with('success', 'Marks entry updated!');
+
 
     }
 }

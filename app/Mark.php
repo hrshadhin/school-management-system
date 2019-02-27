@@ -43,6 +43,10 @@ class Mark extends Model
         return $this->belongsTo('App\Exam', 'exam_id');
     }
 
+    public function class()
+    {
+        return $this->belongsTo('App\IClass', 'class_id');
+    }
     public function subject()
     {
         return $this->belongsTo('App\Subject', 'subject_id');
