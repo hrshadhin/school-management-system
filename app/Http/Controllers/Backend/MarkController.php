@@ -5,15 +5,18 @@ namespace App\Http\Controllers\Backend;
 use App\AcademicYear;
 use App\Exam;
 use App\ExamRule;
+use App\Grade;
 use App\Mark;
 use App\Registration;
 use App\Section;
 use App\Subject;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Helpers\AppHelper;
 use App\IClass;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\DB;
 
 class MarkController extends Controller
 {
@@ -25,7 +28,7 @@ class MarkController extends Controller
     public function index(Request $request)
     {
 
-        $marks = collect();
+        $marks = null;
         $acYear = null;
         $class_id = null;
         $section_id = null;
@@ -34,7 +37,9 @@ class MarkController extends Controller
         $sections = [];
         $academic_years = [];
         $subjects = [];
+        $examRule = null;
         $exams = [];
+        $editMode = 1;
 
         if ($request->isMethod('post')) {
             if(AppHelper::getInstituteCategory() == 'college') {
@@ -54,16 +59,23 @@ class MarkController extends Controller
 
 
             $marks = Mark::with(['student' => function($query){
-                $query->with('info')->select('regi_no','student_id','roll_no','id');
+                $query->with(['info' => function($query){
+                    $query->select('name','id');
+                }])->select('regi_no','student_id','roll_no','id');
             }])->where('academic_year_id', $acYear)
                 ->where('class_id', $class_id)
                 ->where('section_id', $section_id)
                 ->where('subject_id', $subject_id)
                 ->where('exam_id', $exam_id)
-                ->select( 'marks', 'total_marks', 'grade', 'point', 'present')
+                ->select( 'registration_id', 'marks', 'total_marks', 'grade', 'point', 'present','id')
                 ->get();
 
-
+            $examRule = ExamRule::where('exam_id',$exam_id)
+                ->where('subject_id', $subject_id)
+                ->first();
+            if(!$examRule) {
+                return redirect()->back()->with('error', 'Exam rules not found for this subject and exam!');
+            }
             $sections = Section::where('status', AppHelper::ACTIVE)
                 ->where('class_id', $class_id)
                 ->pluck('name', 'id');
@@ -79,6 +91,17 @@ class MarkController extends Controller
                 ->where('class_id', $class_id)
                 ->pluck('name', 'id');
 
+            //check is result is published?
+            $isPublish = DB::table('result_publish')
+                ->where('academic_year_id', $acYear)
+                ->where('class_id', $class_id)
+                ->where('exam_id', $exam_id)
+                ->count();
+
+            if($isPublish){
+                $editMode = 0;
+            }
+
         }
 
 
@@ -92,6 +115,7 @@ class MarkController extends Controller
 
 
 
+
         return view('backend.exam.marks.list', compact('marks',
             'acYear',
             'class_id',
@@ -102,7 +126,9 @@ class MarkController extends Controller
             'sections',
             'subjects',
             'academic_years',
-            'exams'
+            'exams',
+            'examRule',
+            'editMode'
         ));
 
     }
@@ -161,6 +187,7 @@ class MarkController extends Controller
                 ->where('subject_id', $subject_id)
                 ->where('exam_id', $exam_id)
                 ->count();
+
 
             if($entryExists){
                 return redirect()->back()->with('error','This subject marks already exists for this exam!');
@@ -234,10 +261,211 @@ class MarkController extends Controller
      */
     public function store(Request $request)
     {
+        $validateRules = [
+            'academic_year_id' => 'nullable|integer',
+            'class_id' => 'required|integer',
+            'section_id' => 'required|integer',
+            'subject_id' => 'required|integer',
+            'exam_id' => 'required|integer',
+            'registrationIds' => 'required|array',
+            'type' => 'required|array',
+            'absent' => 'nullable|array',
+        ];
 
-        return $request->all();
+        $this->validate($request, $validateRules);
+
+        if(AppHelper::getInstituteCategory() == 'college') {
+            $acYear = $request->get('academic_year_id');
+        }
+        else{
+            $acYear = AppHelper::getAcademicYear();
+        }
+
+        $class_id = $request->get('class_id',0);
+        $section_id = $request->get('section_id',0);
+        $subject_id = $request->get('subject_id',0);
+        $exam_id = $request->get('exam_id',0);
+
+        // some validation before entry the mark
+        $examInfo = Exam::where('status', AppHelper::ACTIVE)
+            ->where('id', $exam_id)
+            ->first();
+        if(!$examInfo) {
+            return redirect()->route('marks.create')->with('error', 'Exam Not Found');
+        }
+
+        $examRule = ExamRule::where('exam_id',$exam_id)
+            ->where('subject_id', $subject_id)
+            ->first();
+        if(!$examRule) {
+            return redirect()->route('marks.create')->with('error', 'Exam rules not found for this subject and exam!');
+        }
+
+        $entryExists = Mark::where('academic_year_id', $acYear)
+            ->where('class_id', $class_id)
+            ->where('section_id', $section_id)
+            ->where('subject_id', $subject_id)
+            ->where('exam_id', $exam_id)
+            ->count();
+
+        if($entryExists){
+            return redirect()->route('marks.create')->with('error','This subject marks already exists for this exam!');
+        }
+        //validation end
+
+        //pull grading information
+        $grade = Grade::where('id', $examRule->grade_id)->first();
+        if(!$grade){
+            return redirect()->route('marks.create')->with('error','Grading information not found!');
+        }
+        $gradingRules = json_decode($grade->rules);
+
+        //exam distributed marks rules
+        $distributeMarksRules = [];
+        foreach (json_decode($examRule->marks_distribution) as $rule){
+            $distributeMarksRules[$rule->type] = [
+                'total_marks' => $rule->total_marks,
+                'pass_marks' => $rule->pass_marks
+            ];
+        }
+
+        $distributedMarks = $request->get('type');
+        $absent = $request->get('absent');
+        $timeStampNow = Carbon::now(env('APP_TIMEZONE', 'Asia/Dhaka'));
+        $userId = auth()->user()->id;
+
+        $marksData = [];
+        $isInvalid = false;
+        $message = '';
+
+        foreach ($request->get('registrationIds') as $student){
+            $marks = $distributedMarks[$student];
+            [$isInvalid, $message, $totalMarks, $grade, $point] = $this->processMarksAndCalculateResult($examRule,
+                $gradingRules, $distributeMarksRules, $marks);
+
+            if($isInvalid){
+                break;
+            }
+
+            $data = [
+                'academic_year_id' => $acYear,
+                'class_id' => $class_id,
+                'section_id' => $section_id,
+                'registration_id' => $student,
+                'exam_id' => $exam_id,
+                'subject_id' => $subject_id,
+                'marks' => json_encode($marks),
+                'total_marks' => $totalMarks,
+                'grade' => $grade,
+                'point' => $point,
+                'present' => isset($absent[$student]) ? '0' : '1',
+                "created_at" => $timeStampNow,
+                "created_by" => $userId,
+            ];
+
+            $marksData[] = $data;
+        }
+
+
+        if($isInvalid){
+            return redirect()->route('marks.create')->with('error', $message);
+        }
+
+
+        DB::beginTransaction();
+        try {
+
+            Mark::insert($marksData);
+            DB::commit();
+        }
+        catch(\Exception $e){
+            DB::rollback();
+            $message = str_replace(array("\r", "\n","'","`"), ' ', $e->getMessage());
+            return redirect()->route('marks.create')->with("error",$message);
+        }
+
+        $sectionInfo = Section::where('id', $section_id)->first();
+        $subjectInfo = Subject::with(['class' => function($query){
+            $query->select('name','id');
+        }])->where('id', $subject_id)->first();
+        //now notify the admins about this record
+        $msg = "Class {$subjectInfo->class->name}, section {$sectionInfo->name}, {$subjectInfo->name} subject marks added for {$examInfo->name} exam  by ".auth()->user()->name;
+        $nothing = AppHelper::sendNotificationToAdmins('info', $msg);
+        // Notification end
+
+        return redirect()->route('marks.create')->with("success","Exam marks added successfully!");
+
+
     }
 
+
+    /**
+     * Process student entry marks and
+     * calculate grade point
+     *
+     * @param $examRule collection
+     * @param $gradingRules array
+     * @param $distributeMarksRules array
+     * @param $strudnetMarks array
+     */
+    private function processMarksAndCalculateResult($examRule, $gradingRules, $distributeMarksRules, $studentMarks) {
+        $totalMarks = 0;
+        $isFail = false;
+        $isInvalid = false;
+        $message = "";
+
+        foreach ($studentMarks as $type => $marks){
+            $marks = floatval($marks);
+            $totalMarks += $marks;
+
+            // AppHelper::PASSING_RULES
+            if(in_array($examRule->passing_rule, [2,3])){
+                if($marks > $distributeMarksRules[$type]['total_marks']){
+                    $isInvalid = true;
+                    $message = AppHelper::MARKS_DISTRIBUTION_TYPES[$type]. " marks is too high from exam rules marks distribution!";
+                    break;
+                }
+
+                if($marks < $distributeMarksRules[$type]['pass_marks']){
+                    $isFail = true;
+                }
+            }
+        }
+
+        // AppHelper::PASSING_RULES
+        if(in_array($examRule->passing_rule, [1,3])){
+            if($totalMarks < $examRule->over_all_pass){
+                $isFail = true;
+            }
+        }
+
+        if($isFail){
+            $grade = 'F';
+            $point = 0.00;
+
+            return [$isInvalid, $message, $totalMarks, $grade, $point];
+        }
+
+        [$grade, $point] = $this->findGradePointFromMarks($gradingRules, $totalMarks);
+
+        return [$isInvalid, $message, $totalMarks, $grade, $point];
+
+    }
+
+    private function findGradePointFromMarks($gradingRules, $marks) {
+        $grade = 'F';
+        $point = 0.00;
+
+        foreach ($gradingRules as $rule){
+            if ($marks >= $rule->marks_from && $marks < $rule->marks_upto){
+                $grade = AppHelper::GRADE_TYPES[$rule->grade];
+                $point = $rule->point;
+                break;
+            }
+        }
+
+        return [$grade, $point];
+    }
 
 
     /**
@@ -248,6 +476,18 @@ class MarkController extends Controller
      */
     public function edit($id)
     {
+        $marksEntry = Mark::with('subject')->findOrFail($id);
+
+        //check is result is published?
+        $isPublish = DB::table('result_publish')
+            ->where('academic_year_id', $acYear)
+            ->where('class_id', $class_id)
+            ->where('exam_id', $exam_id)
+            ->count();
+
+        if($isPublish){
+            $editMode = 0;
+        }
 
 
     }

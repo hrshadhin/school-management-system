@@ -75,10 +75,28 @@
                             </div>
                         </div>
                         <hr>
+                        @if ($errors->any())
+                            <div class="row">
+                                <div class="col-md-12">
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                            </div>
+                            </div>
+                        @endif
                         @if(count($students))
                         <div class="row">
                             <div class="col-md-12">
                                 <form novalidate id="markForm" action="{{URL::Route('marks.store')}}" method="post" enctype="multipart/form-data">
+                                    <input type="hidden" name="academic_year_id" value="{{$acYear}}">
+                                    <input type="hidden" name="class_id" value="{{$class_id}}">
+                                    <input type="hidden" name="section_id" value="{{$section_id}}">
+                                    <input type="hidden" name="subject_id" value="{{$subject_id}}">
+                                    <input type="hidden" name="exam_id" value="{{$exam_id}}">
                                     @csrf
                                 <div class="table-responsive">
                                     <table class="table table-bordered table-striped list_view_table display responsive no-wrap haveForm" width="100%">
@@ -116,11 +134,11 @@
                                                     </td>
                                                 @endforeach
                                                 <td>
-                                                    <input type="number" readonly class="form-control totalMarks" value="0">
+                                                    <input type="text" readonly class="form-control totalMarks" value="0">
                                                 </td>
                                                 <td>
                                                     <div class="checkbox icheck inline_icheck">
-                                                        <input type="checkbox" name="present[{{$student->id}}]">
+                                                        <input type="checkbox" name="absent[{{$student->id}}]">
                                                     </div>
                                                 </td>
                                             </tr>
@@ -166,6 +184,7 @@
         window.changeExportColumnIndex = -1;
         $(document).ready(function () {
             Academic.marksInit();
+
         });
     </script>
 @endsection

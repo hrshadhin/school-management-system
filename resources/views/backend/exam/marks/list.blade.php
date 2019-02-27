@@ -79,6 +79,7 @@
                         </div>
                         </div>
                         <hr>
+                        @if($marks)
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="table-responsive">
@@ -89,17 +90,54 @@
                                             <th>Student Name</th>
                                             <th>Regi No.</th>
                                             <th>Roll No.</th>
-
+                                            @php
+                                                $marksDistributions = json_decode($examRule->marks_distribution);
+                                            @endphp
+                                            @foreach($marksDistributions as $distribution)
+                                                <th>{{AppHelper::MARKS_DISTRIBUTION_TYPES[$distribution->type]}}</th>
+                                            @endforeach
                                             <th>Total Marks</th>
                                             <th>Grade</th>
                                             <th>Point</th>
                                             <th>Status</th>
-                                            <th class="notexport" width="10%">Action</th>
+                                            <th class="notexport" width="5%">Action</th>
                                         </tr>
                                         </thead>
                                         <tbody>
+                                            @foreach($marks as $studentMark)
+                                                <tr>
+                                                    <td>{{$loop->iteration}}</td>
+                                                    <td>{{$studentMark->student->info->name}}</td>
+                                                    <td>{{$studentMark->student->regi_no}}</td>
+                                                    <td>{{$studentMark->student->roll_no}}</td>
+                                                    @php
+                                                        $achivemarks = json_decode($studentMark->marks, true);
+                                                    @endphp
+                                                    @foreach($marksDistributions as $distribution)
+                                                        <td>
+                                                            {{$achivemarks[$distribution->type]}}
+                                                        </td>
+                                                    @endforeach
+                                                    <td>{{$studentMark->total_marks}}</td>
+                                                    <td>{{$studentMark->grade}}</td>
+                                                    <td>{{$studentMark->point}}</td>
+                                                    <td>
+                                                        @if($studentMark->present == 0)
+                                                            <span class="badge bg-red">Absent</span>
+                                                        @else
+                                                            <span class="badge bg-green">Present</span>
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        @if($editMode)
+                                                        <div class="btn-group">
+                                                            <a title="Edit" href="{{URL::route('marks.edit', $studentMark->id)}}" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
 
-
+                                                        </div>
+                                                        @endif
+                                                    </td>
+                                                </tr>
+                                            @endforeach
                                         </tbody>
                                         <tfoot>
                                         <tr>
@@ -107,22 +145,27 @@
                                             <th>Student Name</th>
                                             <th>Regi No.</th>
                                             <th>Roll No.</th>
+                                            @foreach($marksDistributions as $distribution)
+                                                <th>{{AppHelper::MARKS_DISTRIBUTION_TYPES[$distribution->type]}}</th>
+                                            @endforeach
                                             <th>Total Marks</th>
                                             <th>Grade</th>
                                             <th>Point</th>
                                             <th>Status</th>
-                                            <th class="notexport" width="10%">Action</th>
+                                            <th class="notexport" width="5%">Action</th>
                                         </tr>
                                         </tfoot>
                                     </table>
                                 </div>
                             </div>
                         </div>
+                        @endif
                     </div>
                     <!-- /.box-body -->
                 </div>
             </div>
         </div>
+
 
     </section>
     <!-- /.content -->
@@ -138,6 +181,12 @@
         window.changeExportColumnIndex = -1;
         $(document).ready(function () {
             Academic.marksInit();
+            var title = $('title').text() + $('select[name="class_id"] option[selected]').text();
+             title += '-'+ $('select[name="section_id"] option[selected]').text();
+             title += '-'+ $('select[name="subject_id"] option[selected]').text();
+             title += '-'+ $('select[name="exam_id"] option[selected]').text();
+            $('title').text(title);
+
         });
     </script>
 @endsection

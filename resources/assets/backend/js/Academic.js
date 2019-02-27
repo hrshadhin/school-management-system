@@ -571,7 +571,6 @@ export default class Academic {
                 $(element).parents(".form-group").addClass("has-success").removeClass("has-error");
             }
         });
-
         $('#class_change').on('change', function () {
             let class_id = $(this).val();
             if(class_id) {
@@ -605,6 +604,18 @@ export default class Academic {
                 $('select[name="exam_id"]').empty().select2({placeholder: 'Pick a exam...'});
             }
 
+        });
+
+        $('input[type="number"]').on('change keyup paste', function () {
+            let marksElements = $(this).closest('tr').find('input[type="number"]');
+            let totalMarks = 0;
+            marksElements.each(function (index, element) {
+                let marks = parseFloat($(element).val());
+                if(marks){
+                    totalMarks += marks;
+                }
+            });
+            $(this).closest('tr').find('input.totalMarks').val(totalMarks.toFixed(2));
         });
     }
 }
