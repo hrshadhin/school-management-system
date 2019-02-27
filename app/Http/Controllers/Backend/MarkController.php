@@ -431,6 +431,9 @@ class MarkController extends Controller
             }
         }
 
+        //fraction number make ceiling
+        $totalMarks = ceil($totalMarks);
+
         // AppHelper::PASSING_RULES
         if(in_array($examRule->passing_rule, [1,3])){
             if($totalMarks < $examRule->over_all_pass){
@@ -454,15 +457,13 @@ class MarkController extends Controller
     private function findGradePointFromMarks($gradingRules, $marks) {
         $grade = 'F';
         $point = 0.00;
-
         foreach ($gradingRules as $rule){
-            if ($marks >= $rule->marks_from && $marks < $rule->marks_upto){
+            if ($marks >= $rule->marks_from && $marks <= $rule->marks_upto){
                 $grade = AppHelper::GRADE_TYPES[$rule->grade];
                 $point = $rule->point;
                 break;
             }
         }
-
         return [$grade, $point];
     }
 
@@ -600,6 +601,8 @@ class MarkController extends Controller
                 'pass_marks' => $rule->pass_marks
             ];
         }
+
+
 
 
         [$isInvalid, $message, $totalMarks, $grade, $point] = $this->processMarksAndCalculateResult($examRule,
