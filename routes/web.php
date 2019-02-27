@@ -327,8 +327,11 @@ Route::group(
         ->name('marks.edit');
     Route::post('marks/update/{id}', 'MarkController@update')
         ->name('marks.update');
-    Route::get('marks/show/{id}', 'MarkController@show')
-        ->name('marks.show');
+    //result
+    Route::any('result', 'MarkController@resultIndex')
+        ->name('result.index');
+    Route::any('result/generate', 'MarkController@resultGenerate')
+        ->name('result.create');
 
     // Reporting
     //student id card

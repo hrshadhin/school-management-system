@@ -632,4 +632,149 @@ class MarkController extends Controller
 
 
     }
+
+    /**
+     * Published Result list
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function resultIndex(Request $request){
+
+        if (AppHelper::getInstituteCategory() == 'college') {
+            $acYear = $request->get('academic_year_id', 0);
+        } else {
+            $acYear = AppHelper::getAcademicYear();
+        }
+        $class_id = $request->get('class_id', 0);
+        $section_id = $request->get('section_id', 0);
+        $exam_id = $request->get('exam_id', 0);
+        $students = collect();
+        $sections = [];
+        $exams = [];
+        //in post request get the result and show it
+        if ($request->isMethod('post')) {
+
+
+        }
+
+
+        $classes = IClass::where('status', AppHelper::ACTIVE)
+            ->pluck('name', 'id');
+
+        //if its college then have to get those academic years
+        if(AppHelper::getInstituteCategory() == 'college') {
+            $academic_years = AcademicYear::where('status', '1')->orderBy('id', 'desc')->pluck('title', 'id');
+        }
+
+
+        return view('backend.exam.result.list', compact('students',
+            'acYear',
+            'class_id',
+            'classes',
+            'section_id',
+            'sections',
+            'academic_years',
+        'exams',
+        'exam_id'
+        ));
+    }
+
+    /**
+     * Published Result Generate
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function resultGenerate(Request $request){
+
+        //in post request get the result and show it
+        if ($request->isMethod('post')) {
+            if (AppHelper::getInstituteCategory() == 'college') {
+                $acYear = $request->get('academic_year_id', 0);
+            } else {
+                $acYear = AppHelper::getAcademicYear();
+            }
+            $class_id = $request->get('class_id', 0);
+            $exam_id = $request->get('exam_id', 0);
+
+            //validation start
+            //check is result is published?
+            $isPublish = DB::table('result_publish')
+                    ->where('academic_year_id', $acYear)
+                    ->where('class_id', $class_id)
+                    ->where('exam_id', $exam_id)
+                    ->count();
+
+            if($isPublish){
+                return redirect()->back()->with('error', 'Result already published for this class and exam!');
+            }
+
+
+            //this class all section mark submitted
+            $unsubmittedSections = Section::where('status', AppHelper::ACTIVE)
+                ->where('class_id', $class_id)
+                ->whereDoesntHave('marks', function ($query) use($exam_id, $acYear, $class_id) {
+                    $query->select('section_id')
+                        ->where('academic_year_id', $acYear)
+                        ->where('class_id', $class_id)
+                        ->where('exam_id', $exam_id)
+                        ->groupBy('section_id');
+                })
+                ->count();
+
+            if($unsubmittedSections){
+                return redirect()->back()->with('error', 'All sections marks are not submitted yet!');
+            }
+
+
+             //this class all subject mark submitted
+              $subjectsCount = Subject::where('status', AppHelper::ACTIVE)
+                ->where('class_id', $class_id)->count();
+
+             $submittedSubjectMarksBySection = Section::where('status', AppHelper::ACTIVE)
+                  ->where('class_id', $class_id)
+                  ->with(['marks' => function ($query) use($exam_id, $acYear, $class_id) {
+                      $query->select('subject_id','section_id')
+                          ->where('academic_year_id', $acYear)
+                          ->where('class_id', $class_id)
+                          ->where('exam_id', $exam_id)
+                          ->groupBy('subject_id','section_id');
+                  }])
+                  ->get();
+
+             $havePedningSectionMarks = false;
+             $pendingSections = [];
+             foreach ($submittedSubjectMarksBySection as $section){
+                 if(count($section->marks) != $subjectsCount){
+                     $pendingSections[] = $section->name;
+                     $havePedningSectionMarks = true;
+                 }
+             }
+
+             if($havePedningSectionMarks){
+                 $message = "Section ".implode(',' , $pendingSections)." all subjects marks not submitted yet!";
+                 return redirect()->back()->with('error', $message);
+             }
+             //validation end
+
+            //now generate the result
+            // pull default grading system
+            // pull exam info
+            // pull exam rules subject wise and find combine subject
+
+            //loop  the students
+        }
+
+
+        $classes = IClass::where('status', AppHelper::ACTIVE)
+            ->pluck('name', 'id');
+        $academic_years = [];
+        //if its college then have to get those academic years
+        if(AppHelper::getInstituteCategory() == 'college') {
+            $academic_years = AcademicYear::where('status', '1')->orderBy('id', 'desc')->pluck('title', 'id');
+        }
+        $exams = [];
+
+
+        return view('backend.exam.result.generate', compact('classes', 'academic_years','exams'));
+    }
 }
