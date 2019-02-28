@@ -278,6 +278,27 @@
                         </div>
                     </div>
 
+                    <div class="box box-info">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Result Settings</h3>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group has-feedback">
+                                        <label for="result_default_grade_id">Result Default Grade System
+                                            <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="select grade system"></i>
+                                        </label>
+                                        {!! Form::select('result_default_grade_id', $grades, $grade_id , ['class' => 'form-control select2', 'required' => 'true']) !!}
+                                        <span class="form-control-feedback"></span>
+                                        <span class="text-danger">{{ $errors->first('result_default_grade_id') }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="box">
                         <div class="box-footer">
                             <a href="{{URL::route('user.dashboard')}}" class="btn btn-default">Cancel</a>

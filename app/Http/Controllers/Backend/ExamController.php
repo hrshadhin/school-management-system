@@ -455,7 +455,7 @@ class ExamController extends Controller
             ->pluck('name', 'id');
         $exams = Exam::where('status', AppHelper::ACTIVE)
             ->pluck('name', 'id');
-        $grades = Grade::pluck('name', 'id');;
+        $grades = Grade::pluck('name', 'id');
         $subjects = [];
 
 

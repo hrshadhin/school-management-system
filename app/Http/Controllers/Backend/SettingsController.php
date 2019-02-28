@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\AcademicYear;
+use App\Grade;
 use App\Http\Helpers\AppHelper;
 use App\Template;
 use Illuminate\Http\Request;
@@ -52,6 +53,7 @@ class SettingsController extends Controller
                 'institute_type' => 'required|integer',
                 'student_idcard_template' => 'required|integer',
                 'employee_idcard_template' => 'required|integer',
+                'result_default_grade_id' => 'required|integer',
             ];
 
             if(AppHelper::getInstituteCategory() != 'college') {
@@ -184,6 +186,11 @@ class SettingsController extends Controller
                 ['meta_value' => $request->get('employee_idcard_template', 0)]
             );
 
+            AppMeta::updateOrCreate(
+                ['meta_key' => 'result_default_grade_id'],
+                ['meta_value' => $request->get('result_default_grade_id', 0)]
+            );
+
 
             Cache::forget('app_settings');
 
@@ -237,12 +244,18 @@ class SettingsController extends Controller
         $student_idcard_template = $metas['student_idcard_template'] ?? 0;
         $employee_idcard_template = $metas['employee_idcard_template'] ?? 0;
 
+        //result settings
+        $grades = Grade::pluck('name', 'id')->prepend('None',0);
+        $grade_id = $metas['result_default_grade_id'] ?? 0;
+
 
         return view(
             'backend.settings.institute', compact(
                 'info',
                 'academic_years',
                 'academic_year',
+                'grades',
+                'grade_id',
                 'frontend_website',
                 'disable_language',
                 'student_attendance_notification',
