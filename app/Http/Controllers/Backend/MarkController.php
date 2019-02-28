@@ -758,9 +758,23 @@ class MarkController extends Controller
 
             //now generate the result
             // pull default grading system
+            $grade_id = AppHelper::getAppSettings('result_default_grade_id');
+            $grade = Grade::where('id', $grade_id)->first();
+            if(!$grade){
+                return redirect()->back()->with('error', 'Result grade system not set! Set it from institute settings.');
+            }
             // pull exam info
+            $examInfo = Exam::where('status', AppHelper::ACTIVE)
+                ->where('id', $exam_id)
+                ->first();
+            if(!$examInfo) {
+                return redirect()->back()->with('error', 'Exam Not Found');
+            }
+
             // pull exam rules subject wise and find combine subject
 
+
+            dd('pass');
             //loop  the students
         }
 
