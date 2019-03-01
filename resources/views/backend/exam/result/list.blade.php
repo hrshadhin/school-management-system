@@ -56,26 +56,26 @@
                                                     {!! Form::select('section_id', $sections, $section_id , ['placeholder' => 'Pick a section...','class' => 'form-control select2']) !!}
                                                 </div>
                                             </div>
-                                                <div class="col-md-4">
-                                                    <div class="form-group has-feedback">
-                                                        {!! Form::select('exam_id', $exams, $exam_id , ['placeholder' => 'Pick a exam...','class' => 'form-control select2', 'required' => 'true']) !!}
+                                            <div class="col-md-4">
+                                                <div class="form-group has-feedback">
+                                                    {!! Form::select('exam_id', $exams, $exam_id , ['placeholder' => 'Pick a exam...','class' => 'form-control select2', 'required' => 'true']) !!}
+                                                </div>
+                                            </div>
+                                            @if(AppHelper::getInstituteCategory() != 'college')
+                                                <div class="row">
+                                                    <div class="col-md-2">
+                                                        <button type="submit" class="btn btn-info"><i class="fa fa-filter"></i> Get List</button>
                                                     </div>
                                                 </div>
-                                                @if(AppHelper::getInstituteCategory() != 'college')
-                                                    <div class="row">
-                                                        <div class="col-md-2">
-                                                            <button type="submit" class="btn btn-info"><i class="fa fa-filter"></i> Get List</button>
-                                                        </div>
-                                                    </div>
-                                                @endif
+                                            @endif
                                         </div>
                                         @if(AppHelper::getInstituteCategory() == 'college')
-                                        <div class="row">
-                                            <div class="col-md-2">
-                                                <button type="submit" class="btn btn-info"><i class="fa fa-filter"></i> Get List</button>
+                                            <div class="row">
+                                                <div class="col-md-2">
+                                                    <button type="submit" class="btn btn-info"><i class="fa fa-filter"></i> Get List</button>
+                                                </div>
                                             </div>
-                                        </div>
-                                            @endif
+                                        @endif
                                     </form>
 
                                 </fieldset>
@@ -93,7 +93,9 @@
                                                 <th>Student Name</th>
                                                 <th>Regi No.</th>
                                                 <th>Roll No.</th>
-                                                <th>Section</th>
+                                                @if(!$section_id)
+                                                    <th>Section</th>
+                                                @endif
                                                 <th>Grade</th>
                                                 <th>Point</th>
                                                 <th>Total Marks</th>
@@ -103,14 +105,18 @@
                                             <tbody>
                                             @foreach($students as $student)
                                                 <tr>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
+                                                    <td>{{$loop->iteration}}</td>
+                                                    <td>{{$student->info->name}}</td>
+                                                    <td>{{$student->regi_no}}</td>
+                                                    <td>{{$student->roll_no}}</td>
+                                                    @if(!$section_id)
+                                                        <td>{{$student->section->name}}</td>
+                                                    @endif
+                                                    <td>{{$student->result->first()->grade}}</td>
+                                                    <td>{{$student->result->first()->point}}</td>
+                                                    <td>{{$student->result->first()->total_marks}}</td>
+                                                    <td></td>
+
                                                 </tr>
                                             @endforeach
                                             </tbody>
@@ -120,7 +126,9 @@
                                                 <th>Student Name</th>
                                                 <th>Regi No.</th>
                                                 <th>Roll No.</th>
-                                                <th>Section</th>
+                                                @if(!$section_id)
+                                                    <th>Section</th>
+                                                @endif
                                                 <th>Grade</th>
                                                 <th>Point</th>
                                                 <th>Total Marks</th>
@@ -150,7 +158,10 @@
         window.section_list_url = '{{URL::Route("academic.section")}}';
         window.exam_list_url = '{{URL::Route("exam.index")}}';
         window.changeExportColumnIndex = -1;
-        window.excludeFilterComlumns = [0,5,6,7,8];
+        window.excludeFilterComlumns = [0,6,7];
+        @if(!$section_id)
+            window.excludeFilterComlumns = [0,4,7,8];
+        @endif
         $(document).ready(function () {
             Academic.resultInit();
         });

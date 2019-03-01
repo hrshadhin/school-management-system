@@ -18,6 +18,8 @@ class Result extends Model
      * @var array
      */
     protected $fillable = [
+        'academic_year_id',
+        'class_id',
         'registration_id',
         'exam_id',
         'total_marks',
