@@ -680,7 +680,7 @@ class MarkController extends Controller
                 return redirect()->back()->with('error', 'Result not published for this class and exam yet!');
             }
 
-              $students = Registration::where('status', AppHelper::ACTIVE)
+            $students = Registration::where('status', AppHelper::ACTIVE)
                 ->where('academic_year_id', $acYear)
                 ->where('class_id', $class_id)
                 ->when($section_id, function ($query) use($section_id){
@@ -694,9 +694,9 @@ class MarkController extends Controller
                 ->with(['info' => function($query){
                     $query->select('name','id');
                 }])
-                 ->with(['section' => function($query){
-                     $query->select('name','id');
-                 }])
+                ->with(['section' => function($query){
+                    $query->select('name','id');
+                }])
                 ->get();
 
             $sections = Section::where('status', AppHelper::ACTIVE)
@@ -891,30 +891,67 @@ class MarkController extends Controller
                         $isAndInCombineSubject = $this->isAndInCombine($marks->subject_id, $examRules);
                         if ($isAndInCombineSubject) {
                             $combineSubjectsMarks[$marks->subject_id] = $marks;
+
+                            //skip for next subject
                             continue;
                         }
 
-                        //todo: need to add logic for college
                         //find 4th subject AppHelper::SUBJECT_TYPE
                         $is4thSubject = ($examRules[$marks->subject_id]['subject_type'] == 2) ? 1 : 0;
                         if ($is4thSubject) {
+
                             if ($student->fourth_subject == $marks->subject_id && $marks->point >= $examInfo->elective_subject_point_addition) {
                                 $totalPoint += ($marks->point - $examInfo->elective_subject_point_addition);
                             }
+
+                            //if its college then may have student exchange their 4th subject
+                            //with main subject
+                            if(AppHelper::getInstituteCategory() == 'college') {
+                                if ($student->alt_fourth_subject == $marks->subject_id) {
+                                    $totalPoint += $marks->point;
+
+                                    //if fail then result will be fail
+                                    if (intval($marks->point) == 0) {
+                                        $isFail = true;
+                                    }
+                                    $totalSubject++;
+                                }
+                            }
+                            //end college logic
+
                             $totalMarks += $marks->total_marks;
 
+                            //skip for next subject
                             continue;
                         }
 
                         //process not combine and 4th subjects
                         if (!$isAndInCombineSubject && !$is4thSubject) {
+
+                            //if its college then may have student exchange their 4th subject
+                            //with main subject
+                            if(AppHelper::getInstituteCategory() == 'college') {
+                                if ($student->fourth_subject == $marks->subject_id) {
+                                    if($marks->point >= $examInfo->elective_subject_point_addition){
+                                        $totalPoint += ($marks->point - $examInfo->elective_subject_point_addition);
+                                    }
+
+                                    $totalMarks += $marks->total_marks;
+
+                                    //skip for next subject
+                                    continue;
+                                }
+                            }
+                            //end college logic
+
+
                             $totalMarks += $marks->total_marks;
                             $totalPoint += $marks->point;
                             $totalSubject++;
-
                             if (intval($marks->point) == 0) {
                                 $isFail = true;
                             }
+
                         }
                     }
 
@@ -990,8 +1027,8 @@ class MarkController extends Controller
             //result then show error message
             if($isDataMissing){
                 $student = Registration::where('id', $registrationIdForMissing)->with(["info" => function($query){
-                        $query->select('name','id');
-                    }])
+                    $query->select('name','id');
+                }])
                     ->with(["section" => function($query){
                         $query->select('name','id');
                     }])
