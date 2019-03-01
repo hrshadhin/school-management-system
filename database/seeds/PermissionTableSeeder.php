@@ -977,6 +977,16 @@ class PermissionTableSeeder extends Seeder
                 "group" => "Exam"
             ],
             // Exam Marks End
+            // Exam Result
+            [   "slug" => "result.index",
+                "name" => "Result View",
+                "group" => "Exam"
+            ],
+            [   "slug" => "result.create",
+                "name" => "Result Create",
+                "group" => "Exam"
+            ],
+            // Exam Result End
         ];
 
 
