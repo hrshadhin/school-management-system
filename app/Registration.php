@@ -28,7 +28,6 @@ class Registration extends Model
         'card_no',
         'board_regi_no',
         'fourth_subject',
-        'fourth_subject',
         'alt_fourth_subject',
         'house',
         'status',
@@ -67,6 +66,11 @@ class Registration extends Model
     public function result()
     {
         return $this->hasMany('App\Result', 'registration_id');
+    }
+
+    public function marks()
+    {
+        return $this->hasMany('App\Mark', 'registration_id');
     }
 
     public function scopeSection($query, $section)

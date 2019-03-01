@@ -645,7 +645,9 @@ export default class Academic {
 
         });
         var title = $('title').text() + $('select[name="class_id"] option[selected]').text();
-        title += '-'+ $('select[name="section_id"] option[selected]').text();
+        if($('select[name="section_id"]').val()) {
+            title += '-' + $('select[name="section_id"] option[selected]').text();
+        }
         title += '-'+ $('select[name="exam_id"] option[selected]').text();
         $('title').text(title);
     }

@@ -8,6 +8,7 @@ use App\ExamRule;
 use App\Grade;
 use App\Mark;
 use App\Registration;
+use App\Result;
 use App\Section;
 use App\Subject;
 use Carbon\Carbon;
@@ -467,6 +468,20 @@ class MarkController extends Controller
         return [$grade, $point];
     }
 
+    private function findGradeFromPoint($point, $gradingRules) {
+        $grade = 'F';
+
+        foreach ($gradingRules as $rule){
+            if($point >= floatval($rule->point)){
+                $grade = AppHelper::GRADE_TYPES[$rule->grade];
+                break;
+            }
+        }
+
+        return $grade;
+
+    }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -538,7 +553,7 @@ class MarkController extends Controller
     {
         $marks = Mark::with(['subject' => function($query){
             $query->select('id','teacher_id','name');
-            }])
+        }])
             ->with(['class' => function($query){
                 $query->select('id','name');
             }])
@@ -654,6 +669,43 @@ class MarkController extends Controller
         //in post request get the result and show it
         if ($request->isMethod('post')) {
 
+            //check is result is published?
+            $isPublish = DB::table('result_publish')
+                ->where('academic_year_id', $acYear)
+                ->where('class_id', $class_id)
+                ->where('exam_id', $exam_id)
+                ->count();
+
+            if(!$isPublish){
+                return redirect()->back()->with('error', 'Result not published for this class and exam yet!');
+            }
+
+              $students = Registration::where('status', AppHelper::ACTIVE)
+                ->where('academic_year_id', $acYear)
+                ->where('class_id', $class_id)
+                ->when($section_id, function ($query) use($section_id){
+                    $query->where('section_id', $section_id);
+                })
+                ->select('id','student_id','regi_no','roll_no','section_id')
+                ->with(['result' => function($query) use($exam_id){
+                    $query->select('registration_id','total_marks','grade', 'point')
+                        ->where('exam_id', $exam_id);
+                }])
+                ->with(['info' => function($query){
+                    $query->select('name','id');
+                }])
+                 ->with(['section' => function($query){
+                     $query->select('name','id');
+                 }])
+                ->get();
+
+            $sections = Section::where('status', AppHelper::ACTIVE)
+                ->where('class_id', $class_id)
+                ->pluck('name', 'id');
+
+            $exams = Exam::where('status', AppHelper::ACTIVE)
+                ->where('class_id', $class_id)
+                ->pluck('name', 'id');
 
         }
 
@@ -674,8 +726,8 @@ class MarkController extends Controller
             'section_id',
             'sections',
             'academic_years',
-        'exams',
-        'exam_id'
+            'exams',
+            'exam_id'
         ));
     }
 
@@ -699,10 +751,10 @@ class MarkController extends Controller
             //validation start
             //check is result is published?
             $isPublish = DB::table('result_publish')
-                    ->where('academic_year_id', $acYear)
-                    ->where('class_id', $class_id)
-                    ->where('exam_id', $exam_id)
-                    ->count();
+                ->where('academic_year_id', $acYear)
+                ->where('class_id', $class_id)
+                ->where('exam_id', $exam_id)
+                ->count();
 
             if($isPublish){
                 return redirect()->back()->with('error', 'Result already published for this class and exam!');
@@ -726,35 +778,35 @@ class MarkController extends Controller
             }
 
 
-             //this class all subject mark submitted
-              $subjectsCount = Subject::where('status', AppHelper::ACTIVE)
+            //this class all subject mark submitted
+            $subjectsCount = Subject::where('status', AppHelper::ACTIVE)
                 ->where('class_id', $class_id)->count();
 
-             $submittedSubjectMarksBySection = Section::where('status', AppHelper::ACTIVE)
-                  ->where('class_id', $class_id)
-                  ->with(['marks' => function ($query) use($exam_id, $acYear, $class_id) {
-                      $query->select('subject_id','section_id')
-                          ->where('academic_year_id', $acYear)
-                          ->where('class_id', $class_id)
-                          ->where('exam_id', $exam_id)
-                          ->groupBy('subject_id','section_id');
-                  }])
-                  ->get();
+            $submittedSubjectMarksBySection = Section::where('status', AppHelper::ACTIVE)
+                ->where('class_id', $class_id)
+                ->with(['marks' => function ($query) use($exam_id, $acYear, $class_id) {
+                    $query->select('subject_id','section_id')
+                        ->where('academic_year_id', $acYear)
+                        ->where('class_id', $class_id)
+                        ->where('exam_id', $exam_id)
+                        ->groupBy('subject_id','section_id');
+                }])
+                ->get();
 
-             $havePedningSectionMarks = false;
-             $pendingSections = [];
-             foreach ($submittedSubjectMarksBySection as $section){
-                 if(count($section->marks) != $subjectsCount){
-                     $pendingSections[] = $section->name;
-                     $havePedningSectionMarks = true;
-                 }
-             }
+            $havePedningSectionMarks = false;
+            $pendingSections = [];
+            foreach ($submittedSubjectMarksBySection as $section){
+                if(count($section->marks) != $subjectsCount){
+                    $pendingSections[] = $section->name;
+                    $havePedningSectionMarks = true;
+                }
+            }
 
-             if($havePedningSectionMarks){
-                 $message = "Section ".implode(',' , $pendingSections)." all subjects marks not submitted yet!";
-                 return redirect()->back()->with('error', $message);
-             }
-             //validation end
+            if($havePedningSectionMarks){
+                $message = "Section ".implode(',' , $pendingSections)." all subjects marks not submitted yet!";
+                return redirect()->back()->with('error', $message);
+            }
+            //validation end
 
             //now generate the result
             // pull default grading system
@@ -772,10 +824,205 @@ class MarkController extends Controller
             }
 
             // pull exam rules subject wise and find combine subject
+            $examRules = ExamRule::where('class_id', $class_id)
+                ->where('exam_id', $examInfo->id)
+                ->select('subject_id','combine_subject_id','passing_rule','marks_distribution','total_exam_marks','over_all_pass')
+                ->with(['subject' => function($query){
+                    $query->select('id','type');
+                }])
+                ->get()
+                ->reduce(function ($examRules, $rule){
+                    $examRules[$rule->subject_id] =[
+                        'combine_subject_id' => $rule->combine_subject_id,
+                        'passing_rule' => $rule->passing_rule,
+                        'marks_distribution' => json_decode($rule->marks_distribution),
+                        'total_exam_marks' => $rule->total_exam_marks,
+                        'over_all_pass' => $rule->over_all_pass,
+                        'subject_type' => $rule->subject->getOriginal('type')
+                    ];
+                    return $examRules;
+                });
 
+            $totalRules = count(array_keys($examRules));
 
-            dd('pass');
+            if($subjectsCount != $totalRules){
+                return redirect()->back()->with('error', 'Some subjects exam rules missing!');
+            }
+
+            //pull students with marks
+            $students = Registration::where('status', AppHelper::ACTIVE)
+                ->where('academic_year_id', $acYear)
+                ->where('class_id', $class_id)
+                ->select('id','fourth_subject','alt_fourth_subject')
+                ->with(['marks' => function($query) use($acYear,$class_id,$exam_id){
+                    $query->select('registration_id','subject_id','marks', 'total_marks', 'point', 'present')
+                        ->where('academic_year_id', $acYear)
+                        ->where('class_id', $class_id)
+                        ->where('exam_id', $exam_id);
+                }])
+                ->get();
+
+            $isDataMissing = false;
+            $registrationIdForMissing = 0;
+            $resultInsertData = [];
+            $combineResultInsertData = [];
+            $gradingRules = json_decode($grade->rules);
+            $userId = auth()->user()->id;
+
             //loop  the students
+            foreach ($students as $student){
+                try {
+                    $totalMarks = 0;
+                    $totalPoint = 0;
+                    $totalSubject = 0;
+                    $combineSubjectsMarks = [];
+                    $isFail = false;
+
+                    //data missing checks
+                    $studentMarksSubjectCount = count($student->marks);
+                    if ($studentMarksSubjectCount != $subjectsCount) {
+                        $isDataMissing = true;
+                        $registrationIdForMissing = $student->id;
+                        break;
+                    }
+
+                    foreach ($student->marks as $marks) {
+                        //find combine subjects
+                        $isAndInCombineSubject = $this->isAndInCombine($marks->subject_id, $examRules);
+                        if ($isAndInCombineSubject) {
+                            $combineSubjectsMarks[$marks->subject_id] = $marks;
+                            continue;
+                        }
+
+                        //todo: need to add logic for college
+                        //find 4th subject AppHelper::SUBJECT_TYPE
+                        $is4thSubject = ($examRules[$marks->subject_id]['subject_type'] == 2) ? 1 : 0;
+                        if ($is4thSubject) {
+                            if ($student->fourth_subject == $marks->subject_id && $marks->point >= $examInfo->elective_subject_point_addition) {
+                                $totalPoint += ($marks->point - $examInfo->elective_subject_point_addition);
+                            }
+                            $totalMarks += $marks->total_marks;
+
+                            continue;
+                        }
+
+                        //process not combine and 4th subjects
+                        if (!$isAndInCombineSubject && !$is4thSubject) {
+                            $totalMarks += $marks->total_marks;
+                            $totalPoint += $marks->point;
+                            $totalSubject++;
+
+                            if (intval($marks->point) == 0) {
+                                $isFail = true;
+                            }
+                        }
+                    }
+
+
+                    //now process combine subjects
+                    foreach ($examRules as $subject_id => $data) {
+                        if ($data['combine_subject_id'] != null) {
+                            $totalSubject++;
+                            $subjectMarks = $combineSubjectsMarks[$subject_id];
+                            $pairSubjectMarks = $combineSubjectsMarks[$data['combine_subject_id']];
+
+                            [$pairFail, $combineTotalMarks, $pairTotalMarks] = $this->processCombineSubjectMarks($subjectMarks, $pairSubjectMarks, $data, $examRules[$data['combine_subject_id']]);
+
+                            $totalMarks += $pairTotalMarks;
+
+                            if ($pairFail) {
+                                //AppHelper::GRADE_TYPES
+                                $pairGrade = "F";
+                                $pairPoint = 0.00;
+                                $isFail = true;
+                            } else {
+
+                                [$pairGrade, $pairPoint] = $this->findGradePointFromMarks($gradingRules, $pairTotalMarks);
+                                $totalPoint += $pairPoint;
+                            }
+
+                            //need to store in db for marks sheet print
+                            $combineResultInsertData[] = [
+                                'registration_id' => $student->id,
+                                'subject_id' => $subject_id,
+                                'exam_id' => $examInfo->id,
+                                'total_marks' => $combineTotalMarks,
+                                'grade' => $pairGrade,
+                                'point' => $pairPoint,
+                            ];
+
+                        }
+                    }
+
+
+                    $finalPoint = ($totalPoint / $totalSubject);
+                    if ($isFail) {
+                        //AppHelper::GRADE_TYPES
+                        $finalGrade = 'F';
+                    } else {
+                        $finalGrade = $this->findGradeFromPoint($finalPoint, $gradingRules);
+                    }
+
+                    $timeStampNow = Carbon::now(env('APP_TIMEZONE', 'Asia/Dhaka'));
+                    $resultInsertData[] = [
+                        'academic_year_id' => $acYear,
+                        'class_id' => $class_id,
+                        'registration_id' => $student->id,
+                        'exam_id' => $examInfo->id,
+                        'total_marks' => $totalMarks,
+                        'grade' => $finalGrade,
+                        'point' => $finalPoint,
+                        "created_at" => $timeStampNow,
+                        "created_by" => $userId,
+                    ];
+
+                }
+                catch (\Exception $e){
+                    $isDataMissing = true;
+                    $registrationIdForMissing = $student->id;
+                    break;
+                }
+
+            }
+
+
+            //if have any invalid data and can't process
+            //result then show error message
+            if($isDataMissing){
+                $student = Registration::where('id', $registrationIdForMissing)->with(["info" => function($query){
+                        $query->select('name','id');
+                    }])
+                    ->with(["section" => function($query){
+                        $query->select('name','id');
+                    }])
+                    ->select('id','student_id','section_id','regi_no','roll_no')
+                    ->first();
+                $message = "Student '{$student->info->name}', Section: {$student->section->name}, Regi No.:{$student->regi_no}, Roll No.:{$student->roll_no} has invalid marks data!";
+                return redirect()->back()->with('error', $message);
+            }
+
+
+            //now insert into db with transaction enabled
+
+            DB::beginTransaction();
+            try {
+
+                Result::insert($resultInsertData);
+                DB::table('result_publish')->insert([
+                    'academic_year_id' => $acYear,
+                    'class_id' => $class_id,
+                    'exam_id' => $exam_id
+                ]);
+                DB::table('result_combines')->insert($combineResultInsertData);
+                DB::commit();
+            }
+            catch(\Exception $e){
+                DB::rollback();
+                $message = str_replace(array("\r", "\n","'","`"), ' ', $e->getMessage());
+                return redirect()->back()->with("error",$message);
+            }
+
+            return redirect()->back()->with("success","Result generated successfully.");
         }
 
 
@@ -790,5 +1037,93 @@ class MarkController extends Controller
 
 
         return view('backend.exam.result.generate', compact('classes', 'academic_years','exams'));
+    }
+
+    private function isAndInCombine($subject_id, $rules){
+        $isCombine = false;
+        foreach ($rules as $subject => $data){
+            if($subject == $subject_id && $data['combine_subject_id']){
+                $isCombine = true;
+                break;
+            }
+
+            if($data['combine_subject_id'] == $subject_id){
+                $isCombine = true;
+                break;
+            }
+        }
+
+        return $isCombine;
+    }
+    private function processCombineSubjectMarks($subjectMarks, $pairSubjectMarks, $subjectRule, $pairSubjectRule){
+        $pairFail = false;
+
+        $combineTotalMarks = ($subjectMarks->total_marks + $pairSubjectMarks->total_marks);
+
+        if($subjectRule['total_exam_marks'] == $pairSubjectRule['total_exam_marks']){
+            //dividing factor
+            $totalMarks = ($combineTotalMarks/2);
+        }
+        else{
+            //if both subject exam marks not same then it must be 2:1 ratio
+            //Like: subject marks 100 pair subject marks 50
+            $totalMarks = ($combineTotalMarks/ 1.5);
+        }
+
+        //fraction number make ceiling
+        $totalMarks = ceil($totalMarks);
+
+        $passingRule = $subjectRule['passing_rule'];
+        // AppHelper::PASSING_RULES
+        if(in_array($passingRule, [1,3])){
+            if($totalMarks < $subjectRule['over_all_pass']){
+                $pairFail = true;
+            }
+        }
+
+        //if any subject absent then its fail
+        if($subjectMarks->present == 0 || $pairSubjectMarks->present == 0){
+            $pairFail = true;
+        }
+
+        // AppHelper::PASSING_RULES
+        if(!$pairFail && in_array($passingRule, [2,3])){
+
+            //acquire marks
+            $combineDistributedMarks = [];
+            foreach (json_decode($subjectMarks->marks) as $key => $distMarks){
+                $combineDistributedMarks[$key] = floatval($distMarks);
+
+            }
+
+            foreach (json_decode($pairSubjectMarks->marks) as $key => $distMarks){
+                $combineDistributedMarks[$key] += floatval($distMarks);
+
+            }
+
+
+            //passing rules marks
+            $combineDistributeMarks = [];
+            foreach ($subjectRule['marks_distribution'] as $distMarks){
+                $combineDistributeMarks[$distMarks->type] = floatval($distMarks->pass_marks);
+            }
+
+            foreach ($pairSubjectRule['marks_distribution'] as $key => $distMarks){
+                $combineDistributeMarks[$distMarks->type] += floatval($distMarks->pass_marks);
+
+            }
+
+            //now check for pass
+            foreach ($combineDistributeMarks as $key => $value){
+                if($combineDistributedMarks[$key] < $value){
+                    $pairFail = true;
+                }
+            }
+
+        }
+
+
+        return [$pairFail, $combineTotalMarks, $totalMarks];
+
     }
 }
