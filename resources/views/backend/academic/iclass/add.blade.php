@@ -54,7 +54,7 @@
                                         <label for="group">Group
                                             <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Set group"></i>
                                         </label>
-                                        {!! Form::select('group', ['' => 'None', 'Science' => 'Science', 'Humanities' => 'Humanities', 'Commerce' => 'Commerce' ], $group , ['placeholder' => 'Pick a group...','class' => 'form-control select2', 'required' => 'true']) !!}
+                                        {!! Form::select('group', ['None' => 'None', 'Science' => 'Science', 'Humanities' => 'Humanities', 'Commerce' => 'Commerce' ], $group , ['placeholder' => 'Pick a group...','class' => 'form-control select2', 'required' => 'true']) !!}
                                         <span class="form-control-feedback"></span>
                                         <span class="text-danger">{{ $errors->first('group') }}</span>
                                     </div>
