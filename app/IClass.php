@@ -30,4 +30,9 @@ class IClass extends Model
     {
         return $this->hasMany('App\Section', 'class_id');
     }
+
+    public function student()
+    {
+        return $this->hasMany('App\Registration', 'class_id');
+    }
 }

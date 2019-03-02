@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\AcademicYear;
 use App\Employee;
+use App\IClass;
 use App\Models\PasswordResets;
 use App\Permission;
+use App\Registration;
 use App\Role;
+use App\Section;
+use App\smsLog;
 use App\Student;
 use App\Subject;
 use App\User;
@@ -217,22 +222,102 @@ class UserController extends Controller
      */
     public function dashboard(Request $request)
     {
-//        $user = auth()->user();
-//        foreach ($user->unreadNotifications->take(2) as $notification) {
-//            print_r($notification->data);
-//
-//            $notification->markAsRead();
-//
-//        }
-//
-//        die();
+        $userRoleId = session('user_role_id',0);
+        $teachers = 0;
+        $employee = 0;
+        $students = 0;
+        $subjects = 0;
+        $monthWiseSms = [];
+
+        //only admin
+        if($userRoleId == AppHelper::USER_ADMIN){
+
+            $teachers = Employee::where('role_id', AppHelper::EMP_TEACHER)->count();
+            $employee = Employee::count();
+            $students = Student::count();
+            $subjects = Subject::count();
+
+            $smsSend = smsLog::selectRaw('count(id) as send,MONTH(created_at) as month')
+                ->whereYear('created_at', date('Y'))
+                ->groupby('month')
+                ->get()
+                ->reduce(function ($smsSend, $record){
+                    $smsSend[$record->month] = $record->send;
+
+                    return $smsSend;
+                });
+
+            $monthWiseSms['Jan'] = $smsSend[1] ?? 0;
+            $monthWiseSms['Feb'] = $smsSend[2] ?? 0;
+            $monthWiseSms['Mar'] = $smsSend[3] ?? 0;
+            $monthWiseSms['Apr'] = $smsSend[4] ?? 0;
+            $monthWiseSms['May'] = $smsSend[5] ?? 0;
+            $monthWiseSms['Jun'] = $smsSend[6] ?? 0;
+            $monthWiseSms['Jul'] = $smsSend[7] ?? 0;
+            $monthWiseSms['Aug'] = $smsSend[8] ?? 0;
+            $monthWiseSms['Sep'] = $smsSend[9] ?? 0;
+            $monthWiseSms['Oct'] = $smsSend[10] ?? 0;
+            $monthWiseSms['Nov'] = $smsSend[11] ?? 0;
+            $monthWiseSms['Dec'] = $smsSend[12] ?? 0;
+
+        }
+
+        //only admin end
 
 
-        $teachers = Employee::where('role_id', AppHelper::EMP_TEACHER)->count();
-        $students = Student::count();
-        $subjects = Subject::count();
+        $academicYearId = 0;
+        if(AppHelper::getInstituteCategory() == 'college') {
+            $academicYearInfo = AcademicYear::where('status', AppHelper::ACTIVE)
+                ->whereYear('start_date',date('Y'))->first();
+            if($academicYearInfo){
+                $academicYearId = $academicYearInfo->id;
+            }
+        }
+        else{
+            $academicYearId = AppHelper::getAcademicYear();
+        }
+        $studentsCount = IClass::where('status', AppHelper::ACTIVE)
+            ->with(['student' => function($query) use($academicYearId){
+                $query->where('status', AppHelper::ACTIVE)
+                    ->where('academic_year_id', $academicYearId)
+                    ->selectRaw('class_id, count(*) as total')
+                    ->groupBy('class_id');
+            }])
+            ->select('id','name')
+            ->orderBy('numeric_value','asc')
+            ->get();
 
-        return view('backend.user.dashboard', compact('teachers','students', 'subjects'));
+        $selectedClassIds = explode(',', env('DASHBOARD_SECTION_STUDENT_CLASS_CODE','90,91,92,100,101,102'));
+        $selectedClasses = IClass::where('status', AppHelper::ACTIVE)
+            ->whereIn('numeric_value', $selectedClassIds)->pluck('id');
+
+         $sectionStudentCount = Section::where('status', AppHelper::ACTIVE)
+            ->whereIn('class_id', $selectedClasses)
+            ->with(['student' => function($query) use($academicYearId){
+                $query->where('status', AppHelper::ACTIVE)
+                    ->where('academic_year_id', $academicYearId)
+                    ->selectRaw('section_id, count(*) as total')
+                    ->groupBy('section_id');
+            }])
+            ->with(['class' => function($query){
+                $query->select('id','name');
+            }])
+            ->select('id','name','class_id')
+            ->orderBy('class_id','asc')
+            ->orderBy('name','asc')
+            ->get();
+
+
+        return view('backend.user.dashboard', compact(
+            'teachers',
+            'employee',
+            'students',
+            'subjects',
+            'userRoleId',
+            'studentsCount',
+            'sectionStudentCount',
+            'monthWiseSms'
+        ));
     }
 
     /**

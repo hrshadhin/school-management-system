@@ -40,4 +40,9 @@ class Section extends Model
     {
         return $this->hasMany('App\Mark', 'section_id');
     }
+
+    public function student()
+    {
+        return $this->hasMany('App\Registration', 'section_id');
+    }
 }
