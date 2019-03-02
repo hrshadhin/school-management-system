@@ -47,7 +47,7 @@ class AcademicController extends Controller
         }
 
         //for get request
-        $iclasses = IClass::select('id','name','numeric_value','status','note')->orderBy('numeric_value', 'asc')->get();
+        $iclasses = IClass::select('id','name','numeric_value','status','note','group')->orderBy('numeric_value', 'asc')->get();
 
         return view('backend.academic.iclass.list', compact('iclasses'));
     }
