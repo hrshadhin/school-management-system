@@ -109,85 +109,65 @@ class Dashboard {
            new Chart(ctx, config);
         }
 
+        var chartElement = document.getElementById('attendanceChart');
+        if(chartElement) {
+            var config = {
+                type: 'line',
+                data: {
+                    labels:  window.attendanceLabel,
+                    datasets: [{
+                        label: 'Present',
+                        data: window.presentData,
+                        backgroundColor: "rgb(54, 162, 235)",
+                        borderColor: "rgb(54, 162, 235)",
+                        fill: false,
+                        pointRadius: 6,
+                        pointHoverRadius: 20,
+                    }, {
+                        label: 'Absent',
+                        data: window.absentData,
+                        backgroundColor: "rgb(255, 99, 132)",
+                        borderColor: "rgb(255, 99, 132)",
+                        fill: false,
+                        pointRadius: 6,
+                        pointHoverRadius: 20,
 
-        var config = {
-            type: 'line',
-            data: {
-                labels: ['One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten'],
-                datasets: [{
-                    label: 'Present',
-                    data: [
-                        30,
-                        20,
-                        25,
-                        28,
-                        26,
-                        15,
-                        18,
-                        22,
-                        24,
-                        30
-                    ],
-                    backgroundColor:  "rgb(54, 162, 235)",
-                    borderColor:  "rgb(54, 162, 235)",
-                    fill: false,
-                    pointRadius: 6,
-                    pointHoverRadius: 20,
-                }, {
-                    label: 'Absent',
-                    data: [
-                        0,
-                        10,
-                        5,
-                        2,
-                        5,
-                        15,
-                        12,
-                        8,
-                        6,
-                        0
-                    ],
-                    backgroundColor: "rgb(255, 99, 132)",
-                    borderColor: "rgb(255, 99, 132)",
-                    fill: false,
-                    pointRadius: 6,
-                    pointHoverRadius: 20,
-
-                }
-                ]
-            },
-            options: {
-                responsive: true,
-                legend: {
-                    position: 'top',
+                    }
+                    ]
                 },
-                hover: {
-                    mode: 'index'
-                },
-                scales: {
-                    xAxes: [{
-                        display: true,
-                        scaleLabel: {
+                options: {
+                    responsive: true,
+                    legend: {
+                        position: 'top',
+                    },
+                    hover: {
+                        mode: 'index'
+                    },
+                    scales: {
+                        xAxes: [{
                             display: true,
-                            labelString: 'Class'
-                        }
-                    }],
-                    yAxes: [{
-                        display: true,
-                        scaleLabel: {
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Class'
+                            }
+                        }],
+                        yAxes: [{
                             display: true,
-                            labelString: 'Attendace'
-                        }
-                    }]
-                },
-                title: {
-                    display: false,
-                    text: 'Students Today\'s Attendance'
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Attendace'
+                            }
+                        }]
+                    },
+                    title: {
+                        display: false,
+                        text: 'Students Today\'s Attendance'
+                    }
                 }
-            }
-        };
-        var ctx = document.getElementById('attendanceChart').getContext('2d');
-        var attendanceChart = new Chart(ctx, config);
+            };
+            var ctx = chartElement.getContext('2d');
+            new Chart(ctx, config);
+        }
 
 
         // $('#calendar').fullCalendar({
