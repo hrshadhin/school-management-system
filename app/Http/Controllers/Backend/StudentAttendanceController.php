@@ -104,8 +104,10 @@ class StudentAttendanceController extends Controller
             ->with(['student' => function ($query) {
                 $query->select('name','id');
             }])
-            ->whereHas('attendance' , function ($query) use($att_date) {
+            ->whereHas('attendance' , function ($query) use($att_date, $class_id, $acYear) {
                 $query->select('id','present','registration_id')
+                    ->where('academic_year_id', $acYear)
+                    ->where('class_id', $class_id)
                     ->whereDate('attendance_date', $att_date);
             })
             ->select('id','regi_no','roll_no','student_id')
@@ -192,6 +194,8 @@ class StudentAttendanceController extends Controller
             $isPresent = isset($present[$student]) ? '1' : '0';
 
             $attendances[] = [
+                "academic_year_id" => $acYear,
+                "class_id" => $class_id,
                 "registration_id" => $student,
                 "attendance_date" => $attendance_date,
                 "present"   => $isPresent,
