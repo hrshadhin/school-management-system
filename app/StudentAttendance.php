@@ -21,6 +21,8 @@ class StudentAttendance extends Model
      * @var array
      */
     protected $fillable = [
+        'academic_year_id',
+        'class_id',
         'registration_id',
         'attendance_date',
         'present'

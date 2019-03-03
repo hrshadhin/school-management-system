@@ -124,7 +124,7 @@ class SeedStudentAttendance extends Command
                 {
                     // now fetch student id and class info
                     $regiNumbers = array_keys($regiNumbers);
-                    $presentStudents = Registration::select('id','class_id','regi_no')
+                    $presentStudents = Registration::select('id','class_id','regi_no','academic_year_id')
                         ->where('status', AppHelper::ACTIVE)
                         ->whereIn('regi_no', $regiNumbers)
                         ->get();
@@ -133,12 +133,19 @@ class SeedStudentAttendance extends Command
                     foreach ($presentStudents as $student){
 
                         //extract class id from here
-                        $presentStudentsByClass[$kdate][$student->class_id] = true;
+                        $presentStudentsByClass[$kdate][$student->class_id] = $student->academic_year_id;
 
-                        $entryExists = StudentAttendance::whereDate('attendance_date', '=', $kdate)->where('registration_id', '=', $student->id)->count();
+                        $entryExists = StudentAttendance::whereDate('attendance_date', '=', $kdate)
+                            ->where('registration_id', '=', $student->id)
+                            ->where('academic_year_id', $student->academic_year_id)
+                            ->where('class_id', $student->class_id)
+                            ->count();
+
                         if(!$entryExists) {
 
                             $singleAttendance = [
+                                "academic_year_id" => $student->academic_year_id,
+                                "class_id" => $student->class_id,
                                 "registration_id" => $student->id,
                                 "attendance_date" => $kdate,
                                 "present"   => "1",
@@ -195,18 +202,23 @@ class SeedStudentAttendance extends Command
                 $absentAttendances = [];
                 $dateTimeNow = Carbon::now(env('APP_TIMEZONE','Asia/Dhaka'));
 
-                foreach ($stClasses as $class_id => $value){
+                foreach ($stClasses as $class_id => $academicYear){
                     $absentStudents = Registration::where('status', AppHelper::ACTIVE)
+                        ->where('academic_year_id', $academicYear)
                         ->where('class_id', $class_id)
-                        ->whereDoesntHave('attendance' , function ($query) use($pDate) {
+                        ->whereDoesntHave('attendance' , function ($query) use($pDate, $academicYear, $class_id) {
                             $query->select('registration_id')
+                                ->where('academic_year_id', $academicYear)
+                                ->where('class_id', $class_id)
                                 ->whereDate('attendance_date', $pDate);
                         })
-                        ->select('id','regi_no','roll_no')
+                        ->select('id','regi_no','roll_no','class_id','academic_year_id')
                         ->get();
 
                     foreach ($absentStudents as $student){
                         $absentAttendances[] = [
+                            "academic_year_id" => $student->academic_year_id,
+                            "class_id" => $student->class_id,
                             "registration_id" => $student->id,
                             "attendance_date" => $pDate,
                             "present"   => "0",

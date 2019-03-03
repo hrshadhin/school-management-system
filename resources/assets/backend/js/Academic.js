@@ -258,12 +258,13 @@ export default class Academic {
                         $('#studentListTable tbody').empty();
                         if(students.length){
                             students.forEach(function(item){
+                                let roll_no = item.roll_no ? item.roll_no : '';
                                 let rowHtml = '<tr>\n' +
                                     '<td>\n' +
                                     '<span class="text-bold">'+item.student.name+'</span>\n' +
                                     '<input type="hidden" name="registrationIds[]" value="'+item.id+'" required>\n' +
                                     '</td>\n' +
-                                    '<td><span class="text-bold">'+item.roll_no+'</span></td>\n' +
+                                    '<td><span class="text-bold">'+roll_no+'</span></td>\n' +
                                     '<td>\n' +
                                     '<div class="checkbox icheck inline_icheck">\n' +
                                     '<input type="checkbox" name="present['+item.id+']">\n' +
