@@ -46,6 +46,7 @@
           </ul>
           </li>
       @endcanany
+
       <li class="treeview">
         <a href="#">
           <i class="fa icon-academicmain"></i>
@@ -55,6 +56,7 @@
             </span>
         </a>
         <ul class="treeview-menu">
+          @notrole('Student')
           @can('academic.class')
             <li>
               <a href="{{ URL::route('academic.class') }}">
@@ -69,6 +71,7 @@
               </a>
             </li>
           @endcan
+          @endnotrole
 
           @can('academic.subject')
             <li>
@@ -94,6 +97,7 @@
 
         </ul>
       </li>
+      @notrole('Student')
       <li class="treeview">
         <a href="#">
           <i class="fa icon-exam"></i>
@@ -151,6 +155,8 @@
           @endcan
         </ul>
       </li>
+      @endnotrole
+      @notrole('Student')
       <li class="treeview">
         <a href="#">
           <i class="fa fa-users"></i>
@@ -191,6 +197,7 @@
             @endcan
         </ul>
       </li>
+      @endnotrole
       @role('Admin')
       <li class="treeview">
         <a href="#">
@@ -265,19 +272,24 @@
             </span>
         </a>
         <ul class="treeview-menu">
+          @can('report.student_idcard')
           <li>
             <a href="{{ URL::route('report.student_idcard') }}">
               <i class="fa fa-id-card"></i> <span>Student Idcard Print</span>
             </a>
           </li>
+          @endcan
+            @can('report.employee_idcard')
           <li>
             <a href="{{ URL::route('report.employee_idcard') }}">
               <i class="fa fa-id-card"></i> <span>Employee Idcard Print</span>
             </a>
           </li>
+              @endcan
         </ul>
       </li>
 
+      @role('Admin')
       <li class="treeview">
         <a href="#">
           <i class="fa fa-cogs"></i>
@@ -287,7 +299,6 @@
             </span>
         </a>
         <ul class="treeview-menu">
-          @role('Admin')
           <li>
             <a href="{{ URL::route('settings.institute') }}">
               <i class="fa fa-building"></i> <span>Institute</span>
@@ -298,14 +309,9 @@
               <i class="fa fa-external-link"></i> <span>SMS Gateways</span>
             </a>
           </li>
-          @endrole
-          {{--<li>--}}
-          {{--<a href="#">--}}
-          {{--<i class="fa fa-share-alt"></i><span>Miscellaneous</span>--}}
-          {{--</a>--}}
-          {{--</li>--}}
         </ul>
       </li>
+      @endrole
       <!-- Frontend Website links and settings -->
       @if($frontend_website)
         <li class="treeview">
