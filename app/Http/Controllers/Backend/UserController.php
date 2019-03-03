@@ -228,6 +228,10 @@ class UserController extends Controller
         $students = 0;
         $subjects = 0;
         $monthWiseSms = [];
+        $studentsCount = [];
+        $sectionStudentCount = [];
+        $attendanceChartPresentData = [];
+        $attendanceChartAbsentData = [];
 
         //only admin
         if($userRoleId == AppHelper::USER_ADMIN){
@@ -264,48 +268,79 @@ class UserController extends Controller
 
         //only admin end
 
-
-        $academicYearId = 0;
-        if(AppHelper::getInstituteCategory() == 'college') {
-            $academicYearInfo = AcademicYear::where('status', AppHelper::ACTIVE)
-                ->whereYear('start_date',date('Y'))->first();
-            if($academicYearInfo){
-                $academicYearId = $academicYearInfo->id;
+        //except students
+        if($userRoleId != AppHelper::USER_STUDENT) {
+            $academicYearId = 0;
+            if (AppHelper::getInstituteCategory() == 'college') {
+                $academicYearInfo = AcademicYear::where('status', AppHelper::ACTIVE)
+                    ->whereYear('start_date', date('Y'))->first();
+                if ($academicYearInfo) {
+                    $academicYearId = $academicYearInfo->id;
+                }
+            } else {
+                $academicYearId = AppHelper::getAcademicYear();
             }
-        }
-        else{
-            $academicYearId = AppHelper::getAcademicYear();
-        }
-        $studentsCount = IClass::where('status', AppHelper::ACTIVE)
-            ->with(['student' => function($query) use($academicYearId){
-                $query->where('status', AppHelper::ACTIVE)
-                    ->where('academic_year_id', $academicYearId)
-                    ->selectRaw('class_id, count(*) as total')
-                    ->groupBy('class_id');
-            }])
-            ->select('id','name')
-            ->orderBy('numeric_value','asc')
-            ->get();
 
-        $selectedClassIds = explode(',', env('DASHBOARD_SECTION_STUDENT_CLASS_CODE','90,91,92,100,101,102'));
-        $selectedClasses = IClass::where('status', AppHelper::ACTIVE)
-            ->whereIn('numeric_value', $selectedClassIds)->pluck('id');
+            //attendance chart data
+            $iclasses = IClass::where('status', AppHelper::ACTIVE)
+                ->with(['attendance' => function ($query) use ($academicYearId) {
+                    $query->selectRaw('class_id,present,count(registration_id) as total')
+                        ->where('academic_year_id', $academicYearId)
+                        ->whereDate('attendance_date', date('Y-m-d'))
+//                        ->whereDate('attendance_date', '2019-03-02')
+                        ->groupBy('class_id', 'present');
+                }])
+                ->select('id', 'name')
+                ->get();
 
-         $sectionStudentCount = Section::where('status', AppHelper::ACTIVE)
-            ->whereIn('class_id', $selectedClasses)
-            ->with(['student' => function($query) use($academicYearId){
-                $query->where('status', AppHelper::ACTIVE)
-                    ->where('academic_year_id', $academicYearId)
-                    ->selectRaw('section_id, count(*) as total')
-                    ->groupBy('section_id');
-            }])
-            ->with(['class' => function($query){
-                $query->select('id','name');
-            }])
-            ->select('id','name','class_id')
-            ->orderBy('class_id','asc')
-            ->orderBy('name','asc')
-            ->get();
+            $attendanceChartPresentData = [];
+            $attendanceChartAbsentData = [];
+            foreach ($iclasses as $iclass) {
+                $attendanceChartPresentData[$iclass->name] = 0;
+                $attendanceChartAbsentData[$iclass->name] = 0;
+                foreach ($iclass->attendance as $attendanceSummary) {
+                    if ($attendanceSummary->present == "Present") {
+                        $attendanceChartPresentData[$iclass->name] = $attendanceSummary->total;
+                    } else {
+                        $attendanceChartAbsentData[$iclass->name] = $attendanceSummary->total;
+
+                    }
+                }
+            }
+
+            //end
+
+            $studentsCount = IClass::where('status', AppHelper::ACTIVE)
+                ->with(['student' => function ($query) use ($academicYearId) {
+                    $query->where('status', AppHelper::ACTIVE)
+                        ->where('academic_year_id', $academicYearId)
+                        ->selectRaw('class_id, count(*) as total')
+                        ->groupBy('class_id');
+                }])
+                ->select('id', 'name')
+                ->orderBy('numeric_value', 'asc')
+                ->get();
+
+            $selectedClassIds = explode(',', env('DASHBOARD_SECTION_STUDENT_CLASS_CODE', '90,91,92,100,101,102'));
+            $selectedClasses = IClass::where('status', AppHelper::ACTIVE)
+                ->whereIn('numeric_value', $selectedClassIds)->pluck('id');
+
+            $sectionStudentCount = Section::where('status', AppHelper::ACTIVE)
+                ->whereIn('class_id', $selectedClasses)
+                ->with(['student' => function ($query) use ($academicYearId) {
+                    $query->where('status', AppHelper::ACTIVE)
+                        ->where('academic_year_id', $academicYearId)
+                        ->selectRaw('section_id, count(*) as total')
+                        ->groupBy('section_id');
+                }])
+                ->with(['class' => function ($query) {
+                    $query->select('id', 'name');
+                }])
+                ->select('id', 'name', 'class_id')
+                ->orderBy('class_id', 'asc')
+                ->orderBy('name', 'asc')
+                ->get();
+        }
 
 
         return view('backend.user.dashboard', compact(
@@ -316,7 +351,9 @@ class UserController extends Controller
             'userRoleId',
             'studentsCount',
             'sectionStudentCount',
-            'monthWiseSms'
+            'monthWiseSms',
+            'attendanceChartPresentData',
+            'attendanceChartAbsentData'
         ));
     }
 

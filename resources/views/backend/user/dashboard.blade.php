@@ -249,7 +249,12 @@
     <script type="text/javascript">
         @if($userRoleId == AppHelper::USER_ADMIN)
             window.smsLabel = @php echo json_encode(array_keys($monthWiseSms)) @endphp;
-        window.smsValue = @php echo json_encode(array_values($monthWiseSms)) @endphp;
+            window.smsValue = @php echo json_encode(array_values($monthWiseSms)) @endphp;
+        @endif
+        @if($userRoleId != AppHelper::USER_STUDENT)
+            window.attendanceLabel = @php echo json_encode(array_keys($attendanceChartPresentData)) @endphp;
+            window.presentData = @php echo json_encode(array_values($attendanceChartPresentData)) @endphp;
+            window.absentData = @php echo json_encode(array_values($attendanceChartAbsentData)) @endphp;
         @endif
         $(document).ready(function () {
             Dashboard.init();

@@ -35,4 +35,9 @@ class IClass extends Model
     {
         return $this->hasMany('App\Registration', 'class_id');
     }
+
+    public function attendance()
+    {
+        return $this->hasMany('App\StudentAttendance', 'class_id');
+    }
 }
