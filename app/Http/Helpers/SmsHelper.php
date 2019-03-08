@@ -43,6 +43,9 @@ class SmsHelper
             elseif ($this->gateway->gateway == 5) {
                 return $this->sendSmsViaTwilio($number, $message);
             }
+            elseif ($this->gateway->gateway == 6) {
+                return $this->sendSmsViaBulkSmsRoute($number, $message);
+            }
             else {
                 // log sms to file
                 Log::channel('smsLog')->info("Send new sms to ".$number." and message is:\"".$message."\"");

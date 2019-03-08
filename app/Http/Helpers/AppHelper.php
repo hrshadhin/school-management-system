@@ -87,7 +87,8 @@ class AppHelper
         3 => 'Zaman IT',
         4 => 'MIM SMS',
         5 => 'Twilio',
-        6 => 'Log Locally',
+        6 => 'Doze Host',
+        7 => 'Log Locally',
     ];
 
     const LEAVE_TYPES = [
