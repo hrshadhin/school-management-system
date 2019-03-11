@@ -391,6 +391,7 @@ class SettingsController extends Controller
             //validate form
             $messages = [
                 'logo.max' => 'The :attribute size must be under 1MB.',
+                'background_image.max' => 'The :attribute size must be under 1MB.',
             ];
             $rules = [
                 'logo' => 'mimes:jpeg,jpg,png|max:1024',

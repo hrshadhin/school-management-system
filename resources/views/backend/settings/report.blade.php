@@ -36,7 +36,7 @@
                                 <div class="col-md-3">
                                     <div class="form-group has-feedback">
                                         <label for="logo">Logo<span class="text-danger">[max 1MB]</span></label>
-                                        <input  type="file" class="form-control" accept=".jpeg, .jpg, .png" name="logo" placeholder="logo image">
+                                        <input  type="file" class="form-control documentUp" accept=".jpeg, .jpg, .png" name="logo" placeholder="logo image">
                                         @if(isset($metas['report_logo']) && strlen($metas['report_logo']))
                                             <input type="hidden" name="oldLogo" value="{{$metas['report_logo']}}">
                                         @endif
@@ -56,12 +56,12 @@
                                 <div class="col-md-3">
                                     <div class="form-group has-feedback">
                                         <label for="logo">Background Image<span class="text-danger">[max 1MB]</span></label>
-                                        <input  type="file" class="form-control" accept=".jpeg, .jpg, .png" name="background_image" placeholder="background image">
+                                        <input  type="file" class="form-control documentUp" accept=".jpeg, .jpg, .png" name="background_image" placeholder="background image">
                                         @if(isset($metas['report_background_image']) && strlen($metas['report_background_image']))
                                             <input type="hidden" name="oldBackgroundImage" value="{{$metas['report_background_image']}}">
                                         @endif
                                         <span class="glyphicon glyphicon-open-file form-control-feedback"></span>
-                                        <span class="text-danger">{{ $errors->first('logo') }}</span>
+                                        <span class="text-danger">{{ $errors->first('background_image') }}</span>
                                     </div>
                                 </div>
                                 <div class="col-md-3">

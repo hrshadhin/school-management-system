@@ -167,6 +167,25 @@ export default class Settings {
     static reportInit() {
         Generic.initCommonPageJS();
         $('.my-colorpicker').colorpicker();
+
+        $('.documentUp').change(function(){
+            var input = this;
+            var url = $(this).val();
+            var ext = url.substring(url.lastIndexOf('.') + 1).toLowerCase();
+            if (input.files && input.files[0]&& (ext == "png" || ext == "jpeg" || ext == "jpg"))
+            {
+                //validate size
+                var sizeImg =input.files[0].size/1024;
+                if (sizeImg>1024) {
+                    toastr.error("File is too big!");
+                    $(input).val('');
+                    return false
+                }
+            }
+            else{
+                $(input).val('');
+            }
+        });
     }
 
 }
