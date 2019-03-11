@@ -121,6 +121,12 @@ Route::group(
     Route::post('settings/sms-gateway/update/{id}', 'SettingsController@smsGatewayCru')
         ->name('settings.sms_gateway.update');
 
+    //report settings
+    Route::get('settings/report', 'SettingsController@report')
+        ->name('settings.report');
+    Route::post('settings/report', 'SettingsController@report')
+        ->name('settings.report');
+
 
     // administrator routes
     //academic year

@@ -203,14 +203,14 @@ class SettingsController extends Controller
         }
 
         //for get request
-        $settings = AppMeta::where('meta_key', 'institute_settings')->first();
+        $settings = AppMeta::where('meta_key', 'institute_settings')->select('meta_key','meta_value')->first();
         $info = null;
         if($settings) {
             $info = json_decode($settings->meta_value);
         }
 
 
-        $settings = AppMeta::all();
+        $settings = AppMeta::select('meta_key','meta_value')->get();
 
         $metas = [];
         foreach ($settings as $setting){
@@ -376,6 +376,104 @@ class SettingsController extends Controller
         return view('backend.settings.smsgateway_add', compact('gateways', 'gateway', 'gateway_id'));
     }
 
+
+    /**
+     * report settings  manage
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function report(Request $request)
+    {
+
+        //for save on POST request
+        if ($request->isMethod('post')) {
+
+            //validate form
+            $messages = [
+                'logo.max' => 'The :attribute size must be under 1MB.',
+            ];
+            $rules = [
+                'logo' => 'mimes:jpeg,jpg,png|max:1024',
+                'background_color' => 'nullable|max:255',
+                'background_image' => 'mimes:jpeg,jpg,png|max:1024',
+                'text_color' => 'nullable|max:255',
+
+            ];
+            $this->validate($request, $rules, $messages);
+
+
+            $report_logo = '';
+            if($request->hasFile('logo')) {
+                $storagepath = $request->file('logo')->store('public/report');
+                $report_logo = basename($storagepath);
+
+                //if file chnage then delete old one
+                $oldFile = $request->get('oldLogo','');
+                if( $oldFile != ''){
+                    $file_path = "public/report/".$oldFile;
+                    Storage::delete($file_path);
+                }
+            }
+            else{
+                $report_logo = $request->get('oldLogo','');
+            }
+
+            $report_background = '';
+            if($request->hasFile('background_image')) {
+                $storagepath = $request->file('background_image')->store('public/report');
+                $report_background = basename($storagepath);
+
+                //if file chnage then delete old one
+                $oldFile = $request->get('oldBackgroundImage','');
+                if( $oldFile != ''){
+                    $file_path = "public/report/".$oldFile;
+                    Storage::delete($file_path);
+                }
+            }
+            else{
+                $report_background = $request->get('oldBackgroundImage','');
+            }
+
+            //now crate
+            AppMeta::updateOrCreate(
+                ['meta_key' => 'report_logo'],
+                ['meta_value' => $report_logo]
+            );
+
+            AppMeta::updateOrCreate(
+                ['meta_key' => 'report_background_color'],
+                ['meta_value' => $request->get('background_color', '')]
+            );
+
+            AppMeta::updateOrCreate(
+                ['meta_key' => 'report_background_image'],
+                ['meta_value' => $report_background]
+            );
+
+            AppMeta::updateOrCreate(
+                ['meta_key' => 'report_text_color'],
+                ['meta_value' => $request->get('text_color', '')]
+            );
+
+            Cache::forget('app_settings');
+
+            //now notify the admins about this record
+            $msg = "Report settings updated by ".auth()->user()->name;
+            $nothing = AppHelper::sendNotificationToAdmins('info', $msg);
+            // Notification end
+
+            return redirect()->route('settings.report')->with('success', 'Report setting updated!');
+        }
+
+        //for get request
+        $settings = AppMeta::where('meta_key', 'like', '%report_%')->select('meta_key','meta_value')->get();
+        $metas = [];
+        foreach ($settings as $setting){
+            $metas[$setting->meta_key] = $setting->meta_value;
+        }
+
+        return view('backend.settings.report', compact('metas'));
+    }
 
 
 }

@@ -163,4 +163,10 @@ export default class Settings {
         $('#divTemplateList'+which).removeClass('hide');
     }
 
+
+    static reportInit() {
+        Generic.initCommonPageJS();
+        $('.my-colorpicker').colorpicker();
+    }
+
 }
