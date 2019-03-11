@@ -127,33 +127,7 @@
             </div>
         </div>
         @endif
-        @if($userRoleId == AppHelper::USER_ADMIN || $userRoleId == AppHelper::USER_ACCOUNTANT)
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="box box-success">
-                        <div class="box-header with-border x_title">
-                            <h3>Accounting Report</h3>
-                            <label class="total_bal">
-                                Balance: 7022771.82
-                            </label>
-                            <div class="box-tools pull-right">
-                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                                </button>
-                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                            </div>
-
-                        </div>
-                        <!-- /.box-header -->
-                        <div class="box-body">
-                            <canvas id="accountChart" style="width: 821px; height: 136px;"></canvas>
-                        </div>
-                        <!-- /.box-body -->
-                    </div>
-                    <!-- /.box -->
-                </div>
-            </div>
-        @endif
-
+            
         @if($userRoleId == AppHelper::USER_ADMIN)
             <div class="row">
                 <div class="col-md-12">
