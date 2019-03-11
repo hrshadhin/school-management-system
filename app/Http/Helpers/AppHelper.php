@@ -297,7 +297,7 @@ class AppHelper
             $appSettings = Cache::get('app_settings');
         }
         else{
-            $settings = AppMeta::all();
+            $settings = AppMeta::select('meta_key','meta_value')->get();
 
             $metas = [];
             foreach ($settings as $setting){

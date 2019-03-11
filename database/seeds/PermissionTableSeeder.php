@@ -137,6 +137,10 @@ class PermissionTableSeeder extends Seeder
                 "name" => "Institute Edit",
                 "group" => "Admin Only"
             ],
+            [ "slug" => "settings.report",
+                "name" => "Report Edit",
+                "group" => "Admin Only"
+            ],
             [   "slug" => "user.role_index",
                 "name" => "Role View",
                 "group" => "Admin Only"

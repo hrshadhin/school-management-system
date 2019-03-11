@@ -309,6 +309,11 @@
               <i class="fa fa-external-link"></i> <span>SMS Gateways</span>
             </a>
           </li>
+          <li>
+            <a href="{{ URL::route('settings.report') }}">
+              <i class="fa fa-file-pdf-o"></i> <span>Report</span>
+            </a>
+          </li>
         </ul>
       </li>
       @endrole
