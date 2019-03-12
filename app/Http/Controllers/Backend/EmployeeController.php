@@ -128,6 +128,9 @@ class EmployeeController extends Controller
         $data['joining_date'] = $request->get('joining_date');
         $data['id_card'] = $request->get('id_card');
         $data['role_id'] = $request->get('role_id', 0);
+        $data['shift'] = $request->get('shift');
+        $data['duty_start'] = $request->get('duty_start');
+        $data['duty_end'] = $request->get('duty_end');
 
         DB::beginTransaction();
         try {

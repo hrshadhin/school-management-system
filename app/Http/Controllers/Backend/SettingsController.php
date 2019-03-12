@@ -6,6 +6,7 @@ use App\AcademicYear;
 use App\Grade;
 use App\Http\Helpers\AppHelper;
 use App\Template;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\AppMeta;
@@ -48,6 +49,13 @@ class SettingsController extends Controller
                 'phone_no' => 'required|min:8|max:15',
                 'address' => 'required|max:500',
                 'language' => 'required|min:2',
+                'weekends' => 'required|array',
+                'morning_start' => 'required|max:8|min:7',
+                'morning_end' => 'required|max:8|min:7',
+                'day_start' => 'required|max:8|min:7',
+                'day_end' => 'required|max:8|min:7',
+                'evening_start' => 'required|max:8|min:7',
+                'evening_end' => 'required|max:8|min:7',
                 'student_attendance_notification' => 'required|integer',
                 'employee_attendance_notification' => 'required|integer',
                 'institute_type' => 'required|integer',
@@ -151,6 +159,33 @@ class SettingsController extends Controller
                 ['meta_value' => $request->get('institute_type', 1)]
             );
 
+            $shiftData = [
+                'Morning' => [
+                    'start' => Carbon::createFromFormat('h:i a', $request->get('morning_start','12:00 am'))->format('H:i:s'),
+                    'end' => Carbon::createFromFormat('h:i a', $request->get('morning_end','12:00 am'))->format('H:i:s'),
+                ],
+                'Day' => [
+                    'start' => Carbon::createFromFormat('h:i a', $request->get('day_start','12:00 am'))->format('H:i:s'),
+                    'end' => Carbon::createFromFormat('h:i a', $request->get('day_end','12:00 am'))->format('H:i:s'),
+                ],
+                'Evening' => [
+                    'start' => Carbon::createFromFormat('h:i a', $request->get('evening_start','12:00 am'))->format('H:i:s'),
+                    'end' => Carbon::createFromFormat('h:i a', $request->get('evening_end','12:00 am'))->format('H:i:s'),
+                ]
+            ];
+
+            AppMeta::updateOrCreate(
+                ['meta_key' => 'shift_data'],
+                ['meta_value' => json_encode($shiftData)]
+            );
+
+            AppMeta::updateOrCreate(
+                ['meta_key' => 'weekends'],
+                ['meta_value' => json_encode($request->get('weekends',[]))]
+            );
+
+
+
             AppMeta::updateOrCreate(
                 ['meta_key' => 'student_attendance_notification'],
                 ['meta_value' => $request->get('student_attendance_notification', 0)]
@@ -233,6 +268,20 @@ class SettingsController extends Controller
         $employee_attendance_notification = isset($metas['employee_attendance_notification']) ? $metas['employee_attendance_notification'] : 0;
         $institute_type = isset($metas['institute_type']) ? $metas['institute_type'] : 1;
 
+        $weekends = isset($metas['weekends']) ? json_decode($metas['weekends'], true) : [-1];
+        //format shifting data
+        if(isset($metas['shift_data'])) {
+            $shiftData = json_decode($metas['shift_data'], true);
+            $formatedShiftData = [];
+            foreach ($shiftData as $shift => $times){
+                $formatedShiftData[$shift] = [
+                    'start' => Carbon::parse($times['start'])->format('h:i a'),
+                    'end' => Carbon::parse($times['end'])->format('h:i a')
+                ];
+            }
+
+            $metas['shift_data'] = $formatedShiftData;
+        }
 
         //get idcard templates
         // AppHelper::TEMPLATE_TYPE  1=SMS , 2=EMAIL, 3=Id card
@@ -254,6 +303,7 @@ class SettingsController extends Controller
                 'info',
                 'academic_years',
                 'academic_year',
+                'weekends',
                 'grades',
                 'grade_id',
                 'frontend_website',
