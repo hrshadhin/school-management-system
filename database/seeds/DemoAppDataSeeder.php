@@ -6,6 +6,9 @@ use App\AppMeta;
 use App\AcademicYear;
 use App\Http\Helpers\AppHelper;
 use App\IClass;
+use App\Employee;
+use App\Section;
+use App\User;
 
 class DemoAppDataSeeder extends Seeder
 {
@@ -20,6 +23,10 @@ class DemoAppDataSeeder extends Seeder
         echo 'deleting old data.....';
         $this->deletePreviousData();
 
+        //some user with role
+        echo PHP_EOL , 'seeding users...';
+        $this->userData();
+
         //seed academic year
         echo PHP_EOL , 'seeding academic year...';
         $this->academicYearData();
@@ -32,6 +39,14 @@ class DemoAppDataSeeder extends Seeder
         echo PHP_EOL , 'seeding class...';
         $this->classData();
 
+        //seed teacher
+        echo PHP_EOL , 'seeding teacher...';
+        $this->teacherData();
+
+        //seed teacher
+        echo PHP_EOL , 'seeding section...';
+        $this->sectionData();
+
         echo PHP_EOL , 'seeding completed.';
 
     }
@@ -42,9 +57,12 @@ class DemoAppDataSeeder extends Seeder
          * This code is MYSQL specific
          */
         DB::statement("SET foreign_key_checks=0");
+        $this->deleteUserData();
         AcademicYear::truncate();
         AppMeta::truncate();
         IClass::truncate();
+        Employee::truncate();
+        Section::truncate();
         DB::statement("SET foreign_key_checks=1");
 
         //delete images
@@ -69,6 +87,31 @@ class DemoAppDataSeeder extends Seeder
         }
     }
 
+    private function userData(){
+        $created_by = 1;
+        $created_at = Carbon::now(env('APP_TIMEZONE','Asia/Dhaka'));
+
+        $users = factory(App\User::class, 3)
+            ->create(['created_by' => $created_by,'created_at' => $created_at]);
+        $users->each(function ($user) use($created_at, $created_by) {
+                \App\UserRole::create([
+                    'user_id' => $user->id,
+                    'role_id' => rand(2,7),
+                    'created_by' => $created_by,
+                    'created_at' => $created_at
+
+                ]);
+            });
+    }
+
+    private function deleteUserData(){
+        $userIds = \App\UserRole::where('role_id','!=', AppHelper::USER_ADMIN)->pluck('user_id');
+        DB::table('users_permissions')->whereIn('user_id', $userIds)->delete();
+        DB::table('user_roles')->whereIn('user_id', $userIds)->delete();
+        DB::table('users')->whereIn('id', $userIds)->delete();
+
+    }
+
     private function academicYearData(){
         $data['title'] = date('Y');
         $data['start_date'] = Carbon::createFromFormat('d/m/Y', '01/01/'.date('Y'));;
@@ -77,7 +120,6 @@ class DemoAppDataSeeder extends Seeder
 
         AcademicYear::create($data);
     }
-
 
     private function instituteSettingsData()
     {
@@ -131,17 +173,31 @@ class DemoAppDataSeeder extends Seeder
 
         $created_by = 1;
         $created_at = Carbon::now(env('APP_TIMEZONE','Asia/Dhaka'));
-
+        $shiftData = [
+            'Morning' => [
+                'start' => '12:00 am',
+                'end' => '01:00 am',
+            ],
+            'Day' => [
+                'start' => '02:00 pm',
+                'end' => '07:00 pm',
+            ],
+            'Evening' => [
+                'start' => '12:00 am',
+                'end' => '12:00 am',
+            ]
+        ];
         $insertData = [
             ['meta_key' => 'frontend_website' ,'meta_value' => 0, 'created_by' => $created_by, 'created_at' => $created_at],
             ['meta_key' => 'frontend_website' ,'meta_value' => 0, 'created_by' => $created_by, 'created_at' => $created_at],
             ['meta_key' => 'language', 'meta_value' =>  'en', 'created_by' => $created_by, 'created_at' => $created_at],
             ['meta_key' => 'disable_language', 'meta_value' => 0, 'created_by' => $created_by, 'created_at' => $created_at],
-            ['meta_key' => 'institute_type', 'meta_value' => 1, 'created_by' => $created_by, 'created_at' => $created_at]
+            ['meta_key' => 'institute_type', 'meta_value' => 1, 'created_by' => $created_by, 'created_at' => $created_at],
+            ['meta_key' => 'shift_data', 'meta_value' => json_encode($shiftData), 'created_by' => $created_by, 'created_at' => $created_at],
+            ['meta_key' => 'weekends', 'meta_value' => json_encode([0]), 'created_by' => $created_by, 'created_at' => $created_at]
         ];
 
         AppMeta::insert($insertData);
-
     }
 
     private function classData(){
@@ -189,6 +245,14 @@ class DemoAppDataSeeder extends Seeder
         ];
 
         IClass::insert($insertData);
+    }
+
+    private function teacherData() {
+
+    }
+
+    private function sectionData() {
+
     }
 
 }
