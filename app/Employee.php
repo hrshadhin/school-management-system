@@ -73,8 +73,8 @@ class Employee extends Model
         if(!strlen($value)){
             return null;
         }
-//        return Carbon::parse($value)->format('h:i a');
-        return Carbon::parse($value);
+
+        return Carbon::parse($value)->format('h:i a');
 
     }
 
@@ -91,7 +91,7 @@ class Employee extends Model
         if(!strlen($value)){
             return null;
         }
-        return Carbon::parse($value);
+        return Carbon::parse($value)->format('h:i a');
 
     }
 

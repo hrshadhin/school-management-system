@@ -55,7 +55,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group has-feedback">
                                         <label for="establish">Establish<span class="text-danger">*</span></label>
-                                        <input type='text' class="form-control year_picker"  readonly name="establish" placeholder="year" value="@if($info){{ $info->establish }}@else{{ old('establish',date('Y')) }} @endif" required minlength="4" maxlength="255" />
+                                        <input type='text' class="form-control year_picker" readonly  name="establish" placeholder="year" value="@if($info){{ $info->establish }}@else{{ old('establish',date('Y')) }} @endif" required minlength="4" maxlength="255" />
                                         <span class="fa fa-calendar form-control-feedback"></span>
                                         <span class="text-danger">{{ $errors->first('establish') }}</span>
                                     </div>
@@ -201,6 +201,75 @@
                         <!-- /.box-body -->
                     </div>
                     <div class="box box-info">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Institute Working Settings</h3>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group has-feedback">
+                                        <label for="weekends">Weekends</label>
+                                        {!! Form::select('weekends[]', AppHelper::weekDays, $weekends, ['class' => 'form-control select2', 'required' => 'true','multiple' => 'true']) !!}
+                                        <span class="form-control-feedback"></span>
+                                        <span class="text-danger">{{ $errors->first('weekends') }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group has-feedback">
+                                        <label for="morning_start">Morning Shift Start</label>
+                                        <input type='text' class="form-control time_picker"  readonly name="morning_start" placeholder="time" value="@if(isset($metas['shift_data'])){{$metas['shift_data']['Morning']['start']}}@endif" required minlength="7" maxlength="8" />
+                                        <span class="fa fa-clock-o form-control-feedback"></span>
+                                        <span class="text-danger">{{ $errors->first('morning_start') }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group has-feedback">
+                                        <label for="morning_end">Morning Shift End</label>
+                                        <input type='text' class="form-control time_picker"  readonly name="morning_end" placeholder="time" value="@if(isset($metas['shift_data'])){{$metas['shift_data']['Morning']['end']}}@endif" required minlength="7" maxlength="8" />
+                                        <span class="fa fa-clock-o form-control-feedback"></span>
+                                        <span class="text-danger">{{ $errors->first('morning_end') }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group has-feedback">
+                                        <label for="day_start">Day Shift Start</label>
+                                        <input type='text' class="form-control time_picker"  readonly name="day_start" placeholder="time" value="@if(isset($metas['shift_data'])){{$metas['shift_data']['Day']['start']}}@endif" required minlength="7" maxlength="8" />
+                                        <span class="fa fa-clock-o form-control-feedback"></span>
+                                        <span class="text-danger">{{ $errors->first('day_start') }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group has-feedback">
+                                        <label for="day_end">Day Shift End</label>
+                                        <input type='text' class="form-control time_picker"  readonly name="day_end" placeholder="time" value="@if(isset($metas['shift_data'])){{$metas['shift_data']['Day']['end']}}@endif" required  minlength="7"  maxlength="8" />
+                                        <span class="fa fa-clock-o form-control-feedback"></span>
+                                        <span class="text-danger">{{ $errors->first('day_end') }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group has-feedback">
+                                        <label for="evening_start">Evening Shift Start</label>
+                                        <input type='text' class="form-control time_picker"  readonly name="evening_start" placeholder="time" value="@if(isset($metas['shift_data'])){{$metas['shift_data']['Evening']['start']}}@endif" required   minlength="7" maxlength="8" />
+                                        <span class="fa fa-clock-o form-control-feedback"></span>
+                                        <span class="text-danger">{{ $errors->first('evening_start') }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group has-feedback">
+                                        <label for="evening_end">Evening Shift End</label>
+                                        <input type='text' class="form-control time_picker"  autocomplete="off" name="evening_end" placeholder="time" value="@if(isset($metas['shift_data'])){{$metas['shift_data']['Evening']['end']}}@endif" required  minlength="8"  maxlength="8" />
+                                        <span class="fa fa-clock-o form-control-feedback"></span>
+                                        <span class="text-danger">{{ $errors->first('evening_end') }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                            <div class="box box-info">
                         <div class="box-header with-border">
                             <h3 class="box-title">Attendance Notification Settings</h3>
                         </div>

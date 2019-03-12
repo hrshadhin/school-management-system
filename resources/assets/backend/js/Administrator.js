@@ -20,12 +20,9 @@ export default class Administrator {
         });
 
         $(".date_picker").datetimepicker({
-            format: "dd/mm/yyyy",
-            startView: 'decade',
-            minView: 'month',
-            maxView: 'decade',
-            autoclose: true,
-            todayBtn: true
+            format: "DD/MM/YYYY",
+            viewMode: 'days',
+            ignoreReadonly: true
         });
         var buttonCommon = {
             exportOptions: {

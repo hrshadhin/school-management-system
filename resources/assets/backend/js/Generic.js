@@ -20,47 +20,34 @@ export default class Generic {
         });
 
         $(".date_picker").datetimepicker({
-            format: "dd/mm/yyyy",
-            startView: 'month',
-            minView: 'month',
-            maxView: 'decade',
-            autoclose: true,
-            todayBtn: true
+            format: "DD/MM/YYYY",
+            viewMode: 'days',
+            ignoreReadonly: true
         });
         $(".date_picker_with_clear").datetimepicker({
-            format: "dd/mm/yyyy",
-            startView: 'month',
-            minView: 'month',
-            maxView: 'decade',
-            autoclose: true,
-            todayBtn: true,
-            clearBtn: true
+            format: "DD/MM/YYYY",
+            viewMode: 'days',
+            showClear: true,
+            ignoreReadonly: true
         });
+
+
         $(".date_picker2").datetimepicker({
-            format: "dd/mm/yyyy",
-            startView: 'decade',
-            minView: 'month',
-            maxView: 'decade',
-            autoclose: true,
-            todayBtn: true
+            format: "DD/MM/YYYY",
+            viewMode: 'years',
+            ignoreReadonly: true
         });
 
         $(".time_picker").datetimepicker({
-            pickDate: false,
-            minuteStep: 30,
-            pickerPosition: 'bottom-right',
-            format: 'HH:ii p',
-            autoclose: true,
-            showMeridian: true,
-            startView: 1,
-            maxView: 1,
+            format: 'LT',
+            showClear: true,
+            ignoreReadonly: true
         });
+
         $(".date_time_picker").datetimepicker({
-            pickerPosition: 'bottom-right',
-            format: 'dd/mm/yyyy HH:ii p',
-            autoclose: true,
-            showMeridian: true,
-            startView: 'day',
+            format: "DD/MM/YYYY LT",
+            viewMode: 'days',
+            ignoreReadonly: true
         });
 
         var buttonCommon = {
@@ -233,12 +220,9 @@ export default class Generic {
         });
 
         $(".year_picker").datetimepicker({
-            format: "yyyy",
-            autoclose: true,
-            startView: 'decade',
-            minView:'decade',
-            maxView:'decade',
-            viewSelect:'decade'
+            format: "YYYY",
+            viewMode: 'years',
+            ignoreReadonly: true
         });
 
         $('input').not('.dont-style').iCheck({
