@@ -26,7 +26,7 @@ class CreateRegistrationsTable extends Migration
             $table->string('board_regi_no',50)->nullable();
             $table->unsignedInteger('fourth_subject')->default(0);
             $table->unsignedInteger('alt_fourth_subject')->default(0);
-            $table->string('house',100)->nullable(0);
+            $table->string('house',100)->nullable();
             $table->enum('status', [0,1])->default(1);
             $table->timestamps();
             $table->softDeletes();

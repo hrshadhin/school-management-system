@@ -8,7 +8,6 @@ use App\Http\Helpers\AppHelper;
 use App\IClass;
 use App\Employee;
 use App\Section;
-use App\User;
 
 class DemoAppDataSeeder extends Seeder
 {
@@ -43,9 +42,17 @@ class DemoAppDataSeeder extends Seeder
         echo PHP_EOL , 'seeding teacher...';
         $this->teacherData();
 
-        //seed teacher
+        //seed section
         echo PHP_EOL , 'seeding section...';
         $this->sectionData();
+
+        //seed subject
+        echo PHP_EOL , 'seeding subject...';
+        $this->subjectData();
+
+        //seed student
+        echo PHP_EOL , 'seeding student...';
+        $this->studentData();
 
         echo PHP_EOL , 'seeding completed.';
 
@@ -63,6 +70,9 @@ class DemoAppDataSeeder extends Seeder
         IClass::truncate();
         Employee::truncate();
         Section::truncate();
+        \App\Subject::truncate();
+        \App\Student::truncate();
+        \App\Registration::truncate();
         DB::statement("SET foreign_key_checks=1");
 
         //delete images
@@ -94,14 +104,14 @@ class DemoAppDataSeeder extends Seeder
         $users = factory(App\User::class, 3)
             ->create(['created_by' => $created_by,'created_at' => $created_at]);
         $users->each(function ($user) use($created_at, $created_by) {
-                \App\UserRole::create([
-                    'user_id' => $user->id,
-                    'role_id' => rand(2,7),
-                    'created_by' => $created_by,
-                    'created_at' => $created_at
+            \App\UserRole::create([
+                'user_id' => $user->id,
+                'role_id' => rand(2,7),
+                'created_by' => $created_by,
+                'created_at' => $created_at
 
-                ]);
-            });
+            ]);
+        });
     }
 
     private function deleteUserData(){
@@ -249,9 +259,207 @@ class DemoAppDataSeeder extends Seeder
 
     private function teacherData() {
 
+        $created_by = 1;
+        $created_at = Carbon::now(env('APP_TIMEZONE','Asia/Dhaka'));
+
+        $teachers = factory(App\Employee::class, 5)
+            ->create(['created_by' => $created_by,'created_at' => $created_at]);
+
+        $teachers->each(function ($teacher) use($created_at, $created_by) {
+            \App\UserRole::create([
+                'user_id' => $teacher->user_id,
+                'role_id' => AppHelper::USER_TEACHER,
+                'created_by' => $created_by,
+                'created_at' => $created_at
+
+            ]);
+        });
     }
 
     private function sectionData() {
+        $created_by = 1;
+        $created_at = Carbon::now(env('APP_TIMEZONE','Asia/Dhaka'));
+
+        $section = factory(App\Section::class, 5)
+            ->create(['created_by' => $created_by,'created_at' => $created_at]);
+
+        $section = factory(App\Section::class)
+            ->create(['class_id'=> 1, 'name' => 'A', 'created_by' => $created_by,'created_at' => $created_at]);
+
+        $section = factory(App\Section::class)
+            ->create(['class_id'=> 1, 'name' => 'B', 'created_by' => $created_by,'created_at' => $created_at]);
+
+        $section = factory(App\Section::class)
+            ->create(['class_id'=> 1, 'name' => 'C', 'created_by' => $created_by,'created_at' => $created_at]);
+    }
+
+    private function subjectData() {
+        $created_by = 1;
+        $created_at = Carbon::now(env('APP_TIMEZONE','Asia/Dhaka'));
+
+        $subject = factory(App\Subject::class, 10)
+            ->create(['created_by' => $created_by,'created_at' => $created_at]);
+
+        $subject = factory(App\Subject::class)
+            ->create(['class_id'=> 1, 'type' => 1, 'name' => 'Bangla', 'code' => '110', 'created_by' => $created_by,'created_at' => $created_at]);
+
+        $subject = factory(App\Subject::class)
+            ->create(['class_id'=> 1, 'type' => 1, 'name' => 'English', 'code' => '111', 'created_by' => $created_by,'created_at' => $created_at]);
+
+        $subject = factory(App\Subject::class)
+            ->create(['class_id'=> 1, 'type' => 1, 'name' => 'Math', 'code' => '112', 'created_by' => $created_by,'created_at' => $created_at]);
+
+    }
+
+    private function studentData() {
+        $created_by = 1;
+        $created_at = Carbon::now(env('APP_TIMEZONE','Asia/Dhaka'));
+
+        $students = factory(App\Student::class, 15)
+            ->create(['created_by' => $created_by,'created_at' => $created_at]);
+
+        $students->each(function ($student) use($created_at, $created_by) {
+            \App\UserRole::create([
+                'user_id' => $student->user_id,
+                'role_id' => AppHelper::USER_STUDENT,
+                'created_by' => $created_by,
+                'created_at' => $created_at
+
+            ]);
+        });
+
+        //now register student to classes
+
+        $studentIds = $students->pluck('id');
+        $academicYearInfo = AcademicYear::where('id',1)->first();
+
+        $class1Info = IClass::where('id', 1)->first();
+        $class1Sections = Section::where('class_id', $class1Info->id)->orderBy('name', 'asc')->take(1)->pluck('id');
+
+        $class2Info = IClass::where('id', 2)->first();
+        $class2Sections = Section::where('class_id', $class2Info->id)->orderBy('name', 'asc')->take(1)->pluck('id');
+
+        $class3Info = IClass::where('id', 3)->first();
+        $class3Sections = Section::where('class_id', $class3Info->id)->orderBy('name', 'asc')->take(1)->pluck('id');
+
+        $class4Info = IClass::where('id', 4)->first();
+        $class4Sections = Section::where('class_id', $class4Info->id)->orderBy('name', 'asc')->take(1)->pluck('id');
+
+
+        $counter = 1;
+        foreach ($studentIds as $studentId){
+
+            //distribute 5 student for class id 1
+            if($counter <= 5){
+
+                $regiNo = $academicYearInfo->start_date->format('y') . (string)$class1Info->numeric_value;
+                $totalStudent = \App\Registration::where('academic_year_id', $academicYearInfo->id)
+                    ->where('class_id', $class1Info->id)->withTrashed()->count();
+                $regiNo .= str_pad(++$totalStudent,3,'0',STR_PAD_LEFT);
+
+                $registrationData = [
+                    'regi_no' => $regiNo,
+                    'student_id' => $studentId,
+                    'class_id' => $class1Info->id,
+                    'section_id' => $class1Sections[0],
+                    'academic_year_id' => $academicYearInfo->id,
+                    'roll_no' => $studentId,
+                    'shift'    => 'Morning',
+                    'card_no'    => null,
+                    'board_regi_no' => null,
+                    'fourth_subject' => 0,
+                    'alt_fourth_subject' => 0,
+                    'house' => null,
+                    'status' => '1',
+                    'created_by' => $created_by,
+                    'created_at' => $created_at
+                ];
+
+
+            }
+            //distribute 4 student for class id 2
+            elseif($counter > 5 && $counter <= 9){
+                $regiNo = $academicYearInfo->start_date->format('y') . (string)$class2Info->numeric_value;
+                $totalStudent = \App\Registration::where('academic_year_id', $academicYearInfo->id)
+                    ->where('class_id', $class2Info->id)->withTrashed()->count();
+                $regiNo .= str_pad(++$totalStudent,3,'0',STR_PAD_LEFT);
+
+                $registrationData = [
+                    'regi_no' => $regiNo,
+                    'student_id' => $studentId,
+                    'class_id' => $class2Info->id,
+                    'section_id' => $class2Sections[0],
+                    'academic_year_id' => $academicYearInfo->id,
+                    'roll_no' => $studentId,
+                    'shift'    => 'Morning',
+                    'card_no'    => null,
+                    'board_regi_no' => null,
+                    'fourth_subject' => 0,
+                    'alt_fourth_subject' => 0,
+                    'house' => null,
+                    'status' => '1',
+                    'created_by' => $created_by,
+                    'created_at' => $created_at
+                ];
+
+            }
+            //distribute 3 student for class id 3
+            elseif($counter > 9 && $counter <= 12){
+                $regiNo = $academicYearInfo->start_date->format('y') . (string)$class3Info->numeric_value;
+                $totalStudent = \App\Registration::where('academic_year_id', $academicYearInfo->id)
+                    ->where('class_id', $class3Info->id)->withTrashed()->count();
+                $regiNo .= str_pad(++$totalStudent,3,'0',STR_PAD_LEFT);
+
+                $registrationData = [
+                    'regi_no' => $regiNo,
+                    'student_id' => $studentId,
+                    'class_id' => $class3Info->id,
+                    'section_id' => $class3Sections[0],
+                    'academic_year_id' => $academicYearInfo->id,
+                    'roll_no' => $studentId,
+                    'shift'    => 'Morning',
+                    'card_no'    => null,
+                    'board_regi_no' => null,
+                    'fourth_subject' => 0,
+                    'alt_fourth_subject' => 0,
+                    'house' => null,
+                    'status' => '1',
+                    'created_by' => $created_by,
+                    'created_at' => $created_at
+                ];
+            }
+            //distribute 3 student for class id 4
+            else{
+
+                $regiNo = $academicYearInfo->start_date->format('y') . (string)$class4Info->numeric_value;
+                $totalStudent = \App\Registration::where('academic_year_id', $academicYearInfo->id)
+                    ->where('class_id', $class4Info->id)->withTrashed()->count();
+                $regiNo .= str_pad(++$totalStudent,3,'0',STR_PAD_LEFT);
+
+                $registrationData = [
+                    'regi_no' => $regiNo,
+                    'student_id' => $studentId,
+                    'class_id' => $class4Info->id,
+                    'section_id' => $class4Sections[0],
+                    'academic_year_id' => $academicYearInfo->id,
+                    'roll_no' => $studentId,
+                    'shift'    => 'Morning',
+                    'card_no'    => null,
+                    'board_regi_no' => null,
+                    'fourth_subject' => 0,
+                    'alt_fourth_subject' =>  0,
+                    'house' => null,
+                    'status' => '1',
+                    'created_by' => $created_by,
+                    'created_at' => $created_at
+                ];
+
+            }
+
+            \App\Registration::insert([$registrationData]);
+            $counter++;
+        }
+
 
     }
 
