@@ -42,8 +42,9 @@
                                 <th width="5%">#</th>
                                 <th width="25%">Name</th>
                                 <th width="5%">Numeric Value</th>
+                                <th width="10%">Order Sequence</th>
                                 <th width="10%">Group</th>
-                                <th width="35%">Note</th>
+                                <th width="25%">Note</th>
                                 <th width="10%">Status</th>
                                 <th class="notexport" width="10%">Action</th>
                             </tr>
@@ -56,6 +57,7 @@
                                     </td>
                                     <td>{{ $iclass->name }}</td>
                                     <td>{{ $iclass->numeric_value }}</td>
+                                    <td>{{ $iclass->order }}</td>
                                     <td>{{ $iclass->group }}</td>
                                     <td>{{ $iclass->note }}</td>
                                     <td>
@@ -88,8 +90,9 @@
                                 <th width="5%">#</th>
                                 <th width="25%">Name</th>
                                 <th width="5%">Numeric Value</th>
+                                <th width="10%">Order Sequence</th>
                                 <th width="10%">Group</th>
-                                <th width="35%">Note</th>
+                                <th width="25%">Note</th>
                                 <th width="10%">Status</th>
                                 <th class="notexport" width="10%">Action</th>
                             </tr>
@@ -112,8 +115,8 @@
     <script type="text/javascript">
         $(document).ready(function () {
             window.postUrl = '{{URL::Route("academic.class_status", 0)}}';
-            window.changeExportColumnIndex = 5;
-            window.excludeFilterComlumns = [0,5,6];
+            window.changeExportColumnIndex = 6;
+            window.excludeFilterComlumns = [0,2,3,5,6,7];
             Academic.iclassInit();
         });
     </script>

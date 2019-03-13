@@ -47,7 +47,7 @@ class AcademicController extends Controller
         }
 
         //for get request
-        $iclasses = IClass::select('id','name','numeric_value','status','note','group')->orderBy('numeric_value', 'asc')->get();
+        $iclasses = IClass::select('id','name','numeric_value','order','status','note','group')->orderBy('order', 'asc')->get();
 
         return view('backend.academic.iclass.list', compact('iclasses'));
     }
@@ -63,7 +63,8 @@ class AcademicController extends Controller
             ;
             $this->validate($request, [
                 'name' => 'required|min:2|max:255',
-                'numeric_value' => 'required|numeric',
+                'numeric_value' => 'required|integer',
+                'order' => 'required|integer',
                 'group' => 'nullable|max:15',
                 'note' => 'max:500',
             ]);

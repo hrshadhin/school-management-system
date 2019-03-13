@@ -218,6 +218,7 @@ class DemoAppDataSeeder extends Seeder
             [
                 'name' => 'One',
                 'numeric_value' => 1,
+                'order' => 1,
                 'group' => 'None',
                 'status' => '1',
                 'note' => 'demo test',
@@ -227,6 +228,67 @@ class DemoAppDataSeeder extends Seeder
             [
                 'name' => 'Two',
                 'numeric_value' => 2,
+                'order' => 2,
+                'group' => 'None',
+                'status' => '1',
+                'note' => 'demo test',
+                'created_by' => $created_by,
+                'created_at' => $created_at
+            ],
+            [
+                'name' => 'Three',
+                'numeric_value' => 3,
+                'order' => 3,
+                'group' => 'None',
+                'status' => '1',
+                'note' => 'demo test',
+                'created_by' => $created_by,
+                'created_at' => $created_at
+            ],
+            [
+                'name' => 'Four',
+                'numeric_value' => 4,
+                'order' => 4,
+                'group' => 'None',
+                'status' => '1',
+                'note' => 'demo test',
+                'created_by' => $created_by,
+                'created_at' => $created_at
+            ],
+            [
+                'name' => 'Five',
+                'numeric_value' => 5,
+                'order' => 5,
+                'group' => 'None',
+                'status' => '1',
+                'note' => 'demo test',
+                'created_by' => $created_by,
+                'created_at' => $created_at
+            ],
+            [
+                'name' => 'Six',
+                'numeric_value' => 6,
+                'order' => 6,
+                'group' => 'None',
+                'status' => '1',
+                'note' => 'demo test',
+                'created_by' => $created_by,
+                'created_at' => $created_at
+            ],
+            [
+                'name' => 'Seven',
+                'numeric_value' => 7,
+                'order' => 7,
+                'group' => 'None',
+                'status' => '1',
+                'note' => 'demo test',
+                'created_by' => $created_by,
+                'created_at' => $created_at
+            ],
+            [
+                'name' => 'Eight',
+                'numeric_value' => 8,
+                'order' => 8,
                 'group' => 'None',
                 'status' => '1',
                 'note' => 'demo test',
@@ -236,6 +298,7 @@ class DemoAppDataSeeder extends Seeder
             [
                 'name' => 'Nine Science',
                 'numeric_value' => 90,
+                'order' => 9,
                 'group' => 'Science',
                 'status' => '1',
                 'note' => 'demo test',
@@ -245,6 +308,7 @@ class DemoAppDataSeeder extends Seeder
             [
                 'name' => 'Nine Humanities',
                 'numeric_value' => 91,
+                'order' => 10,
                 'group' => 'Humanities',
                 'status' => '1',
                 'note' => 'demo test',
@@ -282,6 +346,15 @@ class DemoAppDataSeeder extends Seeder
 
         $section = factory(App\Section::class, 5)
             ->create(['created_by' => $created_by,'created_at' => $created_at]);
+
+        $section = factory(App\Section::class, 2)
+            ->create(['class_id'=> 2, 'created_by' => $created_by,'created_at' => $created_at]);
+
+        $section = factory(App\Section::class, 2)
+            ->create(['class_id'=> 3, 'created_by' => $created_by,'created_at' => $created_at]);
+
+        $section = factory(App\Section::class, 2)
+            ->create(['class_id'=> 4, 'created_by' => $created_by,'created_at' => $created_at]);
 
         $section = factory(App\Section::class)
             ->create(['class_id'=> 1, 'name' => 'A', 'created_by' => $created_by,'created_at' => $created_at]);
