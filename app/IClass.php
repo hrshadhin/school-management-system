@@ -20,6 +20,7 @@ class IClass extends Model
     protected $fillable = [
         'name',
         'numeric_value',
+        'order',
         'group',
         'status',
         'note'

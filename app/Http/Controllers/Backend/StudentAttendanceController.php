@@ -66,6 +66,7 @@ class StudentAttendanceController extends Controller
 
 
         $classes = IClass::where('status', AppHelper::ACTIVE)
+            ->orderBy('order','asc')
             ->pluck('name', 'id');
         $sections = [];
 
@@ -123,6 +124,7 @@ class StudentAttendanceController extends Controller
     public function create()
     {
         $classes = IClass::where('status', AppHelper::ACTIVE)
+            ->orderBy('order','asc')
             ->pluck('name', 'id');
         //if its college then have to get those academic years
         $academic_years = [];

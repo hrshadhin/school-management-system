@@ -62,7 +62,15 @@
 
                             </div>
                             <div class="row">
-                                <div class="col-md-12">
+                                <div class="col-md-2">
+                                    <div class="form-group has-feedback">
+                                        <label for="order">Order sequence<span class="text-danger">*</span></label>
+                                        <input  type="number" class="form-control" name="order" placeholder="1,2,3,5"  value="@if($iclass){{ $iclass->order }}@else{{ old('order') }} @endif" min="0" required>
+                                        <span class="fa fa-sort-numeric-asc form-control-feedback"></span>
+                                        <span class="text-danger">{{ $errors->first('order') }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-10">
                                     <div class="form-group has-feedback">
                                         <label for="note">Note</label>
                                         <textarea name="note" class="form-control"  maxlength="500" >@if($iclass){{ $iclass->note }}@endif</textarea>

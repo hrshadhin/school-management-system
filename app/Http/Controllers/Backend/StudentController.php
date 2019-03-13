@@ -28,6 +28,7 @@ class StudentController extends Controller
     public function index(Request $request)
     {
         $classes = IClass::where('status', AppHelper::ACTIVE)
+            ->orderBy('order','asc')
             ->pluck('name', 'id');
 
         //if its college then have to get those academic years
@@ -95,6 +96,7 @@ class StudentController extends Controller
     public function create()
     {
         $classes = IClass::where('status', AppHelper::ACTIVE)
+            ->orderBy('order','asc')
             ->pluck('name', 'id');
         $student = null;
         $gender = 1;
