@@ -35,6 +35,14 @@ class ComposerServiceProvider extends ServiceProvider
             ],
             'App\Http\ViewComposers\BackendMasterComposer'
         );
+        View::composer(
+                    [
+                        'backend.report.layouts.master',
+                        'backend.report.layouts.header',
+                        'backend.report.layouts.footer',
+                    ],
+                    'App\Http\ViewComposers\ReportMasterComposer'
+                );
 
 
 

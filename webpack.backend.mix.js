@@ -49,6 +49,7 @@ mix.js('resources/assets/backend/js/app.js', 'public/js')
     .sass('resources/assets/backend/sass/print.scss', 'public/css')
     .sass('resources/assets/backend/sass/vendor.scss', 'public/css')
     .sass('resources/assets/backend/sass/colorpicker.scss', 'public/css')
+    .sass('resources/assets/backend/sass/report.scss', 'public/css')
     .js([
         'resources/assets/backend/js/colorpicker.js',
     ], 'public/js/colorpicker.js')
