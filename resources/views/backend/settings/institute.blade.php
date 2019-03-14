@@ -142,22 +142,18 @@
                                         <span class="text-danger">{{ $errors->first('institute_type') }}</span>
                                     </div>
                                 </div>
+                                {{--<div class="col-md-4">--}}
+                                    {{--<div class="form-group has-feedback">--}}
+                                        {{--<label for="language">Default Language--}}
+                                            {{--<i class="fa fa-question-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Set application language"></i>--}}
+                                        {{--</label>--}}
+                                        {{--{!! Form::select('language', $languages, $language, ['class' => 'form-control select2', 'required' => 'true']) !!}--}}
+                                        {{--<span class="fa fa-language form-control-feedback"></span>--}}
+                                        {{--<span class="text-danger">{{ $errors->first('language') }}</span>--}}
+                                    {{--</div>--}}
+                                {{--</div>--}}
+                                @if(AppHelper::getInstituteCategory() != 'college')
                                 <div class="col-md-4">
-                                    <div class="form-group has-feedback">
-                                        <label for="language">Default Language
-                                            <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Set application language"></i>
-                                        </label>
-                                        {!! Form::select('language', $languages, $language, ['class' => 'form-control select2', 'required' => 'true']) !!}
-                                        <span class="fa fa-language form-control-feedback"></span>
-                                        <span class="text-danger">{{ $errors->first('language') }}</span>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-4">
-                                    @if(AppHelper::getInstituteCategory() != 'college')
                                         <div class="form-group has-feedback">
                                             <label for="academic_year">Default Academic Year
                                                 <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Set default academic year"></i>
@@ -166,9 +162,14 @@
                                             <span class="form-control-feedback"></span>
                                             <span class="text-danger">{{ $errors->first('academic_year') }}</span>
                                         </div>
-                                    @endif
+
                                 </div>
-                                <div class="col-md-2">
+                                @endif
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-2" style="display: none;">
                                     <div class="form-group has-feedback">
                                         <label for="disable_language">Disable Language
                                             <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Check for disable language in top section"></i>
