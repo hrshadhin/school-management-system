@@ -996,14 +996,7 @@ class PermissionTableSeeder extends Seeder
 
         $reportsPermissionList = [
             // Report
-            [   "slug" => "report.student_idcard",
-                "name" => "Student Idcard View",
-                "group" => "Report"
-            ],
-            [   "slug" => "report.employee_idcard",
-                "name" => "Employee Idcard View",
-                "group" => "Report"
-            ]
+
             // Report
         ];
 

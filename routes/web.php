@@ -340,12 +340,7 @@ Route::group(
         ->name('result.create');
 
     // Reporting
-    //student id card
-    Route::any('report/student-idcard', 'ReportController@studentIdcard')
-        ->name('report.student_idcard');
-    //employee id card
-    Route::any('report/employee-idcard', 'ReportController@employeeIdcard')
-        ->name('report.employee_idcard');
+
 
 }
 );
