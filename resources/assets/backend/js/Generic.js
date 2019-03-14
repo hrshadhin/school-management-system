@@ -22,7 +22,7 @@ export default class Generic {
         $(".date_picker").datetimepicker({
             format: "DD/MM/YYYY",
             viewMode: 'days',
-            ignoreReadonly: true
+            ignoreReadonly: true,
         });
         $(".date_picker_with_clear").datetimepicker({
             format: "DD/MM/YYYY",

@@ -96,13 +96,51 @@ class SeedStudentAttendance extends Command
 
                 $row = AppHelper::parseRow($line, $this->fileFormatType);
                 if(count($row)){
-                    if(!isset($attendanceData[$row['date']][$row['id']])){
-                        $totalValidRows++;
-                    }
-                    $attendanceData[$row['date']][$row['id']] = true;
+
+                    $attendanceData[$row['date']][] = [
+                            'studentId' => $row['id'],
+                            'time' => $row['time']
+                        ];
+
                 }
             }
             fclose($handle);
+
+            //now process data for one day
+            foreach ($attendanceData as $key => $oneDayData) {
+                //build student wise data
+                $studentWiseData = [];
+                foreach ($oneDayData as $data) {
+                    $studentWiseData[$data['studentId']][] = $data['time'];
+                }
+
+                $atndDate = $key;
+                //now clean student multiple entry
+                $cleanstudentWiseData = [];
+                foreach ($studentWiseData as $studentId => $entries) {
+                    sort($entries);
+                    $entryCount = count($entries);
+                    $inTime = $entries[0];
+                    $outTime = $entryCount > 1 ? $entries[$entryCount - 1] : $inTime;
+
+                    $inTimeObject = Carbon::createFromFormat('YmdHis', $atndDate.$inTime);
+                    $outTimeObject = Carbon::createFromFormat('YmdHis', $atndDate.$outTime);
+                    $stayingTime  = $inTimeObject->diff($outTimeObject)->format('%H:%I');
+
+
+                    $cleanstudentWiseData[$studentId] = [
+                        'inTime' => $inTimeObject,
+                        'outTime' => $outTimeObject,
+                        'stayingHours' => $stayingTime
+                    ];
+
+                    $totalValidRows++;
+
+                }
+                //now push back one day data to $dateWiseDate  array
+                $attendanceData[$atndDate] = $cleanstudentWiseData;
+            }
+
 
             $pendingFile->total_rows = $totalValidRows;
             if(!$totalValidRows){
@@ -118,13 +156,31 @@ class SeedStudentAttendance extends Command
             $dateTimeNow = Carbon::now(env('APP_TIMEZONE','Asia/Dhaka'));
             $isFail = false;
 
+            //pull shift running time
+            //fetch institute shift running times
+            $shiftData = AppHelper::getAppSettings('shift_data');
+            if($shiftData){
+                $shiftData = json_decode($shiftData, true);
+            }
+            $shiftRuningTimes = [];
+
+            foreach ($shiftData as $shift => $times){
+                $shiftRuningTimes[$shift] = [
+                    'start' => $times['start'],
+                    'end' => $times['end']
+                ];
+            }
+
             //now insert those data to db and
-            foreach ($attendanceData as $kdate => $regiNumbers) {
+            foreach ($attendanceData as $kdate => $studentData) {
                 try
                 {
+                    $atd = new \DateTime(date('Ymd', strtotime($kdate)));
+                    $attendance_date = $atd->format('Y-m-d');
+
                     // now fetch student id and class info
-                    $regiNumbers = array_keys($regiNumbers);
-                    $presentStudents = Registration::select('id','class_id','regi_no','academic_year_id')
+                    $regiNumbers = array_keys($studentData);
+                    $presentStudents = Registration::select('id','class_id','regi_no','academic_year_id','shift')
                         ->where('status', AppHelper::ACTIVE)
                         ->whereIn('regi_no', $regiNumbers)
                         ->get();
@@ -133,9 +189,9 @@ class SeedStudentAttendance extends Command
                     foreach ($presentStudents as $student){
 
                         //extract class id from here
-                        $presentStudentsByClass[$kdate][$student->class_id] = $student->academic_year_id;
+                        $presentStudentsByClass[$attendance_date][$student->class_id] = $student->academic_year_id;
 
-                        $entryExists = StudentAttendance::whereDate('attendance_date', '=', $kdate)
+                        $entryExists = StudentAttendance::whereDate('attendance_date', '=', $attendance_date)
                             ->where('registration_id', '=', $student->id)
                             ->where('academic_year_id', $student->academic_year_id)
                             ->where('class_id', $student->class_id)
@@ -143,11 +199,38 @@ class SeedStudentAttendance extends Command
 
                         if(!$entryExists) {
 
+                            //find is late or early out
+                            $inTime = $studentData[$student->regi_no]['inTime'];
+                            $outTime = $studentData[$student->regi_no]['outTime'];
+                            $timeDiff  = $inTime->diff($outTime)->format('%H:%I');
+                            $status = [];
+                            //late or early out find
+                            if($timeDiff != "00:00" && strlen($student->shift) && isset($shiftRuningTimes[$student->shift])){
+
+                                $shiftStart = Carbon::createFromFormat('Y-m-dH:i:s', $attendance_date.$shiftRuningTimes[$student->shift]['start']);
+                                $shiftEnd = Carbon::createFromFormat('Y-m-dH:i:s', $attendance_date.$shiftRuningTimes[$student->shift]['end']);
+
+                                if($inTime->greaterThan($shiftStart)){
+                                    $status[] = 1;
+                                }
+
+                                if($outTime->lessThan($shiftEnd)){
+                                    $status[] = 2;
+                                }
+
+
+
+                            }
+
                             $singleAttendance = [
                                 "academic_year_id" => $student->academic_year_id,
                                 "class_id" => $student->class_id,
                                 "registration_id" => $student->id,
                                 "attendance_date" => $kdate,
+                                "in_time" => $inTime,
+                                "out_time" => $outTime,
+                                "staying_hour" => $timeDiff,
+                                "status" => implode(',',$status),
                                 "present"   => "1",
                                 "created_at" => $dateTimeNow,
                                 "created_by" => $this->createdBy,
@@ -215,12 +298,22 @@ class SeedStudentAttendance extends Command
                         ->select('id','regi_no','roll_no','class_id','academic_year_id')
                         ->get();
 
+                    //find is late or early out
+                    $inTime = Carbon::createFromFormat('Y-m-dHis', $pDate.'000000');
+                    $outTime = $inTime;
+                    $timeDiff  = $inTime->diff($outTime)->format('%H:%I');
+                    $status = [];
+
                     foreach ($absentStudents as $student){
                         $absentAttendances[] = [
                             "academic_year_id" => $student->academic_year_id,
                             "class_id" => $student->class_id,
                             "registration_id" => $student->id,
                             "attendance_date" => $pDate,
+                            "in_time" => $inTime,
+                            "out_time" => $outTime,
+                            "staying_hour" => $timeDiff,
+                            "status" => implode(',',$status),
                             "present"   => "0",
                             "created_at" => $dateTimeNow,
                             "created_by" => $this->createdBy,

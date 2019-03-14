@@ -185,8 +185,8 @@ class DemoAppDataSeeder extends Seeder
         $created_at = Carbon::now(env('APP_TIMEZONE','Asia/Dhaka'));
         $shiftData = [
             'Morning' => [
-                'start' => '12:00 am',
-                'end' => '01:00 am',
+                'start' => '08:00 am',
+                'end' => '01:00 pm',
             ],
             'Day' => [
                 'start' => '02:00 pm',

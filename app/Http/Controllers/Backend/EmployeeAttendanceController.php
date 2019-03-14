@@ -42,7 +42,7 @@ class EmployeeAttendanceController extends Controller
 
         // get query parameter for filter the fetch
         $employee_id = $request->query->get('employee_id',0);
-        $attendance_date = $request->query->get('attendance_date','');
+        $attendance_date = $request->query->get('attendance_date',date('d/m/Y'));
 
 
         //if its a ajax request that means come from attendance add exists checker
@@ -136,16 +136,22 @@ class EmployeeAttendanceController extends Controller
         $attendance_date = Carbon::createFromFormat('d/m/Y', $request->get('attendance_date'))->format('Y-m-d');
 
         //fetch employee working hours
-        $workTimes = Employee::where('status', AppHelper::ACTIVE)->get()->reduce(function ($workTimes, $employee) {
+        $workTimes = Employee::where('status', AppHelper::ACTIVE)->get()->reduce(function ($workTimes, $employee) use($request) {
             $workTimes[$employee->id] = [
-                'in_time' => $employee->duty_start,
-                'out_time' => $employee->duty_end,
+                'in_time' => null,
+                'out_time' => null
             ];
+            if($employee->duty_start){
+                $workTimes[$employee->id]['in_time'] = Carbon::createFromFormat('d/m/Y H:i:s',$request->get('attendance_date').' '.$employee->getOriginal('duty_start'));
+            }
+
+            if($employee->duty_end){
+                $workTimes[$employee->id]['out_time'] = Carbon::createFromFormat('d/m/Y H:i:s',$request->get('attendance_date').' '.$employee->getOriginal('duty_end'));
+            }
 
             return $workTimes;
         });
 
-//        dd($workTimes);
 
         $dateTimeNow = Carbon::now(env('APP_TIMEZONE','Asia/Dhaka'));
         $attendances = [];

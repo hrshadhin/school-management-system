@@ -25,10 +25,15 @@ class StudentAttendance extends Model
         'class_id',
         'registration_id',
         'attendance_date',
+        'in_time',
+        'out_time',
+        'staying_hour',
+        'status',
         'present'
     ];
 
 
+    protected $dates = ['attendance_date','in_time','out_time'];
 
 
     public function student()

@@ -180,8 +180,10 @@ export default class Academic {
             let class_id = $(this).val();
             Academic.getSection(class_id);
         });
-
-        $('#attendance_list_filter').on('changeDate', function (event) {
+        $('select[name="section_id"]').on('change', function () {
+            $('#attendance_list_filter').trigger('dp.change');
+        });
+        $('#attendance_list_filter').on('dp.change', function (event) {
             let atDate = $(this).val();
             let classId = $('select[name="class_id"]').val();
             let sectionId = $('select[name="section_id"]').val();
@@ -207,12 +209,10 @@ export default class Academic {
 
         });
 
-        $('.attendanceExistsChecker').on('changeDate', function (event) {
+        $('.attendanceExistsChecker').on('dp.change', function (event) {
             Academic.checkAttendanceExists(function (data) {
                     if(data>0){
                         toastr.error('Attendance already exists!');
-                        $('#studentListTable tbody').empty();
-                        $('button[type="submit"]').hide();
                     }
                     else{
                         $('#section_id_filter').trigger('change');
@@ -221,17 +221,8 @@ export default class Academic {
 
         });
 
-        $('#toggleCheckboxes').on('ifChecked ifUnchecked', function(event) {
-            if (event.type == 'ifChecked') {
-                $('input:checkbox').iCheck('check');
-            } else {
-                $('input:checkbox').iCheck('uncheck');
-            }
-        });
-
         $('#section_id_filter').on('change', function () {
             //hide button
-            $('button[type="submit"]').hide();
             let sectionId = $(this).val();
             let classId =  $('select[name="class_id"]').val();
             let acYearId =  $('select[name="academic_year"]').val();
@@ -252,46 +243,52 @@ export default class Academic {
 
             Generic.loaderStart();
             Academic.checkAttendanceExists(function (data) {
-                if(data==0){
-                    Academic.getStudentByAcYearAndClassAndSection(acYearId, classId, sectionId, function (data) {
-                        let students = data;
-                        $('#studentListTable tbody').empty();
-                        if(students.length){
-                            students.forEach(function(item){
-                                let roll_no = item.roll_no ? item.roll_no : '';
-                                let rowHtml = '<tr>\n' +
-                                    '<td>\n' +
-                                    '<span class="text-bold">'+item.student.name+'</span>\n' +
-                                    '<input type="hidden" name="registrationIds[]" value="'+item.id+'" required>\n' +
-                                    '</td>\n' +
-                                    '<td><span class="text-bold">'+roll_no+'</span></td>\n' +
-                                    '<td>\n' +
-                                    '<div class="checkbox icheck inline_icheck">\n' +
-                                    '<input type="checkbox" name="present['+item.id+']">\n' +
-                                    '</div>\n' +
-                                    '</td>\n' +
-                                    '</tr>';
-
-                                $('#studentListTable tbody').append(rowHtml);
-                            });
-                            $('input:checkbox').not('.dont-style-notMe').iCheck({
-                                checkboxClass: 'icheckbox_square-blue',
-                                radioClass: 'iradio_square-blue',
-                                increaseArea: '20%' /* optional */
-                            });
-
-                            //now show the submit button
-                            $('button[type="submit"]').show();
-                        }
-                        Generic.loaderStop();
-                    });
-                }
-                else{
+                if(data>0){
                     toastr.error('Attendance already exists!');
-                    Generic.loaderStop();
                 }
+
+                Generic.loaderStop();
+
             });
 
+
+        });
+
+        $('input.inTime').on('dp.change', function (event) {
+            let attendance_date = window.moment($('input[name="attendance_date"]').val(),'DD-MM-YYYY');
+            let inTime =  window.moment(event.date,'DD-MM-YYYY');
+            if(inTime.isBefore(attendance_date)){
+                toastr.error('In time can\'t be less than attendance date!');
+                $(this).data("DateTimePicker").date(attendance_date.format('DD/MM/YYYY, hh:mm A'));
+                return false;
+            }
+
+            let timeDiff = window.moment.duration(inTime.diff(attendance_date));
+            if(timeDiff.days()>0){
+                toastr.error('In time can\'t be greater than attendance date!');
+                $(this).data("DateTimePicker").date(attendance_date.format('DD/MM/YYYY, hh:mm A'));
+                return false;
+            }
+
+        });
+
+        $('input.outTime').on('dp.change', function (event) {
+            let inTime = window.moment($(this).parents('tr').find('input.inTime').val(),'DD-MM-YYYY, hh:mm A');
+            let outTime =  window.moment(event.date,'DD-MM-YYYY, hh:mm A');
+
+            if(outTime.isBefore(inTime)){
+                toastr.error('Out time can\'t be less than in time!');
+                $(this).data("DateTimePicker").date(inTime);
+                return false;
+            }
+            let timeDiff = window.moment.duration(outTime.diff(inTime));
+            if(timeDiff.days()>0){
+                toastr.error('Can\'t stay more than 24 hrs!');
+                $(this).data("DateTimePicker").date(inTime);
+                return false;
+            }
+            let workingHours = [timeDiff.hours(), timeDiff.minutes()].join(':');
+            $(this).parents('tr').find('span.stayingHour').text(workingHours);
 
         });
     }

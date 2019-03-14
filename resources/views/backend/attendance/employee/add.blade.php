@@ -77,14 +77,14 @@
                                                     </td>
                                                     <td>
                                                         <div class="input-group">
-                                                            <input type='text' class="form-control date_time_picker inTime" readonly  name="inTime[{{$employee->id}}]" placeholder="date time" value="{{date('d/m/Y')}} 00:00 am" required minlength="19" maxlength="19" />
+                                                            <input type='text' class="form-control date_time_picker inTime" readonly  name="inTime[{{$employee->id}}]" placeholder="date time" value="{{date('d/m/Y')}} 00:00 am" required minlength="15" maxlength="19" />
                                                             <span class="fa fa-calendar form-control-feedback"></span>
                                                         </div>
 
                                                     </td>
                                                     <td>
                                                         <div class="input-group">
-                                                        <input type='text' class="form-control date_time_picker outTime" readonly  name="outTime[{{$employee->id}}]" placeholder="date time" value="{{date('d/m/Y')}} 00:00 am" required minlength="19" maxlength="19" />
+                                                        <input type='text' class="form-control date_time_picker outTime" readonly  name="outTime[{{$employee->id}}]" placeholder="date time" value="{{date('d/m/Y')}} 00:00 am" required minlength="18" maxlength="19" />
                                                         <span class="fa fa-calendar form-control-feedback"></span>
                                                         </div>
                                                     </td>

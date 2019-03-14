@@ -26,14 +26,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="box box-info">
-                    <form novalidate id="entryForm" action="{{URL::Route('student_attendance.store')}}" method="post" enctype="multipart/form-data">
-                        <div class="box-header">
-                            <div class="callout callout-danger">
-                                <p><b>Note:</b> Fill up the form first, then it will shows student list.</p>
-                            </div>
-                        </div>
                         <div class="box-body">
-                            @csrf
                             @if(count($errors->all()))
                                 <div class="alert alert-danger">
                                     <ul>
@@ -43,8 +36,11 @@
                                     </ul>
                                 </div>
                             @endif
+                            @if(!count($students))
                             <p class="lead section-title-top-zero">Academic Info:</p>
                             <div class="row">
+                                <form novalidate id="entryForm" action="{{URL::Route('student_attendance.create')}}" method="post" enctype="multipart/form-data">
+                                    @csrf
                                 @if(AppHelper::getInstituteCategory() == 'college')
                                     <div class="col-md-3">
                                         <div class="form-group has-feedback">
@@ -55,7 +51,7 @@
                                         </div>
                                     </div>
                                 @endif
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group has-feedback">
                                         <label for="class_id">Class<span class="text-danger">*</span></label>
                                         {!! Form::select('class_id', $classes, null , ['placeholder' => 'Pick a class...','class' => 'form-control select2', 'required' => 'true']) !!}
@@ -63,7 +59,7 @@
                                         <span class="text-danger">{{ $errors->first('class_id') }}</span>
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <div class="form-group has-feedback">
                                         <label for="section_id">Section<span class="text-danger">*</span></label>
                                         {!! Form::select('section_id', [], null , ['placeholder' => 'Pick a section...','class' => 'form-control select2', 'id' => 'section_id_filter', 'required' => 'true']) !!}
@@ -74,47 +70,93 @@
                                 <div class="col-md-2">
                                     <div class="form-group has-feedback">
                                         <label for="attendance_date">Date<span class="text-danger">*</span></label>
-                                        <input type='text' class="form-control date_picker attendanceExistsChecker"readonly  name="attendance_date" placeholder="date" value="{{date('d/m/Y')}}" required minlength="10" maxlength="11" />
+                                        <input type='text' class="form-control date_picker attendanceExistsChecker" readonly  name="attendance_date" placeholder="date" value="{{$attendance_date}}" required minlength="10" maxlength="11" />
                                         <span class="fa fa-calendar form-control-feedback"></span>
                                         <span class="text-danger">{{ $errors->first('attendance_date') }}</span>
                                     </div>
                                 </div>
+                                    <div class="col-md-2">
+                                        <button type="submit" class="btn btn-info margin-top-20"><i class="fa fa-filter"></i> Entry Attendance</button>
+                                    </div>
+                                </form>
                             </div>
-
+                            @endif
                             <p class="lead section-title-top-zero">Student List:</p>
-                            <div class="row">
+                                <div class="row">
                                 <div class="col-md-12">
+                                    @if(count($students))
+                                        <div class="well text-center" style="padding: 0; margin: 0; font-size: 20px;">
+                                            <span class="text-info">Attendance Entry for {{$attendance_date}}</span><br>
+                                            @if(AppHelper::getInstituteCategory() == 'college')
+                                            <span class="text-info">Academic Year: {{$academic_year}}</span><br>
+                                            @endif
+                                            <span class="text-info">Class: {{$class_name}}</span><br>
+                                            <span class="text-info">Section: {{$section_name}}</span>
+
+                                        </div>
+                                    <form novalidate id="entryForm" action="{{URL::Route('student_attendance.store')}}" method="post" enctype="multipart/form-data">
+                                        @csrf
+                                        <input type="hidden" name="academic_year" value="{{$acYear}}">
+                                        <input type="hidden" name="class_id" value="{{$class_id}}">
+                                        <input type="hidden" name="section_id" value="{{$section_id}}">
+                                        <input type="hidden" name="attendance_date" value="{{$attendance_date}}">
                                     <table id="studentListTable" class="table table-bordered table-striped table-responsive attendance-add">
                                         <thead>
                                         <tr>
-                                            <th width="60%">Name</th>
+                                            <th width="5%">#</th>
+                                            <th width="50%">Name</th>
                                             <th width="10%">Roll No.</th>
-                                            <th width="30%">
-                                                Is Present?
-                                                <div class="checkbox icheck inline_icheck">
-                                                    <label>
-                                                        <input type="checkbox" id="toggleCheckboxes" class="dont-style-notMe"> <span class="text-bold">Select or Deselect All</span>
-                                                    </label>
-                                                </div>
-                                            </th>
+                                            <th width="15%">In Time</th>
+                                            <th width="15%">Out Time</th>
+                                            <th width="5%">Staying Hours</th>
                                         </tr>
                                         </thead>
                                         <tbody>
+                                        @foreach($students as $student)
+                                        <tr>
+                                            <td>
+                                                {{$loop->iteration}}
+                                            </td>
+                                            <td>
+                                                <span class="text-bold">{{$student->info->name}} [{{$student->regi_no}}]</span>
+                                                <input type="hidden" value="{{$student->id}}" name="registrationIds[]">
+                                            </td>
+                                            <td>
+                                                {{$student->roll_no}}
+                                            </td>
+                                            <td>
+                                                <div class="input-group">
+                                                    <input type='text' class="form-control date_time_picker inTime" readonly  name="inTime[{{$student->id}}]" placeholder="date time" value="{{$attendance_date}} 00:00 am" required minlength="18" maxlength="19" />
+                                                    <span class="fa fa-calendar form-control-feedback"></span>
+                                                </div>
 
+                                            </td>
+                                            <td>
+                                                <div class="input-group">
+                                                    <input type='text' class="form-control date_time_picker outTime" readonly  name="outTime[{{$student->id}}]" placeholder="date time" value="{{$attendance_date}} 00:00 am" required minlength="18" maxlength="19" />
+                                                    <span class="fa fa-calendar form-control-feedback"></span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="text-bold stayingHour">00:00</span>
+                                            </td>
+                                        </tr>
+                                        @endforeach
                                         </tbody>
                                     </table>
-
+                                        <button type="submit" class="btn btn-info pull-right"><i class="fa fa-plus-circle"></i> Add Attendance</button>
+                                    </form>
+                                    @endif
                                 </div>
                             </div>
+
+
 
                         </div>
                         <!-- /.box-body -->
                         <div class="box-footer">
                             <a href="{{URL::route('student_attendance.index')}}" class="btn btn-default">Cancel</a>
-                            <button type="submit" class="btn btn-info pull-right" style="display: none;"><i class="fa fa-plus-circle"></i> Save</button>
-
                         </div>
-                    </form>
                 </div>
             </div>
         </div>
@@ -127,7 +169,6 @@
 @section('extraScript')
     <script type="text/javascript">
         window.section_list_url = '{{URL::Route("academic.section")}}';
-        window.getStudentAjaxUrl = '{{URL::route('student.list_by_fitler')}}';
         window.attendanceUrl = '{{route('student_attendance.index')}}';
         $(document).ready(function () {
             Academic.attendanceInit();
