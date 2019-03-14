@@ -553,65 +553,34 @@ class SettingsController extends Controller
 
             //validate form
             $messages = [
-                'logo.max' => 'The :attribute size must be under 1MB.',
-                'background_image.max' => 'The :attribute size must be under 1MB.',
             ];
             $rules = [
-                'logo' => 'mimes:jpeg,jpg,png|max:1024',
                 'background_color' => 'nullable|max:255',
-                'background_image' => 'mimes:jpeg,jpg,png|max:1024',
                 'text_color' => 'nullable|max:255',
 
             ];
             $this->validate($request, $rules, $messages);
 
 
-            $report_logo = '';
-            if($request->hasFile('logo')) {
-                $storagepath = $request->file('logo')->store('public/report');
-                $report_logo = basename($storagepath);
 
-                //if file chnage then delete old one
-                $oldFile = $request->get('oldLogo','');
-                if( $oldFile != ''){
-                    $file_path = "public/report/".$oldFile;
-                    Storage::delete($file_path);
-                }
-            }
-            else{
-                $report_logo = $request->get('oldLogo','');
-            }
-
-            $report_background = '';
-            if($request->hasFile('background_image')) {
-                $storagepath = $request->file('background_image')->store('public/report');
-                $report_background = basename($storagepath);
-
-                //if file chnage then delete old one
-                $oldFile = $request->get('oldBackgroundImage','');
-                if( $oldFile != ''){
-                    $file_path = "public/report/".$oldFile;
-                    Storage::delete($file_path);
-                }
-            }
-            else{
-                $report_background = $request->get('oldBackgroundImage','');
-            }
 
             //now crate
-            AppMeta::updateOrCreate(
-                ['meta_key' => 'report_logo'],
-                ['meta_value' => $report_logo]
-            );
+            if($request->has('show_logo')){
+                AppMeta::updateOrCreate(
+                    ['meta_key' => 'report_show_logo'],
+                    ['meta_value' => 1]
+                );
+            }
+            else{
+                AppMeta::updateOrCreate(
+                    ['meta_key' => 'report_show_logo'],
+                    ['meta_value' => 0]
+                );
+            }
 
             AppMeta::updateOrCreate(
                 ['meta_key' => 'report_background_color'],
                 ['meta_value' => $request->get('background_color', '')]
-            );
-
-            AppMeta::updateOrCreate(
-                ['meta_key' => 'report_background_image'],
-                ['meta_value' => $report_background]
             );
 
             AppMeta::updateOrCreate(
@@ -636,7 +605,9 @@ class SettingsController extends Controller
             $metas[$setting->meta_key] = $setting->meta_value;
         }
 
-        return view('backend.settings.report', compact('metas'));
+        $show_logo  = $metas['report_show_logo'] ?? 0;
+
+        return view('backend.settings.report', compact('metas','show_logo'));
     }
 
 

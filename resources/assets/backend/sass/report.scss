@@ -1,0 +1,165 @@
+@import "~bootstrap/dist/css/bootstrap.min.css";
+@import "~font-awesome/css/font-awesome.min.css";
+
+/*
+ *  Report:
+ * -----------
+ */
+body{
+  background-color: #fff;
+  position: relative;
+  margin: 0;
+}
+.wrapper {
+  height: 100%;
+  position: relative;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.wrapper:before, .wrapper:after {
+  content: " ";
+  display: table;
+}
+
+section {
+  display: block;
+}
+
+.report {
+  position: relative;
+  margin: 10px;
+  font-size: 14px;
+}
+
+.report-header {
+  margin: 10px 0 10px 0;
+  font-size: 20px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 5px;
+  text-align: center;
+}
+
+.report-info {
+
+}
+
+.institute-name {
+  font-size: 25px;
+  font-weight: bold;
+}
+.institute-address {
+  font-size: 15px;
+  font-weight: inherit;
+}
+.report-title {
+  font-size: 18px;
+  font-weight: inherit;
+}
+.report-subtitle {
+  font-size: 15px;
+  font-weight: inherit;
+}
+.report-header .col-xs-12{
+  position: relative;
+}
+.report-header .print-date {
+  top: 0;
+  right: 10px;
+  position: absolute;
+}
+
+.report-body {
+
+}
+.report-body .report-filter {
+  text-align: left;
+}
+
+.report-body .report-filter .filter-text {
+  font-weight: bold;
+}
+.report-body .report-filter .filters {
+  font-size: inherit;
+}
+
+.report-body .report-data {
+  margin-bottom: 50px;
+}
+
+table {
+  width: 100%;
+  max-width: 100%;
+}
+
+table {
+  background-color: transparent;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.report-body .report-data table.main-data tr th {
+  text-align: center;
+  font-weight: bold;
+  font-size: inherit;
+  vertical-align: bottom;
+  border-bottom: 2px solid #ddd;
+  padding: 8px;
+}
+
+.report-body .report-data table.main-data tr td {
+  text-align: center;
+  font-size: inherit;
+  padding: 8px;
+  vertical-align: top;
+  border-top: 1px solid #ddd;
+}
+
+.report-authority h5 {
+  text-align: center;
+  padding-top: 20px;
+}
+
+.report-footer {
+  font-size: inherit;
+  position: relative;
+  bottom: 0;
+  width: 100%;
+  padding: 5px;
+  margin-top: 30px;
+}
+
+.report-footer .left{
+  text-align: left;
+  vertical-align: bottom;
+}
+.report-footer .right{
+  text-align: right;
+  vertical-align: bottom;
+}
+
+/*
+ * Misc: print
+ * -----------
+ */
+@media print {
+  body {
+    margin: 0;
+    padding: 0;
+  }
+  .no-print {
+    display: none !important;
+  }
+
+  @page {
+    size:  A4 portrait;
+    margin: 2mm;
+  }
+
+
+  * {
+    -webkit-print-color-adjust: exact !important; /* Chrome, Safari */
+    color-adjust: exact !important; /*Firefox*/
+  }
+}

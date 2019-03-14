@@ -35,17 +35,6 @@
                             <div class="row">
                                 <div class="col-md-3">
                                     <div class="form-group has-feedback">
-                                        <label for="logo">Logo<span class="text-danger">[max 1MB]</span></label>
-                                        <input  type="file" class="form-control documentUp" accept=".jpeg, .jpg, .png" name="logo" placeholder="logo image">
-                                        @if(isset($metas['report_logo']) && strlen($metas['report_logo']))
-                                            <input type="hidden" name="oldLogo" value="{{$metas['report_logo']}}">
-                                        @endif
-                                        <span class="glyphicon glyphicon-open-file form-control-feedback"></span>
-                                        <span class="text-danger">{{ $errors->first('logo') }}</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group has-feedback">
                                         <label for="background_color">Background Color</label>
                                         <input type="text" class="form-control  my-colorpicker" name="background_color"
                                                placeholder="#ff0000" value="@if(isset($metas['report_background_color']) && strlen($metas['report_background_color'])){{ $metas['report_background_color'] }}@else{{old('background_color') }}@endif">
@@ -55,22 +44,24 @@
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group has-feedback">
-                                        <label for="logo">Background Image<span class="text-danger">[max 1MB]</span></label>
-                                        <input  type="file" class="form-control documentUp" accept=".jpeg, .jpg, .png" name="background_image" placeholder="background image">
-                                        @if(isset($metas['report_background_image']) && strlen($metas['report_background_image']))
-                                            <input type="hidden" name="oldBackgroundImage" value="{{$metas['report_background_image']}}">
-                                        @endif
-                                        <span class="glyphicon glyphicon-open-file form-control-feedback"></span>
-                                        <span class="text-danger">{{ $errors->first('background_image') }}</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group has-feedback">
                                         <label for="text_color">Text Color</label>
                                         <input type="text" class="form-control  my-colorpicker" name="text_color"
                                                placeholder="#ff0000" value="@if(isset($metas['report_text_color']) && strlen($metas['report_text_color'])){{ $metas['report_text_color'] }}@else{{old('text_color') }}@endif">
                                         <span class="fa fa-info form-control-feedback"></span>
                                         <span class="text-danger">{{ $errors->first('text_color') }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group has-feedback">
+                                        <label for="show_logo">Show Logo?
+                                            <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="If its need to show logo on report."></i>
+                                            <div class="checkbox icheck">
+                                                <label>
+                                                    {!! Form::checkbox('show_logo', $show_logo, $show_logo) !!}
+                                                </label>
+                                            </div>
+                                        </label>
+                                        <span class="text-danger">{{ $errors->first('show_logo') }}</span>
                                     </div>
                                 </div>
 

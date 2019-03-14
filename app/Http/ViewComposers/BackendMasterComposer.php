@@ -31,7 +31,7 @@ class BackendMasterComposer
         $view->with('maintainer_url', 'http://shanixlab.com');
         $view->with('appSettings', $appSettings);
         $view->with('languages', AppHelper::LANGUEAGES);
-        $view->with('idc', '36237fc442afd31e37c0acab35ad6b19d96c232a');
+        $view->with('idc', 'd71a320328c4ed43e45fd4ec9553d37c1e705417');
         $view->with('institute_category', AppHelper::getInstituteCategory());
     }
 }

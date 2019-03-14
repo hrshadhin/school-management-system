@@ -16,7 +16,7 @@ class CreateAppMetasTable extends Migration
         Schema::create('app_metas', function (Blueprint $table) {
             $table->increments('id');
             $table->string('meta_key');
-            $table->longText('meta_value');
+            $table->longText('meta_value')->nullable();
             $table->timestamps();
             $table->softDeletes();
             $table->userstamps();
