@@ -147,7 +147,7 @@ class SettingsController extends Controller
             );
             AppMeta::updateOrCreate(
                 ['meta_key' => 'language'],
-                ['meta_value' => $request->get('language', '')]
+                ['meta_value' => $request->get('language', 'en')]
             );
             AppMeta::updateOrCreate(
                 ['meta_key' => 'disable_language'],
@@ -262,8 +262,8 @@ class SettingsController extends Controller
         }
 
         $frontend_website = isset($metas['frontend_website']) ? $metas['frontend_website'] : 0;
-        $language = isset($metas['language']) ? $metas['language'] : 0;
-        $disable_language = isset($metas['disable_language']) ? $metas['disable_language'] : 0;
+        $language = isset($metas['language']) ? $metas['language'] : 'en';
+        $disable_language = isset($metas['disable_language']) ? $metas['disable_language'] : 1;
         $student_attendance_notification = isset($metas['student_attendance_notification']) ? $metas['student_attendance_notification'] : 0;
         $employee_attendance_notification = isset($metas['employee_attendance_notification']) ? $metas['employee_attendance_notification'] : 0;
         $institute_type = isset($metas['institute_type']) ? $metas['institute_type'] : 1;
