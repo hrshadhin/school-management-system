@@ -272,20 +272,7 @@
             </span>
         </a>
         <ul class="treeview-menu">
-          @can('report.student_idcard')
-          <li>
-            <a href="{{ URL::route('report.student_idcard') }}">
-              <i class="fa fa-id-card"></i> <span>Student Idcard Print</span>
-            </a>
-          </li>
-          @endcan
-            @can('report.employee_idcard')
-          <li>
-            <a href="{{ URL::route('report.employee_idcard') }}">
-              <i class="fa fa-id-card"></i> <span>Employee Idcard Print</span>
-            </a>
-          </li>
-              @endcan
+         
         </ul>
       </li>
 
