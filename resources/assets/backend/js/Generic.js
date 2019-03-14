@@ -50,6 +50,21 @@ export default class Generic {
             ignoreReadonly: true
         });
 
+        $('.date_picker_with_disable_days').datetimepicker({
+            format: "DD/MM/YYYY",
+            viewMode: 'days',
+            ignoreReadonly: true,
+            daysOfWeekDisabled: window.disableWeekDays,
+            useCurrent: false
+        });
+
+        $('.only_year_picker').datetimepicker({
+            format: "YYYY",
+            viewMode: 'years',
+            ignoreReadonly: true,
+            useCurrent: false
+        });
+
         var buttonCommon = {
             exportOptions: {
                 columns: ':not(.notexport)',

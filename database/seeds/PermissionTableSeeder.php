@@ -276,6 +276,31 @@ class PermissionTableSeeder extends Seeder
             [   "slug" => "settings.sms_gateway.destroy",
                 "name" => "SMS Gateway Delete",
                 "group" => "Admin Only"
+            ],
+            //academic calendar
+            [   "slug" => "settings.academic_calendar.index",
+                "name" => "Academic Calendar View",
+                "group" => "Admin Only"
+            ],
+            [   "slug" => "settings.academic_calendar.create",
+                "name" => "Academic Calendar Create",
+                "group" => "Admin Only"
+            ],
+            [   "slug" => "settings.academic_calendar.store",
+                "name" => "Academic Calendar Create",
+                "group" => "Admin Only"
+            ],
+            [   "slug" => "settings.academic_calendar.edit",
+                "name" => "Academic Calendar Edit",
+                "group" => "Admin Only"
+            ],
+            [   "slug" => "settings.academic_calendar.update",
+                "name" => "Academic Calendar Edit",
+                "group" => "Admin Only"
+            ],
+            [   "slug" => "settings.academic_calendar.destroy",
+                "name" => "Academic Calendar Delete",
+                "group" => "Admin Only"
             ]
         ];
 
