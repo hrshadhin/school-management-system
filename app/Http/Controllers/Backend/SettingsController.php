@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\AcademicCalendar;
 use App\AcademicYear;
 use App\Grade;
 use App\Http\Helpers\AppHelper;
+use App\IClass;
 use App\Template;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -48,7 +50,7 @@ class SettingsController extends Controller
                 'email' => 'nullable|email|max:255',
                 'phone_no' => 'required|min:8|max:15',
                 'address' => 'required|max:500',
-                'language' => 'required|min:2',
+//                'language' => 'required|min:2',
                 'weekends' => 'required|array',
                 'morning_start' => 'required|max:8|min:7',
                 'morning_end' => 'required|max:8|min:7',
@@ -68,8 +70,6 @@ class SettingsController extends Controller
                 $rules[ 'academic_year'] ='required|integer';
             }
             $this->validate($request, $rules, $messages);
-
-
 
             if($request->hasFile('logo')) {
                 $storagepath = $request->file('logo')->store('public/logo');
@@ -319,6 +319,119 @@ class SettingsController extends Controller
                 'employee_idcard_template'
             )
         );
+    }
+
+
+
+    /**
+     * academic calendar settings  manage
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function academicCalendarIndex(Request $request)
+    {
+        //for save on POST request
+        if ($request->isMethod('post')) {//
+            $this->validate($request, [
+                'hiddenId' => 'required|integer',
+            ]);
+
+            $calendar = AcademicCalendar::findOrFail($request->get('hiddenId'));
+            $calendar->delete();
+
+            return redirect()->route('settings.academic_calendar.index')->with('success', 'Entry deleted!');
+        }
+
+        //for get request
+        $year = $request->query->get('year','');
+        $calendars = collect();
+        if(strlen($year)) {
+            $calendars = AcademicCalendar::whereYear('date_from', $year)
+                ->whereYear('date_upto', $year)
+                ->get();
+        }
+
+        return view('backend.settings.academic_calendar_list', compact('calendars','year'));
+    }
+
+    /**
+     *  academic calendar settings   manage
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function academicCalendarCru(Request $request, $id=0)
+    {
+        //for save on POST request
+        if ($request->isMethod('post')) {
+
+            $rules =  [
+                'title' => 'required|max:255',
+                'date_from' => 'required|min:10|max:10',
+                'date_upto' => 'nullable|min:10|max:10',
+                'description' => 'nullable|min:5|max:500',
+            ];
+
+            if(AppHelper::getInstituteCategory() == 'college' && $request->has('is_exam')) {
+                $rules['class_id'] = 'required|integer';
+            }
+            $this->validate($request, $rules);
+
+
+            $dateFrom = Carbon::createFromFormat('d/m/Y', $request->get('date_from'));
+            $dateUpto = $dateFrom;
+            if(strlen($request->get('date_upto'))){
+                $dateUpto = Carbon::createFromFormat('d/m/Y', $request->get('date_upto'));
+            }
+
+            if($dateUpto->lessThan($dateFrom)){
+                return redirect()->back()->with('error', 'Date up-to can not be less than date from!');
+            }
+
+            $data =  [
+                'title' => $request->get('title'),
+                'date_from' => $dateFrom,
+                'date_upto' => $dateUpto,
+                'class_id' => $request->get('class_id',null),
+                'description' => $request->get('description',''),
+            ];
+            if($request->has('is_holiday')){
+                $data['is_holiday'] = '1';
+            }
+
+            if($request->has('is_exam')){
+                $data['is_exam'] = '1';
+            }
+
+            AcademicCalendar::updateOrCreate(['id' => $id], $data);
+
+            $msg = "Calendar entry";
+            $msg .= $id ? 'updated.' : 'added.';
+            if($id){
+                return redirect()->route('settings.academic_calendar.index')->with('success', $msg);
+            }
+            return redirect()->route('settings.academic_calendar.create')->with('success', $msg);
+        }
+
+        //for get request
+        $classes = collect();
+        $calendar = AcademicCalendar::where('id', $id)->first();
+        $is_holiday = 0;
+        $is_exam = 0;
+        $class_id = null;
+        if($calendar) {
+           $is_holiday = $calendar->is_holiday;
+           $is_exam = $calendar->is_exam;
+           $class_id = $calendar->class_id;
+        }
+
+        if(AppHelper::getInstituteCategory() == 'college') {
+            $classes = IClass::where('status', AppHelper::ACTIVE)
+                ->orderBy('order','asc')
+                ->pluck('name', 'id');
+        }
+
+         $weekends = AppHelper::getAppSettings('weekends');
+
+        return view('backend.settings.academic_calendar_add', compact('calendar', 'is_holiday',
+            'is_exam','classes','class_id','weekends'));
     }
 
 

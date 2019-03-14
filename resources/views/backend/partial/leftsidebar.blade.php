@@ -81,14 +81,6 @@
             </li>
           @endcan
 
-          @can('academic.holiday')
-            <li>
-              <a href="{{ URL::route('academic.holiday') }}">
-                <i class="fa fa-lightbulb-o"></i> <span>Holiday</span>
-              </a>
-            </li>
-          @endcan
-
           {{--<li>--}}
           {{--<a href="#">--}}
           {{--<i class="fa fa-clock-o"></i><span>Routine</span>--}}
@@ -289,6 +281,11 @@
           <li>
             <a href="{{ URL::route('settings.institute') }}">
               <i class="fa fa-building"></i> <span>Institute</span>
+            </a>
+          </li>
+          <li>
+            <a href="{{ URL::route('settings.academic_calendar.index') }}">
+              <i class="fa fa-calendar"></i> <span>Academic Calendar</span>
             </a>
           </li>
           <li>

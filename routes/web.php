@@ -107,6 +107,20 @@ Route::group(
     Route::post('settings/institute', 'SettingsController@institute')
         ->name('settings.institute');
 
+    // academic calendar
+    Route::get('settings/academic-calendar', 'SettingsController@academicCalendarIndex')
+        ->name('settings.academic_calendar.index');
+    Route::post('settings/academic-calendar', 'SettingsController@academicCalendarIndex')
+        ->name('settings.academic_calendar.destroy');
+    Route::get('settings/academic-calendar/create', 'SettingsController@academicCalendarCru')
+        ->name('settings.academic_calendar.create');
+    Route::post('settings/academic-calendar/create', 'SettingsController@academicCalendarCru')
+        ->name('settings.academic_calendar.store');
+    Route::get('settings/academic-calendar/edit/{id}', 'SettingsController@academicCalendarCru')
+        ->name('settings.academic_calendar.edit');
+    Route::post('settings/academic-calendar/update/{id}', 'SettingsController@academicCalendarCru')
+        ->name('settings.academic_calendar.update');
+
     //sms gateways
     Route::get('settings/sms-gateway', 'SettingsController@smsGatewayIndex')
         ->name('settings.sms_gateway.index');
@@ -223,13 +237,6 @@ Route::group(
     Route::post('academic/subject/status/{id}', 'AcademicController@subjectStatus')
         ->name('academic.subject_status');
 
-    // holiday
-    Route::get('academic/holiday', 'AcademicController@holidayCru')
-        ->name('academic.holiday');
-    Route::post('academic/holiday', 'AcademicController@holidayCru')
-        ->name('academic.holiday');
-    Route::post('academic/holiday-delete/{id}', 'AcademicController@holidayDestroy')
-        ->name('academic.holiday_destroy');
 
     // teacher routes
     Route::resource('teacher', 'TeacherController');
