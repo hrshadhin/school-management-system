@@ -16,10 +16,10 @@ export default class HRM {
         Generic.initCommonPageJS();
 
         $('select.emp_filter').on('change', function () {
-            $('#attendance_list_filter').trigger('changeDate');
+            $('#attendance_list_filter').trigger('dp.change');
         });
 
-        $('#attendance_list_filter').on('changeDate', function (event) {
+        $('#attendance_list_filter').on('dp.change', function (event) {
             let atDate = $(this).val();
             let employeeId = $('select[name="employee_id"]').val();
 
@@ -39,7 +39,7 @@ export default class HRM {
 
         });
 
-        $('.attendanceExistsChecker').on('changeDate', function (event) {
+        $('.attendanceExistsChecker').on('dp.change', function (event) {
             let atDate = $('input[name="attendance_date"]').val();
             let inOutDateTime = atDate + " 00:00 am";
             $('input.date_time_picker').val(inOutDateTime);
@@ -56,23 +56,40 @@ export default class HRM {
 
         });
 
-        $('input.outTime').on('changeDate', function (event) {
+        $('input.inTime').on('dp.change', function (event) {
+            let attendance_date = window.moment($('input[name="attendance_date"]').val(),'DD-MM-YYYY');
+            let inTime =  window.moment(event.date,'DD-MM-YYYY');
+            if(inTime.isBefore(attendance_date)){
+                toastr.error('In time can\'t be less than attendance date!');
+                $(this).data("DateTimePicker").date(attendance_date.format('DD/MM/YYYY, hh:mm A'));
+                return false;
+            }
+
+            let timeDiff = window.moment.duration(inTime.diff(attendance_date));
+            if(timeDiff.days()>0){
+                toastr.error('In time can\'t be greater than attendance date!');
+                $(this).data("DateTimePicker").date(attendance_date.format('DD/MM/YYYY, hh:mm A'));
+                return false;
+            }
+
+        });
+
+        $('input.outTime').on('dp.change', function (event) {
             let inTime = window.moment($(this).parents('tr').find('input.inTime').val(),'DD-MM-YYYY, hh:mm A');
             let outTime =  window.moment(event.date,'DD-MM-YYYY, hh:mm A');
 
             if(outTime.isBefore(inTime)){
                 toastr.error('Out time can\'t be less than in time!');
-                $(this).datetimepicker("update",($(this).parents('tr').find('input.inTime').val()));
+                $(this).data("DateTimePicker").date(inTime);
                 return false;
             }
             let timeDiff = window.moment.duration(outTime.diff(inTime));
             if(timeDiff.days()>0){
                 toastr.error('Can\'t work more than 24 hrs!');
-                $(this).datetimepicker("update",($(this).parents('tr').find('input.inTime').val()));
+                $(this).data("DateTimePicker").date(inTime);
                 return false;
             }
             let workingHours = [timeDiff.hours(), timeDiff.minutes()].join(':');
-
             $(this).parents('tr').find('span.workingHour').text(workingHours);
 
         });

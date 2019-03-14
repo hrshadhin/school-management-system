@@ -167,8 +167,8 @@ class SeedEmployeeAttendance extends Command
             $employeesData = Employee::where('status', AppHelper::ACTIVE)->get()->reduce(function ($employeesData, $employee) {
                 $employeesData[$employee->id_card] = [
                     'id' => $employee->id,
-                    'in_time' => $employee->duty_start,
-                    'out_time' => $employee->duty_end,
+                    'in_time' => $employee->getOriginal('duty_start'),
+                    'out_time' => $employee->getOriginal('duty_end'),
                 ];
                 return $employeesData;
             });
@@ -213,11 +213,13 @@ class SeedEmployeeAttendance extends Command
 
                                 //late or early out find
                                 if($employeeData['in_time'] && $employeeData['out_time']) {
-                                    if ($inTimeObject->greaterThan($employeeData['in_time'])) {
+                                    $empIntime = Carbon::createFromFormat('Y-m-d H:i:s',$attendance_date.' '.$employeeData['in_time']);
+                                    if ($inTimeObject->greaterThan($empIntime)) {
                                         $status[] = 1;
                                     }
 
-                                    if ($outTimeObject->lessThan($employeeData['out_time'])) {
+                                    $empOuttime = Carbon::createFromFormat('Y-m-d H:i:s',$attendance_date.' '.$employeeData['out_time']);
+                                    if ($outTimeObject->lessThan($empOuttime)) {
                                         $status[] = 2;
                                     }
                                 }

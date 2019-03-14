@@ -155,7 +155,7 @@
                                 <div class="col-md-2">
                                     <div class="form-group has-feedback">
                                         <label for="duty_start">Duty Start</label>
-                                        <input type='text' class="form-control time_picker"  readonly name="duty_start" placeholder="time" value="@if($employee){{$employee->duty_start}}@else{{ old('duty_start') }}@endif" maxlength="8" />
+                                        <input type='text' class="form-control time_picker"  readonly name="duty_start" placeholder="time" value="@if($employee && $employee->duty_start){{$employee->duty_start->format('h:i a')}}@else{{ old('duty_start') }}@endif" maxlength="8" />
                                         <span class="fa fa-clock-o form-control-feedback"></span>
                                         <span class="text-danger">{{ $errors->first('duty_start') }}</span>
                                     </div>
@@ -163,7 +163,7 @@
                                 <div class="col-md-2">
                                     <div class="form-group has-feedback">
                                         <label for="duty_end">Duty End</label>
-                                        <input type='text' class="form-control time_picker"  readonly name="duty_end" placeholder="time" value="@if($employee){{$employee->duty_end}}@else{{ old('duty_end') }}@endif" maxlength="8" />
+                                        <input type='text' class="form-control time_picker"  readonly name="duty_end" placeholder="time" value="@if($employee && $employee->duty_end){{$employee->duty_end->format('h:i a')}}@else{{ old('duty_end') }}@endif" maxlength="8" />
                                         <span class="fa fa-clock-o form-control-feedback"></span>
                                         <span class="text-danger">{{ $errors->first('duty_end') }}</span>
                                     </div>

@@ -45,7 +45,7 @@ class StudentAttendanceController extends Controller
         $class_id = $request->query->get('class',0);
         $section_id = $request->query->get('section',0);
         $acYear = $request->query->get('academic_year',0);
-        $attendance_date = $request->query->get('attendance_date','');
+        $attendance_date = $request->query->get('attendance_date',date('d/m/Y'));
         //if its college then have to get those academic years
         $academic_years = [];
         if(AppHelper::getInstituteCategory() == 'college') {
@@ -73,8 +73,30 @@ class StudentAttendanceController extends Controller
         //now fetch attendance data
         $attendances = [];
         if($class_id && $section_id && $acYear && strlen($attendance_date) >= 10) {
+            $att_date = Carbon::createFromFormat('d/m/Y',$attendance_date)->toDateString();
+              $attendances = Registration::where('academic_year_id', $acYear)
+                 ->where('class_id', $class_id)
+                 ->where('section_id', $section_id)
+                 ->where('status', AppHelper::ACTIVE)
+                 ->with(['student' => function ($query) {
+                     $query->select('name','id');
+                 }])
+                 ->with(['attendanceSingleDay' => function ($query) use($att_date, $class_id, $acYear) {
+                     $query->select('id','present','registration_id','in_time','out_time','staying_hour')
+                         ->where('academic_year_id', $acYear)
+                         ->where('class_id', $class_id)
+                         ->whereDate('attendance_date', $att_date);
+                 }])
+                 ->whereHas('attendance' , function ($query) use($att_date, $class_id, $acYear) {
+                     $query->select('id','registration_id')
+                         ->where('academic_year_id', $acYear)
+                         ->where('class_id', $class_id)
+                         ->whereDate('attendance_date', $att_date);
+                 })
+                 ->select('id','regi_no','roll_no','student_id')
+                 ->orderBy('roll_no','asc')
+                 ->get();
 
-            $attendances = $this->getAttendanceByFilters($class_id, $section_id, $acYear, $attendance_date);
             $sections = Section::where('status', AppHelper::ACTIVE)
                 ->where('class_id', $class_id)
                 ->pluck('name', 'id');
@@ -106,7 +128,7 @@ class StudentAttendanceController extends Controller
                 $query->select('name','id');
             }])
             ->whereHas('attendance' , function ($query) use($att_date, $class_id, $acYear) {
-                $query->select('id','present','registration_id')
+                $query->select('id','registration_id')
                     ->where('academic_year_id', $acYear)
                     ->where('class_id', $class_id)
                     ->whereDate('attendance_date', $att_date);
@@ -121,20 +143,85 @@ class StudentAttendanceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
+
+        $students = collect();
+        $academic_year = '';
+        $class_name = '';
+        $section_name = '';
+        $academic_years = [];
+        $attendance_date = date('d/m/Y');
+        $acYear = null;
+        $class_id = null;
+        $section_id = null;
+
+        if ($request->isMethod('post')) {
+
+            if(AppHelper::getInstituteCategory() == 'college') {
+                $acYear = $request->get('academic_year_id', 0);
+            }
+            else{
+                $acYear = AppHelper::getAcademicYear();
+            }
+            $class_id = $request->get('class_id',0);
+            $section_id = $request->get('section_id',0);
+            $attendance_date = $request->get('attendance_date','');
+
+            $attendances = $this->getAttendanceByFilters($class_id, $section_id, $acYear, $attendance_date, true);
+            if($attendances){
+                return redirect()->route('student_attendance.create')->with("error","Attendance already exists!");
+            }
+
+            $students = Registration::with(['info' => function($query){
+                $query->select('name','id');
+            }])->where('academic_year_id', $acYear)
+                ->where('class_id', $class_id)
+                ->where('section_id', $section_id)
+                ->select( 'regi_no', 'roll_no', 'id','student_id')
+                ->orderBy('roll_no','asc')
+                ->get();
+
+
+            $classInfo = IClass::where('status', AppHelper::ACTIVE)
+                ->where('id', $class_id)
+                ->first();
+            $class_name = $classInfo->name;
+            $sectionsInfo = Section::where('status', AppHelper::ACTIVE)
+                ->where('id', $section_id)
+                ->where('class_id', $class_id)
+                ->first();
+            $section_name = $sectionsInfo->name;
+
+
+            if(AppHelper::getInstituteCategory() == 'college') {
+                $acYearInfo = AcademicYear::where('status', '1')->where('id', $acYear)->first();
+                $academic_year = $acYearInfo->title;
+            }
+        }
+
         $classes = IClass::where('status', AppHelper::ACTIVE)
             ->orderBy('order','asc')
             ->pluck('name', 'id');
+
         //if its college then have to get those academic years
-        $academic_years = [];
         if(AppHelper::getInstituteCategory() == 'college') {
             $academic_years = AcademicYear::where('status', '1')->orderBy('id', 'desc')->pluck('title', 'id');
         }
 
+
         return view('backend.attendance.student.add', compact(
             'academic_years',
-            'classes'
+            'classes',
+            'sections',
+            'students',
+            'class_name',
+            'academic_year',
+            'section_name',
+            'attendance_date',
+            'class_id',
+            'section_id',
+            'acYear'
         ));
 
     }
@@ -150,12 +237,16 @@ class StudentAttendanceController extends Controller
         //validate form
         $messages = [
             'registrationIds.required' => 'This section has no students!',
+            'outTime.required' => 'Out time missing!',
+            'inTime.required' => 'In time missing!',
         ];
         $rules = [
             'class_id' => 'required|integer',
             'section_id' => 'required|integer',
             'attendance_date' => 'required|min:10|max:11',
-            'registrationIds' => 'required',
+            'registrationIds' => 'required|array',
+            'inTime' => 'required|array',
+            'outTime' => 'required|array',
 
         ];
         //if it college then need another 2 feilds
@@ -186,20 +277,81 @@ class StudentAttendanceController extends Controller
 
         //process the insert data
         $students = $request->get('registrationIds');
-        $present = $request->get('present');
         $attendance_date = Carbon::createFromFormat('d/m/Y', $request->get('attendance_date'))->format('Y-m-d');
         $dateTimeNow = Carbon::now(env('APP_TIMEZONE','Asia/Dhaka'));
+        $inTimes = $request->get('inTime');
+        $outTimes = $request->get('outTime');
+
+        //fetch institute shift running times
+        $shiftData = AppHelper::getAppSettings('shift_data');
+        if($shiftData){
+            $shiftData = json_decode($shiftData, true);
+        }
+        $shiftRuningTimes = [];
+
+        foreach ($shiftData as $shift => $times){
+            $shiftRuningTimes[$shift] = [
+                'start' => Carbon::createFromFormat('d/m/Y H:i:s',$request->get('attendance_date').' '.$times['start']),
+                'end' => Carbon::createFromFormat('d/m/Y H:i:s',$request->get('attendance_date').' '.$times['end'])
+            ];
+        }
+
+        $studentsShift = Registration::whereIn('id', $students)
+            ->get(['id','shift'])
+            ->reduce(function ($studentsShift, $student) {
+                $studentsShift[$student->id] = $student->shift;
+                return $studentsShift;
+        });
 
         $attendances = [];
         $absentIds = [];
+        $parseError = false;
+
         foreach ($students as $student){
-            $isPresent = isset($present[$student]) ? '1' : '0';
+
+            $inTime = Carbon::createFromFormat('d/m/Y h:i a', $inTimes[$student]);
+            $outTime = Carbon::createFromFormat('d/m/Y h:i a', $outTimes[$student]);
+
+            if($outTime->lessThan($inTime)){
+                $message = "Out time can't be less than in time!";
+                $parseError = true;
+                break;
+            }
+
+            if($inTime->diff($outTime)->days > 1){
+                $message = "Can\'t stay more than 24 hrs!";
+                $parseError = true;
+                break;
+            }
+
+            $timeDiff  = $inTime->diff($outTime)->format('%H:%I');
+            $isPresent = ($timeDiff == "00:00") ? "0" : "1";
+            $status = [];
+
+            //late or early out find
+            if($timeDiff != "00:00" && strlen($studentsShift[$student]) && isset($shiftRuningTimes[$studentsShift[$student]])){
+
+                if($inTime->greaterThan($shiftRuningTimes[$studentsShift[$student]]['start'])){
+                    $status[] = 1;
+                }
+
+                if($outTime->lessThan($shiftRuningTimes[$studentsShift[$student]]['end'])){
+                    $status[] = 2;
+                }
+
+
+
+            }
 
             $attendances[] = [
                 "academic_year_id" => $acYear,
                 "class_id" => $class_id,
                 "registration_id" => $student,
                 "attendance_date" => $attendance_date,
+                "in_time" => $inTime,
+                "out_time" => $outTime,
+                "staying_hour" => $timeDiff,
+                "status" => implode(',',$status),
                 "present"   => $isPresent,
                 "created_at" => $dateTimeNow,
                 "created_by" => auth()->user()->id,
@@ -209,6 +361,12 @@ class StudentAttendanceController extends Controller
                 $absentIds[] = $student;
             }
         }
+
+        if($parseError){
+            return redirect()->route('employee_attendance.create')->with("error",$message);
+        }
+
+//        dd($attendances, $absentIds);
 
         DB::beginTransaction();
         try {

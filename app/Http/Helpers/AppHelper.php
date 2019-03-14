@@ -708,12 +708,10 @@ class AppHelper
             $id = trim(ltrim($lineSplits[1], '0'));
             //only for student id , remove teacher ids
             if(strlen($id) > 2){
-                //parse date
-                $atd = new \DateTime(date('Ymd', strtotime($lineSplits[2])));
-                $atndDate = $atd->format('Y-m-d');
                 $data = [
-                    'date' => $atndDate,
+                    'date' => $lineSplits[2],
                     'id' => $id,
+                    'time' => trim($lineSplits[3]),
                 ];
             }
 
@@ -724,9 +722,12 @@ class AppHelper
             $id = trim($lineSplits[0]);
             //only for student id , remove teacher ids
             if(strlen($id) > 2){
+                $aDate = str_replace('-','',$lineSplits[1]);
+                $aTime = str_replace(':','',$lineSplits[2]);
                 $data = [
-                    'date' => $lineSplits[1],
+                    'date' => $aDate,
                     'id' => $id,
+                    'time' => $aTime,
                 ];
             }
         }
