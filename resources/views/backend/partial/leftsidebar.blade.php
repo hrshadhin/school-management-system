@@ -264,7 +264,25 @@
             </span>
         </a>
         <ul class="treeview-menu">
-         
+          <li class="treeview">
+            <a href="#">
+              <i class="fa icon-studentreport"></i>
+              <span>Student</span>
+              <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+            </a>
+            <ul class="treeview-menu">
+              @can('report.student_monthly_attendance')
+                <li>
+                  <a href="{{ URL::route('report.student_monthly_attendance') }}">
+                    <i class="fa icon-attendancereport"></i> <span>Monthly Attendance</span>
+                  </a>
+                </li>
+              @endcan
+            </ul>
+          </li>
+
         </ul>
       </li>
 

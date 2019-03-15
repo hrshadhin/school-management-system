@@ -33,7 +33,7 @@
         @yield('reportBody')
         <!-- /.report body -->
         <!-- report footer -->
-        @include('backend.report.layouts.footer')
+{{--        @include('backend.report.layouts.footer')--}}
         <!-- /.report footer -->
     </section>
     <!-- /.content -->

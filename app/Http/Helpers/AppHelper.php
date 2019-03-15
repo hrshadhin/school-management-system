@@ -10,6 +10,7 @@ use App\Registration;
 use App\SiteMeta;
 use App\Template;
 use App\User;
+use Carbon\Carbon;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Support\Facades\App;
@@ -108,13 +109,13 @@ class AppHelper
     ];
 
     const MARKS_DISTRIBUTION_TYPES = [
-      1 => "Written",
-      2 => "MCQ",
-      3 => "SBA",
-      4 => "Attendance",
-      5 => "Assignment",
-      6 => "Lab Report",
-      7 => "Practical",
+        1 => "Written",
+        2 => "MCQ",
+        3 => "SBA",
+        4 => "Attendance",
+        5 => "Assignment",
+        6 => "Lab Report",
+        7 => "Practical",
     ];
 
     const GRADE_TYPES = [
@@ -487,16 +488,16 @@ class AppHelper
      */
     public static function getUsersByGroup($groupId){
 
-            try{
+        try{
 
-                $users = User::rightJoin('user_roles', 'users.id', '=', 'user_roles.user_id')
-                    ->where('user_roles.role_id', $groupId)
-                    ->select('users.id')
-                    ->get();
+            $users = User::rightJoin('user_roles', 'users.id', '=', 'user_roles.user_id')
+                ->where('user_roles.role_id', $groupId)
+                ->select('users.id')
+                ->get();
 
-            } catch (\Illuminate\Database\QueryException $e) {
-                $users = collect();
-            }
+        } catch (\Illuminate\Database\QueryException $e) {
+            $users = collect();
+        }
 
 
         return $users;
@@ -582,7 +583,7 @@ class AppHelper
         return true;
     }
 
-  /**
+    /**
      *  Send notification to employee via sms
      * @param $students
      * @param $date
@@ -787,6 +788,50 @@ class AppHelper
 
         return $imageString;
 
+    }
+
+    /**
+     * @param Carbon $start_date
+     * @param Carbon $end_date
+     * @param bool $checkWeekends
+     * @param array $weekendDays
+     * @return array
+     */
+    public static function generateDateRangeForReport(Carbon $start_date, Carbon $end_date, $checkWeekends=false, $weekendDays=[], Carbon $limitDate=null, $exludeWeekends=false)
+    {
+
+        if($limitDate){
+            $end_date = $limitDate;
+        }
+
+        $dates = [];
+        for($date = $start_date->copy(); $date->lte($end_date); $date->addDay()) {
+            if($checkWeekends){
+                $weekend = 0;
+                if(in_array($date->dayOfWeek, $weekendDays)){
+                    $weekend = 1;
+                }
+
+                if($exludeWeekends){
+                    if(!$weekend){
+                        $dates[$date->format('Y-m-d')] = intval($date->format('d'));
+                    }
+                    continue;
+                }
+
+                $dates[$date->format('Y-m-d')] = [
+                    'day' => intval($date->format('d')),
+                    'weekend' => $weekend
+                ];
+
+            }
+            else{
+                $dates[$date->format('Y-m-d')] = intval($date->format('d'));
+            }
+
+        }
+
+        return $dates;
     }
 
 

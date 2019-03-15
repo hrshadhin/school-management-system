@@ -347,8 +347,9 @@ Route::group(
         ->name('result.create');
 
     // Reporting
-        
 
+    Route::any('report/student-monthly-attendance', 'ReportController@studentMonthlyAttendance')
+        ->name('report.student_monthly_attendance');
 
 }
 );
