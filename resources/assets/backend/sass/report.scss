@@ -122,12 +122,12 @@ table {
 }
 
 .report-footer {
-  font-size: inherit;
-  position: relative;
+  font-size: 10px;
+  position: fixed;
   bottom: 0;
+  height: 30px;
   width: 100%;
-  padding: 5px;
-  margin-top: 30px;
+  padding:10px;
 }
 
 .report-footer .left{
@@ -155,8 +155,8 @@ table {
   @page {
     size:  A4 portrait;
     margin: 2mm;
+    margin-bottom: 20px;
   }
-
 
   * {
     -webkit-print-color-adjust: exact !important; /* Chrome, Safari */
