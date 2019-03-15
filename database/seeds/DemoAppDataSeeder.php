@@ -204,7 +204,7 @@ class DemoAppDataSeeder extends Seeder
             ['meta_key' => 'disable_language', 'meta_value' => 1, 'created_by' => $created_by, 'created_at' => $created_at],
             ['meta_key' => 'institute_type', 'meta_value' => 1, 'created_by' => $created_by, 'created_at' => $created_at],
             ['meta_key' => 'shift_data', 'meta_value' => json_encode($shiftData), 'created_by' => $created_by, 'created_at' => $created_at],
-            ['meta_key' => 'weekends', 'meta_value' => json_encode([0]), 'created_by' => $created_by, 'created_at' => $created_at]
+            ['meta_key' => 'weekends', 'meta_value' => json_encode([5]), 'created_by' => $created_by, 'created_at' => $created_at]
         ];
 
         AppMeta::insert($insertData);

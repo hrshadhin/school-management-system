@@ -2,7 +2,7 @@
 @extends('backend.layouts.master')
 
 <!-- Page title -->
-@section('pageTitle') SMS Gateway @endsection
+@section('pageTitle') Academic Calendar @endsection
 <!-- End block -->
 
 
