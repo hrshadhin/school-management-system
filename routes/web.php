@@ -347,17 +347,12 @@ Route::group(
         ->name('result.create');
 
     // Reporting
+        
 
 
 }
 );
 
-Route::get('report', function (){
-    $headerData = new stdClass();
-    $headerData->reportTitle = 'Monthly Attendance';
-    $headerData->reportSubTitle = 'Month: January, 2019';
-    return view('backend.report.student.attendance.monthly_section_wise_print', compact('headerData'));
-});
 
 //change website locale
 Route::get(
