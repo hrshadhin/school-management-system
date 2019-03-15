@@ -42,14 +42,11 @@
                                 <thead>
                                 <tr>
                                     <th width="5%">#</th>
-                                    <th width="@if(AppHelper::getInstituteCategory() == 'college') {{'20%'}} @else {{'30%'}} @endif">Title</th>
+                                    <th width="{{'30%'}}">Title</th>
                                     <th width="12%">Date From</th>
                                     <th width="12%">Date Upto</th>
                                     <th width="5%">Holiday</th>
                                     <th width="5%">Exam</th>
-                                    @if(AppHelper::getInstituteCategory() == 'college')
-                                    <th width="10%">Exam Class</th>
-                                    @endif
                                     <th width="16%"> Description</th>
                                     <th class="notexport" width="15%">Action</th>
                                 </tr>
@@ -73,11 +70,6 @@
                                                 <span class="badge bg-3">Yes</span>
                                             @endif
                                         </td>
-                                        @if(AppHelper::getInstituteCategory() == 'college')
-                                            <td>
-                                                {{$calendar->class->name}}
-                                            </td>
-                                        @endif
                                         <td>
                                             {{$calendar->description}}
                                         </td>
@@ -105,14 +97,11 @@
                                 <tfoot>
                                 <tr>
                                     <th width="5%">#</th>
-                                    <th width="@if(AppHelper::getInstituteCategory() == 'college') {{'20%'}} @else {{'30%'}} @endif">Title</th>
+                                    <th width="{{'30%'}}">Title</th>
                                     <th width="12%">Date From</th>
                                     <th width="12%">Date Upto</th>
                                     <th width="5%">Holiday</th>
                                     <th width="5%">Exam</th>
-                                    @if(AppHelper::getInstituteCategory() == 'college')
-                                        <th width="10%">Exam Class</th>
-                                    @endif
                                     <th width="16%"> Description</th>
                                     <th class="notexport" width="15%">Action</th>
                                 </tr>

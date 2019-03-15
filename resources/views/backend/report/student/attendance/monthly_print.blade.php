@@ -1,4 +1,4 @@
-@extends('backend.report.layouts.master', ['headerData' => $headerData,'printIt' => 0])
+@extends('backend.report.layouts.master', ['headerData' => $headerData,'printIt' => 1])
 @section('extraStyle')
     <style>
         @page {
@@ -51,10 +51,7 @@
                                             $status = '';
                                             $color = '';
 
-                                            if(AppHelper::getInstituteCategory() == 'college') {
 
-                                            }
-                                            else{
                                                 if(isset($attendanceData[$student->id][$date])) {
                                                     if($attendanceData[$student->id][$date]['present']  == 1){
                                                         $status = 'P';
@@ -95,7 +92,7 @@
                                                  }
 
 
-                                             }
+
 
                                             if($value['weekend']){
                                                     $status .= 'W';
@@ -126,7 +123,7 @@
         <div class="report-authority">
             <div class="row">
                 <div class="col-xs-4">
-                    <h5>Printed By</h5>
+                    <h5>Printed By: {{auth()->user()->name}}</h5>
                 </div>
                 <div class="col-xs-4">
                     <h5>Class Teacher</h5>

@@ -285,20 +285,34 @@ class ReportController extends Controller
                 $wekends = json_decode($wekends);
             }
             //pull holidays
-            $calendarData = AcademicCalendar::whereDate('date_from', '>=', $monthStart->format('Y-m-d'))
-                ->whereDate('date_from', '<=', $monthEnd->format('Y-m-d'))
-                ->where(function ($q){
-                    $q->where('is_holiday','1')
-                        ->orWhere('is_exam','1');
-                })
-                ->select('date_from','date_upto','is_holiday','is_exam','class_id')
+            $calendarData = AcademicCalendar::where(function ($q){
+                   $q->where('is_holiday','1')
+                       ->orWhere('is_exam','1');
+               })
+                ->where(function ($q) use($monthStart, $monthEnd){
+                    $q->whereDate('date_from', '>=', $monthStart->format('Y-m-d'))
+                        ->whereDate('date_from', '<=', $monthEnd->format('Y-m-d'))
+                        ->orWhere(function ($q) use($monthStart, $monthEnd){
+                            $q->whereDate('date_upto', '>=', $monthStart->format('Y-m-d'))
+                                ->whereDate('date_upto', '<=', $monthEnd->format('Y-m-d'));
+                        });
+                    })
+
+                ->select('date_from','date_upto','is_holiday','is_exam','class_ids')
                 ->get()
-                ->reduce(function ($calendarData, $calendar) use($monthEnd, $wekends){
-                    $limitDate = null;
-                    if($calendar->date_upto->gt($calendar->date_from)){
-                        $limitDate = $monthEnd->copy();
+                ->reduce(function ($calendarData, $calendar) use($monthEnd, $monthStart, $wekends){
+
+                    $startDate = $calendar->date_from;
+                    $endDate = $calendar->date_upto;
+                    if($calendar->date_upto->gt($monthEnd)){
+                        $endDate = $monthEnd;
                     }
-                   $cladendarDateRange = AppHelper::generateDateRangeForReport($calendar->date_from, $calendar->date_upto, true, $wekends, $limitDate, true);
+
+                    if($calendar->date_from->lt($monthStart)){
+                        $startDate = $monthStart;
+                    }
+
+                    $cladendarDateRange = AppHelper::generateDateRangeForReport($startDate, $endDate, true, $wekends, true);
                    foreach ($cladendarDateRange as $date => $value){
                        $symbols = 'H';
                        if($calendar->is_exam == 1){
@@ -308,6 +322,7 @@ class ReportController extends Controller
                    }
                     return $calendarData;
                 });
+
 
             $monthDates = AppHelper::generateDateRangeForReport($monthStart, $monthEnd, true, $wekends);
 
