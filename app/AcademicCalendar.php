@@ -14,5 +14,5 @@ class AcademicCalendar extends Model
      *
      * @var array
      */
-    protected $fillable = ['title','date_from', 'date_upto', 'is_holiday','is_exam','class_id','description'];
+    protected $fillable = ['title','date_from', 'date_upto', 'is_holiday','is_exam','class_ids','description'];
 }

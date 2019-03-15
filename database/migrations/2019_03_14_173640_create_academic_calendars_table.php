@@ -20,13 +20,12 @@ class CreateAcademicCalendarsTable extends Migration
             $table->date('date_upto');
             $table->enum('is_holiday',[0,1])->default(0);
             $table->enum('is_exam',[0,1])->default(0);
-            $table->unsignedInteger('class_id')->nullable();
+            $table->string('class_ids')->nullable();
             $table->string('description', 500)->nullable();
             $table->timestamps();
             $table->softDeletes();
             $table->userstamps();
 
-            $table->foreign('class_id')->references('id')->on('i_classes');
         });
     }
 

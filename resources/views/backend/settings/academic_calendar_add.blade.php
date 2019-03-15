@@ -85,10 +85,10 @@
                                             </div>
                                         </div>
                                         @if(AppHelper::getInstituteCategory() == 'college')
-                                            <div class="col-md-3 classDiv" style="display: none;">
+                                            <div class="col-md-3" >
                                                 <div class="form-group has-feedback">
-                                                    <label for="class_id">Class<span class="text-danger">*</span></label>
-                                                    {!! Form::select('class_id', $classes, $class_id , ['placeholder' => 'Pick a class...','class' => 'form-control select2', 'required' => 'true']) !!}
+                                                    <label for="class_id">Class</label>
+                                                    {!! Form::select('class_id[]', $classes, $class_id , ['class' => 'form-control select2', 'multiple'=>'true']) !!}
                                                     <span class="form-control-feedback"></span>
                                                     <span class="text-danger">{{ $errors->first('class_id') }}</span>
                                                 </div>
@@ -131,12 +131,11 @@
             if(institute_category == 'college') {
                 $('input[name="is_exam"]').on('ifChecked ifUnchecked', function (event) {
                     if (event.type == 'ifChecked') {
-                        $('.classDiv').show();
-                        $('select[name="class_id"]').prop('required', true);
-                        $('select[name="class_id"]').select2({'placeholder': 'Pic a class'})
+                        $('select[name="class_id[]"]').prop('required', true);
                     } else {
-                        $('.classDiv').hide();
-                        $('select[name="class_id"]').prop('required', false);
+
+                        $('select[name="class_id[]"]').prop('required', false);
+                        $('select[name="class_id[]"]').val('').trigger('change');
                     }
                 });
             }

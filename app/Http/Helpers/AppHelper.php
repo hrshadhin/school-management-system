@@ -797,12 +797,9 @@ class AppHelper
      * @param array $weekendDays
      * @return array
      */
-    public static function generateDateRangeForReport(Carbon $start_date, Carbon $end_date, $checkWeekends=false, $weekendDays=[], Carbon $limitDate=null, $exludeWeekends=false)
+    public static function generateDateRangeForReport(Carbon $start_date, Carbon $end_date, $checkWeekends=false, $weekendDays=[], $exludeWeekends=false)
     {
 
-        if($limitDate){
-            $end_date = $limitDate;
-        }
 
         $dates = [];
         for($date = $start_date->copy(); $date->lte($end_date); $date->addDay()) {

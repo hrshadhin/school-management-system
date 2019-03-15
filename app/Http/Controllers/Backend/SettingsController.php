@@ -370,7 +370,7 @@ class SettingsController extends Controller
             ];
 
             if(AppHelper::getInstituteCategory() == 'college' && $request->has('is_exam')) {
-                $rules['class_id'] = 'required|integer';
+                $rules['class_id'] = 'required|array';
             }
             $this->validate($request, $rules);
 
@@ -389,7 +389,6 @@ class SettingsController extends Controller
                 'title' => $request->get('title'),
                 'date_from' => $dateFrom,
                 'date_upto' => $dateUpto,
-                'class_id' => $request->get('class_id',null),
                 'description' => $request->get('description',''),
             ];
             if($request->has('is_holiday')){
@@ -398,6 +397,15 @@ class SettingsController extends Controller
 
             if($request->has('is_exam')){
                 $data['is_exam'] = '1';
+
+                if(AppHelper::getInstituteCategory() == 'college') {
+                    $data['class_ids'] = json_encode($request->get('class_id', []));
+                }
+
+            }
+            else{
+                $data['is_exam'] = '0';
+                $data['class_ids']  = null;
             }
 
             AcademicCalendar::updateOrCreate(['id' => $id], $data);
@@ -415,11 +423,11 @@ class SettingsController extends Controller
         $calendar = AcademicCalendar::where('id', $id)->first();
         $is_holiday = 0;
         $is_exam = 0;
-        $class_id = null;
+        $class_id = [];
         if($calendar) {
            $is_holiday = $calendar->is_holiday;
            $is_exam = $calendar->is_exam;
-           $class_id = $calendar->class_id;
+           $class_id = $calendar->class_ids ? json_decode($calendar->class_ids) : [];
         }
 
         if(AppHelper::getInstituteCategory() == 'college') {
