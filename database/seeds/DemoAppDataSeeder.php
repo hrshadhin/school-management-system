@@ -198,8 +198,7 @@ class DemoAppDataSeeder extends Seeder
             ]
         ];
         $insertData = [
-            ['meta_key' => 'frontend_website' ,'meta_value' => 0, 'created_by' => $created_by, 'created_at' => $created_at],
-            ['meta_key' => 'frontend_website' ,'meta_value' => 0, 'created_by' => $created_by, 'created_at' => $created_at],
+            ['meta_key' => 'frontend_website' ,'meta_value' => 1, 'created_by' => $created_by, 'created_at' => $created_at],
             ['meta_key' => 'language', 'meta_value' =>  'en', 'created_by' => $created_by, 'created_at' => $created_at],
             ['meta_key' => 'disable_language', 'meta_value' => 1, 'created_by' => $created_by, 'created_at' => $created_at],
             ['meta_key' => 'institute_type', 'meta_value' => 1, 'created_by' => $created_by, 'created_at' => $created_at],
