@@ -280,6 +280,220 @@
                   </a>
                 </li>
               @endcan
+                <li>
+                  <a href="#">
+                    <i class="fa icon-attendance"></i> <span>Monthly Details Attendance</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    <i class="fa icon-attendance"></i> <span>Monthly Individual Attendance</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    <i class="fa icon-attendance"></i> <span>Monthly Individual Details Attendance</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    <i class="fa icon-attendance"></i> <span>Weekly Attendance</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    <i class="fa icon-attendance"></i> <span>Weekly Details Attendance</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    <i class="fa icon-attendance"></i> <span>Weekly Individual Attendance</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    <i class="fa icon-attendance"></i> <span>Weekly Individual Details Attendance</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    <i class="fa icon-attendance"></i> <span>Payment History</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    <i class="fa icon-attendance"></i> <span>Student List</span>
+                  </a>
+                </li>
+            </ul>
+          </li>
+          <li class="treeview">
+            <a href="#">
+              <i class="fa fa-users"></i>
+              <span>HRM</span>
+              <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+            </a>
+            <ul class="treeview-menu">
+              <li>
+                <a href="#">
+                  <i class="fa icon-attendance"></i> <span>Absenteeism Attendance</span>
+                </a>
+              </li>
+              <li>
+                <a href="#"><i class="fa icon-attendance"></i> <span>Monthly Attendance</span></a>
+              </li>
+              <li>
+                <a href="#"><i class="fa icon-attendance"></i> <span>Monthly Details Attendance</span></a>
+              </li>
+              <li>
+                <a href="#"><i class="fa icon-attendance"></i> <span>Employee List</span></a>
+              </li>
+
+            </ul>
+          </li>
+
+          <li class="treeview">
+            <a href="#">
+              <i class="fa icon-exam"></i>
+              <span>Exam</span>
+              <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+            </a>
+            <ul class="treeview-menu">
+              <li>
+                <a href="#"><i class="fa fa-id-card"></i> <span>Admit Card</span></a>
+              </li>
+              <li>
+                <a href="#"><i class="fa fa-sort-numeric-asc"></i> <span>Seat Plan</span></a>
+              </li>
+            </ul>
+          </li>
+
+          <li class="treeview">
+            <a href="#">
+              <i class="fa icon-mark2"></i>
+              <span>Marks & Result</span>
+              <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+            </a>
+            <ul class="treeview-menu">
+              <li>
+                <a href="#"><i class="fa fa-list-alt"></i><span>Passing Summery(Class)</span></a>
+              </li>
+              <li>
+                <a href="#"><i class="fa fa-list-alt"></i><span>Passing Summery(Subject)</span></a>
+              </li>
+              <li>
+                <a href="#"><i class="fa fa-list-alt"></i><span>Pass-Fail Percentage</span></a>
+              </li>
+              <li>
+                <a href="#"><i class="fa fa-list-alt"></i><span>Pass-Fail Summery</span></a>
+              </li>
+              <li>
+                <a href="#"><i class="fa fa-list-alt"></i><span>Merit Position</span></a>
+              </li>
+              <li>
+                <a href="#"><i class="fa fa-list-alt"></i><span>Highest Marks</span></a>
+              </li>
+              <li>
+                <a href="#"><i class="fa fa-list-alt"></i><span>Marksheet</span></a>
+              </li>
+              <li>
+                <a href="#"><i class="fa fa-list-alt"></i><span>Marksheet Public</span></a>
+              </li>
+              <li>
+                <a href="#"><i class="fa fa-list-alt"></i><span>Tabulationsheet</span></a>
+              </li>
+            </ul>
+          </li>
+
+          <li class="treeview">
+            <a href="#">
+              <i class="fa icon-hostel"></i>
+              <span>Hostel</span>
+              <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+            </a>
+            <ul class="treeview-menu">
+              <li>
+                <a href="#"><i class="fa fa-list-alt"></i><span>Member List</span></a>
+              </li>
+              <li>
+                <a href="#"><i class="fa fa-list-alt"></i><span>Fee collection</span></a>
+              </li>
+            </ul>
+          </li>
+          <li class="treeview">
+            <a href="#">
+              <i class="fa icon-library"></i>
+              <span>Library</span>
+              <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+            </a>
+            <ul class="treeview-menu">
+              <li>
+                <a href="#"><i class="fa fa-list-alt"></i><span>Books Summary</span></a>
+              </li>
+              <li>
+                <a href="#"><i class="fa fa-list-alt"></i><span>Fine Collection</span></a>
+              </li>
+
+            </ul>
+          </li>
+          <li class="treeview">
+            <a href="#">
+              <i class="fa icon-account"></i>
+              <span>Account</span>
+              <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+            </a>
+            <ul class="treeview-menu">
+              <li>
+                <a href="#"><i class="fa fa-list-alt"></i><span>Monthly Collection</span></a>
+              </li>
+              <li>
+                <a href="#"><i class="fa fa-list-alt"></i><span>Monthly Expenditure</span></a>
+              </li>
+              <li>
+                <a href="#"><i class="fa fa-list-alt"></i><span>Total Collection</span></a>
+              </li>
+              <li>
+                <a href="#"><i class="fa fa-list-alt"></i><span>Total Expenditure</span></a>
+              </li>
+              <li>
+                <a href="#"><i class="fa fa-list-alt"></i><span>Balance Sheet</span></a>
+              </li>
+            </ul>
+          </li>
+          <li class="treeview">
+            <a href="#">
+              <i class="fa icon-payment"></i>
+              <span>Payroll</span>
+              <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+            </a>
+            <ul class="treeview-menu">
+              <li>
+                <a href="#"><i class="fa fa-list-alt"></i><span>Salary Sheet(M.P.O)</span></a>
+              </li>
+              <li>
+                <a href="#"><i class="fa fa-list-alt"></i><span>Salary Sheet Bangla(M.P.O)</span></a>
+              </li>
+              <li>
+                <a href="#"><i class="fa fa-list-alt"></i><span>Salary Sheet</span></a>
+              </li>
+              <li>
+                <a href="#"><i class="fa fa-list-alt"></i><span>Salary Sheet Bangla</span></a>
+              </li>
+              <li>
+                <a href="#"><i class="fa fa-list-alt"></i><span>Employee Payment History</span></a>
+              </li>
             </ul>
           </li>
 
