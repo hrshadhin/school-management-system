@@ -496,6 +496,11 @@
               </li>
             </ul>
           </li>
+          <li>
+            <a href="#">
+              <i class="fa icon-attendance"></i> <span>Academic Calendar</span>
+            </a>
+          </li>
 
         </ul>
       </li>
