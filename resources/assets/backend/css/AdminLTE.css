@@ -4936,3 +4936,9 @@ table.text-center th {
   display: inline;
   margin-left: 50px;
 }
+
+.select2-container{ width: 100% !important; }
+
+.margin-top-24 {
+  margin-top: 24px;
+}

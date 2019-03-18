@@ -12,7 +12,7 @@ export default class Reports {
     }
 
     static commonJs() {
-        $("#reportForm").validate({
+        $("#reportForm, .reportForm").validate({
             errorElement: "em",
             errorPlacement: function (error, element) {
                 // Add the `help-block` class to the error element

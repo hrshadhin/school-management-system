@@ -1025,6 +1025,11 @@ class PermissionTableSeeder extends Seeder
                 "slug" => "report.student_monthly_attendance",
                 "name" => "Student Monthly Attendance View",
                 "group" => "Report"
+            ],
+            [
+                "slug" => "report.student_list",
+                "name" => "Student List View",
+                "group" => "Report"
             ]
             // Report
         ];
