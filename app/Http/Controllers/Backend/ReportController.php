@@ -232,11 +232,12 @@ class ReportController extends Controller
                 'section_id' => 'required|integer',
                 'month' => 'required|min:7|max:7',
             ];
-            $this->validate($request, $rules);
 
             if(AppHelper::getInstituteCategory() == 'college') {
                 $rules['academic_year'] = 'required|integer';
             }
+
+            $this->validate($request, $rules);
 
             $month = Carbon::createFromFormat('m/Y', $request->get('month'))->timezone(env('APP_TIMEZONE','Asia/Dhaka'));
             $classId = $request->get('class_id', 0);
@@ -273,8 +274,8 @@ class ReportController extends Controller
                         $inLate = 1;
                     }
                     $attendanceData[$attendance->registration_id][$attendance->getOriginal('attendance_date')] = [
-                      'present' => $attendance->getOriginal('present'),
-                      'inLate'  => $inLate
+                        'present' => $attendance->getOriginal('present'),
+                        'inLate'  => $inLate
                     ];
 
                     return $attendanceData;
@@ -286,9 +287,9 @@ class ReportController extends Controller
             }
             //pull holidays
             $calendarData = AcademicCalendar::where(function ($q){
-                   $q->where('is_holiday','1')
-                       ->orWhere('is_exam','1');
-               })
+                $q->where('is_holiday','1')
+                    ->orWhere('is_exam','1');
+            })
                 ->where(function ($q) use($monthStart, $monthEnd){
                     $q->whereDate('date_from', '>=', $monthStart->format('Y-m-d'))
                         ->whereDate('date_from', '<=', $monthEnd->format('Y-m-d'))
@@ -296,7 +297,7 @@ class ReportController extends Controller
                             $q->whereDate('date_upto', '>=', $monthStart->format('Y-m-d'))
                                 ->whereDate('date_upto', '<=', $monthEnd->format('Y-m-d'));
                         });
-                    })
+                })
 
                 ->select('date_from','date_upto','is_holiday','is_exam','class_ids')
                 ->get()
@@ -313,13 +314,13 @@ class ReportController extends Controller
                     }
 
                     $cladendarDateRange = AppHelper::generateDateRangeForReport($startDate, $endDate, true, $wekends, true);
-                   foreach ($cladendarDateRange as $date => $value){
-                       $symbols = 'H';
-                       if($calendar->is_exam == 1){
-                           $symbols = 'E';
-                       }
-                       $calendarData[$date] = $symbols;
-                   }
+                    foreach ($cladendarDateRange as $date => $value){
+                        $symbols = 'H';
+                        if($calendar->is_exam == 1){
+                            $symbols = 'E';
+                        }
+                        $calendarData[$date] = $symbols;
+                    }
                     return $calendarData;
                 });
 
@@ -336,11 +337,11 @@ class ReportController extends Controller
                 $filters[] = "Academic year: ".$academicYearInfo->title;
             }
             $section = Section::where('id', $sectionId)
-                    ->with(['class' => function($q){
-                        $q->select('name','id');
-                    }])
-                    ->select('id','class_id','name')
-                    ->first();
+                ->with(['class' => function($q){
+                    $q->select('name','id');
+                }])
+                ->select('id','class_id','name')
+                ->first();
 
             $filters[] = "Class: ".$section->class->name;
             $filters[] = "Section: ".$section->name;
@@ -373,5 +374,157 @@ class ReportController extends Controller
             'classes'
         ));
 
+    }
+
+    /**
+     * Student list print
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function studentList(Request $request){
+
+        $activeTab = 1;
+
+        if($request->isMethod('post')) {
+
+            if($request->get('form_name') == 'class') {
+                $rules = [
+                    'class_id' => 'required|integer',
+                    'section_id' => 'nullable|integer',
+                ];
+            }
+            else {
+
+                $rules = [
+                    'gender' => 'required|integer',
+                    'religion' => 'required|integer',
+                    'blood_group' => 'required|integer',
+                ];
+            }
+
+            if (AppHelper::getInstituteCategory() == 'college') {
+                $rules['academic_year'] = 'required|integer';
+            }
+
+            $this->validate($request, $rules);
+
+            if(AppHelper::getInstituteCategory() == 'college') {
+                $academicYearId = $request->get('academic_year', 0);
+            }
+            else{
+                $academicYearId = AppHelper::getAcademicYear();
+            }
+
+
+            $filters = [];
+            if(AppHelper::getInstituteCategory() == 'college') {
+                $academicYearInfo = AcademicYear::where('id', $academicYearId)->first();
+                $filters[] = "Academic year: ".$academicYearInfo->title;
+            }
+
+            $students = collect();
+            $showSection = false;
+            $showClass = false;
+            if($request->get('form_name') == 'class') {
+
+                //filter input
+                $classId = $request->get('class_id',0);
+                $sectionId = intval($request->get('section_id',0));
+
+                $students =  Registration::where('status', AppHelper::ACTIVE)
+                    ->where('academic_year_id', $academicYearId)
+                    ->where('class_id', $classId)
+                    ->if($sectionId, 'section_id', '=', $sectionId)
+                    ->with(['info' => function($query){
+                        $query->select('name','id', 'father_name', 'father_phone_no', 'mother_name', 'mother_phone_no',
+                            'guardian', 'guardian_phone_no', 'present_address', 'permanent_address');
+                    }])
+                    ->when($sectionId, function ($q){
+                        $q->with(['section' => function($qq){
+                            $qq->select('id','name');
+                        }]);
+                    })
+                    ->select('id','student_id','roll_no','regi_no','section_id')
+                    ->orderBy('regi_no','asc')
+                    ->orderBy('roll_no','asc')
+                    ->get();
+
+                $classInfo = IClass::where('id', $classId)->first();
+                $filters[] = "Class: ".$classInfo->name;
+
+                if($sectionId){
+                    $sectionInfo = Section::where('id', $sectionId)
+                        ->select('id','name')
+                        ->first();
+                    $filters[] = "Section: ".$sectionInfo->name;
+                }
+                else{
+                    $showSection = true;
+                }
+
+            }
+            else{
+
+                //filter input
+                $gender = intval($request->get('gender',0));
+                $religion = intval($request->get('religion',0));
+                $bloodGroup = intval($request->get('blood_group',0));
+
+                $students =  Registration::where('status', AppHelper::ACTIVE)
+                    ->where('academic_year_id', $academicYearId)
+                    ->with(['info' => function($query){
+                        $query->select('name','id', 'father_name', 'father_phone_no', 'mother_name', 'mother_phone_no',
+                            'guardian', 'guardian_phone_no', 'present_address', 'permanent_address','gender','religion','blood_group');
+                    }])
+                    ->with(['class' => function($query){
+                        $query->select('name','id');
+                    }])
+                    ->with(['section' => function($query){
+                        $query->select('name','id');
+                    }])
+                    ->whereHas('student', function ($q) use($gender, $religion, $bloodGroup){
+                        $q->if($religion,'religion','=',$religion)
+                        ->if($gender, 'gender', '=', $gender)
+                        ->if($bloodGroup, 'blood_group', '=', $bloodGroup);
+                    })
+                    ->select('id','student_id','roll_no','regi_no','class_id','section_id')
+                    ->orderBy('class_id','asc')
+                    ->orderBy('section_id','asc')
+                    ->orderBy('regi_no','asc')
+                    ->orderBy('roll_no','asc')
+                    ->get();
+
+
+                $filters[] = "Gender: ".($gender ? AppHelper::GENDER[$gender] : 'All' );
+                $filters[] = "Religion: ".($religion ? AppHelper::RELIGION[$religion] : 'All');
+                $filters[] = "Blood Group: ".($bloodGroup ? AppHelper::BLOOD_GROUP[$bloodGroup] : 'All');
+
+                $showClass = true;
+                $showSection = true;
+            }
+
+
+            $headerData = new \stdClass();
+            $headerData->reportTitle = 'Student List';
+            $headerData->reportSubTitle = '';
+
+            return view('backend.report.student.list_print', compact('headerData', 'students','filters','showClass','showSection'));
+        }
+
+        $classes = IClass::where('status', AppHelper::ACTIVE)
+            ->orderBy('order','asc')
+            ->pluck('name', 'id');
+
+        //if its college then have to get those academic years
+        $academic_years = [];
+        if(AppHelper::getInstituteCategory() == 'college') {
+            $academic_years = AcademicYear::where('status', '1')->orderBy('id', 'desc')->pluck('title', 'id');
+        }
+
+        return view('backend.report.student.list', compact(
+            'academic_years',
+            'classes',
+            'activeTab'
+        ));
     }
 }

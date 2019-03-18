@@ -317,12 +317,13 @@
                 </li>
                 <li>
                   <a href="#">
-                    <i class="fa icon-attendance"></i> <span>Payment History</span>
+                    <i class="fa icon-payment"></i> <span>Payment History</span>
                   </a>
                 </li>
+
                 <li>
-                  <a href="#">
-                    <i class="fa icon-attendance"></i> <span>Student List</span>
+                  <a href="{{route('report.student_list')}}">
+                    <i class="fa icon-student"></i> <span>Student List</span>
                   </a>
                 </li>
             </ul>
