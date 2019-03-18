@@ -17,17 +17,26 @@
                     <table class="main-data">
                         <thead>
                         <tr>
-                            <th>SL</th>
+                            <th width="4%">SL</th>
                             <th>Name</th>
-                            @if($showClass) <th>Class</th> @endif
-                            @if($showSection) <th>Section</th> @endif
-                            <th>Regi No.</th>
-                            <th>Roll</th>
-                            <th width="15%">Father Details</th>
-                            <th width="15%">Mother Details</th>
+                            @if($showClass) <th width="7%">Class</th> @endif
+                            @if($showSection) <th width="7%">Section</th> @endif
+                            <th width="5%">Regi No.</th>
+                            <th width="5%">Roll</th>
+
+                            @if($showClass)
+                            <th width="12%">Father Details</th>
+                            <th width="12%">Mother Details</th>
                             <th width="10%">Guardian Details</th>
-                            <th width="15%">Present Address</th>
-                            <th width="15%">Permanent Address</th>
+                            <th width="12%">Present Address</th>
+                            <th width="12%">Permanent Address</th>
+                            @else
+                                <th width="15%">Father Details</th>
+                                <th width="15%">Mother Details</th>
+                                <th width="10%">Guardian Details</th>
+                                <th width="15%">Present Address</th>
+                                <th width="15%">Permanent Address</th>
+                            @endif
                         </tr>
                         </thead>
                         <tbody>
