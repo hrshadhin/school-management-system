@@ -666,6 +666,7 @@ class MarkController extends Controller
         $students = collect();
         $sections = [];
         $exams = [];
+        $academic_years = [];
         //in post request get the result and show it
         if ($request->isMethod('post')) {
 
