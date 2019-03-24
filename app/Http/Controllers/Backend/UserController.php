@@ -273,7 +273,7 @@ class UserController extends Controller
             $academicYearId = 0;
             if (AppHelper::getInstituteCategory() == 'college') {
                 $academicYearInfo = AcademicYear::where('status', AppHelper::ACTIVE)
-                    ->whereYear('start_date', date('Y'))->first();
+                    ->where('title', env('DASHBOARD_STUDENT_COUNT_DEFAULT_ACADEMIC_YEAR',date('Y')))->first();
                 if ($academicYearInfo) {
                     $academicYearId = $academicYearInfo->id;
                 }
