@@ -379,7 +379,8 @@ class ExamController extends Controller
 
         $classes = IClass::where('status', AppHelper::ACTIVE)
             ->pluck('name', 'id');
-        $exams = Exam::where('status', AppHelper::ACTIVE)
+        $exams = Exam::where('class_id', $class_id)
+            ->where('status', AppHelper::ACTIVE)
             ->pluck('name', 'id');;
 
         return view('backend.exam.rule.list', compact('rules', 'classes', 'exams','class_id','exam_id'));
@@ -453,8 +454,7 @@ class ExamController extends Controller
 
         $classes = IClass::where('status', AppHelper::ACTIVE)
             ->pluck('name', 'id');
-        $exams = Exam::where('status', AppHelper::ACTIVE)
-            ->pluck('name', 'id');
+        $exams = [];//Exam::where('status', AppHelper::ACTIVE)->pluck('name', 'id');
         $grades = Grade::pluck('name', 'id');
         $subjects = [];
 
@@ -535,7 +535,8 @@ class ExamController extends Controller
         $subjects = Subject::where('class_id', $rule->class_id)
             ->where('status', AppHelper::ACTIVE)
             ->pluck('name', 'id');
-        $exams = Exam::where('status', AppHelper::ACTIVE)
+        $exams = Exam::where('class_id', $rule->class_id)
+            ->where('status', AppHelper::ACTIVE)
             ->pluck('name', 'id');
         $grades = Grade::pluck('name', 'id');;
 

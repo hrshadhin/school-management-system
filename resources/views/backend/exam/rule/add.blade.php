@@ -183,6 +183,7 @@
         window.subject_list_url = '{{URL::Route("academic.subject")}}';
         window.exam_details_url = '{{URL::Route("exam.index")}}';
         window.grade_details_url = '{{URL::Route("exam.grade.index")}}';
+        window.exam_list_url = '{{URL::Route("exam.index")}}';
         $(document).ready(function () {
             Academic.examRuleInit();
             @if($rule)
