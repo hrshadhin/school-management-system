@@ -403,6 +403,9 @@ export default class Academic {
                 Generic.loaderStop();
             });
 
+            //now fetch exams for this class
+            Academic.getExam(class_id);
+
         });
 
         $('select[name="exam_id"]').on('change', function () {
@@ -513,7 +516,31 @@ export default class Academic {
 
         //list page js
         $('select[name="class"]').on('change', function () {
-            $('#exam_rule_list_filter').trigger('change');
+            let classId = $(this).val();
+            if(classId){
+                //now fetch exams for this class
+                Generic.loaderStart();
+                let getUrl = window.exam_list_url + "?class_id=" + classId;
+                axios.get(getUrl)
+                    .then((response) => {
+                        if (Object.keys(response.data).length) {
+                            $('select[name="exam"]').empty().prepend('<option selected=""></option>').select2({allowClear: true,placeholder: 'Pick a exam...', data: response.data});
+                        }
+                        else {
+                            $('select[name="exam"]').empty().select2({placeholder: 'Pick a exam...'});
+                            toastr.error('This class have no exam!');
+                        }
+                        Generic.loaderStop();
+                    }).catch((error) => {
+                    let status = error.response.statusText;
+                    toastr.error(status);
+                    Generic.loaderStop();
+
+                });
+            }
+            else{
+                $('select[name="exam"]').empty().select2({placeholder: 'Pick a exam...'});
+            }
         });
         $('#exam_rule_list_filter').on('change', function () {
             let classId =  $('select[name="class"]').val();
