@@ -44,12 +44,14 @@
     ],
     "require": {
         "php": "^7.1.3",
+        "barryvdh/laravel-dompdf": "^0.8.4",
         "fideloper/proxy": "^4.0",
         "guzzlehttp/guzzle": "^6.3",
         "hrshadhin/laravel-userstamps": "dev-master",
         "laravel/framework": "5.6.*",
         "laravel/tinker": "^1.0",
         "laravelcollective/html": "^5.4.0",
+        "maatwebsite/excel": "^3.1",
         "picqer/php-barcode-generator": "^0.3.0",
         "twilio/sdk": "^5.28"
     },
