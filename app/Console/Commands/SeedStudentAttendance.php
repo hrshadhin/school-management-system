@@ -12,6 +12,7 @@ use App\Template;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
+use Exception;
 
 class SeedStudentAttendance extends Command
 {
@@ -61,7 +62,7 @@ class SeedStudentAttendance extends Command
         }
 
         //set file format
-        $this->fileFormatType = $pendingFile->file_format;
+        $this->fileFormatType = intval($pendingFile->file_format);
         $this->createdBy = $pendingFile->created_by;
 
         $filePath = storage_path('app/student-attendance/').$pendingFile->file_name;
