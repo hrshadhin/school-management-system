@@ -160,7 +160,7 @@ class StudentAttendanceController extends Controller
         if ($request->isMethod('post')) {
 
             if(AppHelper::getInstituteCategory() == 'college') {
-                $acYear = $request->get('academic_year_id', 0);
+                $acYear = $request->get('academic_year', 0);
             }
             else{
                 $acYear = AppHelper::getAcademicYear();
@@ -263,7 +263,7 @@ class StudentAttendanceController extends Controller
         $section_id = $request->get('section_id',0);
         $attendance_date = $request->get('attendance_date','');
         if(AppHelper::getInstituteCategory() == 'college') {
-            $acYear =  $request->query->get('academic_year',0);
+            $acYear =  $request->get('academic_year',0);
         }
         else{
 
