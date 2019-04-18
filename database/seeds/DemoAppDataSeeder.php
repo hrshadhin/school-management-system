@@ -54,7 +54,18 @@ class DemoAppDataSeeder extends Seeder
         echo PHP_EOL , 'seeding student...';
         $this->studentData();
 
-        echo PHP_EOL , 'seeding completed.';
+        //seed student attendance
+        echo PHP_EOL , 'seeding student attendance...';
+        $this->studentAttendance();
+
+        //seed employee attendance
+        echo PHP_EOL , 'seeding employee attendance...';
+        $this->employeeAttendance();
+
+
+        //seed exam
+        echo PHP_EOL , 'seeding exam...';
+        $this->examData();
 
     }
 
@@ -73,6 +84,9 @@ class DemoAppDataSeeder extends Seeder
         \App\Subject::truncate();
         \App\Student::truncate();
         \App\Registration::truncate();
+        \App\StudentAttendance::truncate();
+        \App\EmployeeAttendance::truncate();
+        \App\Exam::truncate();
         DB::statement("SET foreign_key_checks=1");
 
         //delete images
@@ -535,4 +549,176 @@ class DemoAppDataSeeder extends Seeder
 
     }
 
+    private function studentAttendance() {
+        $created_by = 1;
+        $created_at = Carbon::now(env('APP_TIMEZONE','Asia/Dhaka'));
+
+        $endDate = $created_at->copy();
+        $startDate = $created_at->copy()->subDays(10);
+
+        //fetch institute shift running times
+        $shiftData = AppHelper::getAppSettings('shift_data');
+        if($shiftData){
+            $shiftData = json_decode($shiftData, true);
+        }
+
+        $students = \App\Registration::where('class_id', 1)->where('academic_year_id', 1)
+            ->get(['id', 'shift'])
+            ->reduce(function ($students, $student) {
+                $students[$student->id] = $student->shift;
+                return $students;
+            });
+
+        $attendances = [];
+        while ($startDate->lte($endDate)) {
+            $shiftRuningTimes = [];
+            foreach ($shiftData as $shift => $times) {
+                $shiftRuningTimes[$shift] = [
+                    'start' => Carbon::createFromFormat('d/m/Y h:i a', $startDate->format('d/m/Y') . ' ' . $times['start']),
+                    'end' => Carbon::createFromFormat('d/m/Y h:i a', $startDate->format('d/m/Y') . ' ' . $times['end'])
+                ];
+            }
+
+            foreach ($students as $studentId => $shift) {
+                $isPresent = rand(0,1);
+                if($isPresent) {
+                    $inTime = $shiftRuningTimes[$shift]['start'];
+                    $outTime = $shiftRuningTimes[$shift]['end'];
+                }
+                else{
+                    $inTime = Carbon::createFromFormat('d/m/Y H:i:s', $startDate->format('d/m/Y') . ' 00:00:00');
+                    $outTime = $inTime;
+                }
+                $timeDiff  = $inTime->diff($outTime)->format('%H:%I');
+
+                $attendances[] = [
+                    "academic_year_id" => 1,
+                    "class_id" => 1,
+                    "registration_id" => $studentId,
+                    "attendance_date" => $startDate->format('Y-m-d'),
+                    "in_time" => $inTime,
+                    "out_time" => $outTime,
+                    "staying_hour" => $timeDiff,
+                    "status" => '',
+                    "present" => strval($isPresent),
+                    "created_at" => $created_at,
+                    "created_by" => $created_by,
+                ];
+            }
+
+            $startDate->addDay(1);
+
+        }
+
+        //now insert into db
+        \App\StudentAttendance::insert($attendances);
+
+
+
+
+
+    }
+
+    private function employeeAttendance() {
+        $created_by = 1;
+        $created_at = Carbon::now(env('APP_TIMEZONE','Asia/Dhaka'));
+
+        $endDate = $created_at->copy();
+        $startDate = $created_at->copy()->subDays(10);
+
+        //fetch institute shift running times
+        $shiftData = AppHelper::getAppSettings('shift_data');
+        if($shiftData){
+            $shiftData = json_decode($shiftData, true);
+        }
+
+        //fetch employee working hours
+        $employees = Employee::where('status', AppHelper::ACTIVE)->get()->reduce(function ($employees, $employee) {
+            $employees[$employee->id] = [
+                'in_time' => $employee->getOriginal('duty_start'),
+                'out_time' => $employee->getOriginal('duty_end')
+            ];
+            return $employees;
+        });
+
+        $attendances = [];
+        while ($startDate->lte($endDate)) {
+
+            foreach ($employees as $employeeId => $employeeShift) {
+                $isPresent = rand(0,1);
+                if($isPresent) {
+                    $inTime = Carbon::createFromFormat('d/m/Y h:i a', $startDate->format('d/m/Y') . ' ' . $shiftData['Morning']['start']);
+                    $outTime = Carbon::createFromFormat('d/m/Y h:i a', $startDate->format('d/m/Y') . ' ' . $shiftData['Morning']['end']);
+                }
+                else{
+                    $inTime = Carbon::createFromFormat('d/m/Y H:i:s', $startDate->format('d/m/Y') . ' 00:00:00');
+                    $outTime = $inTime;
+                }
+                $timeDiff  = $inTime->diff($outTime)->format('%H:%I');
+
+                $attendances[] = [
+                    "employee_id" => $employeeId,
+                    "attendance_date" => $startDate->format('Y-m-d'),
+                    "in_time" => $inTime,
+                    "out_time" => $outTime,
+                    "working_hour" => $timeDiff,
+                    "status" => '',
+                    "present"   => strval($isPresent),
+                    "created_at" => $created_at,
+                    "created_by" => $created_by,
+                ];
+
+            }
+
+            $startDate->addDay(1);
+
+        }
+
+        //now insert into db
+        \App\EmployeeAttendance::insert($attendances);
+
+
+
+
+
+    }
+
+    private function examData() {
+        $created_by = 1;
+        $created_at = Carbon::now(env('APP_TIMEZONE','Asia/Dhaka'));
+
+        $exmas = factory(App\Exam::class, 10)
+            ->create(['created_by' => $created_by,'created_at' => $created_at]);
+
+        $exam = factory(App\Exam::class)
+            ->create([
+                'class_id'=> 1,
+                'name' => '1st Term Exam',
+                'elective_subject_point_addition' => 0,
+                'marks_distribution_types' => json_encode([1,2,7]),
+                'created_by' => $created_by,
+                'created_at' => $created_at
+            ]);
+
+        $exam = factory(App\Exam::class)
+            ->create([
+                'class_id'=> 1,
+                'name' => 'Mid Term Exam',
+                'elective_subject_point_addition' => 2.00,
+                'marks_distribution_types' => json_encode([1,2,5]),
+                'created_by' => $created_by,
+                'created_at' => $created_at
+            ]);
+
+        $exam = factory(App\Exam::class)
+            ->create([
+                'class_id'=> 1,
+                'name' => 'Final Exam',
+                'elective_subject_point_addition' => 0,
+                'marks_distribution_types' => json_encode([1,2,7]),
+                'created_by' => $created_by,
+                'created_at' => $created_at
+            ]);
+
+    }
 }

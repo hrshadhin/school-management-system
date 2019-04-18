@@ -26,6 +26,11 @@
             <div class="col-md-12">
                 <div class="box box-info">
                     <div class="box-header border">
+                        <div class="col-md-3">
+                            <div class="form-group has-feedback">
+                                {!! Form::select('class_id', $classes, $iclass , ['placeholder' => 'Pick a class...','class' => 'form-control select2', 'required' => 'true', 'id' => 'class_id_filter']) !!}
+                            </div>
+                        </div>
                         <div class="box-tools pull-right">
                             <a class="btn btn-info btn-sm" href="{{ URL::route('exam.create') }}"><i class="fa fa-plus-circle"></i> Add New</a>
                         </div>
@@ -118,6 +123,17 @@
         $(document).ready(function () {
             Generic.initCommonPageJS();
             Generic.initDeleteDialog();
+            $('title').text($('title').text() + '-' + $('select[name="class_id"] option[selected]').text());
+            $('#class_id_filter').on('change', function () {
+                var class_id = $(this).val();
+                var getUrl = window.location.href.split('?')[0];
+                if(class_id){
+                    getUrl +="?class="+class_id;
+
+                }
+                window.location = getUrl;
+
+            });
         });
     </script>
 @endsection
