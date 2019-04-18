@@ -30,4 +30,13 @@ class Exam extends Model
     {
         return $this->belongsTo('App\IClass', 'class_id');
     }
+
+    public function scopeIclass($query, $classId)
+    {
+        if($classId){
+            return $query->where('class_id', $classId);
+        }
+
+        return $query;
+    }
 }

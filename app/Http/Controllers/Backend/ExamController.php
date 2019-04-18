@@ -53,8 +53,15 @@ class ExamController extends Controller
             }
             return response('Exam not found!', 404);
         }
-        $exams = Exam::with('class')->get();
-        return view('backend.exam.list', compact('exams'));
+
+        $class_id = $request->query->get('class',0);
+        $exams = Exam::iclass($class_id)->with('class')->get();
+
+        $classes = IClass::where('status', AppHelper::ACTIVE)
+            ->pluck('name', 'id');
+        $iclass = $class_id;
+
+        return view('backend.exam.list', compact('exams','classes', 'iclass'));
     }
 
     /**
