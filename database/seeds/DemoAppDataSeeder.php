@@ -62,10 +62,13 @@ class DemoAppDataSeeder extends Seeder
         echo PHP_EOL , 'seeding employee attendance...';
         $this->employeeAttendance();
 
-
         //seed exam
         echo PHP_EOL , 'seeding exam...';
         $this->examData();
+
+        //seed exam
+        echo PHP_EOL , 'seeding marking grade...';
+        $this->gradeData();
 
     }
 
@@ -87,6 +90,7 @@ class DemoAppDataSeeder extends Seeder
         \App\StudentAttendance::truncate();
         \App\EmployeeAttendance::truncate();
         \App\Exam::truncate();
+        \App\Grade::truncate();
         DB::statement("SET foreign_key_checks=1");
 
         //delete images
@@ -719,6 +723,105 @@ class DemoAppDataSeeder extends Seeder
                 'created_by' => $created_by,
                 'created_at' => $created_at
             ]);
+
+    }
+
+    private function gradeData() {
+        $created_by = 1;
+        $created_at = Carbon::now(env('APP_TIMEZONE','Asia/Dhaka'));
+
+        $grades = [
+            [
+                'name' => '100 Marks',
+                'rules' => json_encode([
+                    [
+                        'grade' => 1,//AppHelper::GRADE_TYPES
+                        'point' => 5,
+                        'marks_from' => 80,
+                        'marks_upto' => 100
+                    ],[
+                        'grade' => 2,
+                        'point' => 4,
+                        'marks_from' => 70,
+                        'marks_upto' => 79
+                    ],[
+                        'grade' => 3,
+                        'point' => 3.5,
+                        'marks_from' => 60,
+                        'marks_upto' => 69
+                    ],[
+                        'grade' => 4,
+                        'point' => 3,
+                        'marks_from' => 50,
+                        'marks_upto' => 59
+                    ],[
+                        'grade' => 5,
+                        'point' => 2,
+                        'marks_from' => 40,
+                        'marks_upto' => 49
+                    ],[
+                        'grade' => 6,
+                        'point' => 1,
+                        'marks_from' => 33,
+                        'marks_upto' => 39
+                    ],
+                    [
+                        'grade' => 7,
+                        'point' => 0,
+                        'marks_from' => 0,
+                        'marks_upto' => 32
+                    ]
+                ]),
+                'created_at' => $created_at,
+                'created_by' => $created_by
+            ],
+            [
+                'name' => '50 Marks',
+                'rules' => json_encode([
+                    [
+                        'grade' => 1,
+                        'point' => 5,
+                        'marks_from' => 40,
+                        'marks_upto' => 50
+                    ],[
+                        'grade' => 2,
+                        'point' => 4,
+                        'marks_from' => 35,
+                        'marks_upto' => 39
+                    ],[
+                        'grade' => 3,
+                        'point' => 3.5,
+                        'marks_from' => 30,
+                        'marks_upto' => 34
+                    ],[
+                        'grade' => 4,
+                        'point' => 3,
+                        'marks_from' => 25,
+                        'marks_upto' => 29
+                    ],[
+                        'grade' => 5,
+                        'point' => 2,
+                        'marks_from' => 20,
+                        'marks_upto' => 24
+                    ],[
+                        'grade' => 6,
+                        'point' => 1,
+                        'marks_from' => 17,
+                        'marks_upto' => 19
+                    ],
+                    [
+                        'grade' => 7,
+                        'point' => 0,
+                        'marks_from' => 0,
+                        'marks_upto' => 16
+                    ]
+                ]),
+                'created_at' => $created_at,
+                'created_by' => $created_by
+            ]
+        ];
+
+        \App\Grade::insert($grades);
 
     }
 }
