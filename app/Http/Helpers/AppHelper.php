@@ -832,4 +832,179 @@ class AppHelper
     }
 
 
+    /**
+     * Process student entry marks and
+     * calculate grade point
+     *
+     * @param $examRule collection
+     * @param $gradingRules array
+     * @param $distributeMarksRules array
+     * @param $strudnetMarks array
+     */
+    public static function processMarksAndCalculateResult($examRule, $gradingRules, $distributeMarksRules, $studentMarks) {
+        $totalMarks = 0;
+        $isFail = false;
+        $isInvalid = false;
+        $message = "";
+
+        foreach ($studentMarks as $type => $marks){
+            $marks = floatval($marks);
+            $totalMarks += $marks;
+
+            // AppHelper::PASSING_RULES
+            if(in_array($examRule->passing_rule, [2,3])){
+                if($marks > $distributeMarksRules[$type]['total_marks']){
+                    $isInvalid = true;
+                    $message = AppHelper::MARKS_DISTRIBUTION_TYPES[$type]. " marks is too high from exam rules marks distribution!";
+                    break;
+                }
+
+                if($marks < $distributeMarksRules[$type]['pass_marks']){
+                    $isFail = true;
+                }
+            }
+        }
+
+        //fraction number make ceiling
+        $totalMarks = ceil($totalMarks);
+
+        // AppHelper::PASSING_RULES
+        if(in_array($examRule->passing_rule, [1,3])){
+            if($totalMarks < $examRule->over_all_pass){
+                $isFail = true;
+            }
+        }
+
+        if($isFail){
+            $grade = 'F';
+            $point = 0.00;
+
+            return [$isInvalid, $message, $totalMarks, $grade, $point];
+        }
+
+        [$grade, $point] = AppHelper::findGradePointFromMarks($gradingRules, $totalMarks);
+
+        return [$isInvalid, $message, $totalMarks, $grade, $point];
+
+    }
+
+    public static function findGradePointFromMarks($gradingRules, $marks) {
+        $grade = 'F';
+        $point = 0.00;
+        foreach ($gradingRules as $rule){
+            if ($marks >= $rule->marks_from && $marks <= $rule->marks_upto){
+                $grade = AppHelper::GRADE_TYPES[$rule->grade];
+                $point = $rule->point;
+                break;
+            }
+        }
+        return [$grade, $point];
+    }
+
+    public static function findGradeFromPoint($point, $gradingRules) {
+        $grade = 'F';
+
+        foreach ($gradingRules as $rule){
+            if($point >= floatval($rule->point)){
+                $grade = AppHelper::GRADE_TYPES[$rule->grade];
+                break;
+            }
+        }
+
+        return $grade;
+
+    }
+
+    public static function isAndInCombine($subject_id, $rules){
+        $isCombine = false;
+        foreach ($rules as $subject => $data){
+            if($subject == $subject_id && $data['combine_subject_id']){
+                $isCombine = true;
+                break;
+            }
+
+            if($data['combine_subject_id'] == $subject_id){
+                $isCombine = true;
+                break;
+            }
+        }
+
+        return $isCombine;
+    }
+
+    public static function processCombineSubjectMarks($subjectMarks, $pairSubjectMarks, $subjectRule, $pairSubjectRule){
+        $pairFail = false;
+
+        $combineTotalMarks = ($subjectMarks->total_marks + $pairSubjectMarks->total_marks);
+
+        if($subjectRule['total_exam_marks'] == $pairSubjectRule['total_exam_marks']){
+            //dividing factor
+            $totalMarks = ($combineTotalMarks/2);
+        }
+        else{
+            //if both subject exam marks not same then it must be 2:1 ratio
+            //Like: subject marks 100 pair subject marks 50
+            $totalMarks = ($combineTotalMarks/ 1.5);
+        }
+
+        //fraction number make ceiling
+        $totalMarks = ceil($totalMarks);
+
+        $passingRule = $subjectRule['passing_rule'];
+        // AppHelper::PASSING_RULES
+        if(in_array($passingRule, [1,3])){
+            if($totalMarks < $subjectRule['over_all_pass']){
+                $pairFail = true;
+            }
+        }
+
+        //if any subject absent then its fail
+        if($subjectMarks->present == 0 || $pairSubjectMarks->present == 0){
+            $pairFail = true;
+        }
+
+        // AppHelper::PASSING_RULES
+        if(!$pairFail && in_array($passingRule, [2,3])){
+
+            //acquire marks
+            $combineDistributedMarks = [];
+            foreach (json_decode($subjectMarks->marks) as $key => $distMarks){
+                $combineDistributedMarks[$key] = floatval($distMarks);
+
+            }
+
+            foreach (json_decode($pairSubjectMarks->marks) as $key => $distMarks){
+                $combineDistributedMarks[$key] += floatval($distMarks);
+
+            }
+
+
+            //passing rules marks
+            $combineDistributeMarks = [];
+            foreach ($subjectRule['marks_distribution'] as $distMarks){
+                $combineDistributeMarks[$distMarks->type] = floatval($distMarks->pass_marks);
+            }
+
+            foreach ($pairSubjectRule['marks_distribution'] as $key => $distMarks){
+                $combineDistributeMarks[$distMarks->type] += floatval($distMarks->pass_marks);
+
+            }
+
+            //now check for pass
+            foreach ($combineDistributeMarks as $key => $value){
+                if($combineDistributedMarks[$key] < $value){
+                    $pairFail = true;
+                }
+            }
+
+        }
+
+
+        return [$pairFail, $combineTotalMarks, $totalMarks];
+
+    }
+
+
+
+
 }
