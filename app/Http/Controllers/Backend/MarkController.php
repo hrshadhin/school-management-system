@@ -741,6 +741,20 @@ class MarkController extends Controller
 
         //in post request get the result and show it
         if ($request->isMethod('post')) {
+            $rules = [
+                'class_id' => 'required|integer',
+                'exam_id' => 'required|integer',
+                'publish_date' => 'required|min:10|max:11',
+            ];
+
+            //if it college then need another 2 feilds
+            if(AppHelper::getInstituteCategory() == 'college') {
+                $rules['academic_year'] = 'required|integer';
+            }
+
+            $this->validate($request, $rules);
+
+
             if (AppHelper::getInstituteCategory() == 'college') {
                 $acYear = $request->get('academic_year_id', 0);
             } else {
@@ -748,6 +762,7 @@ class MarkController extends Controller
             }
             $class_id = $request->get('class_id', 0);
             $exam_id = $request->get('exam_id', 0);
+            $publish_date = Carbon::createFromFormat('d/m/Y', $request->get('publish_date', date('d/m/Y')));
 
             //validation start
             //check is result is published?
@@ -1049,7 +1064,8 @@ class MarkController extends Controller
                 DB::table('result_publish')->insert([
                     'academic_year_id' => $acYear,
                     'class_id' => $class_id,
-                    'exam_id' => $exam_id
+                    'exam_id' => $exam_id,
+                    'publish_date' => $publish_date->format('Y-m-d')
                 ]);
                 DB::table('result_combines')->insert($combineResultInsertData);
                 DB::commit();
@@ -1163,5 +1179,98 @@ class MarkController extends Controller
 
         return [$pairFail, $combineTotalMarks, $totalMarks];
 
+    }
+
+    /**
+     * Published Result Delete
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function resultDelete(Request $request){
+
+        //in post request get the result and show it
+        if ($request->isMethod('post')) {
+            $rules = [
+                'class_id' => 'required|integer',
+                'exam_id' => 'required|integer',
+            ];
+
+            //if it college then need another 2 feilds
+            if(AppHelper::getInstituteCategory() == 'college') {
+                $rules['academic_year'] = 'required|integer';
+            }
+
+            $this->validate($request, $rules);
+
+
+            if (AppHelper::getInstituteCategory() == 'college') {
+                $acYear = $request->get('academic_year_id', 0);
+            } else {
+                $acYear = AppHelper::getAcademicYear();
+            }
+            $class_id = $request->get('class_id', 0);
+            $exam_id = $request->get('exam_id', 0);
+
+            //validation start
+            //check is result is published?
+            $isPublish = DB::table('result_publish')
+                ->where('academic_year_id', $acYear)
+                ->where('class_id', $class_id)
+                ->where('exam_id', $exam_id)
+                ->count();
+
+            if(!$isPublish){
+                return redirect()->back()->with('error', 'Result not published for this class and exam!');
+            }
+
+
+            //now delete data from db with transaction enabled
+            DB::beginTransaction();
+            try {
+
+                $studentIds = Result::where('academic_year_id', $acYear)
+                    ->where('class_id', $class_id)
+                    ->where('exam_id', $exam_id)
+                    ->pluck('registration_id');
+
+                DB::table('results')
+                    ->where('academic_year_id', $acYear)
+                    ->where('class_id', $class_id)
+                    ->where('exam_id', $exam_id)
+                    ->delete();
+
+                DB::table('result_publish')
+                    ->where('academic_year_id', $acYear)
+                    ->where('class_id', $class_id)
+                    ->where('exam_id', $exam_id)
+                    ->delete();
+
+                DB::table('result_combines')
+                    ->where('exam_id', $exam_id)
+                    ->whereIn('registration_id', $studentIds)
+                    ->delete();
+
+                DB::commit();
+            }
+            catch(\Exception $e){
+                DB::rollback();
+                $message = str_replace(array("\r", "\n","'","`"), ' ', $e->getMessage());
+                return redirect()->back()->with("error",$message);
+            }
+
+            return redirect()->back()->with("success","Result deleted successfully.");
+        }
+
+
+        $classes = IClass::where('status', AppHelper::ACTIVE)
+            ->pluck('name', 'id');
+        $academic_years = [];
+        //if its college then have to get those academic years
+        if(AppHelper::getInstituteCategory() == 'college') {
+            $academic_years = AcademicYear::where('status', '1')->orderBy('id', 'desc')->pluck('title', 'id');
+        }
+        $exams = [];
+
+        return view('backend.exam.result.delete', compact('classes', 'academic_years','exams'));
     }
 }

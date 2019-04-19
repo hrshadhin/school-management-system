@@ -38,6 +38,7 @@ class CreateResultsTable extends Migration
             $table->unsignedInteger('academic_year_id');
             $table->unsignedInteger('class_id');
             $table->unsignedInteger('exam_id');
+            $table->date('publish_date');
 
             $table->foreign('academic_year_id')->references('id')->on('academic_years');
             $table->foreign('class_id')->references('id')->on('i_classes');

@@ -28,6 +28,9 @@
                     <div class="box-header">
                         <div class="box-tools pull-right">
                             <a class="btn btn-info btn-sm" href="{{ URL::route('result.create') }}"><i class="fa fa-plus-circle"></i> Generate New</a>
+                            @can('result.delete')
+                                <a class="btn btn-danger btn-sm" href="{{ URL::route('result.delete') }}"><i class="fa fa-trash"></i> Delete Result</a>
+                            @endcan
                         </div>
                     </div>
                     <!-- /.box-header -->

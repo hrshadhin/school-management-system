@@ -12,12 +12,12 @@
     <section class="content-header">
         <h1>
             Result
-            <small>Generate</small>
+            <small>Delete</small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="{{URL::route('user.dashboard')}}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
             <li><a href="{{URL::route('result.index')}}"><i class="fa icon-markpercentage"></i> Result</a></li>
-            <li class="active"> Generate</li>
+            <li class="active"> Delete</li>
         </ol>
     </section>
     <!-- ./Section header -->
@@ -30,7 +30,7 @@
                     <div class="box-body">
                         <div class="row">
                             <div class="col-md-12">
-                                <form novalidate id="entryForm" action="{{URL::Route('result.create')}}" method="post" enctype="multipart/form-data">
+                                <form novalidate id="entryForm" action="{{URL::Route('result.delete')}}" method="post" enctype="multipart/form-data">
                                     @csrf
                                     <div class="row">
                                         @if(AppHelper::getInstituteCategory() == 'college')
@@ -45,7 +45,7 @@
                                                 </div>
                                             </div>
                                         @endif
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <div class="form-group has-feedback">
                                                 <label for="class_id">Class Name
                                                     <span class="text-danger">*</span>
@@ -55,7 +55,7 @@
                                                 <span class="text-danger">{{ $errors->first('class_id') }}</span>
                                             </div>
                                         </div>
-                                        <div class="col-md-5">
+                                        <div class="col-md-4">
                                             <div class="form-group has-feedback">
                                                 <label for="class_id">Exam Name
                                                     <span class="text-danger">*</span>
@@ -65,21 +65,10 @@
                                                 <span class="text-danger">{{ $errors->first('exam_id') }}</span>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-2">
-                                            <div class="form-group has-feedback">
-                                                <label for="publish_date">Result Publish Date<span class="text-danger">*</span></label>
-                                                <input type='text' class="form-control date_picker" readonly  name="publish_date" placeholder="date" value="{{date('d/m/Y')}}" required minlength="10" maxlength="11" />
-                                                <span class="fa fa-calendar form-control-feedback"></span>
-                                                <span class="text-danger">{{ $errors->first('publish_date') }}</span>
-                                            </div>
-                                        </div>
                                             <div class="col-md-2">
-                                                <button type="submit" class="btn btn-info margin-top-20"><i class="fa fa-check-circle"></i> Generate</button>
+                                                <button type="submit" class="btn btn-danger margin-top-20"><i class="fa fa-trash"></i> Delete!</button>
                                             </div>
                                     </div>
-
                                 </form>
                             </div>
                         </div>

@@ -1015,6 +1015,10 @@ class PermissionTableSeeder extends Seeder
                 "name" => "Result Create",
                 "group" => "Exam"
             ],
+            [   "slug" => "result.delete",
+                "name" => "Result Delete",
+                "group" => "Exam"
+            ],
             // Exam Result End
         ];
 
