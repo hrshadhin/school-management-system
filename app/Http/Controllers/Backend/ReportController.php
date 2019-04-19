@@ -5,15 +5,20 @@ namespace App\Http\Controllers\Backend;
 use App\AcademicCalendar;
 use App\AcademicYear;
 use App\Employee;
+use App\Exam;
+use App\ExamRule;
 use App\Http\Helpers\AppHelper;
 use App\IClass;
+use App\Mark;
 use App\Registration;
+use App\Result;
 use App\Section;
 use App\StudentAttendance;
 use App\Template;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 
 class ReportController extends Controller
 {
@@ -484,8 +489,8 @@ class ReportController extends Controller
                     }])
                     ->whereHas('student', function ($q) use($gender, $religion, $bloodGroup){
                         $q->if($religion,'religion','=',$religion)
-                        ->if($gender, 'gender', '=', $gender)
-                        ->if($bloodGroup, 'blood_group', '=', $bloodGroup);
+                            ->if($gender, 'gender', '=', $gender)
+                            ->if($bloodGroup, 'blood_group', '=', $bloodGroup);
                     })
                     ->select('id','student_id','roll_no','regi_no','class_id','section_id')
                     ->orderBy('class_id','asc')
@@ -525,6 +530,185 @@ class ReportController extends Controller
             'academic_years',
             'classes',
             'activeTab'
+        ));
+    }
+    /**
+     *  Marksheet public print
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function marksheetPublic(Request $request){
+
+        if($request->isMethod('post')) {
+
+            $rules = [
+                'class_id' => 'required|integer',
+                'exam_id' => 'required|integer',
+                'regi_no' => 'required',
+            ];
+
+
+            $this->validate($request, $rules);
+
+
+            $classId = $request->get('class_id', 0);
+            $examId = $request->get('exam_id', 0);
+            $regiNo = $request->get('regi_no', '');
+
+
+            $exam = Exam::where('id', $examId)
+                ->where('class_id', $classId)
+                ->select('id','name','marks_distribution_types')
+                ->first();
+
+            if(!$exam){
+                return redirect()->back()->with('error', 'Exam not found!');
+            }
+
+            $student = Registration::where('status', AppHelper::ACTIVE)
+                ->where('class_id', $classId)
+                ->where('regi_no', $regiNo)
+                ->with(['info' => function($query){
+                    $query->select('name','dob','father_name','mother_name','id');
+                }])
+                ->with(['class' => function($query){
+                    $query->select('name','id');
+                }])
+                ->with(['section' => function($query){
+                    $query->select('name','id');
+                }])
+                ->with(['acYear' => function($q){
+                    $q->select('title','id','start_date','end_date');
+                }])
+                ->select('id','student_id','class_id','section_id','shift','regi_no','roll_no','academic_year_id','fourth_subject','alt_fourth_subject')
+                ->first();
+
+            if(!$student){
+                return redirect()->back()->with('error', 'Student not found!');
+            }
+
+            $publishedResult = DB::table('result_publish')
+                ->where('academic_year_id', $student->acYear->id)
+                ->where('academic_year_id', $student->acYear->id)
+                ->where('class_id', $classId)
+                ->where('exam_id', $exam->id)
+                ->whereDate('publish_date','<=', Carbon::now(env('APP_TIMEZONE','Asia/Dhaka'))->format('Y-m-d'))
+                ->select('publish_date')
+                ->first();
+
+            if(!$publishedResult){
+                return redirect()->back()->with('error', 'Result not published for this class and exam!');
+            }
+
+            //result
+            $result =  Result::where('class_id', $request->get('class_id'))
+                ->where('registration_id', $student->id)
+                ->where('exam_id', $exam->id)
+                ->select('registration_id','grade', 'point', 'total_marks')
+                ->first();
+            $result->published_at = Carbon::createFromFormat('Y-m-d', $publishedResult->publish_date)
+                ->format('d/m/Y');
+
+
+
+            // now pull marks
+            //subject wise highest marks
+            $subjectWiseHighestMarks =  Mark::where('marks.academic_year_id', $student->acYear->id)
+                ->where('marks.class_id', $request->get('class_id'))
+                ->where('marks.exam_id', $exam->id)
+                ->selectRaw('max(total_marks) as total, subject_id')
+                ->groupBy('subject_id')
+                ->get()
+                ->reduce(function ($subjectWiseHighestMarks, $mark){
+                    $subjectWiseHighestMarks[$mark->subject_id] = $mark->total;
+                    return $subjectWiseHighestMarks;
+                });
+
+            //student
+            $examMakrs = Mark::join('subjects', 'marks.subject_id', 'subjects.id')
+                ->where('marks.registration_id', $student->id)
+                ->where('marks.academic_year_id', $student->acYear->id)
+                ->where('marks.class_id', $classId)
+                ->where('marks.exam_id', $exam->id)
+                ->select('subject_id','marks','total_marks','grade','point','present','subjects.name as subject_name',
+                    'subjects.type as subject_type','subjects.code as subject_code')
+                ->orderBy('subject_code','asc')
+                ->get();
+
+            $coreSubjectsMakrs = [];
+            foreach ($examMakrs as $marks){
+                if($marks->subject_type == '1'){
+                    //AppHelper::SUBJECT_TYPE
+                    $coreSubjectsMakrs[] = [
+                        'id' => $marks->subject_id,
+                        'code' => $marks->subject_code,
+                        'name' => $marks->subject_name,
+                        'marks' => json_decode($marks->marks, true),
+                        'highest_marks' => $subjectWiseHighestMarks[$marks->subject_id],
+                        'total_marks' => $marks->total_marks,
+                        'grade' => $marks->grade,
+                        'point' => $marks->point
+                    ];
+                }
+                else{
+                    if($student->fourth_subject == $marks->subject_id){
+                        $coreSubjectsMakrs[] = [
+                            'id' => $marks->subject_id,
+                            'code' => $marks->subject_code,
+                            'name' => $marks->subject_name,
+                            'marks' => json_decode($marks->marks, true),
+                            'highest_marks' => $subjectWiseHighestMarks[$marks->subject_id],
+                            'total_marks' => $marks->total_marks,
+                            'grade' => $marks->grade,
+                            'point' => $marks->point
+                        ];
+                    }
+                }
+            }
+
+
+            //marks distribution types
+            $marksDistributionTypes = json_decode($exam->marks_distribution_types, true);
+
+            // report settings
+            $headerData = new \stdClass();
+            $headerData->reportTitle = 'Marksheet';
+            $headerData->reportSubTitle = $exam->name.'-'.$student->acYear->title;
+
+            $message = AppHelper::getAppSettings('report_pms_message');
+            $expireDate = AppHelper::getAppSettings('report_pms_message_exp_date');
+            $showMessage = false;
+            if($message && strlen($message) && $expireDate && strlen($expireDate)){
+                $expireDate = Carbon::createFromFormat('d/m/Y', $expireDate);
+                $nowDate = Carbon::now(env('APP_TIMEZONE','Asia/Dhaka'));
+                if($nowDate->lte($expireDate)){
+                    $showMessage = true;
+                }
+            }
+
+
+            return view('backend.report.exam.marksheet_pub_print', compact(
+                'headerData',
+                'exam',
+                'marksDistributionTypes',
+                'student',
+                'coreSubjectsMakrs',
+                'result',
+                'message',
+                'showMessage'
+            ));
+        }
+
+        $classes = IClass::where('status', AppHelper::ACTIVE)
+            ->orderBy('order','asc')
+            ->pluck('name', 'id');
+
+        $exams = [];
+
+
+        return view('backend.report.exam.marksheet_pub', compact(
+            'exams',
+            'classes'
         ));
     }
 }

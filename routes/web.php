@@ -38,6 +38,9 @@ Route::group(
 }
 );
 
+Route::get('/public/exam', 'Backend\ExamController@indexPublic')->name('public.exam_list');
+Route::any('/online-result', 'Backend\ReportController@marksheetPublic')->name('report.marksheet_pub');
+
 Route::group(
     ['namespace' => 'Backend', 'middleware' => ['auth', 'permission']], function () {
     Route::get('/logout', 'UserController@logout')->name('logout');

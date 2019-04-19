@@ -1004,6 +1004,27 @@ class AppHelper
 
     }
 
+    /**
+     * @param $number integer
+     * @return string
+     */
+    public static function convertNumberToNumberRankingWord($number) {
+        $rankWord = 'TH';
+
+        if($number == 1){
+            $rankWord = "ST";
+        }
+        else if($number == 2) {
+            $rankWord = "ND";
+        }else if($number == 3) {
+            $rankWord = "RD";
+        }
+
+        return strval($number).$rankWord;
+
+    }
+
+
 
 
 

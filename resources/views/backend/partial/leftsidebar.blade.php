@@ -402,7 +402,7 @@
                 <a href="#"><i class="fa fa-list-alt"></i><span>Marksheet</span></a>
               </li>
               <li>
-                <a href="#"><i class="fa fa-list-alt"></i><span>Marksheet Public</span></a>
+                <a href="{{route('report.marksheet_pub')}}"><i class="fa fa-file-pdf-o"></i><span>Marksheet Public</span></a>
               </li>
               <li>
                 <a href="#"><i class="fa fa-list-alt"></i><span>Tabulationsheet</span></a>

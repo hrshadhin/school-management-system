@@ -1,3 +1,5 @@
+import Academic from "./Academic";
+
 export default class Generic {
     /**
      * academic related codes
@@ -271,6 +273,20 @@ export default class Generic {
         });
     }
 
+    static initMarksheetPublic() {
+        Generic.initCommonPageJS();
+        $('#class_change').on('change', function () {
+            let class_id = $(this).val();
+            if(class_id) {
+                //get sections
+                Academic.getExam(class_id);
+            }
+            else{
+                $('select[name="exam_id"]').empty().select2({placeholder: 'Pick a exam...'});
+            }
+
+        });
+    }
     static loaderStart(){
         // console.log('loader started...');
         $('.ajax-loader').css('display','block');

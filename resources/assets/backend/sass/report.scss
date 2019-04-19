@@ -443,6 +443,10 @@ table {
   border-top: 1px solid #ddd;
 }
 
+.report-body .report-data table.main-data tr.lastItem td {
+  border-bottom: 1px solid #ddd;
+}
+
 .report-body .report-data table.classic tr th {
   text-align: center;
   font-weight: bold;
@@ -495,6 +499,9 @@ table {
 
 .holiday {
   color: #983d8b;
+}
+.text-bold {
+  font-weight: bold;
 }
 /*
  * Misc: print
