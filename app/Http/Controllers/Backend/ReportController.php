@@ -19,6 +19,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class ReportController extends Controller
 {
@@ -545,10 +546,13 @@ class ReportController extends Controller
                 'class_id' => 'required|integer',
                 'exam_id' => 'required|integer',
                 'regi_no' => 'required',
+                'captcha' => 'required|captcha'
             ];
 
-
-            $this->validate($request, $rules);
+            $v = Validator::make($request->all(), $rules);
+            if(!$v->passes()){
+                return back()->withErrors($v);
+            }
 
 
             $classId = $request->get('class_id', 0);

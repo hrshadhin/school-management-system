@@ -45,6 +45,7 @@
     "require": {
         "php": "^7.1.3",
         "barryvdh/laravel-dompdf": "^0.8.4",
+        "bonecms/laravel-captcha": "^2.1",
         "fideloper/proxy": "^4.0",
         "guzzlehttp/guzzle": "^6.3",
         "hrshadhin/laravel-userstamps": "dev-master",

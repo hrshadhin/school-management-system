@@ -21,12 +21,7 @@
       </a>
 
       <div class="navbar-custom-menu">
-        <ul class="nav navbar-nav">    
-          <li class="clock-menu hidden-xs tablet-hidden">
-            <a href="#0">
-                <p class="smsclock"><span id="date"></span> || <span id="clock"></span></p>
-            </a>
-          </li>     
+        <ul class="nav navbar-nav">
           <!-- Site Start -->
             @if($frontend_website)
         <li class="dropdown site-menu">

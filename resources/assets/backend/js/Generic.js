@@ -275,6 +275,7 @@ export default class Generic {
 
     static initMarksheetPublic() {
         Generic.initCommonPageJS();
+        // $('#class_change').val('').trigger('change');
         $('#class_change').on('change', function () {
             let class_id = $(this).val();
             if(class_id) {
