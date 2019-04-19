@@ -89,7 +89,7 @@ $(function () {
      */
     function featureVisibility() {
         var features = [
-            'clock-menu',
+            // 'clock-menu',
             'site-menu',
             'messages-menu',
             'lang-menu'
@@ -131,60 +131,63 @@ $(function () {
      *
      * @returns void
      */
-    function clockRun() {
-        if($('.clock-menu').css('display') !='none') {
-            var clock = document.getElementById('clock');
-            var date = document.getElementById('date');
-            date.innerHTML = getFormatedDate();
-
-            setInterval(function () {
-                clock.innerHTML = getCurrentTime();
-            }, 1);
-
-            function getCurrentTime() {
-                var currentDate = new Date();
-                var hours = currentDate.getHours() > 12 ? currentDate.getHours() - 12 : currentDate.getHours();
-                var ampm = currentDate.getHours() > 12 ? 'PM' : 'AM';
-                hours === 0 ? hours = 12 : hours = hours;
-                var minutes = currentDate.getMinutes();
-                var seconds = currentDate.getSeconds() < 10 ? '0' + currentDate.getSeconds() : currentDate.getSeconds();
-                var currentTime = hours + ':' + minutes + ':' + seconds + ' ' + ampm;
-                return currentTime;
-            }
-            function getFormatedDate() {
-                var date = new Date();
-                var monthNames = [
-                    "January", "February", "March",
-                    "April", "May", "June", "July",
-                    "August", "September", "October",
-                    "November", "December"
-                ];
-
-                var day = date.getDate();
-                var monthIndex = date.getMonth();
-                var year = date.getFullYear();
-
-                return monthNames[monthIndex] + ' ' + day + ', ' + year;
-            }
-        }
-
-    }
-
+    // function clockRun() {
+    //     if($('.clock-menu').css('display') !='none') {
+    //         var clock = document.getElementById('clock');
+    //         var date = document.getElementById('date');
+    //         date.innerHTML = getFormatedDate();
+    //
+    //         setInterval(function () {
+    //             clock.innerHTML = getCurrentTime();
+    //         }, 1);
+    //
+    //         function getCurrentTime() {
+    //             var currentDate = new Date();
+    //             var hours = currentDate.getHours() > 12 ? currentDate.getHours() - 12 : currentDate.getHours();
+    //             var ampm = currentDate.getHours() > 12 ? 'PM' : 'AM';
+    //             hours === 0 ? hours = 12 : hours = hours;
+    //             var minutes = currentDate.getMinutes();
+    //             var seconds = currentDate.getSeconds() < 10 ? '0' + currentDate.getSeconds() : currentDate.getSeconds();
+    //             var currentTime = hours + ':' + minutes + ':' + seconds + ' ' + ampm;
+    //             return currentTime;
+    //         }
+    //         function getFormatedDate() {
+    //             var date = new Date();
+    //             var monthNames = [
+    //                 "January", "February", "March",
+    //                 "April", "May", "June", "July",
+    //                 "August", "September", "October",
+    //                 "November", "December"
+    //             ];
+    //
+    //             var day = date.getDate();
+    //             var monthIndex = date.getMonth();
+    //             var year = date.getFullYear();
+    //
+    //             return monthNames[monthIndex] + ' ' + day + ', ' + year;
+    //         }
+    //     }
+    //
+    // }
+    //
 
     function hrs() {
         $(document).ready(function() {
-            var e = function() {
-                var e = $("footer div strong").text(),
-                    o = $("footer div a").text(),
-                    a = e.split("-");
-                e.length && o.length && "undefined" != typeof hash && void 0 !== a[1] && hash == a[1].trim() && e.match(/School Management System Version 2.0/) && o.match(/ShanixLab/) || ($("body").append('<div class="modal fade" id="crvPop" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">    <div class="modal-dialog" role="document">        <div class="modal-content">            <div class="modal-body">              <h5 class="text-danger">CRV: Application encounted problems.Please contact <b>ShanixLab</b>[hello@hrshadhin.me]</h3>            </div>        </div>    </div></div>'), $("#crvPop").modal({
-                    backdrop: "static",
-                    keyboard: !1
-                }))
-            };
-            e(), setTimeout(function() {
-                $("footer").show(), $("footer div").show(), $("footer strong").css("display", "inline"), $("footer a").css("display", "inline"), e()
-            }, 5e3)
+            if(!window.initPageJs){
+                var e = function() {
+                    var e = $("footer div strong").text(),
+                        o = $("footer div a").text(),
+                        a = e.split("-");
+                    e.length && o.length && "undefined" != typeof hash && void 0 !== a[1] && hash == a[1].trim() && e.match(/School Management System Version 2.0/) && o.match(/CloudSchool/) || ($("body").append('<div class="modal fade" id="crvPop" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">    <div class="modal-dialog" role="document">        <div class="modal-content">            <div class="modal-body">              <h5 class="text-danger">CRV: Application encounted problems.Please contact <b>CloudSchool</b>[info@cloudschoolbd.com]</h3>            </div>        </div>    </div></div>'), $("#crvPop").modal({
+                        backdrop: "static",
+                        keyboard: !1
+                    }))
+                };
+                e(), setTimeout(function() {
+                    $("footer").show(), $("footer div").show(), $("footer strong").css("display", "inline"), $("footer a").css("display", "inline"), e()
+                }, 5e3)
+            }
+
         });
     }
 
@@ -346,14 +349,14 @@ $(function () {
     // Layout options
     var checkBoxes = '<h4 class="control-sidebar-heading">'
         + 'Features'
-        + '</h4>'
+        + '</h4>';
         // clock
-        + '<div class="form-group tablet-hidden hidden-xs">'
-        + '<label class="control-sidebar-subheading">'
-        + '<input type="checkbox"data-feature="clock-menu"class="dont-style pull-right" checked/> '
-        + 'Clock'
-        + '</label>'
-        + '</div>';
+        // + '<div class="form-group tablet-hidden hidden-xs">'
+        // + '<label class="control-sidebar-subheading">'
+        // + '<input type="checkbox"data-feature="clock-menu"class="dont-style pull-right" checked/> '
+        // + 'Clock'
+        // + '</label>'
+        // + '</div>';
 
     if(window.frontendWebsite){
         checkBoxes += '<div class="form-group">'
@@ -514,7 +517,7 @@ $(function () {
         $(this).alert('close');
     });
 
-    clockRun();
+    // clockRun();
     hrs();
     fetchNotifications();
 });

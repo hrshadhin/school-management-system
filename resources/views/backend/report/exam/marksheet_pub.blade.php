@@ -67,6 +67,15 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        @captcha
+                                        <input type='text' style="width: 180px;"  class="form-control" id="captcha" name="captcha" placeholder="enter captcha code here" value="" required />
+                                        <span class="text-danger">{{ $errors->first('captcha') }}</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="box-footer">
                             <a href="{{route('report.marksheet_pub')}}"  class="btn btn-warning"><i class="fa fa-refresh"></i> Reset</a>
@@ -89,6 +98,7 @@
     <script src="{{ asset(mix('/js/theme.js')) }}"></script>
     <script type="text/javascript">
         window.exam_list_url = '{{route('public.exam_list')}}';
+        window.initPageJs = 1;
         $(document).ready(function () {
             Generic.initMarksheetPublic();
 
