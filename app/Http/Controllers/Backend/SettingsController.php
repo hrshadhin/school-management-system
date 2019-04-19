@@ -565,11 +565,11 @@ class SettingsController extends Controller
             $rules = [
                 'background_color' => 'nullable|max:255',
                 'text_color' => 'nullable|max:255',
+                'message' => 'nullable|max:1000',
+                'message_expire_date' => 'nullable|min:10|max:11',
 
             ];
             $this->validate($request, $rules, $messages);
-
-
 
 
             //now crate
@@ -594,6 +594,16 @@ class SettingsController extends Controller
             AppMeta::updateOrCreate(
                 ['meta_key' => 'report_text_color'],
                 ['meta_value' => $request->get('text_color', '')]
+            );
+
+            AppMeta::updateOrCreate(
+                ['meta_key' => 'report_pms_message'],
+                ['meta_value' => trim($request->get('message', ''))]
+            );
+
+            AppMeta::updateOrCreate(
+                ['meta_key' => 'report_pms_message_exp_date'],
+                ['meta_value' => trim($request->get('message_expire_date', ''))]
             );
 
             Cache::forget('app_settings');

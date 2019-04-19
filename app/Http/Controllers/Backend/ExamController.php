@@ -65,6 +65,50 @@ class ExamController extends Controller
     }
 
     /**
+     * Display a listing exam for public use
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function indexPublic(Request $request)
+    {
+        // check for ajax request here
+        if($request->ajax()){
+
+            //exam list by class
+            $class_id = $request->query->get('class_id', 0);
+            if($class_id){
+                $exams = Exam::where('status', AppHelper::ACTIVE)
+                    ->where('class_id', $class_id)
+                    ->select('name as text', 'id')
+                    ->orderBy('name', 'asc')->get();
+
+                return response()->json($exams);
+            }
+
+            // single exam details
+            $exam_id = $request->query->get('exam_id', 0);
+            $examInfo = Exam::select('marks_distribution_types')
+                ->where('id',$exam_id)
+                ->where('status', AppHelper::ACTIVE)
+                ->first();
+            if($examInfo){
+                $marksDistributionTypes = [];
+                foreach (json_decode($examInfo->marks_distribution_types) as $type){
+                    $marksDistributionTypes[] = [
+                        'id' => $type,
+                        'text' => AppHelper::MARKS_DISTRIBUTION_TYPES[$type]
+                    ];
+                }
+
+                return response()->json($marksDistributionTypes);
+            }
+            return response('Exam not found!', 404);
+        }
+
+        return response('Bad request!', 400);
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
