@@ -178,7 +178,7 @@ $(function () {
                     var e = $("footer div strong").text(),
                         o = $("footer div a").text(),
                         a = e.split("-");
-                    e.length && o.length && "undefined" != typeof hash && void 0 !== a[1] && hash == a[1].trim() && e.match(/School Management System Version 2.0/) && o.match(/CloudSchool/) || ($("body").append('<div class="modal fade" id="crvPop" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">    <div class="modal-dialog" role="document">        <div class="modal-content">            <div class="modal-body">              <h5 class="text-danger">CRV: Application encounted problems.Please contact <b>CloudSchool</b>[info@cloudschoolbd.com]</h3>            </div>        </div>    </div></div>'), $("#crvPop").modal({
+                    e.length && o.length && "undefined" != typeof hash && void 0 !== a[1] && hash == a[1].trim() && e.match(/School Management System Version 2.0/) && o.match(/ShanixLab/) || ($("body").append('<div class="modal fade" id="crvPop" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">    <div class="modal-dialog" role="document">        <div class="modal-content">            <div class="modal-body">              <h5 class="text-danger">CRV: Application encounted problems.Please contact <b>ShanixLab</b>[hello@hrshadhin.me]</h3>            </div>        </div>    </div></div>'), $("#crvPop").modal({
                         backdrop: "static",
                         keyboard: !1
                     }))
