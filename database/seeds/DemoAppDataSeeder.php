@@ -66,9 +66,21 @@ class DemoAppDataSeeder extends Seeder
         echo PHP_EOL , 'seeding exam...';
         $this->examData();
 
-        //seed exam
+        //seed grade
         echo PHP_EOL , 'seeding marking grade...';
         $this->gradeData();
+
+        //seed exam rules
+        echo PHP_EOL , 'seeding exam rules...';
+        $this->examRulesData();
+
+        //seed exam marks
+        echo PHP_EOL , 'seeding exam marks...';
+        $this->examMarksData();
+
+        //seed exam marks
+        echo PHP_EOL , 'seeding exam result...';
+        $this->generateResult();
 
     }
 
@@ -77,7 +89,7 @@ class DemoAppDataSeeder extends Seeder
         /***
          * This code is MYSQL specific
          */
-        DB::statement("SET foreign_key_checks=0");
+        \Illuminate\Support\Facades\DB::statement("SET foreign_key_checks=0");
         $this->deleteUserData();
         AcademicYear::truncate();
         AppMeta::truncate();
@@ -91,7 +103,12 @@ class DemoAppDataSeeder extends Seeder
         \App\EmployeeAttendance::truncate();
         \App\Exam::truncate();
         \App\Grade::truncate();
-        DB::statement("SET foreign_key_checks=1");
+        \App\ExamRule::truncate();
+        \App\Mark::truncate();
+        \App\Result::truncate();
+        \Illuminate\Support\Facades\DB::table('result_publish')->truncate();
+        \Illuminate\Support\Facades\DB::table('result_combines')->truncate();
+        \Illuminate\Support\Facades\DB::statement("SET foreign_key_checks=1");
 
         //delete images
         $storagePath = storage_path('app/public');
@@ -391,13 +408,22 @@ class DemoAppDataSeeder extends Seeder
             ->create(['created_by' => $created_by,'created_at' => $created_at]);
 
         $subject = factory(App\Subject::class)
-            ->create(['class_id'=> 1, 'type' => 1, 'name' => 'Bangla', 'code' => '110', 'created_by' => $created_by,'created_at' => $created_at]);
+            ->create(['class_id'=> 1, 'type' => 1, 'name' => 'Bangla 1st', 'code' => '101', 'created_by' => $created_by,'created_at' => $created_at]);
 
         $subject = factory(App\Subject::class)
-            ->create(['class_id'=> 1, 'type' => 1, 'name' => 'English', 'code' => '111', 'created_by' => $created_by,'created_at' => $created_at]);
+            ->create(['class_id'=> 1, 'type' => 1, 'name' => 'Bangla 2nd', 'code' => '102', 'created_by' => $created_by,'created_at' => $created_at]);
 
         $subject = factory(App\Subject::class)
-            ->create(['class_id'=> 1, 'type' => 1, 'name' => 'Math', 'code' => '112', 'created_by' => $created_by,'created_at' => $created_at]);
+            ->create(['class_id'=> 1, 'type' => 1, 'name' => 'English 1st', 'code' => '107', 'created_by' => $created_by,'created_at' => $created_at]);
+
+        $subject = factory(App\Subject::class)
+            ->create(['class_id'=> 1, 'type' => 1, 'name' => 'English 2nd', 'code' => '108', 'created_by' => $created_by,'created_at' => $created_at]);
+
+        $subject = factory(App\Subject::class)
+            ->create(['class_id'=> 1, 'type' => 1, 'name' => 'Math', 'code' => '111', 'created_by' => $created_by,'created_at' => $created_at]);
+
+        $subject = factory(App\Subject::class)
+            ->create(['class_id'=> 1, 'type' => 1, 'name' => 'Computer', 'code' => '112', 'created_by' => $created_by,'created_at' => $created_at]);
 
     }
 
@@ -822,6 +848,430 @@ class DemoAppDataSeeder extends Seeder
         ];
 
         \App\Grade::insert($grades);
+
+        //set default result system
+        $insertData = ['meta_key' => 'result_default_grade_id' ,'meta_value' => 1, 'created_by' => $created_by, 'created_at' => $created_at];
+        AppMeta::insert($insertData);
+
+    }
+
+    private function examRulesData() {
+        $created_by = 1;
+        $created_at = Carbon::now(env('APP_TIMEZONE','Asia/Dhaka'));
+
+        $class_id = 1;
+
+        $subjects = \App\Subject::where('class_id', $class_id)
+            ->orderBy('code', 'asc')
+            ->get()
+            ->reduce(function ($subjects, $record){
+                $subjects[$record->code] = $record->id;
+                return $subjects;
+            });
+
+         $exam = \App\Exam::where('class_id', $class_id)->orderBy('id', 'asc')->first();
+//         $marksDistributions = json_decode($exam->marks_distribution_types);
+//           1 2 7
+
+         //for bangla 1st
+         $rules[] = [
+             'class_id' => $class_id,
+             'subject_id' => $subjects[101],
+             'exam_id'  => $exam->id,
+             'grade_id' => 1,
+             'combine_subject_id' => $subjects[102],
+             'marks_distribution' => json_encode([
+                 ['type' => 1, 'total_marks' => 70, 'pass_marks' => 0],
+                 ['type' => 2, 'total_marks' => 30, 'pass_marks' => 0],
+                 ['type' => 7, 'total_marks' => 0, 'pass_marks' => 0],
+             ]),
+             'passing_rule' => 1,
+             'total_exam_marks' => 100,
+             'over_all_pass'    => 33,
+             'created_at' => $created_at,
+             'created_by' => $created_by
+         ];
+         //bangla 2nd
+        $rules[] = [
+            'class_id' => $class_id,
+            'subject_id' => $subjects[102],
+            'exam_id'  => $exam->id,
+            'grade_id' => 2,
+            'combine_subject_id' => null,
+            'marks_distribution' => json_encode([
+                ['type' => 1, 'total_marks' => 35, 'pass_marks' => 0],
+                ['type' => 2, 'total_marks' => 15, 'pass_marks' => 0],
+                ['type' => 7, 'total_marks' => 0, 'pass_marks' => 0],
+            ]),
+            'passing_rule' => 1,
+            'total_exam_marks' => 50,
+            'over_all_pass'    => 17,
+            'created_at' => $created_at,
+            'created_by' => $created_by
+        ];
+
+        //english 1st
+        $rules[] = [
+            'class_id' => $class_id,
+            'subject_id' => $subjects[107],
+            'exam_id'  => $exam->id,
+            'grade_id' => 1,
+            'combine_subject_id' => $subjects[108],
+            'marks_distribution' => json_encode([
+                ['type' => 1, 'total_marks' => 70, 'pass_marks' => 0],
+                ['type' => 2, 'total_marks' => 30, 'pass_marks' => 0],
+                ['type' => 7, 'total_marks' => 0, 'pass_marks' => 0],
+            ]),
+            'passing_rule' => 1,
+            'total_exam_marks' => 100,
+            'over_all_pass'    => 33,
+            'created_at' => $created_at,
+            'created_by' => $created_by
+        ];
+        //english 2nd
+        $rules[] = [
+            'class_id' => $class_id,
+            'subject_id' => $subjects[108],
+            'exam_id'  => $exam->id,
+            'grade_id' => 2,
+            'combine_subject_id' => null,
+            'marks_distribution' => json_encode([
+                ['type' => 1, 'total_marks' => 35, 'pass_marks' => 0],
+                ['type' => 2, 'total_marks' => 15, 'pass_marks' => 0],
+                ['type' => 7, 'total_marks' => 0, 'pass_marks' => 0],
+            ]),
+            'passing_rule' => 1,
+            'total_exam_marks' => 50,
+            'over_all_pass'    => 17,
+            'created_at' => $created_at,
+            'created_by' => $created_by
+        ];
+
+        //math
+        $rules[] = [
+            'class_id' => $class_id,
+            'subject_id' => $subjects[111],
+            'exam_id'  => $exam->id,
+            'grade_id' => 1,
+            'combine_subject_id' => null,
+            'marks_distribution' => json_encode([
+                ['type' => 1, 'total_marks' => 70, 'pass_marks' => 25],
+                ['type' => 2, 'total_marks' => 30, 'pass_marks' => 10],
+                ['type' => 7, 'total_marks' => 0, 'pass_marks' => 0],
+            ]),
+            'passing_rule' => 2,
+            'total_exam_marks' => 100,
+            'over_all_pass'    => 0,
+            'created_at' => $created_at,
+            'created_by' => $created_by
+        ];
+
+        //computer
+        $rules[] = [
+            'class_id' => $class_id,
+            'subject_id' => $subjects[112],
+            'exam_id'  => $exam->id,
+            'grade_id' => 1,
+            'combine_subject_id' => null,
+            'marks_distribution' => json_encode([
+                ['type' => 1, 'total_marks' => 50, 'pass_marks' => 25],
+                ['type' => 2, 'total_marks' => 30, 'pass_marks' => 15],
+                ['type' => 7, 'total_marks' => 20, 'pass_marks' => 10],
+            ]),
+            'passing_rule' => 3,
+            'total_exam_marks' => 100,
+            'over_all_pass'    => 50,
+            'created_at' => $created_at,
+            'created_by' => $created_by
+        ];
+
+         \App\ExamRule::insert($rules);
+
+
+
+    }
+
+    private function examMarksData() {
+        $created_by = 1;
+        $created_at = Carbon::now(env('APP_TIMEZONE','Asia/Dhaka'));
+
+        $class_id = 1;
+
+        $subjects = \App\Subject::where('class_id', $class_id)
+            ->orderBy('code', 'asc')
+            ->get(['id']);
+
+         $exam = \App\Exam::where('class_id', $class_id)->orderBy('id', 'asc')->first();
+
+         $students = \App\Registration::where('class_id', $class_id)->where('academic_year_id', 1)
+            ->get(['id', 'section_id'])
+            ->reduce(function ($students, $student) {
+                $students[$student->id] = $student->section_id;
+                return $students;
+            });
+
+
+        $marksData = [];
+
+         foreach ($subjects as $subject){
+             $examRule = \App\ExamRule::where('exam_id',$exam->id)
+                 ->where('subject_id', $subject->id)
+                 ->first();
+
+             //pull grading information
+             $grade = \App\Grade::where('id', $examRule->grade_id)->first();
+
+             $gradingRules = json_decode($grade->rules);
+
+             //exam distributed marks rules
+             $distributeMarksRules = [];
+             foreach (json_decode($examRule->marks_distribution) as $rule){
+                 $distributeMarksRules[$rule->type] = [
+                     'total_marks' => $rule->total_marks,
+                     'pass_marks' => $rule->pass_marks
+                 ];
+             }
+
+             //loop through students
+             foreach ($students as $student_id => $section_id){
+                 $marks = $this->generateMarks($distributeMarksRules);
+                 [$isInvalid, $message, $totalMarks, $grade, $point] = AppHelper::processMarksAndCalculateResult($examRule,
+                     $gradingRules, $distributeMarksRules, $marks);
+
+
+                 $marksData[] = [
+                'academic_year_id' => 1,
+                'class_id' => $class_id,
+                'section_id' => $section_id,
+                'registration_id' => $student_id,
+                'exam_id' => $exam->id,
+                'subject_id' => $subject->id,
+                'marks' => json_encode($marks),
+                'total_marks' => $totalMarks,
+                'grade' => $grade,
+                'point' => $point,
+                'present' => '1',
+                "created_at" => $created_at,
+                "created_by" => $created_by,
+                ];
+
+
+             }
+         }
+
+        \App\Mark::insert($marksData);
+
+
+
+    }
+
+    private function generateMarks($distributeMarksRules){
+        $marks = [];
+        foreach ($distributeMarksRules as $type => $values){
+            $marks[$type] = rand(0, $values['total_marks']);
+        }
+
+        return $marks;
+
+    }
+
+    private function generateResult() {
+         $created_by = 1;
+        $created_at = Carbon::now(env('APP_TIMEZONE','Asia/Dhaka'));
+
+        $class_id = 1;
+        $acYear = 1;
+        $examInfo = \App\Exam::where('class_id', $class_id)->orderBy('id', 'asc')->first();
+
+        // pull default grading system
+        $grade_id = 1;
+        $grade = \App\Grade::where('id', $grade_id)->first();
+
+        // pull exam rules subject wise and find combine subject
+        $examRules = \App\ExamRule::where('class_id', $class_id)
+            ->where('exam_id', $examInfo->id)
+            ->select('subject_id','combine_subject_id','passing_rule','marks_distribution','total_exam_marks','over_all_pass')
+            ->with(['subject' => function($query){
+                $query->select('id','type');
+            }])
+            ->get()
+            ->reduce(function ($examRules, $rule){
+                $examRules[$rule->subject_id] =[
+                    'combine_subject_id' => $rule->combine_subject_id,
+                    'passing_rule' => $rule->passing_rule,
+                    'marks_distribution' => json_decode($rule->marks_distribution),
+                    'total_exam_marks' => $rule->total_exam_marks,
+                    'over_all_pass' => $rule->over_all_pass,
+                    'subject_type' => $rule->subject->getOriginal('type')
+                ];
+                return $examRules;
+            });
+
+
+        //pull students with marks
+        $exam_id = $examInfo->id;
+        $students = \App\Registration::where('status', AppHelper::ACTIVE)
+            ->where('academic_year_id', $acYear)
+            ->where('class_id', $class_id)
+            ->select('id','fourth_subject','alt_fourth_subject')
+            ->with(['marks' => function($query) use($acYear,$class_id,$exam_id){
+                $query->select('registration_id','subject_id','marks', 'total_marks', 'point', 'present')
+                    ->where('academic_year_id', $acYear)
+                    ->where('class_id', $class_id)
+                    ->where('exam_id', $exam_id);
+            }])
+            ->get();
+
+        $resultInsertData = [];
+        $combineResultInsertData = [];
+        $gradingRules = json_decode($grade->rules);
+        $userId = $created_by;
+
+        //loop  the students
+        foreach ($students as $student){
+                $totalMarks = 0;
+                $totalPoint = 0;
+                $totalSubject = 0;
+                $combineSubjectsMarks = [];
+                $isFail = false;
+
+
+                foreach ($student->marks as $marks) {
+                    //find combine subjects
+                    $isAndInCombineSubject = AppHelper::isAndInCombine($marks->subject_id, $examRules);
+                    if ($isAndInCombineSubject) {
+                        $combineSubjectsMarks[$marks->subject_id] = $marks;
+
+                        //skip for next subject
+                        continue;
+                    }
+
+                    //find 4th subject AppHelper::SUBJECT_TYPE
+                    $is4thSubject = ($examRules[$marks->subject_id]['subject_type'] == 2) ? 1 : 0;
+                    if ($is4thSubject) {
+
+                        if ($student->fourth_subject == $marks->subject_id && $marks->point >= $examInfo->elective_subject_point_addition) {
+                            $totalPoint += ($marks->point - $examInfo->elective_subject_point_addition);
+                        }
+
+                        //if its college then may have student exchange their 4th subject
+                        //with main subject
+                        if(AppHelper::getInstituteCategory() == 'college') {
+                            if ($student->alt_fourth_subject == $marks->subject_id) {
+                                $totalPoint += $marks->point;
+
+                                //if fail then result will be fail
+                                if (intval($marks->point) == 0) {
+                                    $isFail = true;
+                                }
+                                $totalSubject++;
+                            }
+                        }
+                        //end college logic
+
+                        $totalMarks += $marks->total_marks;
+
+                        //skip for next subject
+                        continue;
+                    }
+
+                    //process not combine and 4th subjects
+                    if (!$isAndInCombineSubject && !$is4thSubject) {
+
+                        //if its college then may have student exchange their 4th subject
+                        //with main subject
+                        if(AppHelper::getInstituteCategory() == 'college') {
+                            if ($student->fourth_subject == $marks->subject_id) {
+                                if($marks->point >= $examInfo->elective_subject_point_addition){
+                                    $totalPoint += ($marks->point - $examInfo->elective_subject_point_addition);
+                                }
+
+                                $totalMarks += $marks->total_marks;
+
+                                //skip for next subject
+                                continue;
+                            }
+                        }
+                        //end college logic
+
+
+                        $totalMarks += $marks->total_marks;
+                        $totalPoint += $marks->point;
+                        $totalSubject++;
+                        if (intval($marks->point) == 0) {
+                            $isFail = true;
+                        }
+
+                    }
+                }
+
+
+                //now process combine subjects
+                foreach ($examRules as $subject_id => $data) {
+                    if ($data['combine_subject_id'] != null) {
+                        $totalSubject++;
+                        $subjectMarks = $combineSubjectsMarks[$subject_id];
+                        $pairSubjectMarks = $combineSubjectsMarks[$data['combine_subject_id']];
+
+                        [$pairFail, $combineTotalMarks, $pairTotalMarks] = AppHelper::processCombineSubjectMarks($subjectMarks, $pairSubjectMarks, $data, $examRules[$data['combine_subject_id']]);
+
+                        $totalMarks += $pairTotalMarks;
+
+                        if ($pairFail) {
+                            //AppHelper::GRADE_TYPES
+                            $pairGrade = "F";
+                            $pairPoint = 0.00;
+                            $isFail = true;
+                        } else {
+
+                            [$pairGrade, $pairPoint] = AppHelper::findGradePointFromMarks($gradingRules, $pairTotalMarks);
+                            $totalPoint += $pairPoint;
+                        }
+
+                        //need to store in db for marks sheet print
+                        $combineResultInsertData[] = [
+                            'registration_id' => $student->id,
+                            'subject_id' => $subject_id,
+                            'exam_id' => $examInfo->id,
+                            'total_marks' => $combineTotalMarks,
+                            'grade' => $pairGrade,
+                            'point' => $pairPoint,
+                        ];
+
+                    }
+                }
+
+
+                $finalPoint = ($totalPoint / $totalSubject);
+                if ($isFail) {
+                    //AppHelper::GRADE_TYPES
+                    $finalGrade = 'F';
+                } else {
+                    $finalGrade = AppHelper::findGradeFromPoint($finalPoint, $gradingRules);
+                }
+
+                $resultInsertData[] = [
+                    'academic_year_id' => $acYear,
+                    'class_id' => $class_id,
+                    'registration_id' => $student->id,
+                    'exam_id' => $examInfo->id,
+                    'total_marks' => $totalMarks,
+                    'grade' => $finalGrade,
+                    'point' => $finalPoint,
+                    "created_at" => $created_at,
+                    "created_by" => $userId,
+                ];
+
+        }
+
+        \App\Result::insert($resultInsertData);
+        \Illuminate\Support\Facades\DB::table('result_publish')->insert([
+            'academic_year_id' => $acYear,
+            'class_id' => $class_id,
+            'exam_id' => $exam_id
+        ]);
+        \Illuminate\Support\Facades\DB::table('result_combines')->insert($combineResultInsertData);
+
 
     }
 }
