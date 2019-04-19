@@ -1268,7 +1268,8 @@ class DemoAppDataSeeder extends Seeder
         \Illuminate\Support\Facades\DB::table('result_publish')->insert([
             'academic_year_id' => $acYear,
             'class_id' => $class_id,
-            'exam_id' => $exam_id
+            'exam_id' => $exam_id,
+            'publish_date' => $created_at->format('Y-m-d')
         ]);
         \Illuminate\Support\Facades\DB::table('result_combines')->insert($combineResultInsertData);
 

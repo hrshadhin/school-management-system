@@ -345,6 +345,8 @@ Route::group(
         ->name('result.index');
     Route::any('result/generate', 'MarkController@resultGenerate')
         ->name('result.create');
+    Route::any('result/delete', 'MarkController@resultDelete')
+        ->name('result.delete');
 
     // Reporting
 
