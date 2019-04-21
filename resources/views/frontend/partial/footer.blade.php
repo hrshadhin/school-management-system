@@ -50,7 +50,7 @@
 							<a href="#">@lang('site.menu_admission')</a>
 						</li>
 						<li>
-							<a href="#">@lang('site.menu_result')</a>
+							<a href="{{route('report.marksheet_pub')}}">@lang('site.menu_result')</a>
 						</li>
 					</ul>
 					<ul class="clear-fix">

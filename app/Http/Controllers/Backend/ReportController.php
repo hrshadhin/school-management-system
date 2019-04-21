@@ -546,12 +546,15 @@ class ReportController extends Controller
                 'class_id' => 'required|integer',
                 'exam_id' => 'required|integer',
                 'regi_no' => 'required',
-                'captcha' => 'required|captcha'
             ];
+
+            if(!$request->exists('authorized_form',0)){
+                $rules['captcha'] = 'required|captcha';
+            }
 
             $v = Validator::make($request->all(), $rules);
             if(!$v->passes()){
-                return back()->withErrors($v);
+                return redirect()->route('report.marksheet_pub')->withErrors($v);
             }
 
 

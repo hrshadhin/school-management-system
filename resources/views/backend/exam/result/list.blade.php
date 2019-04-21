@@ -118,7 +118,11 @@
                                                     <td>{{$student->result->first()->grade}}</td>
                                                     <td>{{$student->result->first()->point}}</td>
                                                     <td>{{$student->result->first()->total_marks}}</td>
-                                                    <td></td>
+                                                    <td>
+                                                        <div class="btn-group">
+                                                            <a title="Marksheet Public" href="#0" data-regino="{{$student->regi_no}}" class="btn btn-primary btn-sm viewMarksheetPubBtn"><i class="fa fa-eye"></i></a>
+                                                        </div>
+                                                    </td>
 
                                                 </tr>
                                             @endforeach
@@ -160,6 +164,7 @@
     <script type="text/javascript">
         window.section_list_url = '{{URL::Route("academic.section")}}';
         window.exam_list_url = '{{URL::Route("exam.index")}}';
+        window.marksheetpub_url = '{{URL::Route("report.marksheet_pub")}}';
         window.changeExportColumnIndex = -1;
         window.excludeFilterComlumns = [0,6,7];
         @if(!$section_id)

@@ -12,7 +12,7 @@ $factory->define(App\Student::class, function (Faker $faker) {
         'gender' => rand(1,2),
         'religion' => rand(1,5),
         'blood_group' => rand(1,8),
-        'nationality' => $faker->country,
+        'nationality' => substr($faker->country, 0 , 48),
         'photo' => null,
         'email' => $user->email,
         'phone_no' => $faker->e164PhoneNumber,
