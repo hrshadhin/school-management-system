@@ -292,8 +292,8 @@ class StudentAttendanceController extends Controller
 
         foreach ($shiftData as $shift => $times){
             $shiftRuningTimes[$shift] = [
-                'start' => Carbon::createFromFormat('d/m/Y H:i:s',$request->get('attendance_date').' '.$times['start']),
-                'end' => Carbon::createFromFormat('d/m/Y H:i:s',$request->get('attendance_date').' '.$times['end'])
+                'start' => Carbon::createFromFormat('d/m/Y h:i a',$request->get('attendance_date').' '.$times['start']),
+                'end' => Carbon::createFromFormat('d/m/Y h:i a',$request->get('attendance_date').' '.$times['end'])
             ];
         }
 
