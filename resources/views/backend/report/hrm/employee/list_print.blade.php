@@ -1,4 +1,4 @@
-@extends('backend.report.layouts.master', ['headerData' => $headerData,'printIt' => 0])
+@extends('backend.report.layouts.master', ['headerData' => $headerData,'printIt' => 1])
 @section('extraStyle')
     <style>
         @page {
