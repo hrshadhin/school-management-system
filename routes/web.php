@@ -357,6 +357,8 @@ Route::group(
         ->name('report.student_monthly_attendance');
     Route::any('report/student-list', 'ReportController@studentList')
         ->name('report.student_list');
+    Route::any('report/employee-list', 'ReportController@employeeList')
+        ->name('report.employee_list');
 
 }
 );

@@ -300,7 +300,7 @@
                 <a href="#"><i class="fa icon-attendance"></i> <span>Monthly Attendance</span></a>
               </li>
               <li>
-                <a href="#"><i class="fa icon-attendance"></i> <span>Employee List</span></a>
+                <a href="{{route('report.employee_list')}}"><i class="fa icon-teacher"></i> <span>Employee List</span></a>
               </li>
 
             </ul>

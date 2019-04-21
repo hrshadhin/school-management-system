@@ -533,6 +533,7 @@ class ReportController extends Controller
             'activeTab'
         ));
     }
+
     /**
      *  Marksheet public print
      * @param Request $request
@@ -717,5 +718,46 @@ class ReportController extends Controller
             'exams',
             'classes'
         ));
+    }
+
+    /**
+     * employee list print
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function employeeList(Request $request){
+        if($request->isMethod('post')) {
+
+            $this->validate($request,[]);
+
+            $employees = Employee::with(['role' => function($q){
+                $q->select('id','name');
+            }])->select(
+                'id',
+                'role_id',
+                'name',
+                'designation',
+                'qualification',
+                'dob',
+                'gender',
+                'religion',
+                'email',
+                'phone_no',
+                'address',
+                'joining_date',
+                'shift',
+                'duty_start',
+                'duty_end',
+                'status'
+            )->get();
+
+            $headerData = new \stdClass();
+            $headerData->reportTitle = 'Employee List';
+            $headerData->reportSubTitle = '';
+
+            return view('backend.report.hrm.employee.list_print', compact('headerData','employees'));
+        }
+
+        return view('backend.report.hrm.employee.list');
     }
 }
