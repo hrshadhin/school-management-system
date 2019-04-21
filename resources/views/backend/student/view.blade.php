@@ -79,9 +79,9 @@
                         <li class="active"><a href="#information" data-toggle="tab">Profile</a></li>
                         {{--<li><a href="#routine" data-toggle="tab">Routine</a></li>--}}
                         <li><a href="#attendance" id="tabAttendance" data-pk="{{$student->id}}" data-toggle="tab">Attendance</a></li>
-                        <li><a href="#mark" data-toggle="tab">Mark</a></li>
-                        <li><a href="#invoice" data-toggle="tab">Invoice</a></li>
-                        <li><a href="#payment" data-toggle="tab">Payment</a></li>
+                        {{--<li><a href="#mark" data-toggle="tab">Mark</a></li>--}}
+                        {{--<li><a href="#invoice" data-toggle="tab">Invoice</a></li>--}}
+                        {{--<li><a href="#payment" data-toggle="tab">Payment</a></li>--}}
                         {{--<li><a href="#document" data-toggle="tab">Document</a></li>--}}
                     </ul>
 
@@ -332,15 +332,15 @@
                                 </thead>
                             </table>
                         </div>
-                        <div class="tab-pane" id="mark">
+                        {{--<div class="tab-pane" id="mark">--}}
 
-                        </div>
-                        <div class="tab-pane" id="invoice">
+                        {{--</div>--}}
+                        {{--<div class="tab-pane" id="invoice">--}}
 
-                        </div>
-                        <div class="tab-pane" id="payment">
+                        {{--</div>--}}
+                        {{--<div class="tab-pane" id="payment">--}}
 
-                        </div>
+                        {{--</div>--}}
                         {{--<div class="tab-pane" id="document">--}}
                             {{--<input class="btn btn-success btn-sm" style="margin-bottom: 10px" type="button" value="Add Document" data-toggle="modal" data-target="#documentupload">--}}
                             {{--<div id="hide-table">--}}

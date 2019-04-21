@@ -675,5 +675,33 @@ export default class Academic {
         }
         title += '-'+ $('select[name="exam_id"] option[selected]').text();
         $('title').text(title);
+
+        //marksheetview button click
+        $('.viewMarksheetPubBtn').click(function (e) {
+            e.preventDefault();
+            postForm(this)
+
+        });
+
+        function postForm(btnElement) {
+            let regiNo = $(btnElement).attr('data-regino');
+            let pubMarksheetBtn = $(btnElement).hasClass( "viewMarksheetPubBtn" );
+            let classId = $('select[name="class_id"]').val();
+            let examId = $('select[name="exam_id"]').val();
+            let csrf = document.head.querySelector('meta[name="csrf-token"]').content;
+            let formHtml = '<form id="marksheedForm" action="'+window.marksheetpub_url+'" method="post" target="_blank" enctype="multipart/form-data">\n' +
+                '    <input type="hidden" name="_token" value="'+csrf+'">\n' +
+                '    <input type="hidden" name="class_id" value="'+classId+'">\n' +
+                '    <input type="hidden" name="exam_id" value="'+examId+'">\n' +
+                '    <input type="hidden" name="regi_no" value="'+regiNo+'">\n';
+            if(pubMarksheetBtn){
+                formHtml += '    <input type="hidden" name="authorized_form" value="1">\n';
+            }
+            formHtml += '</form>';
+
+            $('body').append(formHtml);
+            $('#marksheedForm').submit();
+            $('#marksheedForm').remove();
+        }
     }
 }

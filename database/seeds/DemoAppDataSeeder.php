@@ -34,6 +34,10 @@ class DemoAppDataSeeder extends Seeder
         echo PHP_EOL , 'seeding institute settings...';
         $this->instituteSettingsData();
 
+        //seed academic Calendar
+        echo PHP_EOL , 'seeding academic calendar...';
+        $this->academicCalendarData();
+
         //seed class
         echo PHP_EOL , 'seeding class...';
         $this->classData();
@@ -41,6 +45,10 @@ class DemoAppDataSeeder extends Seeder
         //seed teacher
         echo PHP_EOL , 'seeding teacher...';
         $this->teacherData();
+
+        //seed teacher
+        echo PHP_EOL , 'seeding employee...';
+        $this->employeeData();
 
         //seed section
         echo PHP_EOL , 'seeding section...';
@@ -244,6 +252,156 @@ class DemoAppDataSeeder extends Seeder
         AppMeta::insert($insertData);
     }
 
+
+    private function academicCalendarData() {
+        $created_by = 1;
+        $created_at = Carbon::now(env('APP_TIMEZONE','Asia/Dhaka'));
+        $year = date('Y');
+
+        $data = [
+            [
+                'title' => "New Year",
+                'date_from' => $year.'-01-01',
+                'date_upto' => $year.'-01-01',
+                'is_holiday' => '1',
+                'is_exam' => '0',
+                'description' => 'Happy New Year',
+                'created_by' => $created_by,
+                'created_at' => $created_at
+            ],[
+                'title' => "Language Martyrs' Day",
+                'date_from' => $year.'-02-21',
+                'date_upto' => $year.'-02-21',
+                'is_holiday' => '1',
+                'is_exam' => '0',
+                'description' => 'International Mother Language Day',
+                'created_by' => $created_by,
+                'created_at' => $created_at
+            ],[
+                'title' => "Sheikh Mujibur Rahman's birthday",
+                'date_from' => $year.'-03-17',
+                'date_upto' => $year.'-03-17',
+                'is_holiday' => '1',
+                'is_exam' => '0',
+                'description' => 'Father of Nation of Bangladesh',
+                'created_by' => $created_by,
+                'created_at' => $created_at
+            ],[
+                'title' => "Independence Day",
+                'date_from' => $year.'-03-26',
+                'date_upto' => $year.'-03-26',
+                'is_holiday' => '1',
+                'is_exam' => '0',
+                'description' => 'Declaration of Independence from Pakistan in 1971',
+                'created_by' => $created_by,
+                'created_at' => $created_at
+            ],[
+                'title' => "1st Term Exam",
+                'date_from' => $year.'-04-05',
+                'date_upto' => $year.'-04-13',
+                'is_holiday' => '0',
+                'is_exam' => '1',
+                'description' => '',
+                'created_by' => $created_by,
+                'created_at' => $created_at
+            ],[
+                'title' => "Bengali New Year",
+                'date_from' => $year.'-04-14',
+                'date_upto' => $year.'-04-14',
+                'is_holiday' => '1',
+                'is_exam' => '0',
+                'description' => 'Festival marking the start of the Bengali year',
+                'created_by' => $created_by,
+                'created_at' => $created_at
+            ],[
+                'title' => "May Day",
+                'date_from' => $year.'-05-01',
+                'date_upto' => $year.'-05-01',
+                'is_holiday' => '1',
+                'is_exam' => '0',
+                'description' => 'International Labour Day',
+                'created_by' => $created_by,
+                'created_at' => $created_at
+            ],[
+                'title' => "Buddha Purnima",
+                'date_from' => $year.'-05-19',
+                'date_upto' => $year.'-05-19',
+                'is_holiday' => '1',
+                'is_exam' => '0',
+                'description' => 'Birth of Buddha. Observed on the day of the full moon in May',
+                'created_by' => $created_by,
+                'created_at' => $created_at
+            ],[
+                'title' => "2nd Term Exam",
+                'date_from' => $year.'-07-05',
+                'date_upto' => $year.'-07-13',
+                'is_holiday' => '0',
+                'is_exam' => '1',
+                'description' => '',
+                'created_by' => $created_by,
+                'created_at' => $created_at
+            ], [
+                'title' => "National Mourning Day",
+                'date_from' => $year.'-08-15',
+                'date_upto' => $year.'-08-15',
+                'is_holiday' => '1',
+                'is_exam' => '0',
+                'description' => 'National Mourning Day',
+                'created_by' => $created_by,
+                'created_at' => $created_at
+            ],[
+                'title' => "Janmashtami",
+                'date_from' => $year.'-08-24',
+                'date_upto' => $year.'-08-24',
+                'is_holiday' => '1',
+                'is_exam' => '0',
+                'description' => 'Restricted Holiday. Celebrates the birth of Lord Shri Krishna',
+                'created_by' => $created_by,
+                'created_at' => $created_at
+            ],[
+                'title' => "Victory Day",
+                'date_from' => $year.'-12-16',
+                'date_upto' => $year.'-12-16',
+                'is_holiday' => '1',
+                'is_exam' => '0',
+                'description' => 'Commemorates the surrender of the Pakistani army to the Mukti Bahini',
+                'created_by' => $created_by,
+                'created_at' => $created_at
+            ],[
+                'title' => "Final Exam",
+                'date_from' => $year.'-12-17',
+                'date_upto' => $year.'-12-24',
+                'is_holiday' => '0',
+                'is_exam' => '1',
+                'description' => '',
+                'created_by' => $created_by,
+                'created_at' => $created_at
+            ],
+            [
+                'title' => "Christmas Day",
+                'date_from' => $year.'-12-25',
+                'date_upto' => $year.'-12-25',
+                'is_holiday' => '1',
+                'is_exam' => '0',
+                'description' => 'Christmas Day',
+                'created_by' => $created_by,
+                'created_at' => $created_at
+            ],[
+                'title' => "Year end holidays",
+                'date_from' => $year.'-12-26',
+                'date_upto' => $year.'-12-31',
+                'is_holiday' => '1',
+                'is_exam' => '0',
+                'description' => '',
+                'created_by' => $created_by,
+                'created_at' => $created_at
+            ],
+
+        ];
+
+        \App\AcademicCalendar::insert($data);
+    }
+
     private function classData(){
         $created_by = 1;
         $created_at = Carbon::now(env('APP_TIMEZONE','Asia/Dhaka'));
@@ -372,6 +530,21 @@ class DemoAppDataSeeder extends Seeder
 
             ]);
         });
+    }
+    private function employeeData() {
+
+        $created_by = 1;
+        $created_at = Carbon::now(env('APP_TIMEZONE','Asia/Dhaka'));
+
+        $employee = factory(App\Employee::class, 1)->create(['role_id' => 5, 'created_by' => $created_by,'created_at' => $created_at])->first();
+        \App\UserRole::create(['user_id' => $employee->user_id, 'role_id' => $employee->role_id, 'created_by' => $created_by, 'created_at' => $created_at]);
+
+        $employee = factory(App\Employee::class, 1)->create(['role_id' => 6, 'created_by' => $created_by,'created_at' => $created_at])->first();
+        \App\UserRole::create(['user_id' => $employee->user_id, 'role_id' => $employee->role_id, 'created_by' => $created_by, 'created_at' => $created_at]);
+
+        $employee = factory(App\Employee::class, 1)->create(['role_id' => 7, 'created_by' => $created_by,'created_at' => $created_at])->first();
+        \App\UserRole::create(['user_id' => $employee->user_id, 'role_id' => $employee->role_id, 'created_by' => $created_by, 'created_at' => $created_at]);
+
     }
 
     private function sectionData() {
@@ -584,7 +757,26 @@ class DemoAppDataSeeder extends Seeder
         $created_at = Carbon::now(env('APP_TIMEZONE','Asia/Dhaka'));
 
         $endDate = $created_at->copy();
-        $startDate = $created_at->copy()->subDays(10);
+        $startDate = $created_at->copy()->subDays(15);
+
+        $wekends = AppHelper::getAppSettings('weekends');
+        if($wekends){
+            $wekends = json_decode($wekends);
+        }
+        else{
+            $wekends = [];
+        }
+
+        $attendanceDates = AppHelper::generateDateRangeForReport($startDate, $endDate, true, $wekends, true);
+        $holiDays = \App\AcademicCalendar::where('date_from','>=', $startDate->format('Y-m-d'))
+            ->where('date_upto', '<=', $endDate->format('Y-m-d'))
+            ->where('is_holiday','1')
+            ->get(['date_from']);
+
+        //remove holidays from attendance dates
+        foreach ($holiDays as $holiDay){
+            unset($attendanceDates[$holiDay->date_from->format('Y-m-d')]);
+        }
 
         //fetch institute shift running times
         $shiftData = AppHelper::getAppSettings('shift_data');
@@ -600,12 +792,12 @@ class DemoAppDataSeeder extends Seeder
             });
 
         $attendances = [];
-        while ($startDate->lte($endDate)) {
+        foreach ($attendanceDates as $attendanceDate => $value) {
             $shiftRuningTimes = [];
             foreach ($shiftData as $shift => $times) {
                 $shiftRuningTimes[$shift] = [
-                    'start' => Carbon::createFromFormat('d/m/Y h:i a', $startDate->format('d/m/Y') . ' ' . $times['start']),
-                    'end' => Carbon::createFromFormat('d/m/Y h:i a', $startDate->format('d/m/Y') . ' ' . $times['end'])
+                    'start' => Carbon::createFromFormat('Y-m-d h:i a', $attendanceDate . ' ' . $times['start']),
+                    'end' => Carbon::createFromFormat('Y-m-d h:i a', $attendanceDate . ' ' . $times['end'])
                 ];
             }
 
@@ -616,7 +808,7 @@ class DemoAppDataSeeder extends Seeder
                     $outTime = $shiftRuningTimes[$shift]['end'];
                 }
                 else{
-                    $inTime = Carbon::createFromFormat('d/m/Y H:i:s', $startDate->format('d/m/Y') . ' 00:00:00');
+                    $inTime = Carbon::createFromFormat('Y-m-d H:i:s', $attendanceDate . ' 00:00:00');
                     $outTime = $inTime;
                 }
                 $timeDiff  = $inTime->diff($outTime)->format('%H:%I');
@@ -625,7 +817,7 @@ class DemoAppDataSeeder extends Seeder
                     "academic_year_id" => 1,
                     "class_id" => 1,
                     "registration_id" => $studentId,
-                    "attendance_date" => $startDate->format('Y-m-d'),
+                    "attendance_date" => $attendanceDate,
                     "in_time" => $inTime,
                     "out_time" => $outTime,
                     "staying_hour" => $timeDiff,
@@ -635,8 +827,6 @@ class DemoAppDataSeeder extends Seeder
                     "created_by" => $created_by,
                 ];
             }
-
-            $startDate->addDay(1);
 
         }
 
@@ -654,7 +844,26 @@ class DemoAppDataSeeder extends Seeder
         $created_at = Carbon::now(env('APP_TIMEZONE','Asia/Dhaka'));
 
         $endDate = $created_at->copy();
-        $startDate = $created_at->copy()->subDays(10);
+        $startDate = $created_at->copy()->subDays(15);
+
+        $wekends = AppHelper::getAppSettings('weekends');
+        if($wekends){
+            $wekends = json_decode($wekends);
+        }
+        else{
+            $wekends = [];
+        }
+
+        $attendanceDates = AppHelper::generateDateRangeForReport($startDate, $endDate, true, $wekends, true);
+        $holiDays = \App\AcademicCalendar::where('date_from','>=', $startDate->format('Y-m-d'))
+            ->where('date_upto', '<=', $endDate->format('Y-m-d'))
+            ->where('is_holiday','1')
+            ->get(['date_from']);
+
+        //remove holidays from attendance dates
+        foreach ($holiDays as $holiDay){
+            unset($attendanceDates[$holiDay->date_from->format('Y-m-d')]);
+        }
 
         //fetch institute shift running times
         $shiftData = AppHelper::getAppSettings('shift_data');
@@ -672,23 +881,23 @@ class DemoAppDataSeeder extends Seeder
         });
 
         $attendances = [];
-        while ($startDate->lte($endDate)) {
+        foreach ($attendanceDates as $attendanceDate => $value) {
 
             foreach ($employees as $employeeId => $employeeShift) {
                 $isPresent = rand(0,1);
                 if($isPresent) {
-                    $inTime = Carbon::createFromFormat('d/m/Y h:i a', $startDate->format('d/m/Y') . ' ' . $shiftData['Morning']['start']);
-                    $outTime = Carbon::createFromFormat('d/m/Y h:i a', $startDate->format('d/m/Y') . ' ' . $shiftData['Morning']['end']);
+                    $inTime = Carbon::createFromFormat('Y-m-d h:i a', $attendanceDate . ' ' . $shiftData['Morning']['start']);
+                    $outTime = Carbon::createFromFormat('Y-m-d h:i a', $attendanceDate . ' ' . $shiftData['Morning']['end']);
                 }
                 else{
-                    $inTime = Carbon::createFromFormat('d/m/Y H:i:s', $startDate->format('d/m/Y') . ' 00:00:00');
+                    $inTime = Carbon::createFromFormat('Y-m-d H:i:s', $attendanceDate . ' 00:00:00');
                     $outTime = $inTime;
                 }
                 $timeDiff  = $inTime->diff($outTime)->format('%H:%I');
 
                 $attendances[] = [
                     "employee_id" => $employeeId,
-                    "attendance_date" => $startDate->format('Y-m-d'),
+                    "attendance_date" => $attendanceDate,
                     "in_time" => $inTime,
                     "out_time" => $outTime,
                     "working_hour" => $timeDiff,
@@ -699,8 +908,6 @@ class DemoAppDataSeeder extends Seeder
                 ];
 
             }
-
-            $startDate->addDay(1);
 
         }
 
