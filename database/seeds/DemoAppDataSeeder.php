@@ -62,6 +62,15 @@ class DemoAppDataSeeder extends Seeder
         echo PHP_EOL , 'seeding student...';
         $this->studentData();
 
+        //seed id card template for both
+        //employee and students
+        echo PHP_EOL , 'seeding id card template...';
+        $this->idcardTemplateData();
+
+        //seed attendance absent sms and email template
+        echo PHP_EOL , 'seeding absent sms & email template...';
+        $this->smsAndEmailTemplateData();
+
         //seed student attendance
         echo PHP_EOL , 'seeding student attendance...';
         $this->studentAttendance();
@@ -106,6 +115,7 @@ class DemoAppDataSeeder extends Seeder
         Section::truncate();
         \App\Subject::truncate();
         \App\Student::truncate();
+        \App\Template::truncate();
         \App\Registration::truncate();
         \App\StudentAttendance::truncate();
         \App\EmployeeAttendance::truncate();
@@ -752,6 +762,169 @@ class DemoAppDataSeeder extends Seeder
 
     }
 
+    private function idcardTemplateData() {
+        $created_by = 1;
+        $created_at = Carbon::now(env('APP_TIMEZONE','Asia/Dhaka'));
+        $data = [
+            [
+                'name' => "Student Idcard",
+                'type' =>  3, //AppHelper::TEMPLATE_TYPE
+                'role_id' => AppHelper::USER_STUDENT,
+                'content' => json_encode([
+                    "format_id" => "1",
+                    "bg_color" => null,
+                    "border_color" => null,
+                    "body_text_color" => null,
+                    "fs_title_color" => null,
+                    "picture_border_color" => null,
+                    "bs_title_color" => null,
+                    "website_link_color" => null,
+                    "fs_title_bg_color" => null,
+                    "id_title_color" => null,
+                    "title_bg_image" => null,
+                    "signature" => base64_encode(file_get_contents(resource_path('assets/backend/images/signature.png'))),
+                    "logo" => base64_encode(file_get_contents(resource_path('assets/backend/images/idlogo.png'))),
+                ]),
+                'created_by' => $created_by,
+                'created_at' => $created_at
+            ],
+            [
+                'name' => "Employee Idcard",
+                'type' =>  3, //AppHelper::TEMPLATE_TYPE
+                'role_id' => AppHelper::USER_TEACHER,
+                'content' => json_encode([
+                    "format_id" => "2",
+                    "bg_color" => null,
+                    "border_color" => null,
+                    "body_text_color" => null,
+                    "fs_title_color" => null,
+                    "picture_border_color" => null,
+                    "bs_title_color" => null,
+                    "website_link_color" => null,
+                    "fs_title_bg_color" => null,
+                    "id_title_color" => null,
+                    "title_bg_image" => null,
+                    "signature" => base64_encode(file_get_contents(resource_path('assets/backend/images/signature.png'))),
+                    "logo" => base64_encode(file_get_contents(resource_path('assets/backend/images/idlogo.png'))),
+                ]),
+                'created_by' => $created_by,
+                'created_at' => $created_at
+            ]
+        ];
+
+        \App\Template::insert($data);
+
+        AppMeta::insert([
+            [
+                'meta_key' => 'student_idcard_template',
+                'meta_value' => 1,
+                'created_by' => $created_by,
+                'created_at' => $created_at
+            ],
+            [
+                'meta_key' => 'employee_idcard_template',
+                'meta_value' => 2,
+                'created_by' => $created_by,
+                'created_at' => $created_at
+            ]
+        ]);
+
+    }
+
+    private function smsAndEmailTemplateData() {
+        $created_by = 1;
+        $created_at = Carbon::now(env('APP_TIMEZONE','Asia/Dhaka'));
+
+        $data = [
+
+            [
+                'name' => "Student Absent SMS Template",
+                'type' =>  1, //AppHelper::TEMPLATE_TYPE
+                'role_id' => AppHelper::USER_STUDENT,
+                'content' => "Dear Parents your child (Name-{{name}},Class-{{class}},Roll-{{roll_no}}) is absent from school on {{date}}. Head master, CloudSchool BD.",
+                 'created_by' => $created_by,
+                'created_at' => $created_at
+            ],[
+                'name' => "Student Absent Email Template",
+                'type' =>  2, //AppHelper::TEMPLATE_TYPE
+                'role_id' => AppHelper::USER_STUDENT,
+                'content' => "<p></p><pre>Dear <b>{{name}}</b>,</pre><pre><b></b>You are absent from school on {{date}}. Bring your parents to school on next day.</pre><p></p>",
+                 'created_by' => $created_by,
+                'created_at' => $created_at
+            ],
+            [
+                'name' => "Employee Absent SMS Template",
+                'type' =>  1, //AppHelper::TEMPLATE_TYPE
+                'role_id' => AppHelper::USER_TEACHER,
+                'content' => "Dear {{name}}, You are absent from school on {{date}}. Head master, CloudSchool BD.",
+                 'created_by' => $created_by,
+                'created_at' => $created_at
+            ],[
+                'name' => "Employee Absent Email Template",
+                'type' =>  2, //AppHelper::TEMPLATE_TYPE
+                'role_id' => AppHelper::USER_TEACHER,
+                'content' => "<p></p><pre>Dear <b>{{name}}</b>,</pre><pre><b></b>You are absent from school on {{date}}. Meet the authority of the school on next day.</pre><p></p>",
+                 'created_by' => $created_by,
+                'created_at' => $created_at
+            ],
+        ];
+
+        \App\Template::insert($data);
+
+        AppMeta::insert([
+            [
+                'meta_key' => 'student_attendance_notification',
+                'meta_value' => 1,
+                'created_by' => $created_by,
+                'created_at' => $created_at
+            ],
+            [
+                'meta_key' => 'employee_attendance_notification',
+                'meta_value' => 2,
+                'created_by' => $created_by,
+                'created_at' => $created_at
+            ],
+            [
+                'meta_key' => 'student_attendance_template',
+                'meta_value' => 3,
+                'created_by' => $created_by,
+                'created_at' => $created_at
+            ],
+            [
+                'meta_key' => 'employee_attendance_template',
+                'meta_value' => 6,
+                'created_by' => $created_by,
+                'created_at' => $created_at
+            ]
+        ]);
+
+        //now add sms gate way and
+        // default gateway
+        $data = [
+            'gateway' => 7,
+            'name' => 'student absent sms',
+            'sender_id' => 'test',
+            'user' => 'test',
+            'password' => 'test',
+            'api_url' => 'http://loglocally.test',
+        ];
+
+
+        $gatewayId = AppMeta::create([
+                'meta_key' => 'sms_gateway',
+                'meta_value' => json_encode($data),
+            'created_by' => $created_by,
+            'created_at' => $created_at
+            ]);
+
+        AppMeta::insert([[
+                'meta_key' => 'student_attendance_gateway',
+                'meta_value' => $gatewayId->id,
+                'created_by' => $created_by,
+                'created_at' => $created_at
+            ]]);
+    }
+
     private function studentAttendance() {
         $created_by = 1;
         $created_at = Carbon::now(env('APP_TIMEZONE','Asia/Dhaka'));
@@ -796,8 +969,8 @@ class DemoAppDataSeeder extends Seeder
             $shiftRuningTimes = [];
             foreach ($shiftData as $shift => $times) {
                 $shiftRuningTimes[$shift] = [
-                    'start' => Carbon::createFromFormat('Y-m-d h:i a', $attendanceDate . ' ' . $times['start']),
-                    'end' => Carbon::createFromFormat('Y-m-d h:i a', $attendanceDate . ' ' . $times['end'])
+                    'start' => Carbon::createFromFormat('Y-m-d H:i:s', $attendanceDate . ' ' . $times['start']),
+                    'end' => Carbon::createFromFormat('Y-m-d H:i:s', $attendanceDate . ' ' . $times['end'])
                 ];
             }
 
@@ -886,8 +1059,8 @@ class DemoAppDataSeeder extends Seeder
             foreach ($employees as $employeeId => $employeeShift) {
                 $isPresent = rand(0,1);
                 if($isPresent) {
-                    $inTime = Carbon::createFromFormat('Y-m-d h:i a', $attendanceDate . ' ' . $shiftData['Morning']['start']);
-                    $outTime = Carbon::createFromFormat('Y-m-d h:i a', $attendanceDate . ' ' . $shiftData['Morning']['end']);
+                    $inTime = Carbon::createFromFormat('Y-m-d H:i:s', $attendanceDate . ' ' . $shiftData['Morning']['start']);
+                    $outTime = Carbon::createFromFormat('Y-m-d H:i:s', $attendanceDate . ' ' . $shiftData['Morning']['end']);
                 }
                 else{
                     $inTime = Carbon::createFromFormat('Y-m-d H:i:s', $attendanceDate . ' 00:00:00');
@@ -1076,29 +1249,29 @@ class DemoAppDataSeeder extends Seeder
                 return $subjects;
             });
 
-         $exam = \App\Exam::where('class_id', $class_id)->orderBy('id', 'asc')->first();
+        $exam = \App\Exam::where('class_id', $class_id)->orderBy('id', 'asc')->first();
 //         $marksDistributions = json_decode($exam->marks_distribution_types);
 //           1 2 7
 
-         //for bangla 1st
-         $rules[] = [
-             'class_id' => $class_id,
-             'subject_id' => $subjects[101],
-             'exam_id'  => $exam->id,
-             'grade_id' => 1,
-             'combine_subject_id' => $subjects[102],
-             'marks_distribution' => json_encode([
-                 ['type' => 1, 'total_marks' => 70, 'pass_marks' => 0],
-                 ['type' => 2, 'total_marks' => 30, 'pass_marks' => 0],
-                 ['type' => 7, 'total_marks' => 0, 'pass_marks' => 0],
-             ]),
-             'passing_rule' => 1,
-             'total_exam_marks' => 100,
-             'over_all_pass'    => 33,
-             'created_at' => $created_at,
-             'created_by' => $created_by
-         ];
-         //bangla 2nd
+        //for bangla 1st
+        $rules[] = [
+            'class_id' => $class_id,
+            'subject_id' => $subjects[101],
+            'exam_id'  => $exam->id,
+            'grade_id' => 1,
+            'combine_subject_id' => $subjects[102],
+            'marks_distribution' => json_encode([
+                ['type' => 1, 'total_marks' => 70, 'pass_marks' => 0],
+                ['type' => 2, 'total_marks' => 30, 'pass_marks' => 0],
+                ['type' => 7, 'total_marks' => 0, 'pass_marks' => 0],
+            ]),
+            'passing_rule' => 1,
+            'total_exam_marks' => 100,
+            'over_all_pass'    => 33,
+            'created_at' => $created_at,
+            'created_by' => $created_by
+        ];
+        //bangla 2nd
         $rules[] = [
             'class_id' => $class_id,
             'subject_id' => $subjects[102],
@@ -1192,7 +1365,7 @@ class DemoAppDataSeeder extends Seeder
             'created_by' => $created_by
         ];
 
-         \App\ExamRule::insert($rules);
+        \App\ExamRule::insert($rules);
 
 
 
@@ -1208,9 +1381,9 @@ class DemoAppDataSeeder extends Seeder
             ->orderBy('code', 'asc')
             ->get(['id']);
 
-         $exam = \App\Exam::where('class_id', $class_id)->orderBy('id', 'asc')->first();
+        $exam = \App\Exam::where('class_id', $class_id)->orderBy('id', 'asc')->first();
 
-         $students = \App\Registration::where('class_id', $class_id)->where('academic_year_id', 1)
+        $students = \App\Registration::where('class_id', $class_id)->where('academic_year_id', 1)
             ->get(['id', 'section_id'])
             ->reduce(function ($students, $student) {
                 $students[$student->id] = $student->section_id;
@@ -1220,51 +1393,51 @@ class DemoAppDataSeeder extends Seeder
 
         $marksData = [];
 
-         foreach ($subjects as $subject){
-             $examRule = \App\ExamRule::where('exam_id',$exam->id)
-                 ->where('subject_id', $subject->id)
-                 ->first();
+        foreach ($subjects as $subject){
+            $examRule = \App\ExamRule::where('exam_id',$exam->id)
+                ->where('subject_id', $subject->id)
+                ->first();
 
-             //pull grading information
-             $grade = \App\Grade::where('id', $examRule->grade_id)->first();
+            //pull grading information
+            $grade = \App\Grade::where('id', $examRule->grade_id)->first();
 
-             $gradingRules = json_decode($grade->rules);
+            $gradingRules = json_decode($grade->rules);
 
-             //exam distributed marks rules
-             $distributeMarksRules = [];
-             foreach (json_decode($examRule->marks_distribution) as $rule){
-                 $distributeMarksRules[$rule->type] = [
-                     'total_marks' => $rule->total_marks,
-                     'pass_marks' => $rule->pass_marks
-                 ];
-             }
+            //exam distributed marks rules
+            $distributeMarksRules = [];
+            foreach (json_decode($examRule->marks_distribution) as $rule){
+                $distributeMarksRules[$rule->type] = [
+                    'total_marks' => $rule->total_marks,
+                    'pass_marks' => $rule->pass_marks
+                ];
+            }
 
-             //loop through students
-             foreach ($students as $student_id => $section_id){
-                 $marks = $this->generateMarks($distributeMarksRules);
-                 [$isInvalid, $message, $totalMarks, $grade, $point] = AppHelper::processMarksAndCalculateResult($examRule,
-                     $gradingRules, $distributeMarksRules, $marks);
+            //loop through students
+            foreach ($students as $student_id => $section_id){
+                $marks = $this->generateMarks($distributeMarksRules);
+                [$isInvalid, $message, $totalMarks, $grade, $point] = AppHelper::processMarksAndCalculateResult($examRule,
+                    $gradingRules, $distributeMarksRules, $marks);
 
 
-                 $marksData[] = [
-                'academic_year_id' => 1,
-                'class_id' => $class_id,
-                'section_id' => $section_id,
-                'registration_id' => $student_id,
-                'exam_id' => $exam->id,
-                'subject_id' => $subject->id,
-                'marks' => json_encode($marks),
-                'total_marks' => $totalMarks,
-                'grade' => $grade,
-                'point' => $point,
-                'present' => '1',
-                "created_at" => $created_at,
-                "created_by" => $created_by,
+                $marksData[] = [
+                    'academic_year_id' => 1,
+                    'class_id' => $class_id,
+                    'section_id' => $section_id,
+                    'registration_id' => $student_id,
+                    'exam_id' => $exam->id,
+                    'subject_id' => $subject->id,
+                    'marks' => json_encode($marks),
+                    'total_marks' => $totalMarks,
+                    'grade' => $grade,
+                    'point' => $point,
+                    'present' => '1',
+                    "created_at" => $created_at,
+                    "created_by" => $created_by,
                 ];
 
 
-             }
-         }
+            }
+        }
 
         \App\Mark::insert($marksData);
 
@@ -1283,7 +1456,7 @@ class DemoAppDataSeeder extends Seeder
     }
 
     private function generateResult() {
-         $created_by = 1;
+        $created_by = 1;
         $created_at = Carbon::now(env('APP_TIMEZONE','Asia/Dhaka'));
 
         $class_id = 1;
@@ -1336,138 +1509,138 @@ class DemoAppDataSeeder extends Seeder
 
         //loop  the students
         foreach ($students as $student){
-                $totalMarks = 0;
-                $totalPoint = 0;
-                $totalSubject = 0;
-                $combineSubjectsMarks = [];
-                $isFail = false;
+            $totalMarks = 0;
+            $totalPoint = 0;
+            $totalSubject = 0;
+            $combineSubjectsMarks = [];
+            $isFail = false;
 
 
-                foreach ($student->marks as $marks) {
-                    //find combine subjects
-                    $isAndInCombineSubject = AppHelper::isAndInCombine($marks->subject_id, $examRules);
-                    if ($isAndInCombineSubject) {
-                        $combineSubjectsMarks[$marks->subject_id] = $marks;
+            foreach ($student->marks as $marks) {
+                //find combine subjects
+                $isAndInCombineSubject = AppHelper::isAndInCombine($marks->subject_id, $examRules);
+                if ($isAndInCombineSubject) {
+                    $combineSubjectsMarks[$marks->subject_id] = $marks;
 
-                        //skip for next subject
-                        continue;
+                    //skip for next subject
+                    continue;
+                }
+
+                //find 4th subject AppHelper::SUBJECT_TYPE
+                $is4thSubject = ($examRules[$marks->subject_id]['subject_type'] == 2) ? 1 : 0;
+                if ($is4thSubject) {
+
+                    if ($student->fourth_subject == $marks->subject_id && $marks->point >= $examInfo->elective_subject_point_addition) {
+                        $totalPoint += ($marks->point - $examInfo->elective_subject_point_addition);
                     }
 
-                    //find 4th subject AppHelper::SUBJECT_TYPE
-                    $is4thSubject = ($examRules[$marks->subject_id]['subject_type'] == 2) ? 1 : 0;
-                    if ($is4thSubject) {
+                    //if its college then may have student exchange their 4th subject
+                    //with main subject
+                    if(AppHelper::getInstituteCategory() == 'college') {
+                        if ($student->alt_fourth_subject == $marks->subject_id) {
+                            $totalPoint += $marks->point;
 
-                        if ($student->fourth_subject == $marks->subject_id && $marks->point >= $examInfo->elective_subject_point_addition) {
-                            $totalPoint += ($marks->point - $examInfo->elective_subject_point_addition);
-                        }
-
-                        //if its college then may have student exchange their 4th subject
-                        //with main subject
-                        if(AppHelper::getInstituteCategory() == 'college') {
-                            if ($student->alt_fourth_subject == $marks->subject_id) {
-                                $totalPoint += $marks->point;
-
-                                //if fail then result will be fail
-                                if (intval($marks->point) == 0) {
-                                    $isFail = true;
-                                }
-                                $totalSubject++;
+                            //if fail then result will be fail
+                            if (intval($marks->point) == 0) {
+                                $isFail = true;
                             }
+                            $totalSubject++;
                         }
-                        //end college logic
-
-                        $totalMarks += $marks->total_marks;
-
-                        //skip for next subject
-                        continue;
                     }
+                    //end college logic
 
-                    //process not combine and 4th subjects
-                    if (!$isAndInCombineSubject && !$is4thSubject) {
+                    $totalMarks += $marks->total_marks;
 
-                        //if its college then may have student exchange their 4th subject
-                        //with main subject
-                        if(AppHelper::getInstituteCategory() == 'college') {
-                            if ($student->fourth_subject == $marks->subject_id) {
-                                if($marks->point >= $examInfo->elective_subject_point_addition){
-                                    $totalPoint += ($marks->point - $examInfo->elective_subject_point_addition);
-                                }
+                    //skip for next subject
+                    continue;
+                }
 
-                                $totalMarks += $marks->total_marks;
+                //process not combine and 4th subjects
+                if (!$isAndInCombineSubject && !$is4thSubject) {
 
-                                //skip for next subject
-                                continue;
+                    //if its college then may have student exchange their 4th subject
+                    //with main subject
+                    if(AppHelper::getInstituteCategory() == 'college') {
+                        if ($student->fourth_subject == $marks->subject_id) {
+                            if($marks->point >= $examInfo->elective_subject_point_addition){
+                                $totalPoint += ($marks->point - $examInfo->elective_subject_point_addition);
                             }
+
+                            $totalMarks += $marks->total_marks;
+
+                            //skip for next subject
+                            continue;
                         }
-                        //end college logic
-
-
-                        $totalMarks += $marks->total_marks;
-                        $totalPoint += $marks->point;
-                        $totalSubject++;
-                        if (intval($marks->point) == 0) {
-                            $isFail = true;
-                        }
-
                     }
-                }
+                    //end college logic
 
 
-                //now process combine subjects
-                foreach ($examRules as $subject_id => $data) {
-                    if ($data['combine_subject_id'] != null) {
-                        $totalSubject++;
-                        $subjectMarks = $combineSubjectsMarks[$subject_id];
-                        $pairSubjectMarks = $combineSubjectsMarks[$data['combine_subject_id']];
-
-                        [$pairFail, $combineTotalMarks, $pairTotalMarks] = AppHelper::processCombineSubjectMarks($subjectMarks, $pairSubjectMarks, $data, $examRules[$data['combine_subject_id']]);
-
-                        $totalMarks += $pairTotalMarks;
-
-                        if ($pairFail) {
-                            //AppHelper::GRADE_TYPES
-                            $pairGrade = "F";
-                            $pairPoint = 0.00;
-                            $isFail = true;
-                        } else {
-
-                            [$pairGrade, $pairPoint] = AppHelper::findGradePointFromMarks($gradingRules, $pairTotalMarks);
-                            $totalPoint += $pairPoint;
-                        }
-
-                        //need to store in db for marks sheet print
-                        $combineResultInsertData[] = [
-                            'registration_id' => $student->id,
-                            'subject_id' => $subject_id,
-                            'exam_id' => $examInfo->id,
-                            'total_marks' => $combineTotalMarks,
-                            'grade' => $pairGrade,
-                            'point' => $pairPoint,
-                        ];
-
+                    $totalMarks += $marks->total_marks;
+                    $totalPoint += $marks->point;
+                    $totalSubject++;
+                    if (intval($marks->point) == 0) {
+                        $isFail = true;
                     }
+
                 }
+            }
 
 
-                $finalPoint = ($totalPoint / $totalSubject);
-                if ($isFail) {
-                    //AppHelper::GRADE_TYPES
-                    $finalGrade = 'F';
-                } else {
-                    $finalGrade = AppHelper::findGradeFromPoint($finalPoint, $gradingRules);
+            //now process combine subjects
+            foreach ($examRules as $subject_id => $data) {
+                if ($data['combine_subject_id'] != null) {
+                    $totalSubject++;
+                    $subjectMarks = $combineSubjectsMarks[$subject_id];
+                    $pairSubjectMarks = $combineSubjectsMarks[$data['combine_subject_id']];
+
+                    [$pairFail, $combineTotalMarks, $pairTotalMarks] = AppHelper::processCombineSubjectMarks($subjectMarks, $pairSubjectMarks, $data, $examRules[$data['combine_subject_id']]);
+
+                    $totalMarks += $pairTotalMarks;
+
+                    if ($pairFail) {
+                        //AppHelper::GRADE_TYPES
+                        $pairGrade = "F";
+                        $pairPoint = 0.00;
+                        $isFail = true;
+                    } else {
+
+                        [$pairGrade, $pairPoint] = AppHelper::findGradePointFromMarks($gradingRules, $pairTotalMarks);
+                        $totalPoint += $pairPoint;
+                    }
+
+                    //need to store in db for marks sheet print
+                    $combineResultInsertData[] = [
+                        'registration_id' => $student->id,
+                        'subject_id' => $subject_id,
+                        'exam_id' => $examInfo->id,
+                        'total_marks' => $combineTotalMarks,
+                        'grade' => $pairGrade,
+                        'point' => $pairPoint,
+                    ];
+
                 }
+            }
 
-                $resultInsertData[] = [
-                    'academic_year_id' => $acYear,
-                    'class_id' => $class_id,
-                    'registration_id' => $student->id,
-                    'exam_id' => $examInfo->id,
-                    'total_marks' => $totalMarks,
-                    'grade' => $finalGrade,
-                    'point' => $finalPoint,
-                    "created_at" => $created_at,
-                    "created_by" => $userId,
-                ];
+
+            $finalPoint = ($totalPoint / $totalSubject);
+            if ($isFail) {
+                //AppHelper::GRADE_TYPES
+                $finalGrade = 'F';
+            } else {
+                $finalGrade = AppHelper::findGradeFromPoint($finalPoint, $gradingRules);
+            }
+
+            $resultInsertData[] = [
+                'academic_year_id' => $acYear,
+                'class_id' => $class_id,
+                'registration_id' => $student->id,
+                'exam_id' => $examInfo->id,
+                'total_marks' => $totalMarks,
+                'grade' => $finalGrade,
+                'point' => $finalPoint,
+                "created_at" => $created_at,
+                "created_by" => $userId,
+            ];
 
         }
 
