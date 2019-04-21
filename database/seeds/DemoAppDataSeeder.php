@@ -969,8 +969,8 @@ class DemoAppDataSeeder extends Seeder
             $shiftRuningTimes = [];
             foreach ($shiftData as $shift => $times) {
                 $shiftRuningTimes[$shift] = [
-                    'start' => Carbon::createFromFormat('Y-m-d H:i:s', $attendanceDate . ' ' . $times['start']),
-                    'end' => Carbon::createFromFormat('Y-m-d H:i:s', $attendanceDate . ' ' . $times['end'])
+                    'start' => Carbon::createFromFormat('Y-m-d h:i a', $attendanceDate . ' ' . $times['start']),
+                    'end' => Carbon::createFromFormat('Y-m-d h:i a', $attendanceDate . ' ' . $times['end'])
                 ];
             }
 
@@ -1059,8 +1059,8 @@ class DemoAppDataSeeder extends Seeder
             foreach ($employees as $employeeId => $employeeShift) {
                 $isPresent = rand(0,1);
                 if($isPresent) {
-                    $inTime = Carbon::createFromFormat('Y-m-d H:i:s', $attendanceDate . ' ' . $shiftData['Morning']['start']);
-                    $outTime = Carbon::createFromFormat('Y-m-d H:i:s', $attendanceDate . ' ' . $shiftData['Morning']['end']);
+                    $inTime = Carbon::createFromFormat('Y-m-d h:i a', $attendanceDate . ' ' . $shiftData['Morning']['start']);
+                    $outTime = Carbon::createFromFormat('Y-m-d h:i a', $attendanceDate . ' ' . $shiftData['Morning']['end']);
                 }
                 else{
                     $inTime = Carbon::createFromFormat('Y-m-d H:i:s', $attendanceDate . ' 00:00:00');
