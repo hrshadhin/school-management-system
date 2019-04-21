@@ -79,6 +79,10 @@ class DemoAppDataSeeder extends Seeder
         echo PHP_EOL , 'seeding employee attendance...';
         $this->employeeAttendance();
 
+        //leave and work out side data
+        echo PHP_EOL , 'seeding leave and outside work data...';
+        $this->leaveAndWorkOutSide();
+
         //seed exam
         echo PHP_EOL , 'seeding exam...';
         $this->examData();
@@ -124,6 +128,8 @@ class DemoAppDataSeeder extends Seeder
         \App\ExamRule::truncate();
         \App\Mark::truncate();
         \App\Result::truncate();
+        \App\Leave::truncate();
+        \App\WorkOutside::truncate();
         \Illuminate\Support\Facades\DB::table('result_publish')->truncate();
         \Illuminate\Support\Facades\DB::table('result_combines')->truncate();
         \Illuminate\Support\Facades\DB::statement("SET foreign_key_checks=1");
@@ -256,10 +262,16 @@ class DemoAppDataSeeder extends Seeder
             ['meta_key' => 'disable_language', 'meta_value' => 1, 'created_by' => $created_by, 'created_at' => $created_at],
             ['meta_key' => 'institute_type', 'meta_value' => 1, 'created_by' => $created_by, 'created_at' => $created_at],
             ['meta_key' => 'shift_data', 'meta_value' => json_encode($shiftData), 'created_by' => $created_by, 'created_at' => $created_at],
-            ['meta_key' => 'weekends', 'meta_value' => json_encode([5]), 'created_by' => $created_by, 'created_at' => $created_at]
+            ['meta_key' => 'weekends', 'meta_value' => json_encode([5]), 'created_by' => $created_by, 'created_at' => $created_at],
+            ['meta_key' => 'total_casual_leave', 'meta_value' => 14, 'created_by' => $created_by, 'created_at' => $created_at],
+            ['meta_key' => 'total_sick_leave', 'meta_value' => 10, 'created_by' => $created_by, 'created_at' => $created_at]
         ];
 
+        //now crate
         AppMeta::insert($insertData);
+
+        //invalid previous cache
+        \Illuminate\Support\Facades\Cache::forget('app_settings');
     }
 
 
@@ -1091,6 +1103,16 @@ class DemoAppDataSeeder extends Seeder
 
 
 
+    }
+
+    private function leaveAndWorkOutSide() {
+        $created_by = 1;
+        $created_at = Carbon::now(env('APP_TIMEZONE','Asia/Dhaka'));
+        $leaves = factory(App\Leave::class, 5)
+            ->create(['created_by' => $created_by,'created_at' => $created_at]);
+
+        $workoutside = factory(App\WorkOutside::class, 3)
+            ->create(['created_by' => $created_by,'created_at' => $created_at]);
     }
 
     private function examData() {
