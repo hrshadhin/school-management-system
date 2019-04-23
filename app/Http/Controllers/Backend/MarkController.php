@@ -749,7 +749,7 @@ class MarkController extends Controller
 
             //if it college then need another 2 feilds
             if(AppHelper::getInstituteCategory() == 'college') {
-                $rules['academic_year'] = 'required|integer';
+                $rules['academic_year_id'] = 'required|integer';
             }
 
             $this->validate($request, $rules);
@@ -1197,7 +1197,7 @@ class MarkController extends Controller
 
             //if it college then need another 2 feilds
             if(AppHelper::getInstituteCategory() == 'college') {
-                $rules['academic_year'] = 'required|integer';
+                $rules['academic_year_id'] = 'required|integer';
             }
 
             $this->validate($request, $rules);
