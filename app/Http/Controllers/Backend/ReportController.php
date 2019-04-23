@@ -5,16 +5,19 @@ namespace App\Http\Controllers\Backend;
 use App\AcademicCalendar;
 use App\AcademicYear;
 use App\Employee;
+use App\EmployeeAttendance;
 use App\Exam;
 use App\ExamRule;
 use App\Http\Helpers\AppHelper;
 use App\IClass;
+use App\Leave;
 use App\Mark;
 use App\Registration;
 use App\Result;
 use App\Section;
 use App\StudentAttendance;
 use App\Template;
+use App\WorkOutside;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -759,5 +762,132 @@ class ReportController extends Controller
         }
 
         return view('backend.report.hrm.employee.list');
+    }
+
+
+    /**
+     *  Employee attendance Monthly
+     *  @return \Illuminate\Http\Response
+     */
+    public function employeeMonthlyAttendance(Request $request){
+
+        if($request->isMethod('post')){
+            $rules = [
+                'month' => 'required|min:7|max:7',
+            ];
+
+
+            $this->validate($request, $rules);
+
+            $month = Carbon::createFromFormat('m/Y', $request->get('month'))->timezone(env('APP_TIMEZONE','Asia/Dhaka'));
+
+            $monthStart = $month->startOfMonth()->copy();
+            $monthEnd = $month->endOfMonth()->copy();
+
+            $employees = Employee::where('status', AppHelper::ACTIVE)
+                ->select('id','name','id_card')
+                ->orderBy('id_card','asc')
+                ->get();
+
+            $employeeIds = $employees->pluck('id');
+            $attendanceData = EmployeeAttendance::select('employee_id','attendance_date','present','status')
+                ->whereIn('employee_id', $employeeIds)
+                ->whereDate('attendance_date', '>=', $monthStart->format('Y-m-d'))
+                ->whereDate('attendance_date', '<=', $monthEnd->format('Y-m-d'))
+                ->get()
+                ->reduce(function ($attendanceData, $attendance){
+                    $inLate = 0;
+                    if(strpos($attendance->status, '1') !== false){
+                        $inLate = 1;
+                    }
+                    $attendanceData[$attendance->employee_id][$attendance->getOriginal('attendance_date')] = [
+                        'present' => $attendance->getOriginal('present'),
+                        'inLate'  => $inLate
+                    ];
+
+                    return $attendanceData;
+                });
+
+            //get all leaves of employees for requested month
+            $employeesLeaves = Leave::where('status',2) //1= pending, 2= approved, 3= Rejected
+                ->whereDate('leave_date','>=', $monthStart->format('Y-m-d'))
+                ->whereDate('leave_date','<=', $monthEnd->format('Y-m-d'))
+                ->get(['employee_id','leave_date'])
+                ->reduce(function ($employeesLeaves, $leave) {
+                    $employeesLeaves[$leave->employee_id][$leave->getOriginal('leave_date')] = 1; //just true
+                    return $employeesLeaves;
+                });
+
+            //get all workoutside of employees for requested month
+            $employeesWorkoutside = WorkOutside::whereDate('work_date','>=', $monthStart->format('Y-m-d'))
+                ->whereDate('work_date','<=', $monthEnd->format('Y-m-d'))
+                ->get(['employee_id','work_date'])
+                ->reduce(function ($employeesWorkoutside, $work) {
+                    $employeesWorkoutside[$work->employee_id][$work->getOriginal('work_date')] = 1; //just true
+                    return $employeesWorkoutside;
+                });
+
+
+            $wekends = AppHelper::getAppSettings('weekends');
+            if($wekends){
+                $wekends = json_decode($wekends);
+            }
+            //pull holidays
+            $calendarData = AcademicCalendar::where(function ($q){
+                $q->where('is_holiday','1');
+            })
+                ->where(function ($q) use($monthStart, $monthEnd){
+                    $q->whereDate('date_from', '>=', $monthStart->format('Y-m-d'))
+                        ->whereDate('date_from', '<=', $monthEnd->format('Y-m-d'))
+                        ->orWhere(function ($q) use($monthStart, $monthEnd){
+                            $q->whereDate('date_upto', '>=', $monthStart->format('Y-m-d'))
+                                ->whereDate('date_upto', '<=', $monthEnd->format('Y-m-d'));
+                        });
+                })
+
+                ->select('date_from','date_upto','is_holiday','is_exam','class_ids')
+                ->get()
+                ->reduce(function ($calendarData, $calendar) use($monthEnd, $monthStart, $wekends){
+
+                    $startDate = $calendar->date_from;
+                    $endDate = $calendar->date_upto;
+                    if($calendar->date_upto->gt($monthEnd)){
+                        $endDate = $monthEnd;
+                    }
+
+                    if($calendar->date_from->lt($monthStart)){
+                        $startDate = $monthStart;
+                    }
+
+                    $cladendarDateRange = AppHelper::generateDateRangeForReport($startDate, $endDate, true, $wekends, true);
+                    foreach ($cladendarDateRange as $date => $value){
+                        $symbols = 'H';
+                        $calendarData[$date] = $symbols;
+                    }
+                    return $calendarData;
+                });
+
+            $monthDates = AppHelper::generateDateRangeForReport($monthStart, $monthEnd, true, $wekends);
+
+            $headerData = new \stdClass();
+            $headerData->reportTitle = 'Monthly Attendance';
+            $headerData->reportSubTitle = 'Month: '.$month->format('F,Y');
+
+            $filters = [];
+
+
+            return view('backend.report.hrm.employee.attendance.monthly_print',compact(
+                'headerData',
+                'monthDates',
+                'employees',
+                'attendanceData',
+                'calendarData',
+                'employeesLeaves',
+                'employeesWorkoutside'
+            ));
+        }
+
+        return view('backend.report.hrm.employee.attendance.monthly');
+
     }
 }

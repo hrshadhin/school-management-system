@@ -1039,7 +1039,12 @@ class PermissionTableSeeder extends Seeder
                 "slug" => "report.employee_list",
                 "name" => "Employee List View",
                 "group" => "Report"
-            ]
+            ],
+            [
+            "slug" => "report.employee_monthly_attendance",
+            "name" => "Employee Monthly Attendance View",
+            "group" => "Report"
+        ],
             // Report
         ];
 
