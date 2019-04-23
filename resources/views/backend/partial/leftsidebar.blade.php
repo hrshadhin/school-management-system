@@ -273,13 +273,13 @@
             </span>
             </a>
             <ul class="treeview-menu">
-              @can('report.student_monthly_attendance')
+{{--              @can('report.student_monthly_attendance')--}}
                 <li>
                   <a href="{{ URL::route('report.student_monthly_attendance') }}">
                     <i class="fa icon-attendancereport"></i> <span>Monthly Attendance</span>
                   </a>
                 </li>
-              @endcan
+              {{--@endcan--}}
                 <li>
                   <a href="{{route('report.student_list')}}">
                     <i class="fa icon-student"></i> <span>Student List</span>
@@ -297,7 +297,7 @@
             </a>
             <ul class="treeview-menu">
               <li>
-                <a href="#"><i class="fa icon-attendance"></i> <span>Monthly Attendance</span></a>
+                <a href="{{ URL::route('report.employee_monthly_attendance') }}"><i class="fa icon-attendancereport"></i> <span>Monthly Attendance</span></a>
               </li>
               <li>
                 <a href="{{route('report.employee_list')}}"><i class="fa icon-teacher"></i> <span>Employee List</span></a>
