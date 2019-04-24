@@ -15,6 +15,7 @@ use App\Template;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\Process\Process;
 use Exception;
@@ -388,6 +389,9 @@ class StudentAttendanceController extends Controller
             return redirect()->route('student_attendance.create')->with("error",$message);
         }
 
+
+        //now invalid cache
+        Cache::forget('student_attendance_count');
 
         $message = "Attendance saved successfully.";
         //check if notification need to send?

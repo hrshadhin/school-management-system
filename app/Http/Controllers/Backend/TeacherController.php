@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Employee;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -142,6 +143,10 @@ class TeacherController extends Controller
             $msg = $data['name']." teacher added by ".auth()->user()->name;
             $nothing = AppHelper::sendNotificationToAdmins('info', $msg);
             // Notification end
+
+            //invalid dashboard cache
+            Cache::forget('teacherCount');
+            Cache::forget('employeeCount');
 
             return redirect()->route('teacher.create')->with('success', 'Teacher added!');
 
@@ -414,6 +419,10 @@ class TeacherController extends Controller
             $msg = $teacher->name." teacher deleted by ".auth()->user()->name;
             $nothing = AppHelper::sendNotificationToAdmins('info', $msg);
             // Notification end
+
+            //invalid dashboard cache
+            Cache::forget('teacherCount');
+            Cache::forget('employeeCount');
 
             return redirect()->route('teacher.index')->with('success', 'Teacher deleted.');
 

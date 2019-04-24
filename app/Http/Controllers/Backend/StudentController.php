@@ -15,6 +15,7 @@ use App\UserRole;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -305,6 +306,11 @@ class StudentController extends Controller
             $msg = $data['name']." student added by ".auth()->user()->name;
             $nothing = AppHelper::sendNotificationToAdmins('info', $msg);
             // Notification end
+
+            //invalid dashboard cache
+            Cache::forget('studentCount');
+            Cache::forget('student_count_by_class');
+            Cache::forget('student_count_by_section');
 
             return redirect()->route('student.create')->with('success', 'Student added!');
 
@@ -785,6 +791,10 @@ class StudentController extends Controller
             $msg = $student->name." student deleted by ".auth()->user()->name;
             $nothing = AppHelper::sendNotificationToAdmins('info', $msg);
             // Notification end
+            //invalid dashboard cache
+            Cache::forget('studentCount');
+            Cache::forget('student_count_by_class');
+            Cache::forget('student_count_by_section');
 
             return redirect()->route('student.index')->with('success', 'Student deleted.');
 

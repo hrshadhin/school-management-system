@@ -11,6 +11,7 @@ use App\StudentAttendance;
 use App\Template;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Exception;
 
@@ -336,6 +337,9 @@ class SeedStudentAttendance extends Command
             Log::channel('studentattendancelog')->critical($errorMSG);
             return false;
         }
+
+        //now invalid cache
+        Cache::forget('student_attendance_count');
 
         //send notification for absent
         try {

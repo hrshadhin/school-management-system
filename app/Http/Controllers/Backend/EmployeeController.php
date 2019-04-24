@@ -164,6 +164,9 @@ class EmployeeController extends Controller
             $nothing = AppHelper::sendNotificationToAdmins('info', $msg);
             // Notification end
 
+            //invalid dashboard cache
+            Cache::forget('employeeCount');
+
             return redirect()->route('hrm.employee.create')->with('success', 'Employee added!');
 
 
@@ -440,6 +443,8 @@ class EmployeeController extends Controller
             $msg = $employee->name." Employee deleted by ".auth()->user()->name;
             $nothing = AppHelper::sendNotificationToAdmins('info', $msg);
             // Notification end
+            //invalid dashboard cache
+            Cache::forget('employeeCount');
 
             return redirect()->route('hrm.employee.index')->with('success', 'Employee deleted.');
 
