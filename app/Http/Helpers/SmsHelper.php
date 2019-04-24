@@ -8,6 +8,7 @@ use App\smsLog;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use Exception;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Twilio\Rest\Client as twilioClient;
 
@@ -219,6 +220,8 @@ class SmsHelper
     }
 
     private function logSmsToDB($to, $message, $status){
+        //invalid cache
+        Cache::forget('smsChartData');
 
         return smsLog::create([
             'sender_id' => $this->gateway->sender_id,

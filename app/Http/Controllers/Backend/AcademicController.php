@@ -14,6 +14,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\IClass;
 use App\Employee;
+use Illuminate\Support\Facades\Cache;
 
 class AcademicController extends Controller
 {
@@ -42,6 +43,9 @@ class AcademicController extends Controller
             $msg = $iclass->name." class deleted by ".auth()->user()->name;
             $nothing = AppHelper::sendNotificationToAdmins('info', $msg);
             // Notification end
+
+            //invalid cache
+            Cache::forget('selected_classes_4_dashboard');
 
             return redirect()->route('academic.class')->with('success', 'Record deleted!');
         }
@@ -88,6 +92,9 @@ class AcademicController extends Controller
                 $msg = $data['name']." class added by ".auth()->user()->name;
                 $nothing = AppHelper::sendNotificationToAdmins('info', $msg);
                 // Notification end
+
+                //invalid cache
+                Cache::forget('selected_classes_4_dashboard');
             }
 
 
@@ -289,6 +296,9 @@ class AcademicController extends Controller
             $nothing = AppHelper::sendNotificationToAdmins('info', $msg);
             // Notification end
 
+            //invalid dashboard cache
+            Cache::forget('SubjectCount');
+
             return redirect()->route('academic.subject')->with('success', 'Record deleted!');
         }
 
@@ -354,6 +364,9 @@ class AcademicController extends Controller
                 $msg = $data['name']." subject added by ".auth()->user()->name;
                 $nothing = AppHelper::sendNotificationToAdmins('info', $msg);
                 // Notification end
+
+                //invalid dashboard cache
+                Cache::forget('SubjectCount');
             }
 
             $msg = "subject ";

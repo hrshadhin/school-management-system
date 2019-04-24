@@ -235,111 +235,19 @@ class UserController extends Controller
 
         //only admin
         if($userRoleId == AppHelper::USER_ADMIN){
-
-            $teachers = Employee::where('role_id', AppHelper::EMP_TEACHER)->count();
-            $employee = Employee::count();
-            $students = Student::count();
-            $subjects = Subject::count();
-
-            $smsSend = smsLog::selectRaw('count(id) as send,MONTH(created_at) as month')
-                ->whereYear('created_at', date('Y'))
-                ->groupby('month')
-                ->get()
-                ->reduce(function ($smsSend, $record){
-                    $smsSend[$record->month] = $record->send;
-
-                    return $smsSend;
-                });
-
-            $monthWiseSms['Jan'] = $smsSend[1] ?? 0;
-            $monthWiseSms['Feb'] = $smsSend[2] ?? 0;
-            $monthWiseSms['Mar'] = $smsSend[3] ?? 0;
-            $monthWiseSms['Apr'] = $smsSend[4] ?? 0;
-            $monthWiseSms['May'] = $smsSend[5] ?? 0;
-            $monthWiseSms['Jun'] = $smsSend[6] ?? 0;
-            $monthWiseSms['Jul'] = $smsSend[7] ?? 0;
-            $monthWiseSms['Aug'] = $smsSend[8] ?? 0;
-            $monthWiseSms['Sep'] = $smsSend[9] ?? 0;
-            $monthWiseSms['Oct'] = $smsSend[10] ?? 0;
-            $monthWiseSms['Nov'] = $smsSend[11] ?? 0;
-            $monthWiseSms['Dec'] = $smsSend[12] ?? 0;
-
+            //these models records count
+            [$teachers, $employee, $students, $subjects] = $this->getStatisticData();
+            //sms chart data
+            $monthWiseSms = $this->getSmsChartData();
         }
 
-        //only admin end
-
-        //except students
+        //all user except students
         if($userRoleId != AppHelper::USER_STUDENT) {
-            $academicYearId = 0;
-            if (AppHelper::getInstituteCategory() == 'college') {
-                $academicYearInfo = AcademicYear::where('status', AppHelper::ACTIVE)
-                    ->where('title', env('DASHBOARD_STUDENT_COUNT_DEFAULT_ACADEMIC_YEAR',date('Y')))->first();
-                if ($academicYearInfo) {
-                    $academicYearId = $academicYearInfo->id;
-                }
-            } else {
-                $academicYearId = AppHelper::getAcademicYear();
-            }
-
             //attendance chart data
-            $iclasses = IClass::where('status', AppHelper::ACTIVE)
-                ->with(['attendance' => function ($query) use ($academicYearId) {
-                    $query->selectRaw('class_id,present,count(registration_id) as total')
-                        ->where('academic_year_id', $academicYearId)
-                        ->whereDate('attendance_date', date('Y-m-d'))
-//                        ->whereDate('attendance_date', '2019-03-02')
-                        ->groupBy('class_id', 'present');
-                }])
-                ->select('id', 'name')
-                ->get();
+            [$attendanceChartPresentData, $attendanceChartAbsentData] = $this->getClassWiseTodayAttendanceCount();
 
-            $attendanceChartPresentData = [];
-            $attendanceChartAbsentData = [];
-            foreach ($iclasses as $iclass) {
-                $attendanceChartPresentData[$iclass->name] = 0;
-                $attendanceChartAbsentData[$iclass->name] = 0;
-                foreach ($iclass->attendance as $attendanceSummary) {
-                    if ($attendanceSummary->present == "Present") {
-                        $attendanceChartPresentData[$iclass->name] = $attendanceSummary->total;
-                    } else {
-                        $attendanceChartAbsentData[$iclass->name] = $attendanceSummary->total;
-
-                    }
-                }
-            }
-
-            //end
-
-            $studentsCount = IClass::where('status', AppHelper::ACTIVE)
-                ->with(['student' => function ($query) use ($academicYearId) {
-                    $query->where('status', AppHelper::ACTIVE)
-                        ->where('academic_year_id', $academicYearId)
-                        ->selectRaw('class_id, count(*) as total')
-                        ->groupBy('class_id');
-                }])
-                ->select('id', 'name')
-                ->orderBy('numeric_value', 'asc')
-                ->get();
-
-            $selectedClassIds = explode(',', env('DASHBOARD_SECTION_STUDENT_CLASS_CODE', '90,91,92,100,101,102'));
-            $selectedClasses = IClass::where('status', AppHelper::ACTIVE)
-                ->whereIn('numeric_value', $selectedClassIds)->pluck('id');
-
-            $sectionStudentCount = Section::where('status', AppHelper::ACTIVE)
-                ->whereIn('class_id', $selectedClasses)
-                ->with(['student' => function ($query) use ($academicYearId) {
-                    $query->where('status', AppHelper::ACTIVE)
-                        ->where('academic_year_id', $academicYearId)
-                        ->selectRaw('section_id, count(*) as total')
-                        ->groupBy('section_id');
-                }])
-                ->with(['class' => function ($query) {
-                    $query->select('id', 'name');
-                }])
-                ->select('id', 'name', 'class_id')
-                ->orderBy('class_id', 'asc')
-                ->orderBy('name', 'asc')
-                ->get();
+            $studentsCount = $this->getClassWiseStudentCount();
+            $sectionStudentCount = $this->getSectionWiseStudentCountForSpecificClasses();
         }
 
 
@@ -1084,5 +992,155 @@ class UserController extends Controller
         return $rolePermissions;
     }
 
+   /**
+    *  Dashboard data helper methods
+    */
+   private function getAcademicYearForDashboard() {
+       $academicYearId = 0;
+       if (AppHelper::getInstituteCategory() == 'college') {
+           $academicYearInfo = AcademicYear::where('status', AppHelper::ACTIVE)
+               ->where('title', env('DASHBOARD_STUDENT_COUNT_DEFAULT_ACADEMIC_YEAR',date('Y')))->first();
+           if ($academicYearInfo) {
+               $academicYearId = $academicYearInfo->id;
+           }
+       } else {
+           $academicYearId = AppHelper::getAcademicYear();
+       }
 
+       return $academicYearId;
+   }
+
+   private function getStatisticData() {
+       $teachers = Cache::rememberForever('teacherCount' , function () {
+           return   Employee::where('role_id', AppHelper::EMP_TEACHER)->count();
+       });
+
+       $employee = Cache::rememberForever('employeeCount' , function () {
+           return Employee::count();
+       });
+       $academicYearId = $this->getAcademicYearForDashboard();
+       $students = Cache::rememberForever('studentCount' , function () use($academicYearId) {
+           return Registration::where('status', AppHelper::ACTIVE)
+               ->where('academic_year_id', $academicYearId)
+               ->count();
+       });
+       $subjects = Cache::rememberForever('SubjectCount' , function () {
+           return Subject::count();
+       });
+
+       return [$teachers, $employee, $students, $subjects];
+   }
+
+   private function getSmsChartData() {
+       $smsSend = Cache::rememberForever('smsChartData' , function () {
+           $allMonthSmsSended =  smsLog::selectRaw('count(id) as send,MONTH(created_at) as month')
+               ->whereYear('created_at', date('Y'))
+               ->groupby('month')
+               ->get();
+
+           return $allMonthSmsSended;
+       });
+
+       $smsSend = $smsSend->reduce(function ($smsSend, $record){
+           $smsSend[$record->month] = $record->send;
+           return $smsSend;
+       });
+
+       $monthWiseSms['Jan'] = $smsSend[1] ?? 0;
+       $monthWiseSms['Feb'] = $smsSend[2] ?? 0;
+       $monthWiseSms['Mar'] = $smsSend[3] ?? 0;
+       $monthWiseSms['Apr'] = $smsSend[4] ?? 0;
+       $monthWiseSms['May'] = $smsSend[5] ?? 0;
+       $monthWiseSms['Jun'] = $smsSend[6] ?? 0;
+       $monthWiseSms['Jul'] = $smsSend[7] ?? 0;
+       $monthWiseSms['Aug'] = $smsSend[8] ?? 0;
+       $monthWiseSms['Sep'] = $smsSend[9] ?? 0;
+       $monthWiseSms['Oct'] = $smsSend[10] ?? 0;
+       $monthWiseSms['Nov'] = $smsSend[11] ?? 0;
+       $monthWiseSms['Dec'] = $smsSend[12] ?? 0;
+
+       return $monthWiseSms;
+   }
+
+   private function getClassWiseTodayAttendanceCount() {
+       $academicYearId = $this->getAcademicYearForDashboard();
+       $iclasses = Cache::rememberForever('student_attendance_count' , function () use($academicYearId) {
+           return  IClass::where('status', AppHelper::ACTIVE)
+               ->with(['attendance' => function ($query) use ($academicYearId) {
+                   $query->selectRaw('class_id,present,count(registration_id) as total')
+                       ->where('academic_year_id', $academicYearId)
+                       ->whereDate('attendance_date', date('Y-m-d'))
+//                        ->whereDate('attendance_date', '2019-03-02')
+                       ->groupBy('class_id', 'present');
+               }])
+               ->select('id', 'name')
+               ->get();
+       });
+
+       $attendanceChartPresentData = [];
+       $attendanceChartAbsentData = [];
+       foreach ($iclasses as $iclass) {
+           $attendanceChartPresentData[$iclass->name] = 0;
+           $attendanceChartAbsentData[$iclass->name] = 0;
+           foreach ($iclass->attendance as $attendanceSummary) {
+               if ($attendanceSummary->present == "Present") {
+                   $attendanceChartPresentData[$iclass->name] = $attendanceSummary->total;
+               } else {
+                   $attendanceChartAbsentData[$iclass->name] = $attendanceSummary->total;
+
+               }
+           }
+       }
+
+       return [$attendanceChartPresentData, $attendanceChartAbsentData];
+   }
+
+   private function getClassWiseStudentCount()
+   {
+       $academicYearId = $this->getAcademicYearForDashboard();
+       $studentCount = Cache::rememberForever('student_count_by_class', function () use ($academicYearId) {
+         return  IClass::where('status', AppHelper::ACTIVE)
+               ->with(['student' => function ($query) use ($academicYearId) {
+                   $query->where('status', AppHelper::ACTIVE)
+                       ->where('academic_year_id', $academicYearId)
+                       ->selectRaw('class_id, count(*) as total')
+                       ->groupBy('class_id');
+               }])
+               ->select('id', 'name')
+               ->orderBy('numeric_value', 'asc')
+               ->get();
+       });
+
+       return $studentCount;
+   }
+
+   private function getSectionWiseStudentCountForSpecificClasses() {
+       $academicYearId = $this->getAcademicYearForDashboard();
+       $selectedClassNumericValues = explode(',', env('DASHBOARD_SECTION_STUDENT_CLASS_CODE', '90,91,92,100,101,102'));
+       $selectedClasses = Cache::rememberForever('selected_classes_4_dashboard', function () use ($selectedClassNumericValues) {
+          return IClass::where('status', AppHelper::ACTIVE)
+               ->whereIn('numeric_value', $selectedClassNumericValues)->pluck('id');
+       });
+
+       $sectionStudentCount = Cache::rememberForever('student_count_by_section', function () use ($selectedClasses, $academicYearId) {
+          return  Section::where('status', AppHelper::ACTIVE)
+               ->whereIn('class_id', $selectedClasses)
+               ->with(['student' => function ($query) use ($academicYearId) {
+                   $query->where('status', AppHelper::ACTIVE)
+                       ->where('academic_year_id', $academicYearId)
+                       ->selectRaw('section_id, count(*) as total')
+                       ->groupBy('section_id');
+               }])
+               ->with(['class' => function ($query) {
+                   $query->select('id', 'name');
+               }])
+               ->select('id', 'name', 'class_id')
+               ->orderBy('class_id', 'asc')
+               ->orderBy('name', 'asc')
+               ->get();
+       });
+
+       return $sectionStudentCount;
+
+   }
 }
