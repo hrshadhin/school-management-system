@@ -101,14 +101,29 @@
                                         <input type="hidden" name="section_id" value="{{$section_id}}">
                                         <input type="hidden" name="attendance_date" value="{{$attendance_date}}">
                                     <table id="studentListTable" class="table table-bordered table-striped table-responsive attendance-add">
+                                        <caption>
+                                            <div class="checkbox icheck pull-right">
+                                                <label>
+                                                    <input type="checkbox" name="is_send_notification" class="notMe" @if($sendNotification) checked @endif> <span class="text-bold text-warning">Send Absent Notification?</span>
+                                                </label>
+                                            </div>
+                                        </caption>
                                         <thead>
                                         <tr>
                                             <th width="5%">#</th>
-                                            <th width="50%">Name</th>
+                                            <th width="55%">Name</th>
                                             <th width="10%">Roll No.</th>
-                                            <th width="15%">In Time</th>
-                                            <th width="15%">Out Time</th>
-                                            <th width="5%">Staying Hours</th>
+                                            {{--<th width="15%">In Time</th>--}}
+                                            {{--<th width="15%">Out Time</th>--}}
+                                            {{--<th width="5%">Staying Hours</th>--}}
+                                            <th width="30%">
+                                                Is Present?
+                                                <div class="checkbox icheck inline_icheck">
+                                                    <label>
+                                                        <input type="checkbox" id="toggleCheckboxes" class="dont-style-notMe"> <span class="text-bold">Select or Deselect All</span>
+                                                    </label>
+                                                </div>
+                                            </th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -124,21 +139,27 @@
                                             <td>
                                                 {{$student->roll_no}}
                                             </td>
-                                            <td>
-                                                <div class="input-group">
-                                                    <input type='text' class="form-control date_time_picker inTime" readonly  name="inTime[{{$student->id}}]" placeholder="date time" value="{{$attendance_date}} 00:00 am" required minlength="18" maxlength="19" />
-                                                    <span class="fa fa-calendar form-control-feedback"></span>
-                                                </div>
 
-                                            </td>
+                                            {{--<td>--}}
+                                                {{--<div class="input-group">--}}
+                                                    {{--<input type='text' class="form-control date_time_picker inTime" readonly  name="inTime[{{$student->id}}]" placeholder="date time" value="{{$attendance_date}} 00:00 am" required minlength="18" maxlength="19" />--}}
+                                                    {{--<span class="fa fa-calendar form-control-feedback"></span>--}}
+                                                {{--</div>--}}
+
+                                            {{--</td>--}}
+                                            {{--<td>--}}
+                                                {{--<div class="input-group">--}}
+                                                    {{--<input type='text' class="form-control date_time_picker outTime" readonly  name="outTime[{{$student->id}}]" placeholder="date time" value="{{$attendance_date}} 00:00 am" required minlength="18" maxlength="19" />--}}
+                                                    {{--<span class="fa fa-calendar form-control-feedback"></span>--}}
+                                                {{--</div>--}}
+                                            {{--</td>--}}
+                                            {{--<td>--}}
+                                                {{--<span class="text-bold stayingHour">00:00</span>--}}
+                                            {{--</td>--}}
                                             <td>
-                                                <div class="input-group">
-                                                    <input type='text' class="form-control date_time_picker outTime" readonly  name="outTime[{{$student->id}}]" placeholder="date time" value="{{$attendance_date}} 00:00 am" required minlength="18" maxlength="19" />
-                                                    <span class="fa fa-calendar form-control-feedback"></span>
+                                                <div class="checkbox icheck inline_icheck">
+                                                    <input type="checkbox" name="present[{{$student->id}}]">
                                                 </div>
-                                            </td>
-                                            <td>
-                                                <span class="text-bold stayingHour">00:00</span>
                                             </td>
                                         </tr>
                                         @endforeach

@@ -94,8 +94,12 @@ class EmployeeAttendanceController extends Controller
         ->where('status', AppHelper::ACTIVE)
         ->get();
 
+        $sendNotification = AppHelper::getAppSettings('student_attendance_notification');
+
+
         return view('backend.attendance.employee.add', compact(
-            'employees'
+            'employees',
+            'sendNotification'
         ));
 
     }
@@ -227,7 +231,7 @@ class EmployeeAttendanceController extends Controller
         //check if notification need to send?
         //todo: need uncomment these code on client deploy
 //        $sendNotification = AppHelper::getAppSettings('employee_attendance_notification');
-//        if($sendNotification != "0") {
+//        if($sendNotification != "0" && $request->has('is_send_notification')) {
 //            if($sendNotification == "1"){
 //                //then send sms notification
 //
@@ -250,7 +254,9 @@ class EmployeeAttendanceController extends Controller
 
         //push job to queue
         //todo: need comment these code on client deploy
-        PushEmployeeAbsentJob::dispatch($absentIds, $attendance_date);
+        if($request->has('is_send_notification')) {
+            PushEmployeeAbsentJob::dispatch($absentIds, $attendance_date);
+        }
 
 
         return redirect()->route('employee_attendance.create')->with("success",$message);
@@ -348,6 +354,7 @@ class EmployeeAttendanceController extends Controller
                     'file_format' => $isValidFormat,
                     'total_rows' => 0,
                     'imported_rows' => 0,
+                    'send_notification' => $request->has('is_send_notification') ? 1 : 0,
                     'attendance_type' => 2,
                 ]);
 
@@ -381,9 +388,12 @@ class EmployeeAttendanceController extends Controller
         }
 
         $queueFireUrl = route('employee_attendance_seeder',['code' => 'hr799']);
+        $sendNotification = AppHelper::getAppSettings('student_attendance_notification');
+
         return view('backend.attendance.employee.upload', compact(
             'isProcessingFile',
-            'queueFireUrl'
+            'queueFireUrl',
+            'sendNotification'
         ));
     }
 

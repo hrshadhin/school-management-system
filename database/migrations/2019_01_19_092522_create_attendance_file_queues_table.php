@@ -21,6 +21,7 @@ class CreateAttendanceFileQueuesTable extends Migration
             $table->integer('total_rows');
             $table->integer('imported_rows');
             $table->smallInteger('is_imported')->default(0);
+            $table->smallInteger('send_notification')->default(0);
             $table->enum('attendance_type',[1,2])->default(1); //1=student 2=employee
             $table->timestamps();
             $table->softDeletes();

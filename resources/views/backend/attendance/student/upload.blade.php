@@ -66,6 +66,13 @@
                                         </div>
 
                                     </div>
+                                    <div class="col-md-6">
+                                        <div class="checkbox icheck">
+                                            <label class="margin-top-20">
+                                                <input type="checkbox" name="is_send_notification" class="notMe" @if($sendNotification) checked @endif> <span class="text-bold text-warning">Send Absent Notification?</span>
+                                            </label>
+                                        </div>
+                                    </div>
                                 </div>
 
                             @else
@@ -107,6 +114,12 @@
             @if($isProcessingFile)
                 Academic.attendanceFileUploadStatus();
             @endif
+
+            $('input').not('.dont-style').iCheck({
+                checkboxClass: 'icheckbox_square-blue',
+                radioClass: 'iradio_square-blue',
+                increaseArea: '20%' /* optional */
+            });
 
         });
     </script>

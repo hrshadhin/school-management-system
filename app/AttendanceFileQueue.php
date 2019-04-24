@@ -20,6 +20,7 @@ class AttendanceFileQueue extends Model
         'imported_rows',
         'send_sms',
         'is_imported',
+        'send_notification',
         'attendance_type',
     ];
 
