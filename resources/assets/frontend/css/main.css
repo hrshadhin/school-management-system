@@ -2730,7 +2730,7 @@ input[type="text"][disabled] {
 	border-left: 9px solid transparent;
 	border-right: 9px solid transparent;
 	position: absolute;
-	top: -9px;\
+	top: -9px;
 	left: -webkit-calc(50% - 9px);
 	left: -moz-calc(50% - 9px);
 	left: calc(50% - 9px);

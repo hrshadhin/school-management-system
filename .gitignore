@@ -16,6 +16,7 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
+yarn.lock
 .env
 storage/debugbar
 database/seeds/DevPermissionTableSeeder.php

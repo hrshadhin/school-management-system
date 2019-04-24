@@ -17,12 +17,10 @@ mix.webpackConfig({
         // Ignore all locale files of moment.js
         // new webpack.IgnorePlugin(
         //     /^\.\/locale$/, /moment$/,
-        //     /^\.\/locale$/, /fullcalendar$/
         // )
         new webpack.ContextReplacementPlugin(
             // The path to directory which should be handled by this plugin
             /moment[\/\\]locale/,
-            /fullcalendar[\/\\]dist[\/\\]locale/,
             /select2[\/\\]dist[\/\\]js[\/\\]i18n/,
         )
     ]
@@ -43,7 +41,7 @@ mix.js('resources/assets/backend/js/app.js', 'public/js')
     ], 'public/js/theme.js')
     .extract([
         'jquery', 'bootstrap', 'icheck', 'jquery-validation', 'slimscroll', 'fastclick',
-        'datatables.net', 'datatables.net-bs', 'datatables.net-buttons', 'datatables.net-responsive-bs'
+        'datatables.net', 'datatables.net-bs', 'datatables.net-responsive-bs'
     ])
     .sass('resources/assets/backend/sass/app.scss', 'public/css')
     .sass('resources/assets/backend/sass/print.scss', 'public/css')

@@ -69,19 +69,18 @@ window.toastr.options = {
     "hideMethod": "fadeOut"
 };
 
-// require( 'inputmask');
 
 // datatable buttons exports
-window.JSZip = require('jszip')
-var pdfMake = require('pdfmake/build/pdfmake.js');
-var pdfFonts = require('pdfmake/build/vfs_fonts');
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
+// window.JSZip = require('jszip')
+// var pdfMake = require('pdfmake/build/pdfmake.js');
+// var pdfFonts = require('pdfmake/build/vfs_fonts');
+// pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 require('datatables.net');
 require('datatables.net-bs');
-require('datatables.net-buttons');
+// require('datatables.net-buttons');
 require('datatables.net-responsive-bs');
-require('datatables.net-buttons/js/buttons.html5');
-require('datatables.net-buttons/js/buttons.print');
+// require('datatables.net-buttons/js/buttons.html5');
+// require('datatables.net-buttons/js/buttons.print');
 
 

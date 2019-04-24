@@ -67,62 +67,62 @@ export default class Generic {
             useCurrent: false
         });
 
-        var buttonCommon = {
-            exportOptions: {
-                columns: ':not(.notexport)',
-                format: {
-                    body: function (data, row, column, node) {
-                        if(typeof(window.changeExportColumnIndex) !== 'undefined') {
-                            var onValue = typeof window.changeExportColumnValue !== 'undefined' ? window.changeExportColumnValue[0] : 'Active';
-                            var offValue = typeof window.changeExportColumnValue !== 'undefined' ? window.changeExportColumnValue[1] : 'Inactive';
-                            if (column === window.changeExportColumnIndex) {
-                                data = /checked/.test(data) ? onValue : offValue;
-                            }
-                        }
-                        return data;
-                    }
-                }
-            }
-        };
+        // var buttonCommon = {
+        //     exportOptions: {
+        //         columns: ':not(.notexport)',
+        //         format: {
+        //             body: function (data, row, column, node) {
+        //                 if(typeof(window.changeExportColumnIndex) !== 'undefined') {
+        //                     var onValue = typeof window.changeExportColumnValue !== 'undefined' ? window.changeExportColumnValue[0] : 'Active';
+        //                     var offValue = typeof window.changeExportColumnValue !== 'undefined' ? window.changeExportColumnValue[1] : 'Inactive';
+        //                     if (column === window.changeExportColumnIndex) {
+        //                         data = /checked/.test(data) ? onValue : offValue;
+        //                     }
+        //                 }
+        //                 return data;
+        //             }
+        //         }
+        //     }
+        // };
 
         //table with out search
         var table = $('#listDataTable').DataTable({
             pageLength: 25,
             lengthChange: false,
             responsive: true,
-            buttons: [
-                $.extend(true, {}, buttonCommon, {
-                    extend: 'copy',
-                    text: '<i class="fa fa-files-o"></i>',
-                    titleAttr: 'copy',
-                }),
-                $.extend(true, {}, buttonCommon, {
-                    extend: 'csv',
-                    text: '<i class="fa fa-file-text-o"></i>',
-                    titleAttr: 'csv',
-                }),
-                $.extend(true, {}, buttonCommon, {
-                    extend: 'excel',
-                    text: '<i class="fa fa-file-excel-o"></i>',
-                    titleAttr: 'Excel',
-                }),
-                $.extend(true, {}, buttonCommon, {
-                    extend: 'pdf',
-                    text: '<i class="fa fa-file-pdf-o"></i>',
-                    titleAttr: 'pdf',
-                    customize: function (doc) {
-                        doc.content[1].table.widths = Array(doc.content[1].table.body[0].length + 1).join('*').split('');
-                        doc.content[1].alignment = "center";
-                    }
-                }),
-                $.extend(true, {}, buttonCommon, {
-                    extend: 'print',
-                    text: '<i class="fa fa-print"></i>',
-                    titleAttr: 'print',
-                })
-            ]
+            // buttons: [
+            //     $.extend(true, {}, buttonCommon, {
+            //         extend: 'copy',
+            //         text: '<i class="fa fa-files-o"></i>',
+            //         titleAttr: 'copy',
+            //     }),
+            //     $.extend(true, {}, buttonCommon, {
+            //         extend: 'csv',
+            //         text: '<i class="fa fa-file-text-o"></i>',
+            //         titleAttr: 'csv',
+            //     }),
+            //     $.extend(true, {}, buttonCommon, {
+            //         extend: 'excel',
+            //         text: '<i class="fa fa-file-excel-o"></i>',
+            //         titleAttr: 'Excel',
+            //     }),
+            //     $.extend(true, {}, buttonCommon, {
+            //         extend: 'pdf',
+            //         text: '<i class="fa fa-file-pdf-o"></i>',
+            //         titleAttr: 'pdf',
+            //         customize: function (doc) {
+            //             doc.content[1].table.widths = Array(doc.content[1].table.body[0].length + 1).join('*').split('');
+            //             doc.content[1].alignment = "center";
+            //         }
+            //     }),
+            //     $.extend(true, {}, buttonCommon, {
+            //         extend: 'print',
+            //         text: '<i class="fa fa-print"></i>',
+            //         titleAttr: 'print',
+            //     })
+            // ]
         });
-        table.buttons().container().appendTo($('.col-sm-6:eq(0)', table.table().container()));
+        // table.buttons().container().appendTo($('.col-sm-6:eq(0)', table.table().container()));
 
         //table custom
         var table33 = $('#listDataTableOnlyPrint').DataTable({
@@ -130,75 +130,76 @@ export default class Generic {
             responsive: true,
             paging: false,
             filter: false,
-            buttons: [
-                $.extend(true, {}, buttonCommon, {
-                    extend: 'print',
-                    text: '<i class="fa fa-print"></i>',
-                    titleAttr: 'print',
-                })
-            ]
+            // buttons: [
+            //     $.extend(true, {}, buttonCommon, {
+            //         extend: 'print',
+            //         text: '<i class="fa fa-print"></i>',
+            //         titleAttr: 'print',
+            //     })
+            // ]
         });
-        table33.buttons().container().appendTo($('.col-sm-6:eq(0)', table33.table().container()));
+        // table33.buttons().container().appendTo($('.col-sm-6:eq(0)', table33.table().container()));
 
 
         //style table with search
         // Setup - add a text input to each footer cell
-        $('#listDataTableWithSearch thead tr').clone(true).appendTo( '#listDataTableWithSearch thead' );
-        $('#listDataTableWithSearch thead tr:eq(1) th').each( function (i) {
+        // $('#listDataTableWithSearch thead tr').clone(true).appendTo( '#listDataTableWithSearch thead' );
+        // $('#listDataTableWithSearch thead tr:eq(1) th').each( function (i) {
+        //
+        //     if(window.excludeFilterComlumns.indexOf(i) > -1) {
+        //         $(this).html( '' );
+        //         return;
+        //     }
+        //
+        //     $(this).html( '<input type="text" placeholder="Search" />' );
+        //     $( 'input', this ).on( 'keyup change', function () {
+        //         if ( table2.column(i).search() !== this.value ) {
+        //             table2
+        //                 .column(i)
+        //                 .search( this.value )
+        //                 .draw();
+        //         }
+        //     } );
+        // } );
 
-            if(window.excludeFilterComlumns.indexOf(i) > -1) {
-                $(this).html( '' );
-                return;
-            }
-
-            $(this).html( '<input type="text" placeholder="Search" />' );
-            $( 'input', this ).on( 'keyup change', function () {
-                if ( table2.column(i).search() !== this.value ) {
-                    table2
-                        .column(i)
-                        .search( this.value )
-                        .draw();
-                }
-            } );
-        } );
         var table2 = $('#listDataTableWithSearch').DataTable({
             pageLength: 25,
             lengthChange: false,
             orderCellsTop: true,
             responsive: true,
-            buttons: [
-                $.extend(true, {}, buttonCommon, {
-                    extend: 'copy',
-                    text: '<i class="fa fa-files-o"></i>',
-                    titleAttr: 'copy',
-                }),
-                $.extend(true, {}, buttonCommon, {
-                    extend: 'csv',
-                    text: '<i class="fa fa-file-text-o"></i>',
-                    titleAttr: 'csv',
-                }),
-                $.extend(true, {}, buttonCommon, {
-                    extend: 'excel',
-                    text: '<i class="fa fa-file-excel-o"></i>',
-                    titleAttr: 'Excel',
-                }),
-                $.extend(true, {}, buttonCommon, {
-                    extend: 'pdf',
-                    text: '<i class="fa fa-file-pdf-o"></i>',
-                    titleAttr: 'pdf',
-                    customize: function (doc) {
-                        doc.content[1].table.widths = Array(doc.content[1].table.body[0].length + 1).join('*').split('');
-                        doc.content[1].alignment = "center";
-                    }
-                }),
-                $.extend(true, {}, buttonCommon, {
-                    extend: 'print',
-                    text: '<i class="fa fa-print"></i>',
-                    titleAttr: 'print',
-                })
-            ]
+            // buttons: [
+            //     $.extend(true, {}, buttonCommon, {
+            //         extend: 'copy',
+            //         text: '<i class="fa fa-files-o"></i>',
+            //         titleAttr: 'copy',
+            //     }),
+            //     $.extend(true, {}, buttonCommon, {
+            //         extend: 'csv',
+            //         text: '<i class="fa fa-file-text-o"></i>',
+            //         titleAttr: 'csv',
+            //     }),
+            //     $.extend(true, {}, buttonCommon, {
+            //         extend: 'excel',
+            //         text: '<i class="fa fa-file-excel-o"></i>',
+            //         titleAttr: 'Excel',
+            //     }),
+            //     $.extend(true, {}, buttonCommon, {
+            //         extend: 'pdf',
+            //         text: '<i class="fa fa-file-pdf-o"></i>',
+            //         titleAttr: 'pdf',
+            //         customize: function (doc) {
+            //             doc.content[1].table.widths = Array(doc.content[1].table.body[0].length + 1).join('*').split('');
+            //             doc.content[1].alignment = "center";
+            //         }
+            //     }),
+            //     $.extend(true, {}, buttonCommon, {
+            //         extend: 'print',
+            //         text: '<i class="fa fa-print"></i>',
+            //         titleAttr: 'print',
+            //     })
+            // ]
         });
-        table2.buttons().container().appendTo($('.col-sm-6:eq(0)', table2.table().container()));
+        // table2.buttons().container().appendTo($('.col-sm-6:eq(0)', table2.table().container()));
 
 
         let stopchange = false;
