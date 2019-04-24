@@ -156,6 +156,7 @@ class StudentAttendanceController extends Controller
         $acYear = null;
         $class_id = null;
         $section_id = null;
+        $sendNotification = 0;
 
         if ($request->isMethod('post')) {
 
@@ -199,6 +200,8 @@ class StudentAttendanceController extends Controller
                 $acYearInfo = AcademicYear::where('status', '1')->where('id', $acYear)->first();
                 $academic_year = $acYearInfo->title;
             }
+
+            $sendNotification = AppHelper::getAppSettings('student_attendance_notification');
         }
 
         $classes = IClass::where('status', AppHelper::ACTIVE)
@@ -222,7 +225,8 @@ class StudentAttendanceController extends Controller
             'attendance_date',
             'class_id',
             'section_id',
-            'acYear'
+            'acYear',
+            'sendNotification'
         ));
 
     }
@@ -238,16 +242,16 @@ class StudentAttendanceController extends Controller
         //validate form
         $messages = [
             'registrationIds.required' => 'This section has no students!',
-            'outTime.required' => 'Out time missing!',
-            'inTime.required' => 'In time missing!',
+//            'outTime.required' => 'Out time missing!',
+//            'inTime.required' => 'In time missing!',
         ];
         $rules = [
             'class_id' => 'required|integer',
             'section_id' => 'required|integer',
             'attendance_date' => 'required|min:10|max:11',
             'registrationIds' => 'required|array',
-            'inTime' => 'required|array',
-            'outTime' => 'required|array',
+//            'inTime' => 'required|array',
+//            'outTime' => 'required|array',
 
         ];
         //if it college then need another 2 feilds
@@ -278,22 +282,24 @@ class StudentAttendanceController extends Controller
 
         //process the insert data
         $students = $request->get('registrationIds');
+        $present = $request->get('present',[]);
         $attendance_date = Carbon::createFromFormat('d/m/Y', $request->get('attendance_date'))->format('Y-m-d');
         $dateTimeNow = Carbon::now(env('APP_TIMEZONE','Asia/Dhaka'));
-        $inTimes = $request->get('inTime');
-        $outTimes = $request->get('outTime');
+//        $inTimes = $request->get('inTime');
+//        $outTimes = $request->get('outTime');
 
         //fetch institute shift running times
         $shiftData = AppHelper::getAppSettings('shift_data');
         if($shiftData){
             $shiftData = json_decode($shiftData, true);
         }
+
         $shiftRuningTimes = [];
 
         foreach ($shiftData as $shift => $times){
             $shiftRuningTimes[$shift] = [
-                'start' => Carbon::createFromFormat('d/m/Y h:i a',$request->get('attendance_date').' '.$times['start']),
-                'end' => Carbon::createFromFormat('d/m/Y h:i a',$request->get('attendance_date').' '.$times['end'])
+                'start' => Carbon::createFromFormat('Y-m-d h:i a',$attendance_date.' '.$times['start']),
+                'end' => Carbon::createFromFormat('Y-m-d h:i a',$attendance_date.' '.$times['end'])
             ];
         }
 
@@ -310,39 +316,40 @@ class StudentAttendanceController extends Controller
 
         foreach ($students as $student){
 
-            $inTime = Carbon::createFromFormat('d/m/Y h:i a', $inTimes[$student]);
-            $outTime = Carbon::createFromFormat('d/m/Y h:i a', $outTimes[$student]);
+//            $inTime = Carbon::createFromFormat('d/m/Y h:i a', $inTimes[$student]);
+//            $outTime = Carbon::createFromFormat('d/m/Y h:i a', $outTimes[$student]);
+              $inTime = $shiftRuningTimes[$studentsShift[$student]]['start'];
+            $outTime = $shiftRuningTimes[$studentsShift[$student]]['end'];
 
-            if($outTime->lessThan($inTime)){
-                $message = "Out time can't be less than in time!";
-                $parseError = true;
-                break;
-            }
-
-            if($inTime->diff($outTime)->days > 1){
-                $message = "Can\'t stay more than 24 hrs!";
-                $parseError = true;
-                break;
-            }
+//            if($outTime->lessThan($inTime)){
+//                $message = "Out time can't be less than in time!";
+//                $parseError = true;
+//                break;
+//            }
+//
+//            if($inTime->diff($outTime)->days > 1){
+//                $message = "Can\'t stay more than 24 hrs!";
+//                $parseError = true;
+//                break;
+//            }
 
             $timeDiff  = $inTime->diff($outTime)->format('%H:%I');
-            $isPresent = ($timeDiff == "00:00") ? "0" : "1";
+//            $isPresent = ($timeDiff == "00:00") ? "0" : "1";
+
+            $isPresent = isset($present[$student]) ? '1' : '0';
             $status = [];
 
             //late or early out find
-            if($timeDiff != "00:00" && strlen($studentsShift[$student]) && isset($shiftRuningTimes[$studentsShift[$student]])){
-
-                if($inTime->greaterThan($shiftRuningTimes[$studentsShift[$student]]['start'])){
-                    $status[] = 1;
-                }
-
-                if($outTime->lessThan($shiftRuningTimes[$studentsShift[$student]]['end'])){
-                    $status[] = 2;
-                }
-
-
-
-            }
+//            if($timeDiff != "00:00" && strlen($studentsShift[$student]) && isset($shiftRuningTimes[$studentsShift[$student]])){
+//
+//                if($inTime->greaterThan($shiftRuningTimes[$studentsShift[$student]]['start'])){
+//                    $status[] = 1;
+//                }
+//
+//                if($outTime->lessThan($shiftRuningTimes[$studentsShift[$student]]['end'])){
+//                    $status[] = 2;
+//                }
+//            }
 
             $attendances[] = [
                 "academic_year_id" => $acYear,
@@ -386,7 +393,7 @@ class StudentAttendanceController extends Controller
         //check if notification need to send?
         //todo: need uncomment these code on client deploy
 //        $sendNotification = AppHelper::getAppSettings('student_attendance_notification');
-//        if($sendNotification != "0") {
+//        if($sendNotification != "0" && $request->has('is_send_notification')) {
 //            if($sendNotification == "1"){
 //                //then send sms notification
 //
@@ -409,7 +416,9 @@ class StudentAttendanceController extends Controller
 
         //push job to queue
         //todo: need comment these code on client deploy
-        PushStudentAbsentJob::dispatch($absentIds, $attendance_date);
+        if($request->has('is_send_notification')) {
+            PushStudentAbsentJob::dispatch($absentIds, $attendance_date);
+        }
 
 
         return redirect()->route('student_attendance.create')->with("success",$message);
@@ -507,6 +516,7 @@ class StudentAttendanceController extends Controller
                     'total_rows' => 0,
                     'imported_rows' => 0,
                     'attendance_type' => 1,
+                    'send_notification' => $request->has('is_send_notification') ? 1 : 0,
                 ]);
 
 
@@ -540,9 +550,12 @@ class StudentAttendanceController extends Controller
         }
 
         $queueFireUrl = route('student_attendance_seeder',['code' => 'hr799']);
+        $sendNotification = AppHelper::getAppSettings('student_attendance_notification');
+
         return view('backend.attendance.student.upload', compact(
             'isProcessingFile',
-            'queueFireUrl'
+            'queueFireUrl',
+            'sendNotification'
         ));
     }
 

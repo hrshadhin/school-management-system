@@ -99,9 +99,9 @@ class SeedStudentAttendance extends Command
                 if(count($row)){
 
                     $attendanceData[$row['date']][] = [
-                            'studentId' => $row['id'],
-                            'time' => $row['time']
-                        ];
+                        'studentId' => $row['id'],
+                        'time' => $row['time']
+                    ];
 
                 }
             }
@@ -208,8 +208,8 @@ class SeedStudentAttendance extends Command
                             //late or early out find
                             if($timeDiff != "00:00" && strlen($student->shift) && isset($shiftRuningTimes[$student->shift])){
 
-                                $shiftStart = Carbon::createFromFormat('Y-m-dH:i:s', $attendance_date.$shiftRuningTimes[$student->shift]['start']);
-                                $shiftEnd = Carbon::createFromFormat('Y-m-dH:i:s', $attendance_date.$shiftRuningTimes[$student->shift]['end']);
+                                $shiftStart = Carbon::createFromFormat('Y-m-dh:i a', $attendance_date.$shiftRuningTimes[$student->shift]['start']);
+                                $shiftEnd = Carbon::createFromFormat('Y-m-dh:i a', $attendance_date.$shiftRuningTimes[$student->shift]['end']);
 
                                 if($inTime->greaterThan($shiftStart)){
                                     $status[] = 1;
@@ -339,9 +339,10 @@ class SeedStudentAttendance extends Command
 
         //send notification for absent
         try {
-            foreach ($absentStudentIdsByDate as $attendance_date => $absentIds) {
+            if ($pendingFile->send_notification) {
+                foreach ($absentStudentIdsByDate as $attendance_date => $absentIds) {
 
-                //todo: need uncomment these code on client deploy
+                    //todo: need uncomment these code on client deploy
 //                $sendNotification = AppHelper::getAppSettings('student_attendance_notification');
 //                if ($sendNotification != "0") {
 //                    if ($sendNotification == "1") {
@@ -363,9 +364,10 @@ class SeedStudentAttendance extends Command
 //                    }
 //                }
 
-                //push job to queue
-                //todo: need comment these code on client deploy
-                PushStudentAbsentJob::dispatch($absentIds, $attendance_date);
+                    //push job to queue
+                    //todo: need comment these code on client deploy
+                    PushStudentAbsentJob::dispatch($absentIds, $attendance_date);
+                }
             }
             $pendingFile->is_imported = 1;
             $pendingFile->updated_by = $this->createdBy;

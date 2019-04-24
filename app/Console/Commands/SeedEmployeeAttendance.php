@@ -296,8 +296,9 @@ class SeedEmployeeAttendance extends Command
 
         //send notification for absent
         try {
-            foreach ($absentIds as $attendance_date => $employeeIds) {
-                //todo: need uncomment these code on client deploy
+            if ($pendingFile->send_notification) {
+                foreach ($absentIds as $attendance_date => $employeeIds) {
+                    //todo: need uncomment these code on client deploy
 //                $sendNotification = AppHelper::getAppSettings('employee_attendance_notification');
 //                if ($sendNotification != "0") {
 //                    if ($sendNotification == "1") {
@@ -319,9 +320,10 @@ class SeedEmployeeAttendance extends Command
 //                    }
 //                }
 
-                //push job to queue
-                //todo: need comment these code on client deploy
-                PushEmployeeAbsentJob::dispatch($employeeIds, $attendance_date);
+                    //push job to queue
+                    //todo: need comment these code on client deploy
+                    PushEmployeeAbsentJob::dispatch($employeeIds, $attendance_date);
+                }
             }
             $pendingFile->is_imported = 1;
             $pendingFile->updated_by = $this->createdBy;

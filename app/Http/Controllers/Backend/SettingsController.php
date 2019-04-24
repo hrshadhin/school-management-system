@@ -71,6 +71,7 @@ class SettingsController extends Controller
             }
             $this->validate($request, $rules, $messages);
 
+
             if($request->hasFile('logo')) {
                 $storagepath = $request->file('logo')->store('public/logo');
                 $fileName = basename($storagepath);
@@ -161,16 +162,16 @@ class SettingsController extends Controller
 
             $shiftData = [
                 'Morning' => [
-                    'start' => Carbon::createFromFormat('h:i a', $request->get('morning_start','12:00 am'))->format('H:i:s'),
-                    'end' => Carbon::createFromFormat('h:i a', $request->get('morning_end','12:00 am'))->format('H:i:s'),
+                    'start' => strtolower($request->get('morning_start','12:00 am')),
+                    'end' => strtolower($request->get('morning_end','12:00 am')),
                 ],
                 'Day' => [
-                    'start' => Carbon::createFromFormat('h:i a', $request->get('day_start','12:00 am'))->format('H:i:s'),
-                    'end' => Carbon::createFromFormat('h:i a', $request->get('day_end','12:00 am'))->format('H:i:s'),
+                    'start' => strtolower($request->get('day_start','12:00 am')),
+                    'end' => strtolower($request->get('day_end','12:00 am')),
                 ],
                 'Evening' => [
-                    'start' => Carbon::createFromFormat('h:i a', $request->get('evening_start','12:00 am'))->format('H:i:s'),
-                    'end' => Carbon::createFromFormat('h:i a', $request->get('evening_end','12:00 am'))->format('H:i:s'),
+                    'start' => strtolower($request->get('evening_start','12:00 am')),
+                    'end' => strtolower($request->get('evening_end','12:00 am')),
                 ]
             ];
 

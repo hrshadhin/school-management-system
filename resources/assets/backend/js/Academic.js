@@ -220,6 +220,13 @@ export default class Academic {
             });
 
         });
+        $('#toggleCheckboxes').on('ifChecked ifUnchecked', function(event) {
+            if (event.type == 'ifChecked') {
+                $('input:checkbox:not(.notMe)').iCheck('check');
+            } else {
+                $('input:checkbox:not(.notMe)').iCheck('uncheck');
+            }
+        });
 
         $('#section_id_filter').on('change', function () {
             //hide button
