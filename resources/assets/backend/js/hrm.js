@@ -143,6 +143,8 @@ export default class HRM {
 
     static employeeProfileInit() {
         $('.btnPrintInformation').click(function () {
+            $('ul.nav-tabs li:not(.active)').addClass('no-print');
+            $('ul.nav-tabs li.active').removeClass('no-print');
             window.print();
         });
 

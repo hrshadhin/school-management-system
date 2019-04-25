@@ -11,10 +11,7 @@
         @media print {
             @page {
                 size:  A4 landscape;
-                margin-top: 10mm;
-                margin-left: 0.10in;
-                margin-right: 0;
-                margin-bottom: 0;
+                margin: 5px;
             }
         }
     </style>
@@ -67,66 +64,137 @@
                                     </ul>
                                 </div>
                             </div>
-                            <div class="box box-info">
-                                <div class="box-header with-border">
-                                    <h3 class="box-title">Profile</h3>
-                                </div>
-                                <!-- /.box-header -->
-                                <div class="box-body">
-                                    <strong><i class="fa fa-info margin-r-5"></i> Gender</strong>
-                                    <p class="text-muted">{{$teacher->gender}}</p>
+                            {{--<div class="box box-info">--}}
+                                {{--<div class="box-header with-border">--}}
+                                    {{--<h3 class="box-title">Profile</h3>--}}
+                                {{--</div>--}}
+                                {{--<!-- /.box-header -->--}}
+                                {{--<div class="box-body">--}}
+                                    {{--<strong><i class="fa fa-info margin-r-5"></i> Gender</strong>--}}
+                                    {{--<p class="text-muted">{{$teacher->gender}}</p>--}}
 
-                                    <hr>
-                                    <strong><i class="fa fa-clock-o margin-r-5"></i> Date of Birth</strong>
-                                    <p class="text-muted">{{$teacher->dob}}</p>
+                                    {{--<hr>--}}
+                                    {{--<strong><i class="fa fa-clock-o margin-r-5"></i> Date of Birth</strong>--}}
+                                    {{--<p class="text-muted">{{$teacher->dob}}</p>--}}
 
-                                    <hr>
-                                    <strong><i class="fa fa-book margin-r-5"></i> Qualification</strong>
-                                    <p class="text-muted">{{$teacher->qualification}}</p>
+                                    {{--<hr>--}}
+                                    {{--<strong><i class="fa fa-book margin-r-5"></i> Qualification</strong>--}}
+                                    {{--<p class="text-muted">{{$teacher->qualification}}</p>--}}
 
-                                    <hr>
+                                    {{--<hr>--}}
 
-                                    <strong><i class="fa fa-map-marker margin-r-5"></i> Address</strong>
-                                    <p class="text-muted">{{$teacher->address}}</p>
+                                    {{--<strong><i class="fa fa-map-marker margin-r-5"></i> Address</strong>--}}
+                                    {{--<p class="text-muted">{{$teacher->address}}</p>--}}
 
-                                    <hr>
+                                    {{--<hr>--}}
 
-                                    <strong><i class="fa fa-info margin-r-5"></i> Religion</strong>
-                                    <p class="text-muted">{{$teacher->religion}}</p>
+                                    {{--<strong><i class="fa fa-info margin-r-5"></i> Religion</strong>--}}
+                                    {{--<p class="text-muted">{{$teacher->religion}}</p>--}}
 
-                                    <hr>
+                                    {{--<hr>--}}
 
-                                    <strong><i class="fa fa-calendar margin-r-5"></i> Join Date</strong>
-                                    <p class="text-muted">{{$teacher->joining_date}}</p>
+                                    {{--<strong><i class="fa fa-calendar margin-r-5"></i> Join Date</strong>--}}
+                                    {{--<p class="text-muted">{{$teacher->joining_date}}</p>--}}
 
-                                    <hr>
-                                    <strong><i class="fa fa-sign-in margin-r-5"></i> Username</strong>
-                                    <p class="text-muted">{{$teacher->user->username}}</p>
+                                    {{--<hr>--}}
+                                    {{--<strong><i class="fa fa-sign-in margin-r-5"></i> Username</strong>--}}
+                                    {{--<p class="text-muted">{{$teacher->user->username}}</p>--}}
 
-                                    <hr>
-                                    <strong><i class="fa fa-pencil margin-r-5"></i> Signature</strong>
-                                    @if($teacher->signature )
-                                        <img class="img-responsive" src="{{ asset('storage/employee/signature')}}/{{ $teacher->signature }}">
-                                    @endif
+                                    {{--<hr>--}}
+                                    {{--<strong><i class="fa fa-pencil margin-r-5"></i> Signature</strong>--}}
+                                    {{--@if($teacher->signature )--}}
+                                        {{--<img class="img-responsive" src="{{ asset('storage/employee/signature')}}/{{ $teacher->signature }}">--}}
+                                    {{--@endif--}}
 
-                                </div>
-                                <!-- /.box-body -->
-                            </div>
+                                {{--</div>--}}
+                                {{--<!-- /.box-body -->--}}
+                            {{--</div>--}}
                         </div>
 
                         <div class="col-sm-9">
                             <div class="nav-tabs-custom">
                                 <ul class="nav nav-tabs">
-                                    {{--<li><a href="#routine" data-toggle="tab">Routine</a></li>--}}
-                                    <li class="active"><a href="#classList" data-toggle="tab">Class & Section</a></li>
+                                    <li class="active"><a href="#profile" data-toggle="tab">Profile</a></li>
+                                    <li ><a href="#classList" data-toggle="tab">Class & Section</a></li>
                                     <li><a href="#subjects" data-toggle="tab">Subjects</a></li>
                                 </ul>
 
                                 <div class="tab-content">
-                                    {{--<div class="tab-pane" id="routine">--}}
-                                    {{--</div>--}}
-
-                                    <div class="tab-pane active" id="classList">
+                                    <div class="tab-pane active" id="profile">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <label for="">Full Name</label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <p for="">: {{$teacher->name}}</p>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="">Date of Birth</label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <p for="">: {{$teacher->dob}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <label for="">Qualification</label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <p for="">: {{$teacher->qualification}}</p>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="">Designation</label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <p for="">: {{$teacher->designation}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <label for="">Gender</label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <p for="">: {{$teacher->gender}}</p>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="">Religion</label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <p for="">: {{$teacher->religion}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <label for="">Join Date</label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <p for="">: {{$teacher->joining_date}}</p>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="">Username</label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <p for="">: {{$teacher->user->username}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <label for="">Address</label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <p for="">: {{$teacher->address}}</p>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="">Signature</label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                @if($teacher->signature )
+                                                    <img class="img-responsive" src="{{ asset('storage/employee/signature')}}/{{ $teacher->signature }}">
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane" id="classList">
                                         <table class="table table-responsive table-bordered table-hover">
                                             <thead>
                                             <tr>
@@ -189,6 +257,8 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('.btnPrintInformation').click(function () {
+                $('ul.nav-tabs li:not(.active)').addClass('no-print');
+                $('ul.nav-tabs li.active').removeClass('no-print');
                 window.print();
             });
         });

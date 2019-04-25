@@ -11,10 +11,7 @@
         @media print {
             @page {
                 size:  A4 landscape;
-                margin-top: 10mm;
-                margin-left: 0.10in;
-                margin-right: 0;
-                margin-bottom: 0;
+                margin: 0;
             }
         }
     </style>

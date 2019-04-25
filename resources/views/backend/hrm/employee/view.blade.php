@@ -11,10 +11,10 @@
         @media print {
             @page {
                 size:  A4 landscape;
-                margin-top: 10mm;
-                margin-left: 0.10in;
-                margin-right: 0;
-                margin-bottom: 0;
+                margin-top: 5px;
+            }
+            ::-webkit-scrollbar {
+                display: none;
             }
         }
     </style>
@@ -66,72 +66,82 @@
                                         <li class="list-group-item" style="background-color: #FFF">
                                             <b>Email</b> <a class="pull-right">{{$employee->email}}</a>
                                         </li>
+                                        <li class="list-group-item" style="background-color: #FFF">
+                                            <b>Shift</b> <a class="pull-right">{{$employee->shift}}</a>
+                                        </li>
+                                        <li class="list-group-item" style="background-color: #FFF">
+                                            <b>Duty Start</b> <a class="pull-right">@if($employee->duty_start){{$employee->duty_start->format('h:i a')}} @endif</a>
+                                        </li>
+                                        <li class="list-group-item" style="background-color: #FFF">
+                                            <b>Duty End</b> <a class="pull-right">@if($employee->duty_end){{$employee->duty_end->format('h:i a')}} @endif</a>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
-                            <div class="box box-info">
-                                <div class="box-header with-border">
-                                    <h3 class="box-title">Profile</h3>
-                                </div>
-                                <!-- /.box-header -->
-                                <div class="box-body">
-                                    <strong><i class="fa fa-info margin-r-5"></i> Gender</strong>
-                                    <p class="text-muted">{{$employee->gender}}</p>
+                            {{--<div class="box box-info">--}}
+                                {{--<div class="box-header with-border">--}}
+                                    {{--<h3 class="box-title">Profile</h3>--}}
+                                {{--</div>--}}
+                                {{--<!-- /.box-header -->--}}
+                                {{--<div class="box-body">--}}
+                                    {{--<strong><i class="fa fa-info margin-r-5"></i> Gender</strong>--}}
+                                    {{--<p class="text-muted">{{$employee->gender}}</p>--}}
 
-                                    <hr>
-                                    <strong><i class="fa fa-clock-o margin-r-5"></i> Date of Birth</strong>
-                                    <p class="text-muted">{{$employee->dob}}</p>
+                                    {{--<hr>--}}
+                                    {{--<strong><i class="fa fa-clock-o margin-r-5"></i> Date of Birth</strong>--}}
+                                    {{--<p class="text-muted">{{$employee->dob}}</p>--}}
 
-                                    <hr>
-                                    <strong><i class="fa fa-book margin-r-5"></i> Qualification</strong>
-                                    <p class="text-muted">{{$employee->qualification}}</p>
+                                    {{--<hr>--}}
+                                    {{--<strong><i class="fa fa-book margin-r-5"></i> Qualification</strong>--}}
+                                    {{--<p class="text-muted">{{$employee->qualification}}</p>--}}
 
-                                    <hr>
+                                    {{--<hr>--}}
 
-                                    <strong><i class="fa fa-map-marker margin-r-5"></i> Address</strong>
-                                    <p class="text-muted">{{$employee->address}}</p>
+                                    {{--<strong><i class="fa fa-map-marker margin-r-5"></i> Address</strong>--}}
+                                    {{--<p class="text-muted">{{$employee->address}}</p>--}}
 
-                                    <hr>
+                                    {{--<hr>--}}
 
-                                    <strong><i class="fa fa-info margin-r-5"></i> Religion</strong>
-                                    <p class="text-muted">{{$employee->religion}}</p>
+                                    {{--<strong><i class="fa fa-info margin-r-5"></i> Religion</strong>--}}
+                                    {{--<p class="text-muted">{{$employee->religion}}</p>--}}
 
-                                    <hr>
+                                    {{--<hr>--}}
 
-                                    <strong><i class="fa fa-calendar margin-r-5"></i> Join Date</strong>
-                                    <p class="text-muted">{{$employee->joining_date}}</p>
+                                    {{--<strong><i class="fa fa-calendar margin-r-5"></i> Join Date</strong>--}}
+                                    {{--<p class="text-muted">{{$employee->joining_date}}</p>--}}
 
-                                    <hr>
-                                    <strong><i class="fa fa-clock-o margin-r-5"></i> Shift</strong>
-                                    <p class="text-muted">{{$employee->shift}}</p>
+                                    {{--<hr>--}}
+                                    {{--<strong><i class="fa fa-clock-o margin-r-5"></i> Shift</strong>--}}
+                                    {{--<p class="text-muted">{{$employee->shift}}</p>--}}
 
-                                    <hr>
-                                    <strong><i class="fa fa-clock-o margin-r-5"></i> Duty Start</strong>
-                                    <p class="text-muted">{{$employee->duty_start}}</p>
+                                    {{--<hr>--}}
+                                    {{--<strong><i class="fa fa-clock-o margin-r-5"></i> Duty Start</strong>--}}
+                                    {{--<p class="text-muted">{{$employee->duty_start}}</p>--}}
 
-                                    <hr>
-                                    <strong><i class="fa fa-clock-o margin-r-5"></i> Duty End</strong>
-                                    <p class="text-muted">{{$employee->duty_end}}</p>
-                                    @if($employee->user)
-                                    <hr>
-                                    <strong><i class="fa fa-sign-in margin-r-5"></i> Username</strong>
-                                    <p class="text-muted">{{$employee->user->username}}</p>
-                                    @endif
-                                    <hr>
-                                    <strong><i class="fa fa-pencil margin-r-5"></i> Signature</strong>
-                                    @if($employee->signature )
-                                        <img class="img-responsive" src="{{ asset('storage/employee/signature')}}/{{ $employee->signature }}">
-                                    @endif
+                                    {{--<hr>--}}
+                                    {{--<strong><i class="fa fa-clock-o margin-r-5"></i> Duty End</strong>--}}
+                                    {{--<p class="text-muted">{{$employee->duty_end}}</p>--}}
+                                    {{--@if($employee->user)--}}
+                                    {{--<hr>--}}
+                                    {{--<strong><i class="fa fa-sign-in margin-r-5"></i> Username</strong>--}}
+                                    {{--<p class="text-muted">{{$employee->user->username}}</p>--}}
+                                    {{--@endif--}}
+                                    {{--<hr>--}}
+                                    {{--<strong><i class="fa fa-pencil margin-r-5"></i> Signature</strong>--}}
+                                    {{--@if($employee->signature )--}}
+                                        {{--<img class="img-responsive" src="{{ asset('storage/employee/signature')}}/{{ $employee->signature }}">--}}
+                                    {{--@endif--}}
 
-                                </div>
-                                <!-- /.box-body -->
-                            </div>
+                                {{--</div>--}}
+                                {{--<!-- /.box-body -->--}}
+                            {{--</div>--}}
                         </div>
 
                         <div class="col-sm-9">
                             <div class="nav-tabs-custom">
                                 <ul class="nav nav-tabs">
-                                    <li class="active"><a href="#leaveStats" data-toggle="tab">Leave Balance</a></li>
+                                    <li class="active"><a href="#profile" data-toggle="tab">Profile</a></li>
+                                    <li><a href="#leaveStats" data-toggle="tab">Leave Balance</a></li>
                                     <li><a href="#attendance" id="tabAttendance" data-pk="{{$employee->id}}" data-toggle="tab">Attendance</a></li>
                                     {{--<li><a href="#salary" data-toggle="tab">Salary</a></li>--}}
                                     {{--<li><a href="#payment" data-toggle="tab">Payment</a></li>--}}
@@ -139,7 +149,81 @@
                                 </ul>
 
                                 <div class="tab-content">
-                                    <div class="tab-pane active" id="leaveStats">
+                                    <div class="tab-pane active" id="profile">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <label for="">Full Name</label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <p for="">: {{$employee->name}}</p>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="">Date of Birth</label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <p for="">: {{$employee->dob}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <label for="">Qualification</label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <p for="">: {{$employee->qualification}}</p>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="">Designation</label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <p for="">: {{$employee->designation}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <label for="">Gender</label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <p for="">: {{$employee->gender}}</p>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="">Religion</label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <p for="">: {{$employee->religion}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <label for="">Join Date</label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <p for="">: {{$employee->joining_date}}</p>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="">Username</label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <p for="">: {{$employee->user->username}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <label for="">Address</label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <p for="">: {{$employee->address}}</p>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="">Signature</label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                @if($employee->signature )
+                                                    <img class="img-responsive" src="{{ asset('storage/employee/signature')}}/{{ $employee->signature }}">
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane" id="leaveStats">
                                         <div class="row tile_count text-center">
                                             <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count tile_stats_count_nb">
                                                 <span class="count_top"><i class="fa fa-2x fa-level-down text-green"></i><b class="text-info"> Casual Leave(CL)</b></span>
