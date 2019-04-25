@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Employee;
 use App\Http\Helpers\AppHelper;
 use App\Leave;
+use App\WorkOutside;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -106,7 +107,31 @@ class LeaveController extends Controller
             }
         }
 
-        //todo: pull hrm leave settings and validate for it
+        $dateList = [$leaveDateStart->format('Y-m-d')];
+        if($leaveDateEnd){
+            $startDate = $leaveDateStart->copy();
+            $startDate->addDay(1);
+            while ($startDate->lte($leaveDateEnd)){
+                $dateList[] = $startDate->format('Y-m-d');
+                $startDate->addDay(1);
+            }
+        }
+
+        $haveWorkOutSide = WorkOutside::where('employee_id', $request->get('employee_id',0))
+            ->whereIn('work_date', $dateList)
+            ->count();
+
+        if($haveWorkOutSide){
+            $message = 'This employee has work outside schedule';
+            if($leaveDateEnd){
+                $message .= ' inside '.$leaveDateStart->format('d/m/Y').' to '.$leaveDateEnd->format('d/m/Y');
+            }
+            else{
+                $message .= ' on '.$leaveDateStart->format('d/m/Y');
+            }
+            return redirect()->back()->with('error', $message);
+        }
+
         $holidayBalance = true;
         if($request->get('leave_type',0) == 1) {
             $totalAllowCasualLeave = AppHelper::getAppSettings('total_casual_leave');
@@ -217,6 +242,15 @@ class LeaveController extends Controller
         }
 
         $this->validate($request, $rules);
+
+        $leaveDate = Carbon::createFromFormat('d/m/Y',$request->get('leave_date'))->format('Y-m-d');
+        $haveWorkOutSide = WorkOutside::where('employee_id', $leave->employee_id)
+            ->whereDate('work_date', $leaveDate)
+            ->count();
+        if($haveWorkOutSide){
+            $message = 'This employee has work outside schedule  on '.$request->get('leave_date');
+            return redirect()->back()->with('error', $message);
+        }
 
         $data = $request->all();
         unset($data['employee_id']);
