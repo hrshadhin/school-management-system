@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Employee;
+use App\Leave;
 use App\WorkOutside;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -90,6 +91,30 @@ class WorkOutsideController extends Controller
             }
         }
 
+        $dateList = [$leaveDateStart->format('Y-m-d')];
+        if($leaveDateEnd){
+            $startDate = $leaveDateStart->copy();
+            $startDate->addDay(1);
+            while ($startDate->lte($leaveDateEnd)){
+                $dateList[] = $startDate->format('Y-m-d');
+                $startDate->addDay(1);
+            }
+        }
+        $haveLeave = Leave::where('employee_id', $request->get('employee_id',0))
+            ->whereIn('status',[1,2]) //pending, approved
+            ->whereIn('leave_date', $dateList)
+            ->count();
+
+        if($haveLeave){
+            $message = 'This employee has leave schedule';
+            if($leaveDateEnd){
+                $message .= ' inside '.$leaveDateStart->format('d/m/Y').' to '.$leaveDateEnd->format('d/m/Y');
+            }
+            else{
+                $message .= ' on '.$leaveDateStart->format('d/m/Y');
+            }
+            return redirect()->back()->with('error', $message);
+        }
 
         $data = $request->all();
         if($request->hasFile('document')) {
@@ -165,6 +190,15 @@ class WorkOutsideController extends Controller
 
 
         $this->validate($request, $rules);
+        $workDate = Carbon::createFromFormat('d/m/Y',$request->get('work_date'))->format('Y-m-d');
+        $haveLeave = Leave::where('employee_id', $work->employee_id)
+            ->whereIn('status',[1,2]) //pending, approved
+            ->whereDate('leave_date', $workDate)
+            ->count();
+        if($haveLeave){
+            $message = 'This employee has leave schedule  on '.$request->get('work_date');
+            return redirect()->back()->with('error', $message);
+        }
 
         $data = $request->all();
         unset($data['employee_id']);

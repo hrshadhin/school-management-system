@@ -65,7 +65,7 @@
                                     <div class="col-md-2">
                                     <div class="form-group has-feedback">
                                         <label for="leave_date_end">Leave Date end</label>
-                                        <input type='text' class="form-control date_picker"  readonly name="leave_date_end" placeholder="date" value="" minlength="10" maxlength="10" />
+                                        <input type='text' class="form-control date_picker_with_clear"  readonly name="leave_date_end" placeholder="date" value="" minlength="10" maxlength="10" />
                                         <span class="fa fa-calendar form-control-feedback"></span>
                                         <span class="text-danger">{{ $errors->first('leave_date_end') }}</span>
                                     </div>

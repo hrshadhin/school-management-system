@@ -57,7 +57,7 @@
                                     <div class="col-md-4">
                                     <div class="form-group has-feedback">
                                         <label for="work_date_end">Work Date end</label>
-                                        <input type='text' class="form-control date_picker"  readonly name="work_date_end" placeholder="date" value="" minlength="10" maxlength="10" />
+                                        <input type='text' class="form-control date_picker_with_clear"  readonly name="work_date_end" placeholder="date" value="" minlength="10" maxlength="10" />
                                         <span class="fa fa-calendar form-control-feedback"></span>
                                         <span class="text-danger">{{ $errors->first('work_date_end') }}</span>
                                     </div>
