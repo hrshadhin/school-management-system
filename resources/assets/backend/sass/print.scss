@@ -20,6 +20,11 @@
     -o-transform: translate(0, 0) !important;
     transform: translate(0, 0) !important;
   }
+  .main-footer {
+    bottom: 0;
+    position: fixed;
+    width: 100%;
+  }
   .fixed .content-wrapper,
   .fixed .right-side {
     padding-top: 0 !important;
