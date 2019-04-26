@@ -243,6 +243,12 @@ class LeaveController extends Controller
 
         $this->validate($request, $rules);
 
+        if($request->has('update_status')){
+            $leave->status = $request->get('status');
+            $leave->save();
+            return redirect()->route('hrm.leave.index')->with('success', 'Leave Updated!');
+        }
+
         $leaveDate = Carbon::createFromFormat('d/m/Y',$request->get('leave_date'))->format('Y-m-d');
         $haveWorkOutSide = WorkOutside::where('employee_id', $leave->employee_id)
             ->whereDate('work_date', $leaveDate)
