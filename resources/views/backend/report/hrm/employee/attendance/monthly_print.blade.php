@@ -47,36 +47,47 @@
                                                         $status = 'P';
                                                         $color = 'green';
                                                         $tPresent++;
+                                                        if($value['weekend'] || isset($calendarData[$date])){
+                                                            $tPresent--;
+                                                        }
 
                                                     }
                                                     else{
-                                                        $status = 'A';
-                                                        $tabsent++;
-                                                        $color = 'red';
+                                                        if(!isset($employeesWorkoutside[$employee->id][$date])
+                                                        && !isset($employeesLeaves[$employee->id][$date])
+                                                        && !isset($calendarData[$date])
+                                                        && !$value['weekend']
+                                                        ){
+                                                            $status = 'A';
+                                                            $tabsent++;
+                                                            $color = 'red';
+                                                        }
+
                                                     }
                                                 }
 
 
                                                  if(isset($calendarData[$date])) {
-                                                        $status = $calendarData[$date];
+                                                        $status .= $calendarData[$date];
                                                         $color = 'holiday';
+                                                        $tPresent++;
                                                  }
 
 
                                                 if($value['weekend']){
                                                         $status .= 'W';
                                                         $color = 'weekend';
+                                                        $tPresent++;
                                                 }
                                                 if(isset($employeesLeaves[$employee->id][$date])) {
                                                         $status = 'L';
                                                         $color = 'blue';
-
+                                                        $tPresent++;
                                                 }
                                                 if(isset($employeesWorkoutside[$employee->id][$date])) {
                                                         $status = 'WO';
                                                         $color = 'green';
                                                         $tPresent++;
-                                                        $tabsent--;
                                                 }
                                         @endphp
                                         <td class="{{$color}}">{{$status}}</td>
