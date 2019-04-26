@@ -506,6 +506,16 @@ table {
 .text-bold {
   font-weight: bold;
 }
+#pageNumber {
+  float: right;
+}
+#pageNumber:after {
+  counter-increment: page;
+  content:"Page " counter(page);
+  padding-left: 10px;
+  padding-right: 10px;
+  font-weight: bold;
+}
 /*
  * Misc: print
  * -----------

@@ -1,11 +1,10 @@
 <div class="report-footer">
     <div class="row">
-        <div class="col-xs-6 left">
-            <strong>Copyright &copy; {{date('Y')}} <i>{{$instituteName}}</i> All rights reserved.</strong>
-        </div>
-        <div class="col-xs-6 right">
+        <div class="col-xs-12">
+            <strong>Copyright &copy; {{date('Y')}} <i>{{$instituteName}}</i></strong>
             <!-- Don't remove below text. Its against copy right laws. -->
-            <strong>School Management System Version 2.0 || Developed by <i>{{$maintainer}}</i></strong>
+            <strong class="appInfo"> || School Management System v{{$majorVersion}}.{{$minorVersion}} || Developed by <i>{{$maintainer}}</i></strong>
+            <span id="pageNumber"></span>
         </div>
     </div>
 </div>
