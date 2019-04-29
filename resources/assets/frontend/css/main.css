@@ -1200,9 +1200,11 @@ header:before{
 }
 .header-top-panel.active_social #top_lang_links_wrapper {
 	opacity: 0;
+	display: none;
 }
 .header-top-panel.active_lang #top_social_links_wrapper {
 	opacity: 0;
+	display: none;
 }
 
 /**/

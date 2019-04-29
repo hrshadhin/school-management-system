@@ -1705,43 +1705,43 @@ function cws_top_social_icon_animation() {
   })
 }
 function cws_top_social_init() {
-  var el = jQuery(".header-top-panel #top_social_links_wrapper");
-  var toggle_class = "expanded";
-  var parent_toggle_class = "active_social";
-  if (!el.length) return;
-  el.on('click', function () {
-    var el = jQuery(this);
-    if (el.hasClass(toggle_class)) {
-      el.removeClass(toggle_class);
-      setTimeout(function () {
-        el.closest(".header-top-panel").removeClass(parent_toggle_class);
-      }, 300);
-    }
-    else {
-      el.addClass(toggle_class);
-      el.closest(".header-top-panel").addClass(parent_toggle_class);
-    }
-  });
+    var el = jQuery(".header-top-panel div.share-toggle-button");
+    var toggle_class = "expanded";
+    var parent_toggle_class = "active_social";
+    if (!el.length) return;
+    el.on('click', function () {
+        var el = jQuery(this).parent();
+        if (el.hasClass(toggle_class)) {
+            el.removeClass(toggle_class);
+            setTimeout(function () {
+                el.closest(".header-top-panel").removeClass(parent_toggle_class);
+            }, 300);
+        }
+        else {
+            el.addClass(toggle_class);
+            el.closest(".header-top-panel").addClass(parent_toggle_class);
+        }
+    });
 }
 
 function cws_top_lang_init() {
-  var el = jQuery(".header-top-panel #top_lang_links_wrapper");
-  var toggle_class = "expanded";
-  var parent_toggle_class = "active_lang";
-  if (!el.length) return;
-  el.on('click', function () {
-    var el = jQuery(this);
-    if (el.hasClass(toggle_class)) {
-      el.removeClass(toggle_class);
-      setTimeout(function () {
-        el.closest(".header-top-panel").removeClass(parent_toggle_class);
-      }, 300);
-    }
-    else {
-      el.addClass(toggle_class);
-      el.closest(".header-top-panel").addClass(parent_toggle_class);
-    }
-  });
+    var el = jQuery(".header-top-panel div.lang-toggle-button");
+    var toggle_class = "expanded";
+    var parent_toggle_class = "active_lang";
+    if (!el.length) return;
+    el.on('click', function () {
+        var el = jQuery(this).parent();
+        if (el.hasClass(toggle_class)) {
+            el.removeClass(toggle_class);
+            setTimeout(function () {
+                el.closest(".header-top-panel").removeClass(parent_toggle_class);
+            }, 300);
+        }
+        else {
+            el.addClass(toggle_class);
+            el.closest(".header-top-panel").addClass(parent_toggle_class);
+        }
+    });
 }
 
 function select2_init() {
