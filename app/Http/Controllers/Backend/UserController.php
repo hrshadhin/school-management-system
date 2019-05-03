@@ -1012,11 +1012,11 @@ class UserController extends Controller
 
    private function getStatisticData() {
        $teachers = Cache::rememberForever('teacherCount' , function () {
-           return   Employee::where('role_id', AppHelper::EMP_TEACHER)->count();
+           return   Employee::where('status', AppHelper::ACTIVE)->where('role_id', AppHelper::EMP_TEACHER)->count();
        });
 
        $employee = Cache::rememberForever('employeeCount' , function () {
-           return Employee::count();
+           return Employee::where('status', AppHelper::ACTIVE)->count();
        });
        $academicYearId = $this->getAcademicYearForDashboard();
        $students = Cache::rememberForever('studentCount' , function () use($academicYearId) {
@@ -1025,7 +1025,7 @@ class UserController extends Controller
                ->count();
        });
        $subjects = Cache::rememberForever('SubjectCount' , function () {
-           return Subject::count();
+           return Subject::where('status', AppHelper::ACTIVE)->count();
        });
 
        return [$teachers, $employee, $students, $subjects];
