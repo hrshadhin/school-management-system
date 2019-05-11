@@ -362,18 +362,7 @@ Route::group(
     Route::any('report/employee-monthly-attendance', 'ReportController@employeeMonthlyAttendance')
         ->name('report.employee_monthly_attendance');
 
-}
-);
-
-
-//change website locale
-Route::get(
-    '/set-locale/{lang}', function ($lang) {
-    //set user wanted locale to session
-    Session::put('user_locale', $lang);
-    return redirect()->back();
-}
-)->name('setLocale');
+});
 
 //web artisan routes
 Route::get(
@@ -395,7 +384,6 @@ Route::get(
     }
 }
 )->name('student_attendance_seeder');
-
 Route::get(
     '/employee-attendance-file-queue-start/{code}', function ($code) {
     if($code == "hr799"){
@@ -415,7 +403,6 @@ Route::get(
     }
 }
 )->name('employee_attendance_seeder');
-
 
 //dev routes
 Route::get(
@@ -457,8 +444,7 @@ Route::get(
     return 'clear cache';
 }
 );
-
-// create tiggers
+//create tiggers
 Route::get(
     '/create-triggers/{code}', function ($code) {
     if($code !== '007') {

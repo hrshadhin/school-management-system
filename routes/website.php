@@ -30,6 +30,14 @@ Route::group(
 
 });
 
+//change website locale
+Route::get(
+    '/set-locale/{lang}', function ($lang) {
+    //set user wanted locale to session
+    Session::put('user_locale', $lang);
+    return redirect()->back();
+}
+)->name('setLocale');
 
 Route::group(
     ['namespace' => 'Backend', 'middleware' => ['auth','permission']], function () {
