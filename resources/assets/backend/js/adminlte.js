@@ -865,6 +865,7 @@ throw new Error('AdminLTE requires jQuery')
   $(document).on('click', Selector.button, function (e) {
     e.preventDefault();
     Plugin.call($(this), 'toggle');
+      localStorage.setItem("menu-collapse", $('body').hasClass('sidebar-collapse'));
   });
   $(window).on('load', function () {
     Plugin.call($(Selector.button));
