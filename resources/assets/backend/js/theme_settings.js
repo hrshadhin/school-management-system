@@ -324,6 +324,15 @@ $(function () {
             $('[data-layout="sidebar-collapse"]').attr('checked', 'checked')
         }
 
+        //menu collapse or expand
+        var isMenuCollapse = localStorage.getItem("menu-collapse");
+        if(isMenuCollapse === 'true'){
+            $('body').addClass('sidebar-collapse');
+        }
+        else{
+            $('body').removeClass('sidebar-collapse');
+        }
+
     }
 
     // // Create the new tab
