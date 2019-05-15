@@ -27,7 +27,7 @@
                 <div class="box box-info">
                     <form novalidate id="reportForm" target="_blank" action="{{URL::Route('report.student_monthly_attendance')}}" method="POST" enctype="multipart/form-data">
                         <div class="box-header with-border">
-                          <h3 class="box-title">Section wise monthly attendance</h3>
+                            <h3 class="box-title">Section wise monthly attendance</h3>
                         </div>
                         <div class="box-body">
                             @csrf
@@ -42,16 +42,14 @@
                             @endif
 
                             <div class="row">
-                                @if(AppHelper::getInstituteCategory() == 'college')
-                                    <div class="col-md-4">
-                                        <div class="form-group has-feedback">
-                                            <label for="academic_year">Academic Year<span class="text-danger">*</span></label>
-                                            {!! Form::select('academic_year', $academic_years, null , ['placeholder' => 'Pick a year...','class' => 'form-control select2', 'required' => 'true']) !!}
-                                            <span class="form-control-feedback"></span>
-                                            <span class="text-danger">{{ $errors->first('academic_year') }}</span>
-                                        </div>
+                                <div class="col-md-4">
+                                    <div class="form-group has-feedback">
+                                        <label for="academic_year">Academic Year<span class="text-danger">*</span></label>
+                                        {!! Form::select('academic_year', $academic_years, null , ['placeholder' => 'Pick a year...','class' => 'form-control select2', 'required' => 'true']) !!}
+                                        <span class="form-control-feedback"></span>
+                                        <span class="text-danger">{{ $errors->first('academic_year') }}</span>
                                     </div>
-                                @endif
+                                </div>
                                 <div class="col-md-4">
                                     <div class="form-group has-feedback">
                                         <label for="class_id">Class<span class="text-danger">*</span></label>
@@ -68,18 +66,17 @@
                                         <span class="text-danger">{{ $errors->first('section_id') }}</span>
                                     </div>
                                 </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group has-feedback">
-                                            <label for="month">Month<span class="text-danger">*</span></label>
-                                            <div class="input-group">
-                                                <input type='text' readonly class="form-control month_picker" name="month" placeholder="month" value="" required minlength="7" maxlength="7" />
-                                                <span class="fa fa-calendar form-control-feedback"></span>
-                                                <span class="text-danger">{{ $errors->first('month') }}</span>
+                                <div class="col-md-2">
+                                    <div class="form-group has-feedback">
+                                        <label for="month">Month<span class="text-danger">*</span></label>
+                                        <div class="input-group">
+                                            <input type='text' readonly class="form-control month_picker" name="month" placeholder="month" value="" required minlength="7" maxlength="7" />
+                                            <span class="fa fa-calendar form-control-feedback"></span>
+                                            <span class="text-danger">{{ $errors->first('month') }}</span>
 
-                                            </div>
                                         </div>
                                     </div>
-
+                                </div>
                             </div>
                         </div>
                         <!-- /.box-body -->

@@ -60,19 +60,15 @@
                                         <span class="text-danger">{{ $errors->first('side') }}</span>
                                     </div>
                                 </div>
-                                @if(AppHelper::getInstituteCategory() == 'college')
-                                    <div class="col-md-4">
-                                        <div class="form-group has-feedback">
-                                            <label for="academic_year">Academic Year<span class="text-danger">*</span></label>
-                                            {!! Form::select('academic_year', $academic_years, null , ['placeholder' => 'Pick a year...','class' => 'form-control select2', 'required' => 'true']) !!}
-                                            <span class="form-control-feedback"></span>
-                                            <span class="text-danger">{{ $errors->first('academic_year') }}</span>
-                                        </div>
+                                <div class="col-md-4">
+                                    <div class="form-group has-feedback">
+                                        <label for="academic_year">Academic Year<span class="text-danger">*</span></label>
+                                        {!! Form::select('academic_year', $academic_years, null , ['placeholder' => 'Pick a year...','class' => 'form-control select2', 'required' => 'true']) !!}
+                                        <span class="form-control-feedback"></span>
+                                        <span class="text-danger">{{ $errors->first('academic_year') }}</span>
                                     </div>
-                                @endif
+                                </div>
                             </div>
-
-
 
                             <div class="row">
 
