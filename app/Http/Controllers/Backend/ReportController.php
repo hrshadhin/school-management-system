@@ -372,11 +372,7 @@ class ReportController extends Controller
             ->orderBy('order','asc')
             ->pluck('name', 'id');
 
-        //if its college then have to get those academic years
-        $academic_years = [];
-        if(AppHelper::getInstituteCategory() == 'college') {
-            $academic_years = AcademicYear::where('status', '1')->orderBy('id', 'desc')->pluck('title', 'id');
-        }
+        $academic_years = AcademicYear::where('status', '1')->orderBy('id', 'desc')->pluck('title', 'id');
 
         return view('backend.report.student.attendance.monthly', compact(
             'academic_years',
@@ -524,11 +520,7 @@ class ReportController extends Controller
             ->orderBy('order','asc')
             ->pluck('name', 'id');
 
-        //if its college then have to get those academic years
-        $academic_years = [];
-        if(AppHelper::getInstituteCategory() == 'college') {
-            $academic_years = AcademicYear::where('status', '1')->orderBy('id', 'desc')->pluck('title', 'id');
-        }
+        $academic_years = AcademicYear::where('status', '1')->orderBy('id', 'desc')->pluck('title', 'id');
 
         return view('backend.report.student.list', compact(
             'academic_years',

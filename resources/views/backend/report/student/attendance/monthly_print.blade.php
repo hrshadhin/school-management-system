@@ -129,7 +129,7 @@
                     <h5>Class Teacher</h5>
                 </div>
                 <div class="col-xs-4">
-                    <h5>Principal</h5>
+                    <h5>@if(AppHelper::getInstituteCategory() == "college") Principal @else Head Master  @endif</h5>
                 </div>
             </div>
         </div>
