@@ -63,23 +63,9 @@ class ReportController extends Controller
             $instituteInfo = AppHelper::getAppSettings('institute_settings');
 
 
-            //pull students
-            //filters
-            if(AppHelper::getInstituteCategory() != 'college') {
-                // now check is academic year set or not
-                $acYear = AppHelper::getAcademicYear();
-                if (!$acYear || (int)($acYear) < 1) {
-
-                    return redirect()->route('administrator.report.student_idcard')
-                        ->with("error", 'Academic year not set yet! Please go to settings and set it.');
-                }
-            }
-            else {
-                $acYear = $request->get('academic_year',0);
-            }
-
-            $classId = $request->get('class_id');
-            $sectionId = $request->get('section_id');
+            $acYear = $request->get('academic_year',0);
+            $classId = $request->get('class_id', 0);
+            $sectionId = $request->get('section_id', 0);
 
             $session = '';
             $validity = '';
@@ -139,12 +125,8 @@ class ReportController extends Controller
             ->orderBy('order','asc')
             ->pluck('name', 'id');
 
-        //if its college then have to get those academic years
-        $academic_years = [];
-        if(AppHelper::getInstituteCategory() == 'college') {
-            $academic_years = AcademicYear::where('status', '1')->orderBy('id', 'desc')->pluck('title', 'id');
-        }
-
+        $academic_years = AcademicYear::where('status', '1')->orderBy('id', 'desc')->pluck('title', 'id');
+        
         //get templates for students
         // AppHelper::TEMPLATE_TYPE  1=SMS , 2=EMAIL, 3=Id card
         $templates = Template::whereIn('type',[3])->where('role_id', AppHelper::USER_STUDENT)->pluck('name','id');
@@ -239,24 +221,18 @@ class ReportController extends Controller
             $rules = [
                 'class_id' => 'required|integer',
                 'section_id' => 'required|integer',
+                'academic_year' => 'required|integer',
                 'month' => 'required|min:7|max:7',
             ];
 
-            if(AppHelper::getInstituteCategory() == 'college') {
-                $rules['academic_year'] = 'required|integer';
-            }
 
             $this->validate($request, $rules);
 
             $month = Carbon::createFromFormat('m/Y', $request->get('month'))->timezone(env('APP_TIMEZONE','Asia/Dhaka'));
             $classId = $request->get('class_id', 0);
             $sectionId = $request->get('section_id', 0);
-            if(AppHelper::getInstituteCategory() == 'college') {
-                $academicYearId = $request->get('academic_year', 0);
-            }
-            else{
-                $academicYearId = AppHelper::getAcademicYear();
-            }
+            $academicYearId = $request->get('academic_year', 0);
+
             $monthStart = $month->startOfMonth()->copy();
             $monthEnd = $month->endOfMonth()->copy();
 
@@ -394,6 +370,7 @@ class ReportController extends Controller
 
             if($request->get('form_name') == 'class') {
                 $rules = [
+                    'academic_year' => 'required|integer',
                     'class_id' => 'required|integer',
                     'section_id' => 'nullable|integer',
                 ];
@@ -401,31 +378,21 @@ class ReportController extends Controller
             else {
 
                 $rules = [
+                    'academic_year' => 'required|integer',
                     'gender' => 'required|integer',
                     'religion' => 'required|integer',
                     'blood_group' => 'required|integer',
                 ];
             }
 
-            if (AppHelper::getInstituteCategory() == 'college') {
-                $rules['academic_year'] = 'required|integer';
-            }
 
             $this->validate($request, $rules);
 
-            if(AppHelper::getInstituteCategory() == 'college') {
-                $academicYearId = $request->get('academic_year', 0);
-            }
-            else{
-                $academicYearId = AppHelper::getAcademicYear();
-            }
-
-
+            $academicYearId = $request->get('academic_year', 0);
             $filters = [];
-            if(AppHelper::getInstituteCategory() == 'college') {
-                $academicYearInfo = AcademicYear::where('id', $academicYearId)->first();
-                $filters[] = "Academic year: ".$academicYearInfo->title;
-            }
+            $academicYearInfo = AcademicYear::where('id', $academicYearId)->first();
+            $filters[] = "Academic year: ".$academicYearInfo->title;
+
 
             $students = collect();
             $showSection = false;
