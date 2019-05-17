@@ -198,7 +198,7 @@ $(function () {
 
         //check is feature enabled by user
         var isHidden = get('messages-menu');
-        if(!isHidden){
+        if((isHidden === "false" || isHidden == null) && $('ul.notification_top').length){
             //call notification in every 5 minutes
             //so check it and call the api
             var oldTime = localStorage.getItem('notiCallTime');
