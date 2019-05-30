@@ -311,18 +311,7 @@ $(function () {
             $pushMenu.expandOnHover()
             if (!$('body').hasClass('sidebar-collapse'))
                 $('[data-layout="sidebar-collapse"]').click()
-        })
-
-        //  Reset options
-        if ($('body').hasClass('fixed')) {
-            $('[data-layout="fixed"]').attr('checked', 'checked')
-        }
-        if ($('body').hasClass('layout-boxed')) {
-            $('[data-layout="layout-boxed"]').attr('checked', 'checked')
-        }
-        if ($('body').hasClass('sidebar-collapse')) {
-            $('[data-layout="sidebar-collapse"]').attr('checked', 'checked')
-        }
+        });
 
         //menu collapse or expand
         var isMenuCollapse = localStorage.getItem("menu-collapse");
@@ -335,22 +324,7 @@ $(function () {
 
     }
 
-    // // Create the new tab
-    // var $tabPane = $('<div />', {
-    //   'id': 'control-sidebar-theme-demo-options-tab',
-    //   'class': 'tab-pane active'
-    // })
 
-    // // Create the tab button
-    // var $tabButton = $('<li />', { 'class': 'active' })
-    //   .html('<a href=\'#control-sidebar-theme-demo-options-tab\' data-toggle=\'tab\'>'
-    //     + '<i class="fa fa-wrench"></i>'
-    //     + '</a>')
-
-    // // Add the tab button to the right sidebar tabs
-    // $('[href="#control-sidebar-home-tab"]')
-    //   .parent()
-    //   .before($tabButton)
 
     // Create the menu
     var $demoSettings = $('<div />')
@@ -502,18 +476,27 @@ $(function () {
     $('#rightSideBarContent').append($demoSettings);
 
     //sidebar menu active setter 
-    var getUrl = window.location;
-    var baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
-    var baseSubUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1] + "/" + getUrl.pathname.split('/')[2];
-    var fullUrl = getUrl.href;
-    $(".sidebar-menu li a").each(function () {
-        if ($(this).attr("href") == fullUrl || $(this).attr("href") == baseUrl || $(this).attr("href") == baseSubUrl || $(this).attr("href") == '') {
-            $(".sidebar-menu li").removeClass('active');
-            $(this).parent().parent().parents('li').addClass("active");
-            $(this).parent().addClass("active");
-        }
-
+    // var getUrl = window.location;
+    // var baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
+    // var baseSubUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1] + "/" + getUrl.pathname.split('/')[2];
+    // var fullUrl = getUrl.href;
+    // $(".sidebar-menu li a").each(function () {
+    //     if ($(this).attr("href") == fullUrl || $(this).attr("href") == baseUrl || $(this).attr("href") == baseSubUrl || $(this).attr("href") == '') {
+    //         $(".sidebar-menu li").removeClass('active');
+    //         $(this).parent().parent().parents('li').addClass("active");
+    //         $(this).parent().addClass("active");
+    //     }
+    //
+    // });
+    var url = window.location;
+    // Will only work if string in href matches with location
+    $('.sidebar-menu li a[href="' + url + '"]').parent().addClass('active');
+    // Will also work for relative and absolute hrefs
+    var activeMenuItem = $('.sidebar-menu li a').filter(function() {
+        return this.href == url;
     });
+    activeMenuItem.parent().parent().parents('li').addClass('active');
+
 
     //start setup startup page settings
     setup();
