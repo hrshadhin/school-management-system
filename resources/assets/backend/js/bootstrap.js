@@ -41,7 +41,7 @@ if (token) {
 
 require('icheck');
 require('jquery-validation');
-require('slimscroll');
+require('jquery-slimscroll');
 require('fastclick');
 window.swal = require('sweetalert2');
 require('select2');

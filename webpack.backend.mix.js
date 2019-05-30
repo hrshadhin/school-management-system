@@ -40,7 +40,7 @@ mix.js('resources/assets/backend/js/app.js', 'public/js')
         'resources/assets/backend/js/bootstrap-toggle.min.js',
     ], 'public/js/theme.js')
     .extract([
-        'jquery', 'bootstrap', 'icheck', 'jquery-validation', 'slimscroll', 'fastclick',
+        'jquery', 'bootstrap', 'icheck', 'jquery-validation', 'jquery-slimscroll', 'fastclick',
         'datatables.net', 'datatables.net-bs', 'datatables.net-responsive-bs'
     ])
     .sass('resources/assets/backend/sass/app.scss', 'public/css')
