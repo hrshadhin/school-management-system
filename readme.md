@@ -116,7 +116,6 @@ password: demo123
 <img src="./screenshot/ce/menu.png" >
 <img src="./screenshot/list.png" >
 <img src="./screenshot/ce/profile-st.png" >
-<img src="./screenshot/id1.png" >
 <img src="./screenshot/id-2.png" >
 <img src="./screenshot/attendance.jpg" >
 <img src="./screenshot/grade.png" >
