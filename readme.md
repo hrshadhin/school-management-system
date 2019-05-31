@@ -119,10 +119,10 @@ password: demo123
 <img src="./screenshot/ce/profile-st.png" >
 <img src="./screenshot/id1.png" >
 <img src="./screenshot/id-2.png" >
-<img src="./screenshot/attendance.png" >
+<img src="./screenshot/attendance.jpg" >
 <img src="./screenshot/grade.png" >
 <img src="./screenshot/rules.png" >
-<img src="./screenshot/marksheet.png" >
+<img src="./screenshot/marksheet.jpg" >
 
 **Website**
 <img src="./screenshot/home.png" >
