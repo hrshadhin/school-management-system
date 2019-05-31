@@ -34,6 +34,10 @@ For Enterprise edition checkout here [EE](https://github.com/hrshadhin/school-ma
 - Photo Gallery
 - Event Manage
 - Google Analytics
+<<<<<<< HEAD
+=======
+- User Notificateion
+>>>>>>> v2.0
 
 # Installation and use
 
@@ -114,6 +118,17 @@ password: demo123
 <img src="./screenshot/ce/dashboard.png" >
 <img src="./screenshot/site-dashboard.png" >
 <img src="./screenshot/ce/menu.png" >
+<<<<<<< HEAD
+=======
+<img src="./screenshot/list.png" >
+<img src="./screenshot/ce/profile-st.png" >
+<img src="./screenshot/id1.png" >
+<img src="./screenshot/id-2.png" >
+<img src="./screenshot/attendance.jpg" >
+<img src="./screenshot/grade.png" >
+<img src="./screenshot/rules.png" >
+<img src="./screenshot/marksheet.jpg" >
+>>>>>>> v2.0
 
 **Website**
 <img src="./screenshot/home.png" >
