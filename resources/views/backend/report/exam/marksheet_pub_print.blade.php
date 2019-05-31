@@ -65,7 +65,7 @@
                             <th>&nbsp;</th>
                             <th class="text-bold" style="text-align: right;" colspan="{{count($marksDistributionTypes)+3}}">Total Marks &amp; GPA</th>
                             <th class="text-bold">{{$result->total_marks}}</th>
-                            <th class="text-bold">{{$result->point}}</th>
+                            <th class="text-bold">@if($result->grade != "F") {{$result->point}} @else 0.00 @endif</th>
                             <th class="text-bold">{{$result->grade}}</th>
                         </tr>
                         </tfoot>
