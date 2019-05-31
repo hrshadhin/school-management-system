@@ -127,6 +127,7 @@ class UserController extends Controller
 
             $this->validate($request, [
                 'email' => 'required|email',
+                'captcha' => 'required|captcha'
             ]);
 
             $user = User::where('email', $request->get('email'))->first();
