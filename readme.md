@@ -6,7 +6,7 @@ Another School Management System build with laravel and PHP 7.
 :loudspeaker:
 **Notic:**  Now its version [v2.0](https://github.com/hrshadhin/school-management-system/releases/tag/v2.0) (community edition)
 . If you need PHP 5 support then use version [v1.0](https://github.com/hrshadhin/school-management-system/releases/tag/v1.0).
-For Enterprise edition checkout here [EE](https://github.com/hrshadhin/school-management-system/tree/ee)
+For Enterprise edition checkout here [EE](https://github.com/hrshadhin/school-management-system/tree/empty)
 
 # Features
 - Academic Year manage
