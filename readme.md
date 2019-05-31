@@ -111,8 +111,9 @@ password: demo123
 
 # Screenshot
 **Apllication**
-<img src="./screenshot/dashboard.png" >
+<img src="./screenshot/ce/dashboard.png" >
 <img src="./screenshot/site-dashboard.png" >
+<img src="./screenshot/ce/menu.png" >
 
 **Website**
 <img src="./screenshot/home.png" >
