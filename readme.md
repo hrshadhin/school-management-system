@@ -1,31 +1,43 @@
-# school-management-system(SMS)
+# school Management System (SMS)
 Another School Management System build with laravel and PHP 7.
 
 [ ![Codeship Status for hrshadhin/school-management-system](https://app.codeship.com/projects/09010350-b97f-0136-1477-5a7589b245e6/status?branch=v2.0-dev)](https://app.codeship.com/projects/312233)
 
 :loudspeaker:
-**Notic:** This branch is under development all features are not complete yet! so don't use it in production.
-if you need production use please wait for completion of the project or use version [v1.0](https://github.com/hrshadhin/school-management-system/releases/tag/v1.0).
+**Notic:**  Now its version [v2.0](https://github.com/hrshadhin/school-management-system/releases/tag/v2.0) (community edition)
+. If you need PHP 5 support then use version [v1.0](https://github.com/hrshadhin/school-management-system/releases/tag/v1.0).
+For Enterprise edition checkout here [EE](https://github.com/hrshadhin/school-management-system/tree/ee)
 
 # Features
-- Application
-- Admission
-- Attendance
-- Exam
-- Result
-- Certificate
-- Fees
-- Accounting
-- Library
-- Hostel
-- Employees
-- Leave manage
+- Academic Year manage
+- Academic Calendar Setup
+- Institute Setup
+- Class & Section
+- Subject & Teacher
+- Student Admission
+- Student Attendance
+- Exam & Grading Rules
+- Makrs & Result
+- Employees Manage
+- Employees Attendance
+- Employees Leave
+- Employees Work Outside
+- SMS Gateway Setup 
+- Attendance notification email/sms 
+- Student & Employee Id-Card mass print with templates
+- User & Role manage with permision grid(ACL)
+- User wise Dashboard
+- Report Settings
 - Reports
-- Front-end website
+- Dynamic Front Website
+- Website Management Panel
+- Photo Gallery
+- Event Manage
+- Google Analytics
 
 # Installation and use
 
-## Dependency
+**Dependency**
 - PHP >= 7.1.3
 - OpenSSL PHP Extension
 - PDO PHP Extension
@@ -41,9 +53,6 @@ if you need production use please wait for completion of the project or use vers
 ```
 $ git clone https://github.com/hrshadhin/school-management-system.git
 
-OR development branch
-
-$ git clone https://github.com/hrshadhin/school-management-system.git -b v2.0-dev --single-branch
 ```
 ```
 $ cd school-management-system
@@ -65,6 +74,9 @@ $ php artisan db:seed
 ```
 $ php artisan db:seed --class DemoSiteDataSeeder
 ```
+```
+$ php artisan db:seed --class DemoAppDataSeeder
+```
 **Clear cache**
 ```
 $ sudo php artisan cache:clear
@@ -81,27 +93,33 @@ $ npm run frontend-prod
 ```
 $ php artisan serve
 ```
-Now visit and login: http://localhost:8000 \
+Now visit and login: [http://localhost:8000](http://localhost:8000) \
 username: admin\
 password: demo123
 
-# Demo Live Link
+**Demo(Community Edition)**\
 website url: http://sms.hrshadhin.me \
-app url: http://sms.hrshadhin.me/login \
+app login: http://sms.hrshadhin.me/login \
+username: admin\
+password: demo123
+
+**Demo(Enterprise Edition)**\
+website url: http://cloudschoolbd.com \
+app login: http://cloudschoolbd.com/login \
 username: admin\
 password: demo123
 
 # Screenshot
-## Back Panel
+**Apllication**
 <img src="./screenshot/dashboard.png" >
 <img src="./screenshot/site-dashboard.png" >
 
-## Front website
+**Website**
 <img src="./screenshot/home.png" >
 
 # Security Vulnerabilities
 
-If you discover a security vulnerability within SMS, please send an e-mail to H.R. Shadhin via [hello@hrshadhin.me](mailto:hello@hrshadhin.me). All security vulnerabilities will be promptly addressed.
+If you discover a security vulnerability within SMS, please send an e-mail to H.R. Shadhin via [dev@hrshadhin.me](mailto:dev@hrshadhin.me). All security vulnerabilities will be promptly addressed.
 
 # License
 
