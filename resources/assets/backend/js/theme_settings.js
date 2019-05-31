@@ -1,5 +1,5 @@
 /**
- * AdminLTE Theme seeting
+ * AdminLTE Theme settings
  * ------------------
  */
 $(function () {
@@ -324,6 +324,24 @@ $(function () {
 
     }
 
+    /**
+     *
+     * Left menubar auto active and
+     *  Scroll to that position
+     */
+    setTimeout(function () {
+        let url =  window.location;
+        // Will only work if string in href matches with location
+        $('.sidebar-menu li a[href="' + url + '"]').parent().addClass('active');
+        // Will also work for relative and absolute hrefs
+        $('.sidebar-menu li a').filter(function () {
+            return this.href == url;
+        }).parent().parent().parents('li').addClass('active');
+        var alinkPosition = $('.sidebar-menu li a[href="' + url + '"]')[0].offsetTop;
+        $('.sidebar').scrollTop(alinkPosition);
+
+    },500);
+
 
 
     // Create the menu
@@ -333,13 +351,13 @@ $(function () {
     var checkBoxes = '<h4 class="control-sidebar-heading">'
         + 'Features'
         + '</h4>';
-        // clock
-        // + '<div class="form-group tablet-hidden hidden-xs">'
-        // + '<label class="control-sidebar-subheading">'
-        // + '<input type="checkbox"data-feature="clock-menu"class="dont-style pull-right" checked/> '
-        // + 'Clock'
-        // + '</label>'
-        // + '</div>';
+    // clock
+    // + '<div class="form-group tablet-hidden hidden-xs">'
+    // + '<label class="control-sidebar-subheading">'
+    // + '<input type="checkbox"data-feature="clock-menu"class="dont-style pull-right" checked/> '
+    // + 'Clock'
+    // + '</label>'
+    // + '</div>';
 
     if(window.frontendWebsite){
         checkBoxes += '<div class="form-group">'
@@ -488,15 +506,6 @@ $(function () {
     //     }
     //
     // });
-    var url = window.location;
-    // Will only work if string in href matches with location
-    $('.sidebar-menu li a[href="' + url + '"]').parent().addClass('active');
-    // Will also work for relative and absolute hrefs
-    var activeMenuItem = $('.sidebar-menu li a').filter(function() {
-        return this.href == url;
-    });
-    activeMenuItem.parent().parent().parents('li').addClass('active');
-
 
     //start setup startup page settings
     setup();
