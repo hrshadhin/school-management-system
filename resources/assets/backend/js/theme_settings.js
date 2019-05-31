@@ -330,15 +330,21 @@ $(function () {
      *  Scroll to that position
      */
     setTimeout(function () {
-        let url =  window.location;
-        // Will only work if string in href matches with location
-        $('.sidebar-menu li a[href="' + url + '"]').parent().addClass('active');
-        // Will also work for relative and absolute hrefs
-        $('.sidebar-menu li a').filter(function () {
-            return this.href == url;
-        }).parent().parent().parents('li').addClass('active');
-        var alinkPosition = $('.sidebar-menu li a[href="' + url + '"]')[0].offsetTop;
-        $('.sidebar').scrollTop(alinkPosition);
+        let getUrl = window.location;
+        let baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
+        let baseSubUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1] + "/" + getUrl.pathname.split('/')[2];
+        let fullUrl = getUrl.href;
+        let activeMenuItem = $(".sidebar-menu li a").filter(function () {
+            return $(this).attr("href") == fullUrl
+                || $(this).attr("href") == baseUrl
+                || $(this).attr("href") == baseSubUrl
+                || $(this).attr("href") == '';
+
+        });
+        activeMenuItem.parent().addClass("active");
+        activeMenuItem.parent().parent().parents('li').addClass("active");
+
+        $('.sidebar').scrollTop(activeMenuItem[0].offsetTop);
 
     },500);
 
@@ -492,20 +498,6 @@ $(function () {
     $demoSettings.append($skinsList)
 
     $('#rightSideBarContent').append($demoSettings);
-
-    //sidebar menu active setter 
-    // var getUrl = window.location;
-    // var baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
-    // var baseSubUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1] + "/" + getUrl.pathname.split('/')[2];
-    // var fullUrl = getUrl.href;
-    // $(".sidebar-menu li a").each(function () {
-    //     if ($(this).attr("href") == fullUrl || $(this).attr("href") == baseUrl || $(this).attr("href") == baseSubUrl || $(this).attr("href") == '') {
-    //         $(".sidebar-menu li").removeClass('active');
-    //         $(this).parent().parent().parents('li').addClass("active");
-    //         $(this).parent().addClass("active");
-    //     }
-    //
-    // });
 
     //start setup startup page settings
     setup();
