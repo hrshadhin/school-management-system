@@ -131,4 +131,4 @@ If you discover a security vulnerability within SMS, please send an e-mail to H.
 
 # License
 
-SMS is open-sourced software licensed under the AGPL-3.0 license. Frameworks and libraries has it own licensed
+SMS is open-sourced software licensed under the AGPL-3.0 license. Frameworks and libraries has it own licensed.
