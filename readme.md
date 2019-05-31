@@ -111,7 +111,6 @@ username: admin\
 password: demo123
 
 # Screenshot
-**Apllication**
 <img src="./screenshot/ce/dashboard.png" >
 <img src="./screenshot/site-dashboard.png" >
 <img src="./screenshot/ce/menu.png" >
@@ -123,8 +122,6 @@ password: demo123
 <img src="./screenshot/grade.png" >
 <img src="./screenshot/rules.png" >
 <img src="./screenshot/marksheet.jpg" >
-
-**Website**
 <img src="./screenshot/home.png" >
 
 # Security Vulnerabilities
