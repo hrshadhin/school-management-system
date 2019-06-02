@@ -39,7 +39,7 @@
                                     <th width="5%">#</th>
                                     <th width="20%">Name</th>
                                     <th width="10%">Type</th>
-                                    <th width="10%">User</th>
+                                    <th width="10%">For</th>
                                     <th width="45%">Template</th>
                                     <th class="notexport" width="10%">Action</th>
                                 </tr>
@@ -52,7 +52,7 @@
                                         </td>
                                         <td>{{ $template->name }}</td>
                                         <td>{{ $template->type }}</td>
-                                        <td>{{ $template->user->name }}</td>
+                                        <td>{{ $template->role_id }}</td>
                                         <td>{{ $template->content }}</td>
                                         <td>
                                             <div class="btn-group">

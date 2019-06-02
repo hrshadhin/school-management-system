@@ -37,9 +37,8 @@
                                 <thead>
                                 <tr>
                                     <th width="5%">#</th>
-                                    <th width="20%">Name</th>
-                                    <th width="10%">Type</th>
-                                    <th width="10%">User</th>
+                                    <th width="30%">Name</th>
+                                    <th width="10%">For</th>
                                     <th width="45%" class="notexport">Template</th>
                                     <th class="notexport" width="10%">Action</th>
                                 </tr>
@@ -51,16 +50,7 @@
                                             {{$loop->iteration}}
                                         </td>
                                         <td>{{ $template->name }}</td>
-                                        <td>{{ $template->type }}</td>
-                                        <td>
-                                            @if(AppHelper::USER_TEACHER == $template->role_id)
-                                                Employee
-                                            @else
-                                                Student
-                                            @endif
-
-
-                                        </td>
+                                        <td>{{$template->role_id}}</td>
                                         <td>
                                             <a title="Preview" href="#" data-id="{{$template->id}}" class="btn btn-info btn-sm btnIdcardPreview"><i class="fa fa-eye-slash"></i></a>
 
@@ -89,9 +79,8 @@
                                 <tfoot>
                                 <tr>
                                     <th width="5%">#</th>
-                                    <th width="20%">Name</th>
-                                    <th width="10%">Type</th>
-                                    <th width="10%">User</th>
+                                    <th width="30%">Name</th>
+                                    <th width="10%">For</th>
                                     <th width="45%" class="notexport">Template</th>
                                     <th class="notexport" width="10%">Action</th>
                                 </tr>

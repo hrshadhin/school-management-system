@@ -256,6 +256,7 @@ class StudentController extends Controller
                         'name' => $data['name'],
                         'username' => $request->get('username'),
                         'email' => $data['email'],
+                        'phone_no' => $data['phone_no'],
                         'password' => bcrypt($request->get('password')),
                         'remember_token' => null,
                     ]
@@ -731,6 +732,14 @@ class StudentController extends Controller
 
             // now save student
             $student->fill($data);
+            if(($student->isDirty('email') || $student->isDirty('phone_no'))
+                && ($student->user_id || isset($data['user_id']))){
+                $userId = $data['user_id'] ?? $student->user_id;
+                $user = User::where('id', $userId)->first();
+                $user->email = $data['email'];
+                $user->phone_no = $data['phone_no'];
+                $user->save();
+            }
             $student->save();
 
             //if have changes then insert log

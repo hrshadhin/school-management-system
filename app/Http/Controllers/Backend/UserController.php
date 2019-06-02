@@ -289,6 +289,7 @@ class UserController extends Controller
                 'username' => 'required|min:5',
                 'email' => 'required|email',
                 'name' => 'required|min:5|max:255',
+                'phone_no' => 'nullable|max:15',
             ]);
             $isExists = false;
             $oldUsername = $user->username;
@@ -315,6 +316,7 @@ class UserController extends Controller
 
             if(!$isExists){
                 $user->name = $request->get('name');
+                $user->phone_no = $request->get('phone_no','');
                 $user->email = $newEmail;
                 $user->username = $newUserName;
                 $user->save();
@@ -411,6 +413,7 @@ class UserController extends Controller
                 'email' => 'email|max:255|unique:users,email',
                 'username' => 'required|min:5|max:255|unique:users,username',
                 'password' => 'required|min:6|max:50',
+                'phone_no' => 'nullable|max:15',
                 'role_id' => 'required|numeric',
 
             ]
@@ -431,6 +434,7 @@ class UserController extends Controller
                     'name' => $data['name'],
                     'username' => $request->get('username'),
                     'email' => $data['email'],
+                    'phone_no' => $data['phone_no'],
                     'password' => bcrypt($request->get('password')),
                     'remember_token' => null,
                 ]
@@ -537,14 +541,13 @@ class UserController extends Controller
             abort(404);
         }
         //validate form
-        $this->validate(
-             $request, [
+        $this->validate($request, [
         'name' => 'required|min:5|max:255',
         'email' => 'email|max:255|unique:users,email,'.$user->id,
-        'role_id' => 'required|numeric'
+        'role_id' => 'required|numeric',
+         'phone_no' => 'nullable|max:15',
 
-            ]
-        );
+        ]);
 
         if($request->get('role_id') == AppHelper::USER_ADMIN){
             return redirect()->route('user.index')->with("error",'Do not mess with the system!!!');
@@ -554,6 +557,7 @@ class UserController extends Controller
 
         $data['name'] = $request->get('name');
         $data['email'] = $request->get('email');
+        $data['phone_no'] = $request->get('phone_no');
         $user->fill($data);
         $user->save();
 

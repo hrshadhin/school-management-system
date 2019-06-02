@@ -27,7 +27,8 @@
                 <div class="box box-info">
                     <div class="box-header">
                     <div class="callout callout-danger">
-                        <p><b>Note:</b> If you select student form user select box then some keyword will appear in tags box. You can click those any of tags for inserting into content field. if you insert [name] tag then when you send email/sms it will represent student name on that place.</p>
+                        <p><b>Note:</b> Select a option in for feild then some keyword will appear in tags box. You can click those any of tags for inserting into content field. if you insert [name] tag then when you send
+                            email/sms it will represent student/employee/user name on that place.</p>
                     </div>
 
                    </div>
@@ -66,8 +67,8 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group has-feedback">
-                                        <label for="name">Type Of User / Role<span class="text-danger">*</span></label>
-                                        {!! Form::select('role_id', $roles, $role , ['placeholder' => 'Pick a role...','class' => 'form-control select2', 'required' => 'true']) !!}
+                                        <label for="name">For<span class="text-danger">*</span></label>
+                                        {!! Form::select('role_id', AppHelper::TEMPLATE_USERS, $role , ['placeholder' => 'which for...','class' => 'form-control select2', 'required' => 'true']) !!}
                                         <span class="form-control-feedback"></span>
                                         <span class="text-danger">{{ $errors->first('role_id') }}</span>
                                     </div>
@@ -76,7 +77,7 @@
                             <div class="form-group has-feedback">
                                 <label for="name">Tags</label>
                                 <div class="border" id="email_tags">
-                                    @foreach($roles as $key => $user)
+                                    @foreach(AppHelper::TEMPLATE_USERS as $key => $user)
                                         <div class="emailtagdiv" id="email_{{$key}}" style="display: @if($role==$key) block; @else none; @endif">
                                             @if($key == AppHelper::USER_STUDENT)
                                                 <input class="btn bg-black btn-xs keyword_tag" type="button" value="@{{class}}">
@@ -98,12 +99,7 @@
                                                 <input class="btn bg-black btn-xs keyword_tag" type="button" value="@{{present_address}}">
                                                 <input class="btn bg-black btn-xs keyword_tag" type="button" value="@{{permanent_address}}">
                                                 <input class="btn bg-black btn-xs keyword_tag" type="button" value="@{{date}}">
-                                            @elseif($key == AppHelper::USER_ADMIN || $key == AppHelper::USER_PARENTS)
-                                                <input class="btn bg-black btn-xs keyword_tag" type="button" value="@{{name}}">
-                                                <input class="btn bg-black btn-xs keyword_tag" type="button" value="@{{email}}">
-                                                <input class="btn bg-black btn-xs keyword_tag" type="button" value="@{{username}}">
-                                                <input class="btn bg-black btn-xs keyword_tag" type="button" value="@{{date}}">
-                                            @else
+                                            @elseif($key == AppHelper::USER_TEACHER)
                                                 <input class="btn bg-black btn-xs keyword_tag" type="button" value="@{{name}}">
                                                 <input class="btn bg-black btn-xs keyword_tag" type="button" value="@{{designation}}">
                                                 <input class="btn bg-black btn-xs keyword_tag" type="button" value="@{{dob}}">
@@ -113,6 +109,24 @@
                                                 <input class="btn bg-black btn-xs keyword_tag" type="button" value="@{{phone_no}}">
                                                 <input class="btn bg-black btn-xs keyword_tag" type="button" value="@{{address}}">
                                                 <input class="btn bg-black btn-xs keyword_tag" type="button" value="@{{joining_date}}">
+                                                <input class="btn bg-black btn-xs keyword_tag" type="button" value="@{{username}}">
+                                                <input class="btn bg-black btn-xs keyword_tag" type="button" value="@{{date}}">
+                                            @elseif($key == AppHelper::USER_PARENTS)
+                                                <input class="btn bg-black btn-xs keyword_tag" type="button" value="@{{class}}">
+                                                <input class="btn bg-black btn-xs keyword_tag" type="button" value="@{{section}}">
+                                                <input class="btn bg-black btn-xs keyword_tag" type="button" value="@{{regi_no}}">
+                                                <input class="btn bg-black btn-xs keyword_tag" type="button" value="@{{roll_no}}">
+                                                <input class="btn bg-black btn-xs keyword_tag" type="button" value="@{{name}}">
+                                                <input class="btn bg-black btn-xs keyword_tag" type="button" value="@{{dob}}">
+                                                <input class="btn bg-black btn-xs keyword_tag" type="button" value="@{{gender}}">
+                                                <input class="btn bg-black btn-xs keyword_tag" type="button" value="@{{religion}}">
+                                                <input class="btn bg-black btn-xs keyword_tag" type="button" value="@{{email}}">
+                                                <input class="btn bg-black btn-xs keyword_tag" type="button" value="@{{phone_no}}">
+                                                <input class="btn bg-black btn-xs keyword_tag" type="button" value="@{{date}}">
+                                            @elseif($key == 0)
+                                                <input class="btn bg-black btn-xs keyword_tag" type="button" value="@{{name}}">
+                                                <input class="btn bg-black btn-xs keyword_tag" type="button" value="@{{email}}">
+                                                <input class="btn bg-black btn-xs keyword_tag" type="button" value="@{{phone_no}}">
                                                 <input class="btn bg-black btn-xs keyword_tag" type="button" value="@{{username}}">
                                                 <input class="btn bg-black btn-xs keyword_tag" type="button" value="@{{date}}">
                                             @endif
