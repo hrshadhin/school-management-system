@@ -22,9 +22,6 @@ class CreateTemplatesTable extends Migration
             $table->timestamps();
             $table->softDeletes();
             $table->userstamps();
-
-
-            $table->foreign('role_id')->references('id')->on('roles');
         });
     }
 
