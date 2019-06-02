@@ -60,7 +60,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group has-feedback">
                                         <label for="name">Name<span class="text-danger">*</span></label>
-                                        <input autofocus type="text" class="form-control" name="name" placeholder="title" value="@if($template){{ $template->name }}@else{{ old('name') }} @endif" required minlength="4" maxlength="255">
+                                        <input autofocus type="text" class="form-control" name="name" placeholder="title" value="@if($template){{ $template->name }}@else{{ old('name') }}@endif" required minlength="4" maxlength="255">
                                         <span class="fa fa-info form-control-feedback"></span>
                                         <span class="text-danger">{{ $errors->first('name') }}</span>
                                     </div>
