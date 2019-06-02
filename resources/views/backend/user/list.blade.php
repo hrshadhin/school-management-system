@@ -41,9 +41,10 @@
                             <tr>
                                 <th width="5%">#</th>
                                 <th width="20%">Name</th>
-                                <th width="10%">Username</th>
-                                <th width="30%">Email</th>
-                                <th width="10%">Role</th>
+                                <th width="8%">Username</th>
+                                <th width="25%">Email</th>
+                                <th width="12%">Phone No.</th>
+                                <th width="5%">Role</th>
                                 <th width="10%">Status</th>
                                 <th class="notexport" width="15%">Action</th>
                             </tr>
@@ -57,6 +58,7 @@
                                     <td>{{ $user->name }}</td>
                                     <td>{{ $user->username }}</td>
                                     <td>{{ $user->email }}</td>
+                                    <td>{{ $user->phone_no }}</td>
                                     <td>{{ $user->role }}</td>
                                     <td>
                                         <!-- todo: have problem in mobile device -->
@@ -95,9 +97,10 @@
                             <tr>
                                 <th width="5%">#</th>
                                 <th width="20%">Name</th>
-                                <th width="10%">Username</th>
-                                <th width="30%">Email</th>
-                                <th width="10%">Role</th>
+                                <th width="8%">Username</th>
+                                <th width="25%">Email</th>
+                                <th width="12%">Phone No.</th>
+                                <th width="5%">Role</th>
                                 <th width="10%">Status</th>
                                 <th class="notexport" width="15%">Action</th>
                             </tr>
@@ -120,7 +123,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
             window.postUrl = '{{URL::Route("user.status", 0)}}';
-            window.changeExportColumnIndex = 5;
+            window.changeExportColumnIndex = 6;
             Generic.initCommonPageJS();
             Generic.initDeleteDialog();
         });
