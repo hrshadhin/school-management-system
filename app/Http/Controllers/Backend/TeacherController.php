@@ -122,6 +122,7 @@ class TeacherController extends Controller
                     'name' => $data['name'],
                     'username' => $request->get('username'),
                     'email' => $data['email'],
+                    'phone_no' => $data['phone_no'],
                     'password' => bcrypt($request->get('password')),
                     'remember_token' => null,
                 ]
@@ -369,8 +370,13 @@ class TeacherController extends Controller
             $data['user_id'] = $request->get('user_id');
         }
 
-
         $teacher->fill($data);
+        if($teacher->isDirty('email') || $teacher->isDirty('phone_no')){
+            $user = $teacher->user()->first();
+            $user->email = $data['email'];
+            $user->phone_no = $data['phone_no'];
+            $user->save();
+        }
         $teacher->save();
 
         return redirect()->route('teacher.index')->with('success', 'Teacher updated!');

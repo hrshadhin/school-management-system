@@ -49,8 +49,8 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group has-feedback">
-                                                <label for="name">Type Of User / Role<span class="text-danger">*</span></label>
-                                                {!! Form::select('role_id', $roles, $role , ['placeholder' => 'Pick a role...','class' => 'form-control select2', 'required' => 'true']) !!}
+                                                <label for="name">For<span class="text-danger">*</span></label>
+                                                {!! Form::select('role_id', $roles, $role , ['placeholder' => 'Which for...','class' => 'form-control select2', 'required' => 'true']) !!}
                                                 <span class="form-control-feedback"></span>
                                                 <span class="text-danger">{{ $errors->first('role_id') }}</span>
                                             </div>

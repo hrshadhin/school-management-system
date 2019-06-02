@@ -19,6 +19,7 @@ class CreateUsersTable extends Migration
                 $table->string('name');
                 $table->string('username')->unique();
                 $table->string('email')->unique();
+                $table->string('phone_no',15)->nullble();
                 $table->string('password');
                 $table->rememberToken();
                 $table->boolean('force_logout')->default(0);
