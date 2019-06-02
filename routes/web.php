@@ -164,30 +164,30 @@ Route::group(
 
     // template
     //mail and sms
-    Route::get('administrator/template/mailandsms', 'AdministratorController@templateMailAndSmsIndex')
+    Route::get('administrator/template-mailandsms', 'AdministratorController@templateMailAndSmsIndex')
         ->name('administrator.template.mailsms.index');
-    Route::post('administrator/template/mailandsms', 'AdministratorController@templateMailAndSmsIndex')
+    Route::post('administrator/template-mailandsms', 'AdministratorController@templateMailAndSmsIndex')
         ->name('administrator.template.mailsms.destroy');
-    Route::get('administrator/template/mailandsms/create', 'AdministratorController@templateMailAndSmsCru')
+    Route::get('administrator/template-mailandsms/create', 'AdministratorController@templateMailAndSmsCru')
         ->name('administrator.template.mailsms.create');
-    Route::post('administrator/template/mailandsms/create', 'AdministratorController@templateMailAndSmsCru')
+    Route::post('administrator/template-mailandsms/create', 'AdministratorController@templateMailAndSmsCru')
         ->name('administrator.template.mailsms.store');
-    Route::get('administrator/template/mailandsms/edit/{id}', 'AdministratorController@templateMailAndSmsCru')
+    Route::get('administrator/template-mailandsms/edit/{id}', 'AdministratorController@templateMailAndSmsCru')
         ->name('administrator.template.mailsms.edit');
-    Route::post('administrator/template/mailandsms/update/{id}', 'AdministratorController@templateMailAndSmsCru')
+    Route::post('administrator/template-mailandsms/update/{id}', 'AdministratorController@templateMailAndSmsCru')
         ->name('administrator.template.mailsms.update');
     // id card
-    Route::get('administrator/template/idcard', 'AdministratorController@templateIdcardIndex')
+    Route::get('administrator/template-idcard', 'AdministratorController@templateIdcardIndex')
         ->name('administrator.template.idcard.index');
-    Route::post('administrator/template/idcard', 'AdministratorController@templateIdcardIndex')
+    Route::post('administrator/template-idcard', 'AdministratorController@templateIdcardIndex')
         ->name('administrator.template.idcard.destroy');
-    Route::get('administrator/template/idcard/create', 'AdministratorController@templateIdcardCru')
+    Route::get('administrator/template-idcard/create', 'AdministratorController@templateIdcardCru')
         ->name('administrator.template.idcard.create');
-    Route::post('administrator/template/idcard/create', 'AdministratorController@templateIdcardCru')
+    Route::post('administrator/template-idcard/create', 'AdministratorController@templateIdcardCru')
         ->name('administrator.template.idcard.store');
-    Route::get('administrator/template/idcard/edit/{id}', 'AdministratorController@templateIdcardCru')
+    Route::get('administrator/template-idcard/edit/{id}', 'AdministratorController@templateIdcardCru')
         ->name('administrator.template.idcard.edit');
-    Route::post('administrator/template/idcard/update/{id}', 'AdministratorController@templateIdcardCru')
+    Route::post('administrator/template-idcard/update/{id}', 'AdministratorController@templateIdcardCru')
         ->name('administrator.template.idcard.update');
 
 
