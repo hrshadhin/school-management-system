@@ -167,6 +167,7 @@ class AdministratorController extends Controller
                 'email' => 'email|max:255|unique:users,email',
                 'username' => 'required|min:5|max:255|unique:users,username',
                 'password' => 'required|min:6|max:50',
+                'phone_no' => 'nullable|max:15',
 
             ]
         );
@@ -182,6 +183,7 @@ class AdministratorController extends Controller
                     'name' => $data['name'],
                     'username' => $request->get('username'),
                     'email' => $data['email'],
+                    'phone_no' => $data['phone_no'],
                     'password' => bcrypt($request->get('password')),
                     'remember_token' => null,
                 ]
@@ -254,12 +256,14 @@ class AdministratorController extends Controller
             $request, [
                 'name' => 'required|min:5|max:255',
                 'email' => 'email|max:255|unique:users,email,'.$user->id,
+                'phone_no' => 'nullable|max:15',
             ]
         );
 
 
         $data['name'] = $request->get('name');
         $data['email'] = $request->get('email');
+        $data['phone_no'] = $request->get('phone_no');
         $user->fill($data);
         $user->save();
 
@@ -401,17 +405,14 @@ class AdministratorController extends Controller
 
             $userRole = $request->query->get('user','');
 
-            $userRoles = [];
-
+            $for = AppHelper::USER_TEACHER;
             if($userRole == "student"){
-                $userRoles[] = AppHelper::USER_STUDENT;
+                $for = AppHelper::USER_STUDENT;
             }
-            elseif ($userRole == "employee"){
-                $userRoles = Role::select('id')->whereNotIn('id', [AppHelper::USER_STUDENT, AppHelper::USER_ADMIN])->get()->pluck('id');
-            }
+
 
             $templates = Template::where('type',$request->query->get('type',0))
-                ->whereIn('role_id', $userRoles)->get();
+                ->where('role_id', $for)->get();
 
             $data = [];
             foreach ($templates as $template){
@@ -427,7 +428,7 @@ class AdministratorController extends Controller
 
         //for get request
         // AppHelper::TEMPLATE_TYPE  1=SMS , 2=EMAIL
-        $templates = Template::whereIn('type',[1,2])->with('user')->get();
+        $templates = Template::whereIn('type',[1,2])->get();
 
         return view('backend.administrator.templates.mail_and_sms.list', compact('templates'));
     }
@@ -468,15 +469,13 @@ class AdministratorController extends Controller
             return redirect()->route('administrator.template.mailsms.create')->with('success', $msg);
         }
 
-        //for get request
-        $roles = Role::pluck('name','id');
-        $role = null;
+        $role = -1;
         $template = Template::find($id);
         if($template) {
-            $role = $template->role_id;
+            $role = $template->getOriginal('role_id');
         }
 
-        return view('backend.administrator.templates.mail_and_sms.add', compact('roles', 'role', 'template'));
+        return view('backend.administrator.templates.mail_and_sms.add', compact('role', 'template'));
     }
 
 
@@ -510,7 +509,6 @@ class AdministratorController extends Controller
         if($request->ajax()){
 
             $userRole = $request->query->get('user','');
-
             $isSingle = $request->query->get('pk',0);
 
             if($isSingle){
@@ -527,17 +525,13 @@ class AdministratorController extends Controller
 
             }
 
-            $userRoles = [];
-
+            $for = AppHelper::USER_TEACHER;
             if($userRole == "student"){
-                $userRoles[] = AppHelper::USER_STUDENT;
-            }
-            elseif ($userRole == "employee"){
-                $userRoles = Role::select('id')->whereNotIn('id', [AppHelper::USER_STUDENT, AppHelper::USER_ADMIN])->get()->pluck('id');
+                $for = AppHelper::USER_STUDENT;
             }
 
             $templates = Template::where('type',3)
-                ->whereIn('role_id', $userRoles)->get();
+                ->where('role_id', $for)->get();
 
             $data = [];
             foreach ($templates as $template){
@@ -675,7 +669,7 @@ class AdministratorController extends Controller
         $roles = [  AppHelper::USER_TEACHER => "Employee", AppHelper::USER_STUDENT => "Student" ];
 
         if($template) {
-            $role = $template->role_id;
+            $role = $template->getOriginal('role_id');
             $content = json_decode($template->content);
             $formatNo = $content->format_id;
         }

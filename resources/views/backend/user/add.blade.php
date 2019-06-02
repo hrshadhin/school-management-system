@@ -39,7 +39,7 @@
                             @csrf
                             @if($user)  {{ method_field('PATCH') }} @endif
                             <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group has-feedback">
                                         <label for="name">Name<span class="text-danger">*</span></label>
                                         <input autofocus type="text" class="form-control" name="name" placeholder="name" value="@if($user){{ $user->name }}@else{{old('name')}}@endif" required minlength="2" maxlength="255">
@@ -47,7 +47,7 @@
                                         <span class="text-danger">{{ $errors->first('name') }}</span>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group has-feedback">
                                         <label for="email">Email<span class="text-danger">*</span></label>
                                         <input  type="email" class="form-control" name="email"  placeholder="email address" value="@if($user){{$user->email}}@else{{old('email')}}@endif" maxlength="100" required>
@@ -55,7 +55,15 @@
                                         <span class="text-danger">{{ $errors->first('email') }}</span>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
+                                    <div class="form-group has-feedback">
+                                        <label for="phone_no">Phone/Mobile No.</label>
+                                        <input  type="text" class="form-control" name="phone_no" placeholder="phone or mobile number" value="@if($user){{$user->phone_no}}@else{{old('phone_no')}}@endif" maxlength="15">
+                                        <span class="fa fa-phone form-control-feedback"></span>
+                                        <span class="text-danger">{{ $errors->first('phone_no') }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
                                     <div class="form-group has-feedback">
                                         <label for="role_id">User Role
                                             <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Set a user role"></i>

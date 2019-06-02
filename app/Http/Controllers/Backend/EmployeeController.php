@@ -141,6 +141,7 @@ class EmployeeController extends Controller
                         'name' => $data['name'],
                         'username' => $request->get('username'),
                         'email' => $data['email'],
+                        'phone_no' => $data['phone_no'],
                         'password' => bcrypt($request->get('password')),
                         'remember_token' => null,
                     ]
@@ -400,8 +401,13 @@ class EmployeeController extends Controller
             $data['user_id'] = $request->get('user_id');
         }
 
-
         $employee->fill($data);
+        if($employee->isDirty('email') || $employee->isDirty('phone_no')){
+            $user = $employee->user()->first();
+            $user->email = $data['email'];
+            $user->phone_no = $data['phone_no'];
+            $user->save();
+        }
         $employee->save();
 
         return redirect()->route('hrm.employee.index')->with('success', 'Employee updated!');

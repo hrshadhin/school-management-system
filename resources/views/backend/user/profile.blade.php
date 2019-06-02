@@ -45,9 +45,12 @@
                         </p>
 
                         <hr>
-
                         <strong><i class="fa fa-envelope margin-r-5"></i> Email</strong>
                         <p class="text-muted">{{$user->email}}</p>
+
+                        <hr>
+                        <strong><i class="fa fa-phone margin-r-5"></i> Phone no</strong>
+                        <p class="text-muted">{{$user->phone_no}}</p>
 
                         <hr>
 
@@ -76,6 +79,12 @@
                                 <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
                                 <span class="text-danger">{{ $errors->first('email') }}</span>
                             </div>
+                                <div class="form-group has-feedback">
+                                    <input  type="text" class="form-control" name="phone_no" placeholder="phone or mobile number" value="{{$user->phone_no}}" maxlength="15">
+                                    <span class="fa fa-phone form-control-feedback"></span>
+                                    <span class="text-danger">{{ $errors->first('phone_no') }}</span>
+                                </div>
+
                             <div class="form-group has-feedback">
                                 <input  type="text" class="form-control" value="{{$user->username}}" name="username" required minlength="5" maxlength="255">
                                 <span class="glyphicon glyphicon-user form-control-feedback"></span>

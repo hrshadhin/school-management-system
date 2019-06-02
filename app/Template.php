@@ -28,9 +28,9 @@ class Template extends Model
 
 
 
-    public function user()
+    public function getRoleIdAttribute($value)
     {
-        return $this->belongsTo('App\Role', 'role_id')->select('id','name');
+        return Arr::get(AppHelper::TEMPLATE_USERS, $value);
     }
 
     public function getTypeAttribute($value)

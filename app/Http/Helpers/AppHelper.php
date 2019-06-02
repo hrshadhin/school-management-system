@@ -92,6 +92,13 @@ class AppHelper
         3 => 'ID CARD'
     ];
 
+    const TEMPLATE_USERS = [
+        AppHelper::USER_TEACHER => "Employee",
+        AppHelper::USER_STUDENT => "Student",
+        AppHelper::USER_PARENTS => "Parents",
+        0 => "System Users"
+    ];
+
     const SMS_GATEWAY_LIST = [
         1 => 'Bulk SMS Route',
         2 => 'IT Solutionbd',
