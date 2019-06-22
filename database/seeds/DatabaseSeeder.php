@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        echo PHP_EOL , 'cleaning old data....';
+        echo PHP_EOL , 'cleaning old data....', PHP_EOL;
 
         DB::statement("SET foreign_key_checks=0");
 

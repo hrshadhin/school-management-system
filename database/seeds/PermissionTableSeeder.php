@@ -1057,7 +1057,7 @@ class PermissionTableSeeder extends Seeder
         Permission::insert($permissions);
 
 
-        echo PHP_EOL , 'seeding role permissions...';
+        echo PHP_EOL , 'seeding role permissions...', PHP_EOL;
         //now add admin role permissions
         $admin = Role::where('name', 'admin')->first();
         $permissions = Permission::get();
@@ -1072,7 +1072,7 @@ class PermissionTableSeeder extends Seeder
 
         $roles = Role::where('name', '!=', 'admin')->get();
         foreach ($roles as $role){
-            echo PHP_EOL , 'seeding '.$role->name.' permissions...';
+            echo 'seeding '.$role->name.' permissions...', PHP_EOL;
             $role->permissions()->saveMany($permissions);
         }
 

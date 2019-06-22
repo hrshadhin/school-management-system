@@ -19,7 +19,7 @@ class DemoAppDataSeeder extends Seeder
     public function run()
     {
         //truncate previous data
-        echo 'deleting old data.....';
+        echo PHP_EOL, 'deleting old data.....';
         $this->deletePreviousData();
 
         //some user with role
@@ -100,7 +100,7 @@ class DemoAppDataSeeder extends Seeder
         $this->examMarksData();
 
         //seed exam marks
-        echo PHP_EOL , 'seeding exam result...';
+        echo PHP_EOL , 'seeding exam result...', PHP_EOL;
         $this->generateResult();
 
     }

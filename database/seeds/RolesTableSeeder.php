@@ -12,7 +12,7 @@ class RolesTableSeeder extends Seeder
      */
     public function run()
     {
-        echo PHP_EOL , 'seeding roles...';
+        echo 'seeding roles...', PHP_EOL;
 
         Role::create(
             [
