@@ -14,7 +14,7 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        echo PHP_EOL , 'seeding users...';
+        echo 'seeding users...', PHP_EOL;
 
         $user= User::create(
             [
