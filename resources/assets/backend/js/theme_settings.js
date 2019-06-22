@@ -218,47 +218,54 @@ $(function () {
                     success: function (response) {
                         localStorage.setItem('notiCallTime', new Date());
                         localStorage.setItem('notifications', JSON.stringify(response));
-                    },
-                    async: false
+                        renderNotification();
+                    }
                 });
             }
+            else{
+                renderNotification();
+            }
 
-            var notifications = (typeof (localStorage.getItem('notifications')) !== "undefined") ? JSON.parse(localStorage.getItem('notifications')) : [];
-            // console.log(notifications);
-            $('.notificaton_header').text('You have '+notifications.length+' recent notifications');
-            $('.notification_badge').text(notifications.length);
-            $('ul.notification_top').empty();
-            notifications.forEach(function(notification, index){
-                var notiIcon = "fa-times-circle text-danger";
-                switch (notification.type){
-                    case "info":
-                        notiIcon = "fa-info-circle";
-                        break;
-                    case "warning":
-                        notiIcon = "fa-warning text-warning";
-                        break;
-                    case "success":
-                        notiIcon = "fa-check-circle text-success";
-                        break;
-                    default:
-                        break;
-                }
-
-                var li = '<li>\n' +
-                    '<a href="#">\n' +
-                    '    <div class="pull-left">\n'+
-                    '    <i class="fa '+ notiIcon +'"></i>\n' +
-                    '</div>\n' +
-                    '    <h4 class="notification_title">'+ notification.message +'</h4>\n' +
-                    '   <p><small class="pull-right"><i class="fa fa-clock-o"></i> '+ notification.created_at +'</small></p>\n' +
-                    '</a>\n' +
-                    '</li>';
-                $('ul.notification_top').append(li);
-            })
 
         }
 
     }
+    
+    function renderNotification() {
+        var notifications = (localStorage.getItem('notifications')) ? JSON.parse(localStorage.getItem('notifications')) : [];
+        // console.log(notifications);
+        $('.notificaton_header').text('You have '+notifications.length+' recent notifications');
+        $('.notification_badge').text(notifications.length);
+        $('ul.notification_top').empty();
+        var notiIcon = "fa-times-circle text-danger";
+        notifications.forEach(function(notification, index){
+            switch (notification.type){
+                case "info":
+                    notiIcon = "fa-info-circle text-info";
+                    break;
+                case "warning":
+                    notiIcon = "fa-warning text-warning";
+                    break;
+                case "success":
+                    notiIcon = "fa-check-circle text-success";
+                    break;
+                default:
+                    break;
+            }
+
+            var li = '<li>\n' +
+                '<a href="#">\n' +
+                '    <div class="pull-left">\n'+
+                '    <i class="fa '+ notiIcon +'"></i>\n' +
+                '</div>\n' +
+                '    <h4 class="notification_title">'+ notification.message +'</h4>\n' +
+                '   <p><small class="pull-right"><i class="fa fa-clock-o"></i> '+ notification.created_at +'</small></p>\n' +
+                '</a>\n' +
+                '</li>';
+            $('ul.notification_top').append(li);
+        })
+    }
+
 
     /**
      * Retrieve default settings and apply them to the template
