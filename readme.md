@@ -95,6 +95,9 @@ $ npm run backend-prod
 $ npm run frontend-prod
 ```
 ```
+$ php artisan storage:link
+```
+```
 $ php artisan serve
 ```
 Now visit and login: [http://localhost:8000](http://localhost:8000) \

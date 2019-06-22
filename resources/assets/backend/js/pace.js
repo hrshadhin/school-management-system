@@ -428,10 +428,11 @@
                         _this.trigger('request', {
                             type: type,
                             url: url,
-                            request: req
+                            request: req,
+                            async: true
                         });
                     }
-                    return _open.apply(req, arguments);
+                    return _open.apply(req, arguments, true);
                 };
             };
             window.XMLHttpRequest = function(flags) {
