@@ -432,7 +432,7 @@
                             async: true
                         });
                     }
-                    return _open.apply(req, arguments, true);
+                    return _open.call(req, type, url, async || true);
                 };
             };
             window.XMLHttpRequest = function(flags) {
