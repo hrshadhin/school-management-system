@@ -49,11 +49,12 @@
         "fideloper/proxy": "^4.0",
         "guzzlehttp/guzzle": "^6.3",
         "hrshadhin/laravel-userstamps": "dev-master",
-        "laravel/framework": "5.6.*",
+        "laravel/framework": "5.8.*",
         "laravel/tinker": "^1.0",
         "laravelcollective/html": "^5.4.0",
         "maatwebsite/excel": "^3.1",
         "picqer/php-barcode-generator": "^0.3.0",
+        "rap2hpoutre/laravel-log-viewer": "^1.2",
         "twilio/sdk": "^5.28"
     },
     "require-dev": {

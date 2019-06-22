@@ -21,7 +21,7 @@ class DemoSiteDataSeeder extends Seeder
     public function run()
     {
         //truncate previous data
-        echo 'deleting old data.....';
+        echo PHP_EOL, 'deleting old data.....';
         $this->deletePreviousData();
 
         //seed common settings
@@ -78,7 +78,7 @@ class DemoSiteDataSeeder extends Seeder
         $this->eventData();
 
 
-        echo PHP_EOL , 'seeding completed.';
+        echo PHP_EOL , 'seeding completed.', PHP_EOL;
 
     }
 

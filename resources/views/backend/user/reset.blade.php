@@ -46,12 +46,12 @@
                     <span class="text-danger">{{ $errors->first('email') }}</span>
                 </div>
                 <div class="form-group has-feedback">
-                    <input type="password" class="form-control" id="password" name="password" placeholder="New Password" required minlength="6" maxlength="50">
+                    <input type="password" class="form-control" id="password" name="password" placeholder="New Password" required minlength="8" maxlength="50">
                     <span class="glyphicon glyphicon-lock form-control-feedback"></span>
                     <span class="text-danger">{{ $errors->first('password') }}</span>
                 </div>
                 <div class="form-group has-feedback">
-                    <input type="password" class="form-control" name="password_confirmation" placeholder="Confirm Password" required minlength="6" maxlength="50">
+                    <input type="password" class="form-control" name="password_confirmation" placeholder="Confirm Password" required minlength="8" maxlength="50">
                     <span class="glyphicon glyphicon-lock form-control-feedback"></span>
                     <span class="text-danger">{{ $errors->first('password_confirmation') }}</span>
                 </div>
