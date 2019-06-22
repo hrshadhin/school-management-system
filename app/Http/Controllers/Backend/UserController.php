@@ -185,7 +185,7 @@ class UserController extends Controller
             $this->validate($request, [
                 'token' => 'required',
                 'email' => 'required|email',
-                'password' => 'required|confirmed|min:6|max:50',
+                'password' => 'required|confirmed|min:8|max:50',
             ]);
 
             $token = $request->get('token');
