@@ -412,20 +412,6 @@ class PermissionTableSeeder extends Seeder
                 "group" => "Academic"
             ],
             //subject end
-            // Holiday
-            [   "slug" => "academic.holiday",
-                "name" => "Holiday View",
-                "group" => "Academic"
-            ],
-            [   "slug" => "academic.holiday",
-                "name" => "Holiday Create",
-                "group" => "Academic"
-            ],
-            [   "slug" => "academic.holiday_destroy",
-                "name" => "Holiday Delete",
-                "group" => "Academic"
-            ],
-            // Holiday
             [   "slug" => "student.store",
                 "name" => "Student Create",
                 "group" => "Academic"
