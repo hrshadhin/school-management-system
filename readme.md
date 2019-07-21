@@ -116,6 +116,9 @@ app login: http://cloudschoolbd.com/login \
 username: admin\
 password: demo123
 
+**N.B:**
+- For sms and email processing you need to run laravel queue worker. `bin` folder has supervisor config for start queue worker with supervisor.
+
 # Screenshot
 <img src="./screenshot/ce/dashboard.png" >
 <img src="./screenshot/site-dashboard.png" >

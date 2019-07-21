@@ -12,9 +12,8 @@ use App\Template;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
-use Symfony\Component\Process\Process;
-
 
 class EmployeeAttendanceController extends Controller
 {
@@ -229,33 +228,9 @@ class EmployeeAttendanceController extends Controller
 
         $message = "Attendance saved successfully.";
         //check if notification need to send?
-        //todo: need uncomment these code on client deploy
-//        $sendNotification = AppHelper::getAppSettings('employee_attendance_notification');
-//        if($sendNotification != "0" && $request->has('is_send_notification')) {
-//            if($sendNotification == "1"){
-//                //then send sms notification
-//
-//                //get sms gateway information
-//                $gateway = AppMeta::where('id', AppHelper::getAppSettings('employee_attendance_gateway'))->first();
-//                if(!$gateway){
-//                    redirect()->route('employee_attendance.create')->with("warning",$message." But SMS Gateway not setup!");
-//                }
-//
-//                //get sms template information
-//                $template = Template::where('id', AppHelper::getAppSettings('employee_attendance_template'))->first();
-//                if(!$template){
-//                    redirect()->route('employee_attendance.create')->with("warning",$message." But SMS template not setup!");
-//                }
-//
-//                $res = AppHelper::sendAbsentNotificationForEmployeeViaSMS($absentIds, $attendance_date);
-//
-//            }
-//        }
-
-        //push job to queue
-        //todo: need comment these code on client deploy
         if($request->has('is_send_notification')) {
-            PushEmployeeAbsentJob::dispatch($absentIds, $attendance_date);
+            PushEmployeeAbsentJob::dispatch($absentIds, $attendance_date)
+                ->onQueue('absent');
         }
 
 
@@ -358,16 +333,9 @@ class EmployeeAttendanceController extends Controller
                     'attendance_type' => 2,
                 ]);
 
-
-                // now start the command to proccess data
-                $command = "php ".base_path()."/artisan attendance:seedEmployee";
-                $process = new Process($command);
-                $process->start();
-
-                // debug code
-//            $process->wait();
-//            echo $process->getOutput();
-//            echo $process->getErrorOutput();
+                //push command on queue
+                Artisan::queue('attendance:seedEmployee')
+                    ->onQueue('commands');
 
             } catch (\Exception $e) {
                 return redirect()->back()->with('error', $e->getMessage());

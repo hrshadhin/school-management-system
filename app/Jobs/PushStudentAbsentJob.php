@@ -99,7 +99,7 @@ class PushStudentAbsentJob implements ShouldQueue
             }
 
             if($gateway) {
-                $cellNumber = AppHelper::validateBangladeshiCellNo($studentData['student']['father_phone_no']);
+                $cellNumber = AppHelper::validateCellNo($studentData['student']['father_phone_no']);
                 if ($cellNumber) {
                     //send to a job handler
                     ProcessSms::dispatch($gateway, $cellNumber, $message)->onQueue('sms');

@@ -23,6 +23,16 @@ class SmsHelper
 
     public function sendSms($number, $message) {
 
+        //clean message for GSM extended character
+        // ~^{}[]\|
+        $message = str_replace('{', '(', $message);
+        $message = str_replace('}', ')', $message);
+        $message = str_replace('[', '(', $message);
+        $message = str_replace(']', ')', $message);
+        $message = preg_replace("/[^a-zA-Z0-9\s(),\/]/mi", "", $message);
+        $message = preg_replace("/\s{2,}/mi", " ", $message);
+
+
         try {
 
             if(!$this->gateway){
