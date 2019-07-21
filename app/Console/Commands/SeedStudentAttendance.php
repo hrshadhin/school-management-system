@@ -345,32 +345,8 @@ class SeedStudentAttendance extends Command
         try {
             if ($pendingFile->send_notification) {
                 foreach ($absentStudentIdsByDate as $attendance_date => $absentIds) {
-
-                    //todo: need uncomment these code on client deploy
-//                $sendNotification = AppHelper::getAppSettings('student_attendance_notification');
-//                if ($sendNotification != "0") {
-//                    if ($sendNotification == "1") {
-//                        //then send sms notification
-//                        //get sms gateway information
-//                        $gateway = AppMeta::where('id', AppHelper::getAppSettings('student_attendance_gateway'))->first();
-//                        if (!$gateway) {
-//                            Log::channel('studentabsentlog')->error("SMS Gateway not setup!");
-//                        }
-//
-//                        //get sms template information
-//                        $template = Template::where('id', AppHelper::getAppSettings('student_attendance_template'))->first();
-//                        if (!$template) {
-//                            Log::channel('studentabsentlog')->error("Template not setup!");
-//                        }
-//
-//                        $res = AppHelper::sendAbsentNotificationForStudentViaSMS($absentIds, $attendance_date);
-//
-//                    }
-//                }
-
-                    //push job to queue
-                    //todo: need comment these code on client deploy
-                    PushStudentAbsentJob::dispatch($absentIds, $attendance_date);
+                    PushStudentAbsentJob::dispatch($absentIds, $attendance_date)
+                        ->onQueue('absent');
                 }
             }
             $pendingFile->is_imported = 1;
