@@ -279,7 +279,7 @@ class UserController extends Controller
         $user = User::where('id',auth()->user()->id)->with('role')->first();
 
 
-        $userRole = Role::findOrFail($user->role->role_id)->first();
+        $userRole = Role::where('id',$user->role->role_id)->first();
 
 
         if ($request->isMethod('post')) {
