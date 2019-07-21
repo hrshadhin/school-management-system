@@ -573,7 +573,7 @@ class AppHelper
                 $message = str_replace('{{' . $key . '}}', $value, $message);
             }
 
-            $cellNumber = AppHelper::validateBangladeshiCellNo($studentArray['student']['father_phone_no']);
+            $cellNumber = AppHelper::validateCellNo($studentArray['student']['father_phone_no']);
 
             if($cellNumber){
 
@@ -624,7 +624,7 @@ class AppHelper
                 $message = str_replace('{{' . $key . '}}', $value, $message);
             }
 
-            $cellNumber = AppHelper::validateBangladeshiCellNo($employee->phone_no);
+            $cellNumber = AppHelper::validateCellNo($employee->phone_no);
 
             if($cellNumber){
 
@@ -672,6 +672,13 @@ class AppHelper
         return false;
 
 
+    }
+    /**
+     * @param $number
+     * @return bool|mixed|string
+     */
+    public static function validateCellNo($number) {
+        return $number;
     }
 
 

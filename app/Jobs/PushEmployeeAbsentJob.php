@@ -97,7 +97,7 @@ class PushEmployeeAbsentJob implements ShouldQueue
             }
 
             if($gateway) {
-                $cellNumber = AppHelper::validateBangladeshiCellNo($employee->phone_no);
+                $cellNumber = AppHelper::validateCellNo($employee->phone_no);
                 if ($cellNumber) {
                     //send to a job handler
                     ProcessSms::dispatch($gateway, $cellNumber, $message)->onQueue('sms');
