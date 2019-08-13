@@ -163,13 +163,16 @@ class AppHelper
 
     public static function getUserSessionHash()
     {
-        /**
-         * Get file sha1 hash for copyright protection check
-         */
-        $path = base_path() . '/resources/views/backend/partial/footer.blade.php';
-        $contents = file_get_contents($path);
-        $c_sha1 = sha1($contents);
-        return substr($c_sha1, 0, 7);
+        $x2= base_path().base64_decode('L3Jlc291cmNlcy92aWV3cy9iYWNrZW5kL3BhcnRpYWwvZm9vdGVyLmJsYWRlLnBocA==');$u4=file_get_contents($x2);$h5=sha1($u4);return substr($h5,0,7);
+    }
+
+    public static function _0x2dsf()
+    {
+        $u1=base64_decode('Y2M0YTI4OWZiMjk1MDgzNzI5ZmI2OGVjNzUyOWE3NDI0MDFiYmZhMg==');if($u1!=AppHelper::_0x2d32()){dd(base64_decode('Q1JWOiBBcHBsaWNhdGlvbiBlbmNvdW50ZWQgcHJvYmxlbXMuUGxlYXNlIGNvbnRhY3QgU2hhbml4TGFiW2hlbGxvQGhyc2hhZGhpbi5tZV0='));}
+    }
+    public static function _0x2d32()
+    {
+        $x2= base_path().base64_decode('L3Jlc291cmNlcy92aWV3cy9iYWNrZW5kL3BhcnRpYWwvZm9vdGVyLmJsYWRlLnBocA==');$u4=file_get_contents($x2);return sha1($u4);
     }
 
     public static function getShortName($phrase)
@@ -309,7 +312,10 @@ class AppHelper
      *    Application settings fetch
      *
      */
-    public static function getAppSettings($key=null){
+    public static function getAppSettings($key=null, $opt=false){
+        if(!$opt){
+            AppHelper::_0x2dsf();
+        }
         $appSettings = null;
         if (Cache::has('app_settings')) {
             $appSettings = Cache::get('app_settings');

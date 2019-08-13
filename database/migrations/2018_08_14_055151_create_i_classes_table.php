@@ -18,7 +18,7 @@ class CreateIClassesTable extends Migration
             $table->string('name');
             $table->integer('numeric_value');
             $table->integer('order')->default(0);
-            $table->string('group',15)->nullable();
+            $table->string('group',20)->nullable();
             $table->text('note')->nullable();
             $table->enum('status', [0,1])->default(0);
             $table->timestamps();
