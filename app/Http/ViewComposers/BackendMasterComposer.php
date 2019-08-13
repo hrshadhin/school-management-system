@@ -10,7 +10,7 @@ class BackendMasterComposer
     {
 
         // get app settings
-        $appSettings = AppHelper::getAppSettings();
+        $appSettings = AppHelper::getAppSettings(null, true);
 
         $view->with('frontend_website', 1);
         $view->with('show_language', 1);

@@ -73,7 +73,7 @@ class UserController extends Controller
             session(['user_session_sha1' => AppHelper::getUserSessionHash()]);
             session(['user_role_id' => auth()->user()->role->role_id]);
 
-            $appSettings = AppHelper::getAppSettings();
+            $appSettings = AppHelper::getAppSettings(null, true);
 
             $msgType = "success";
             $msg = "Welcome to admin panel.";
