@@ -296,7 +296,8 @@ class SeedEmployeeAttendance extends Command
 
         //send notification for absent
         try {
-            if ($pendingFile->send_notification) {
+            $sendNotification = AppHelper::getAppSettings('student_attendance_notification', true);
+            if ($sendNotification != "0" && $pendingFile->send_notification) {
                 foreach ($absentIds as $attendance_date => $employeeIds) {
                     PushEmployeeAbsentJob::dispatch($employeeIds, $attendance_date)
                         ->onQueue('absent');
