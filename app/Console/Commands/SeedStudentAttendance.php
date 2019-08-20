@@ -160,7 +160,7 @@ class SeedStudentAttendance extends Command
 
             //pull shift running time
             //fetch institute shift running times
-            $shiftData = AppHelper::getAppSettings('shift_data');
+            $shiftData = AppHelper::getAppSettings('shift_data', true);
             if($shiftData){
                 $shiftData = json_decode($shiftData, true);
             }
@@ -343,7 +343,8 @@ class SeedStudentAttendance extends Command
 
         //send notification for absent
         try {
-            if ($pendingFile->send_notification) {
+            $sendNotification = AppHelper::getAppSettings('student_attendance_notification', true);
+            if ($sendNotification != "0" && $pendingFile->send_notification) {
                 foreach ($absentStudentIdsByDate as $attendance_date => $absentIds) {
                     PushStudentAbsentJob::dispatch($absentIds, $attendance_date)
                         ->onQueue('absent');
