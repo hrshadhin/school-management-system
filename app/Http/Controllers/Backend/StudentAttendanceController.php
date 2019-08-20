@@ -395,7 +395,8 @@ class StudentAttendanceController extends Controller
 
         $message = "Attendance saved successfully.";
         //check if notification need to send?
-        if($request->has('is_send_notification')) {
+        $sendNotification = AppHelper::getAppSettings('student_attendance_notification', true);
+        if($sendNotification != "0" && $request->has('is_send_notification')) {
             PushStudentAbsentJob::dispatch($absentIds, $attendance_date)
                 ->onQueue('absent');
         }

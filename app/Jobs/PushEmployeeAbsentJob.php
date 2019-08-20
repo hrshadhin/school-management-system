@@ -41,13 +41,13 @@ class PushEmployeeAbsentJob implements ShouldQueue
     public function handle()
     {
         //check if notification need to send?
-        $sendNotification = AppHelper::getAppSettings('employee_attendance_notification');
+        $sendNotification = AppHelper::getAppSettings('employee_attendance_notification', true);
         if($sendNotification != "0") {
 
             if($sendNotification == "1"){
                 //then send sms notification
                 //get sms gateway information
-                $gateway = AppMeta::where('id', AppHelper::getAppSettings('employee_attendance_gateway'))->first();
+                $gateway = AppMeta::where('id', AppHelper::getAppSettings('employee_attendance_gateway', true))->first();
                 if(!$gateway){
                     Log::channel('employeeabsentlog')->error("SMS Gateway not setup!");
                     return;
@@ -77,7 +77,7 @@ class PushEmployeeAbsentJob implements ShouldQueue
         $employees = $this->getEmployees();
 
         //get sms template information
-        $template = Template::where('id', AppHelper::getAppSettings('employee_attendance_template'))->first();
+        $template = Template::where('id', AppHelper::getAppSettings('employee_attendance_template', true))->first();
         if(!$template){
             Log::channel('employeeabsentlog')->error("Template not setup!");
             return;
