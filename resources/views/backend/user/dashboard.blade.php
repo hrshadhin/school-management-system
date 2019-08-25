@@ -35,7 +35,7 @@
             <div class="row">
                 <div class="col-lg-3 col-xs-6">
                     <div class="small-box ">
-                        <a class="small-box-footer bg-orange-dark" href="#">
+                        <a class="small-box-footer bg-orange-dark" href="{{URL::route('student.index')}}">
                             <div class="icon bg-orange-dark" style="padding: 9.5px 18px 8px 18px;">
                                 <i class="fa icon-student"></i>
                             </div>
@@ -50,7 +50,7 @@
 
                 <div class="col-lg-3 col-xs-6">
                     <div class="small-box ">
-                        <a class="small-box-footer bg-pink-light" href="#">
+                        <a class="small-box-footer bg-pink-light" href="{{URL::route('teacher.index')}}">
                             <div class="icon bg-pink-light" style="padding: 9.5px 18px 8px 18px;">
                                 <i class="fa icon-teacher"></i>
                             </div>
@@ -65,7 +65,7 @@
                 </div>
                 <div class="col-lg-3 col-xs-6">
                     <div class="small-box ">
-                        <a class="small-box-footer bg-purple-light" href="#">
+                        <a class="small-box-footer bg-purple-light" href="{{URL::route('hrm.employee.index')}}">
                             <div class="icon bg-purple-light" style="padding: 9.5px 18px 8px 18px;">
                                 <i class="fa icon-member"></i>
                             </div>
@@ -81,7 +81,7 @@
 
                 <div class="col-lg-3 col-xs-6">
                     <div class="small-box ">
-                        <a class="small-box-footer bg-teal-light" href="#">
+                        <a class="small-box-footer bg-teal-light" href="{{URL::route('academic.subject')}}">
                             <div class="icon bg-teal-light" style="padding: 9.5px 18px 8px 18px;">
                                 <i class="fa icon-subject"></i>
                             </div>
