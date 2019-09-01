@@ -173,7 +173,7 @@
                                                 $color = 1;
                                             }
                                         @endphp
-                                        <li><a href="#">{{$iclass->name}} <span class="pull-right badge bg-{{$color}}">@if(count($iclass->student)) {{$iclass->student->first()->total}} @else {{0}} @endif</span></a></li>
+                                        <li><a href="{{URL::route('student.index')}}?class={{$iclass->id}}">{{$iclass->name}} <span class="pull-right badge bg-{{$color}}">@if(count($iclass->student)) {{$iclass->student->first()->total}} @else {{0}} @endif</span></a></li>
                                     @endforeach
                                 </ul>
                             </div>
@@ -200,7 +200,7 @@
                                                 $color = 1;
                                             }
                                         @endphp
-                                        <li><a href="#">{{$section->class->name}}[{{$section->name}}]<span class="pull-right badge bg-{{$color}}">@if(count($section->student)) {{$section->student->first()->total}} @else {{0}} @endif</span></a></li>
+                                        <li><a href="{{URL::route('student.index')}}?class={{$section->class->id}}&section={{$section->id}}">{{$section->class->name}}[{{$section->name}}]<span class="pull-right badge bg-{{$color}}">@if(count($section->student)) {{$section->student->first()->total}} @else {{0}} @endif</span></a></li>
                                     @endforeach
                                 </ul>
                             </div>
