@@ -63,37 +63,57 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-4">
-                                    <div class="form-group has-feedback">
-                                        <label for="logo">Logo<span class="text-danger">[230 X 50 max size and max 1MB]</span></label>
-                                        <input  type="file" class="form-control" accept=".jpeg, .jpg, .png" name="logo" placeholder="logo image">
+                                    <div class="row">
                                         @if($info && isset($info->logo))
-                                            <input type="hidden" name="oldLogo" value="{{$info->logo}}">
+                                            <div class="col-md-4 col-sm-12">
+                                                <img class="profile-user-img img-responsive img-circle" src="{{ asset('storage/logo')}}/{{ $info->logo}}">
+                                                <input type="hidden" name="oldLogo" value="{{$info->logo}}">
+                                            </div>
                                         @endif
-                                        <span class="glyphicon glyphicon-open-file form-control-feedback"></span>
-                                        <span class="text-danger">{{ $errors->first('logo') }}</span>
+                                        <div class="@if($info && isset($info->logo)) col-md-8 col-sm-12 @else col-md-12 @endif">
+                                            <div class="form-group has-feedback">
+                                                <label for="logo">Logo<span class="text-danger">[500 X 500 max size and max 2MB]</span></label>
+                                                <input  type="file" class="form-control" accept=".jpeg, .jpg, .png" name="logo" placeholder="logo image">
+                                                <span class="glyphicon glyphicon-open-file form-control-feedback"></span>
+                                                <span class="text-danger">{{ $errors->first('logo') }}</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
-
-                                    <div class="form-group has-feedback">
-                                        <label for="logo_small">Logo Small<span class="text-danger">[50 X 50 max size and max 512kb]</span></label>
-                                        <input  type="file" class="form-control" accept=".jpeg, .jpg, .png" name="logo_small" placeholder="logo image">
+                                    <div class="row">
                                         @if($info && isset($info->logo_small))
-                                            <input type="hidden" name="oldLogoSmall" value="{{$info->logo_small}}">
+                                            <div class="col-md-4 col-sm-12">
+                                                <img class="profile-user-img img-responsive img-circle" src="{{ asset('storage/logo')}}/{{ $info->logo_small}}">
+                                                <input type="hidden" name="oldLogoSmall" value="{{$info->logo_small}}">
+                                            </div>
                                         @endif
-                                        <span class="glyphicon glyphicon-open-file form-control-feedback"></span>
-                                        <span class="text-danger">{{ $errors->first('logo_small') }}</span>
+                                        <div class="@if($info && isset($info->logo_small)) col-md-8 col-sm-12 @else col-md-12 @endif">
+                                            <div class="form-group has-feedback">
+                                                <label for="logo_small">Logo Small<span class="text-danger">[150 X 150 max size and max 512kb]</span></label>
+                                                <input  type="file" class="form-control" accept=".jpeg, .jpg, .png" name="logo_small" placeholder="logo image">
+                                                <span class="glyphicon glyphicon-open-file form-control-feedback"></span>
+                                                <span class="text-danger">{{ $errors->first('logo_small') }}</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
-                                    <div class="form-group has-feedback">
-                                        <label for="favicon">Favicon<span class="text-danger">[only .png image][32 X 32 exact size and max 512KB]</span></label>
-                                        <input  type="file" class="form-control" accept=".png" name="favicon" placeholder="favicon image">
+                                    <div class="row">
                                         @if($info && isset($info->favicon))
+                                            <div class="col-md-4 col-sm-12">
+                                                <img class="profile-user-img img-responsive img-circle" src="{{ asset('storage/logo')}}/{{ $info->favicon}}">
                                             <input type="hidden" name="oldFavicon" value="{{$info->favicon}}">
+                                            </div>
                                         @endif
-                                        <span class="glyphicon glyphicon-open-file form-control-feedback"></span>
-                                        <span class="text-danger">{{ $errors->first('favicon') }}</span>
+                                        <div class="@if($info && isset($info->favicon)) col-md-8 col-sm-12 @else col-md-12 @endif">
+                                            <div class="form-group has-feedback">
+                                                <label for="favicon">Favicon<span class="text-danger">[only .png image][32 X 32 exact size and max 512KB]</span></label>
+                                                <input  type="file" class="form-control" accept=".png" name="favicon" placeholder="favicon image">
+                                                <span class="glyphicon glyphicon-open-file form-control-feedback"></span>
+                                                <span class="text-danger">{{ $errors->first('favicon') }}</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
