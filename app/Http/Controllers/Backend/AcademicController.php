@@ -69,7 +69,7 @@ class AcademicController extends Controller
                 'name' => 'required|min:2|max:255',
                 'numeric_value' => 'required|integer',
                 'order' => 'required|integer',
-                'group' => 'nullable|max:15',
+                'group' => 'nullable|max:20',
                 'note' => 'max:500',
             ]);
 

@@ -778,20 +778,22 @@ class StudentController extends Controller
         if(!$registration){
             abort(404);
         }
-        $student =  Student::find($registration->student_id);
-        if(!$student){
-            abort(404);
-        }
+        $haveStudent =  Registration::where('student_id',$registration->student_id)->count();
 
         $message = 'Something went wrong!';
         DB::beginTransaction();
         try {
 
             $registration->delete();
-            $student->delete();
-            if($student->user_id){
-                $user = User::find($student->user_id);
-                $user->delete();
+
+            $student = Student::find($registration->student_id);
+
+            if(!$haveStudent) {
+                $student->delete();
+                if ($student->user_id) {
+                    $user = User::find($student->user_id);
+                    $user->delete();
+                }
             }
             DB::commit();
 
