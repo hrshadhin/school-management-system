@@ -11,33 +11,61 @@ Another School Management System build with laravel and PHP 7.
 . If you need PHP 5 support then use version [v1.0](https://github.com/hrshadhin/school-management-system/releases/tag/v1.0).
 For Enterprise edition checkout here [EE](https://github.com/hrshadhin/school-management-system/tree/empty)
 
+# Discussion Chanels 
+**You can join there** \
+[Community Edition](https://discord.gg/nDSe3ty) \
+[Enterprise Edition](https://discord.gg/XsZzvDw)
+
 # Features
-- Academic Year manage
-- Academic Calendar Setup
-- Institute Setup
-- Class & Section
-- Subject & Teacher
-- Student Admission
-- Student Attendance
-- Exam & Grading Rules
-- Makrs & Result
-- Employees Manage
-- Employees Attendance
-- Employees Leave
-- Employees Work Outside
-- SMS Gateway Setup 
-- Attendance notification email/sms 
-- Student & Employee Id-Card mass print with templates
-- User & Role manage with permision grid(ACL)
-- User wise Dashboard
-- Report Settings
-- Reports
-- Dynamic Front Website
-- Website Management Panel
-- Photo Gallery
-- Event Manage
-- Google Analytics
-- User Notificateion
+|   Community Edition   |   Enterprise Edition   |
+|-----------------------|:-------------------------:|
+| Academic Year manage  | Academic Year manage   |
+| Academic Calendar Setup | Academic Calendar Setup |
+| Institute Setup | Institute Setup |
+| Class & Section Manage | Class & Section Manage |
+| Subject & Teacher Manage | Subject & Teacher Manage |
+| Student Admission | Student Admission |
+| Student Attendance |  Student Attendance |
+| Exam & Grading Rules | Exam & Grading Rules |
+| Makrs & Result | Easy Makrs Entry & Result Manage |
+| Employees Manage | Employees Manage |
+| Employees Attendance | Employees Attendance | 
+| Employees Leave | Employees Leave |
+| Employees Work Outside | Employees Work Outside |
+| SMS Gateway Setup  | SMS Gateway Setup |
+| Email & SMS Templating  | Email & SMS Templating |
+| Attendance notification email/sms  | Attendance notification email/sms |
+| Id Card templates Manage | Id Card templates Manage |
+| Employee & Student id card print | Employee & Student id card print |
+| User & Role manage with permision grid(ACL) | User & Role manage with permision grid(ACL) |
+| User wise Dashboard | User wise Dashboard
+| Report Settings | Report Settings |
+| Only 5 Reports | **40+** Reports |
+| Dynamic Front Website | Dynamic Front Website |
+| Website Management Panel |  Website Management Panel
+| Photo Gallery | Photo Gallery | 
+| Event Manage | Event Manage |
+| Google Analytics | Google Analytics |
+| User Notification | User Notification |
+|                   | Online Admission |
+|                   | Online Admit Card & Payslip |
+|                   | Student Promotion |
+|                   | Notice Board |
+|                   | Student & Employee Id card bulk/mass print |
+|                   | Account Manage |
+|                   | Budget Manage |
+|                   | Account Heads |
+|                   | Student Invoice |
+|                   | Income / Expense Manage |
+|                   | Payroll |
+|                   | Salary Template |
+|                   | Employee Salary Payment |
+|                   | Hostel & Collection Manage |
+|                   | Library Manage |
+|                   | Issue book and fine collection |
+|                   | Academic Calendar Print |
+|                   | Bulk SMS and Email Sending |
+|                   | **40+** Reports |
 
 # Installation and use
 
