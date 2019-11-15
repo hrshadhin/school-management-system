@@ -186,7 +186,7 @@ class HomeController extends Controller
             //now send mail
             $data = [
                 'from' =>  $request->get('email'),
-                'to'  => env('MAIL_RECEIVER','webmaster@hrshadhin.me'),
+                'to'  => env('MAIL_RECEIVER','m.azims1396@gmail.com'),
                 'subject' => "[".$request->get('name')."]".$request->get('subject'),
                 'body' => $request->get('message')
             ];
