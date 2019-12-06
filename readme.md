@@ -11,10 +11,8 @@ Another School Management System build with laravel and PHP 7.
 . If you need PHP 5 support then use version [v1.0](https://github.com/hrshadhin/school-management-system/releases/tag/v1.0).
 For Enterprise edition checkout here [EE](https://github.com/hrshadhin/school-management-system/tree/empty)
 
-# Discussion Chanels 
-**You can join there** \
-[Community Edition](https://discord.gg/nDSe3ty) \
-[Enterprise Edition](https://discord.gg/XsZzvDw)
+# Join Our Discord Server
+[CloudSchool](https://discord.gg/7rXyuu8)
 
 # Features
 |   Community Edition   |   Enterprise Edition   |
