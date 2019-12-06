@@ -12,7 +12,7 @@ Another School Management System build with laravel and PHP 7.
 For Enterprise edition checkout here [EE](https://github.com/hrshadhin/school-management-system/tree/empty)
 
 # Join Our Discord Server
-[CloudSchool](https://discord.gg/7rXyuu8)
+:mega:[CloudSchool](https://discord.gg/7rXyuu8):mega:
 
 # Features
 |   Community Edition   |   Enterprise Edition   |
