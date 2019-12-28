@@ -6,20 +6,20 @@
     <ul class="sidebar-menu" data-widget="tree">
       <li>
         <a href="{{ URL::route('user.dashboard') }}">
-          <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+          <i class="fa fa-dashboard"></i> <span>@lang('menu.dashboard')</span>
         </a>
       </li>
       @can('student.index')
         <li>
           <a href="{{ URL::route('student.index') }}">
-            <i class="fa icon-student"></i> <span>Students</span>
+            <i class="fa icon-student"></i> <span>@lang('menu.students')</span>
           </a>
         </li>
       @endcan
       @can('teacher.index')
         <li>
           <a href="{{ URL::route('teacher.index') }}">
-            <i class="fa icon-teacher"></i> <span>Teachers</span>
+            <i class="fa icon-teacher"></i> <span>@lang('menu.teachers')</span>
           </a>
         </li>
       @endcan
@@ -27,7 +27,7 @@
         <li class="treeview">
           <a href="#">
             <i class="fa icon-attendance"></i>
-            <span>Attendance</span>
+            <span>@lang('menu.attendance')</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
@@ -35,12 +35,12 @@
           <ul class="treeview-menu">
           <li>
             <a href="{{ URL::route('student_attendance.index') }}">
-              <i class="fa icon-student"></i> <span>Student Attendance</span>
+              <i class="fa icon-student"></i> <span>@lang('menu.students_attendance')</span>
             </a>
           </li>
             <li>
             <a href="{{ URL::route('employee_attendance.index') }}">
-              <i class="fa icon-member"></i> <span>Employee Attendance</span>
+              <i class="fa icon-member"></i> <span>@lang('menu.employees_attendance')</span>
             </a>
           </li>
           </ul>
@@ -50,7 +50,7 @@
       <li class="treeview">
         <a href="#">
           <i class="fa icon-academicmain"></i>
-          <span>Academic</span>
+          <span>@lang('menu.academic')</span>
           <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
@@ -60,14 +60,14 @@
           @can('academic.class')
             <li>
               <a href="{{ URL::route('academic.class') }}">
-                <i class="fa fa-sitemap"></i> <span>Class</span>
+                <i class="fa fa-sitemap"></i> <span>@lang('menu.classes')</span>
               </a>
             </li>
           @endcan
           @can('academic.section')
             <li>
               <a href="{{ URL::route('academic.section') }}">
-                <i class="fa fa-cubes"></i> <span>Section</span>
+                <i class="fa fa-cubes"></i> <span>@lang('menu.sections')</span>
               </a>
             </li>
           @endcan
@@ -76,7 +76,7 @@
           @can('academic.subject')
             <li>
               <a href="{{ URL::route('academic.subject') }}">
-                <i class="fa icon-subject"></i> <span>Subject</span>
+                <i class="fa icon-subject"></i> <span>@lang('menu.subjects')</span>
               </a>
             </li>
           @endcan
@@ -93,7 +93,7 @@
       <li class="treeview">
         <a href="#">
           <i class="fa icon-exam"></i>
-          <span>Exam</span>
+          <span>@lang('menu.exams')</span>
           <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
@@ -102,21 +102,21 @@
           @can('exam.index')
             <li>
               <a href="{{ URL::route('exam.index') }}">
-                <i class="fa icon-exam"></i> <span>Exam</span>
+                <i class="fa icon-exam"></i> <span>@lang('menu.exams')</span>
               </a>
             </li>
           @endcan
           @can('exam.grade.index')
             <li>
               <a href="{{ URL::route('exam.grade.index') }}">
-                <i class="fa fa-bar-chart"></i> <span>Grade</span>
+                <i class="fa fa-bar-chart"></i> <span>@lang('menu.grades')</span>
               </a>
             </li>
           @endcan
           @can('exam.rule.index')
             <li>
               <a href="{{ URL::route('exam.rule.index') }}">
-                <i class="fa fa-cog"></i> <span>Rule</span>
+                <i class="fa fa-cog"></i> <span>@lang('menu.rules')</span>
               </a>
             </li>
           @endcan
@@ -125,7 +125,7 @@
       <li class="treeview">
         <a href="#">
           <i class="fa icon-markmain"></i>
-          <span>Marks & Result</span>
+          <span>@lang('menu.marks_and_results')</span>
           <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
@@ -134,14 +134,14 @@
           @can('marks.index')
             <li>
               <a href="{{ URL::route('marks.index') }}">
-                <i class="fa icon-markmain"></i> <span>Marks</span>
+                <i class="fa icon-markmain"></i> <span>@lang('menu.marks')</span>
               </a>
             </li>
           @endcan
             @can('result.index')
             <li>
               <a href="{{ URL::route('result.index') }}">
-                <i class="fa icon-markpercentage"></i> <span>Result</span>
+                <i class="fa icon-markpercentage"></i> <span>@lang('menu.results')</span>
               </a>
             </li>
           @endcan
@@ -152,7 +152,7 @@
       <li class="treeview">
         <a href="#">
           <i class="fa fa-users"></i>
-          <span>HRM</span>
+          <span>@lang('menu.hrm')</span>
           <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
@@ -161,14 +161,14 @@
           @can('hrm.employee.index')
             <li>
               <a href="{{ URL::route('hrm.employee.index') }}">
-                <i class="fa icon-member"></i> <span>Employee</span>
+                <i class="fa icon-member"></i> <span>@lang('menu.employees')</span>
               </a>
             </li>
           @endcan
             @can('hrm.leave.index')
               <li>
                 <a href="{{ URL::route('hrm.leave.index') }}">
-                  <i class="fa fa-bed"></i> <span>Leave</span>
+                  <i class="fa fa-bed"></i> <span>@lang('menu.leave')</span>
                 </a>
               </li>
             @endcan
@@ -176,14 +176,14 @@
             @can('hrm.work_outside.index')
               <li>
                 <a href="{{ URL::route('hrm.work_outside.index') }}">
-                  <i class="glyphicon glyphicon-log-out"></i> <span>Work Outside</span>
+                  <i class="glyphicon glyphicon-log-out"></i> <span>@lang('menu.work_outside')</span>
                 </a>
               </li>
             @endcan
             @can('hrm.policy')
               <li>
                 <a href="{{ URL::route('hrm.policy') }}">
-                  <i class="fa fa-cogs"></i> <span>Policy</span>
+                  <i class="fa fa-cogs"></i> <span>@lang('menu.policy_settings')</span>
                 </a>
               </li>
             @endcan
@@ -194,7 +194,7 @@
       <li class="treeview">
         <a href="#">
           <i class="fa fa-user-secret"></i>
-          <span>Administrator</span>
+          <span>@lang('menu.administrator')</span>
           <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
@@ -202,33 +202,33 @@
         <ul class="treeview-menu">
           <li>
             <a href="{{ URL::route('administrator.academic_year') }}">
-              <i class="fa fa-calendar-plus-o"></i> <span>Academic Year</span>
+              <i class="fa fa-calendar-plus-o"></i> <span>@lang('menu.accademic_year')</span>
             </a>
           </li>
           <li>
             <a href="{{ URL::route('administrator.template.mailsms.index') }}">
-              <i class="fa icon-mailandsms"></i> <span>Mail/SMS Template</span>
+              <i class="fa icon-mailandsms"></i> <span>@lang('menu.mail_sms_template')</span>
             </a>
           </li>
           <li>
             <a href="{{ URL::route('administrator.template.idcard.index') }}">
-              <i class="fa fa-id-card"></i> <span>ID Card Template</span>
+              <i class="fa fa-id-card"></i> <span>@lang('menu.id_card_template')</span>
             </a>
           </li>
 
           <li>
             <a href="{{URL::route('administrator.user_index')}}">
-              <i class="fa fa-user-md"></i> <span>System Admin</span>
+              <i class="fa fa-user-md"></i> <span>@lang('menu.system_admins')</span>
             </a>
           </li>
           <li>
             <a href="{{route('administrator.user_password_reset')}}">
-              <i class="fa fa-eye-slash"></i> <span>Reset User Password</span>
+              <i class="fa fa-eye-slash"></i> <span>@lang('menu.reset_user_password')</span>
             </a>
           </li>
           <li>
             <a href="{{URL::route('user.role_index')}}">
-              <i class="fa fa-users"></i> <span>Role</span>
+              <i class="fa fa-users"></i> <span>@lang('menu.roles')</span>
             </a>
           </li>
 
@@ -250,7 +250,7 @@
       @can('user.index')
         <li>
           <a href="{{ URL::route('user.index') }}">
-            <i class="fa fa-users"></i> <span>Users</span>
+            <i class="fa fa-users"></i> <span>@lang('menu.users')</span>
           </a>
         </li>
       @endcan
@@ -258,7 +258,7 @@
       <li class="treeview">
         <a href="#">
           <i class="fa fa-file-pdf-o"></i>
-          <span>Reports</span>
+          <span>@lang('menu.reports')</span>
           <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
@@ -267,7 +267,7 @@
           <li class="treeview">
             <a href="#">
               <i class="fa icon-studentreport"></i>
-              <span>Student</span>
+              <span>@lang('menu.manage_students')</span>
               <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
@@ -276,13 +276,13 @@
 {{--              @can('report.student_monthly_attendance')--}}
                 <li>
                   <a href="{{ URL::route('report.student_monthly_attendance') }}">
-                    <i class="fa icon-attendancereport"></i> <span>Monthly Attendance</span>
+                    <i class="fa icon-attendancereport"></i> <span>@lang('menu.monthly_attendance')</span>
                   </a>
                 </li>
               {{--@endcan--}}
                 <li>
                   <a href="{{route('report.student_list')}}">
-                    <i class="fa icon-student"></i> <span>Student List</span>
+                    <i class="fa icon-student"></i> <span>@lang('menu.students_list')</span>
                   </a>
                 </li>
             </ul>
@@ -290,17 +290,17 @@
           <li class="treeview">
             <a href="#">
               <i class="fa fa-users"></i>
-              <span>HRM</span>
+              <span>@lang('menu.hrm')</span>
               <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
             </a>
             <ul class="treeview-menu">
               <li>
-                <a href="{{ URL::route('report.employee_monthly_attendance') }}"><i class="fa icon-attendancereport"></i> <span>Monthly Attendance</span></a>
+                <a href="{{ URL::route('report.employee_monthly_attendance') }}"><i class="fa icon-attendancereport"></i> <span>@lang('menu.monthly_attendance')</span></a>
               </li>
               <li>
-                <a href="{{route('report.employee_list')}}"><i class="fa icon-teacher"></i> <span>Employee List</span></a>
+                <a href="{{route('report.employee_list')}}"><i class="fa icon-teacher"></i> <span>@lang('menu.employees_list')</span></a>
               </li>
 
             </ul>
@@ -309,14 +309,14 @@
           <li class="treeview">
             <a href="#">
               <i class="fa icon-mark2"></i>
-              <span>Marks & Result</span>
+              <span>@lang('menu.marks_and_results')</span>
               <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
             </a>
             <ul class="treeview-menu">
               <li>
-                <a href="{{route('report.marksheet_pub')}}"><i class="fa fa-file-pdf-o"></i><span>Marksheet Public</span></a>
+                <a href="{{route('report.marksheet_pub')}}"><i class="fa fa-file-pdf-o"></i><span>@lang('menu.marksheet_public')</span></a>
               </li>
             </ul>
           </li>
@@ -327,7 +327,7 @@
       <li class="treeview">
         <a href="#">
           <i class="fa fa-cogs"></i>
-          <span>Settings</span>
+          <span>@lang('menu.settings')</span>
           <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
@@ -335,22 +335,22 @@
         <ul class="treeview-menu">
           <li>
             <a href="{{ URL::route('settings.institute') }}">
-              <i class="fa fa-building"></i> <span>Institute</span>
+              <i class="fa fa-building"></i> <span>@lang('menu.institute')</span>
             </a>
           </li>
           <li>
             <a href="{{ URL::route('settings.academic_calendar.index') }}">
-              <i class="fa fa-calendar"></i> <span>Academic Calendar</span>
+              <i class="fa fa-calendar"></i> <span>@lang('menu.academic_calendar')</span>
             </a>
           </li>
           <li>
             <a href="{{ URL::route('settings.sms_gateway.index') }}">
-              <i class="fa fa-external-link"></i> <span>SMS Gateways</span>
+              <i class="fa fa-external-link"></i> <span>@lang('menu.sms_gateways')</span>
             </a>
           </li>
           <li>
             <a href="{{ URL::route('settings.report') }}">
-              <i class="fa fa-file-pdf-o"></i> <span>Report</span>
+              <i class="fa fa-file-pdf-o"></i> <span>@lang('menu.reports')</span>
             </a>
           </li>
         </ul>
@@ -361,7 +361,7 @@
         <li class="treeview">
           <a href="#">
             <i class="fa fa-globe"></i>
-            <span>Site</span>
+            <span>@lang('menu.site')</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
@@ -370,36 +370,36 @@
             @can('site.dashboard')
             <li>
               <a href="{{ URL::route('site.dashboard') }}">
-                <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+                <i class="fa fa-dashboard"></i> <span>@lang('menu.dashboard')</span>
               </a>
             </li>
             @endcan
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-home"></i>
-                <span>Home</span>
+                <span>@lang('menu.home')</span>
                 <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
               </a>
               <ul class="treeview-menu">
                 @can('site.index')
-                <li><a href="{{URL::route('slider.index')}}"><i class="fa fa-picture-o text-aqua"></i> Sliders</a></li>
+                <li><a href="{{URL::route('slider.index')}}"><i class="fa fa-picture-o text-aqua"></i> @lang('menu.sliders')</a></li>
                 @endcan
                 @can('site.about_content')
-                <li><a href="{{URL::route('site.about_content')}}"><i class="fa fa-info text-aqua"></i> About Us</a></li>
+                <li><a href="{{URL::route('site.about_content')}}"><i class="fa fa-info text-aqua"></i> @lang('menu.about_us')</a></li>
                 @endcan
                 @can('site.service')
-                <li><a href="{{ URL::route('site.service') }}"><i class="fa fa-file-text text-aqua"></i> Our Services</a></li>
+                <li><a href="{{ URL::route('site.service') }}"><i class="fa fa-file-text text-aqua"></i> @lang('menu.our_services')</a></li>
                 @endcan
                 @can('site.statistic')
-                <li><a href="{{ URL::route('site.statistic') }}"><i class="fa fa-bars"></i> Statistic</a></li>
+                <li><a href="{{ URL::route('site.statistic') }}"><i class="fa fa-bars"></i> @lang('menu.statistics')</a></li>
                 @endcan
                 @can('site.testimonial')
-                <li><a href="{{ URL::route('site.testimonial') }}"><i class="fa fa-comments"></i> Testimonials</a></li>
+                <li><a href="{{ URL::route('site.testimonial') }}"><i class="fa fa-comments"></i> @lang('menu.testimonials')</a></li>
                 @endcan
                 @can('site.subscribe')
-                <li><a href="{{ URL::route('site.subscribe') }}"><i class="fa fa-users"></i> Subscribers</a></li>
+                <li><a href="{{ URL::route('site.subscribe') }}"><i class="fa fa-users"></i> @lang('menu.subscribers')</a></li>
                 @endcan
               </ul>
             </li>
@@ -407,7 +407,7 @@
               <li>
               <a href="{{ URL::route('class_profile.index') }}">
                 <i class="fa fa-building"></i>
-                <span>Class</span>
+                <span>@lang('site.menu_class')</span>
               </a>
             </li>
             @endcan
@@ -415,7 +415,7 @@
               <li>
               <a href="{{ URL::route('teacher_profile.index') }}">
                 <i class="fa icon-teacher"></i>
-                <span>Teachers</span>
+                <span>@lang('site.menu_teachers')</span>
               </a>
             </li>
             @endcan
@@ -423,7 +423,7 @@
             <li>
               <a href="{{ URL::route('event.index') }}">
                 <i class="fa fa-bullhorn"></i>
-                <span>Events</span>
+                <span>@lang('site.menu_events')</span>
               </a>
             </li>
             @endcan
@@ -431,7 +431,7 @@
             <li>
               <a href="{{ URL::route('site.gallery') }}">
                 <i class="fa fa-camera"></i>
-                <span>Gallery</span>
+                <span>@lang('site.menu_gallery')</span>
               </a>
             </li>
             @endcan
@@ -439,7 +439,7 @@
               <li>
               <a href="{{ URL::route('site.contact_us') }}">
                 <i class="fa fa-map-marker"></i>
-                <span>Contact Us</span>
+                <span>@lang('site.menu_contact_us')</span>
               </a>
             </li>
             @endcan
@@ -447,7 +447,7 @@
             <li>
               <a href="{{ URL::route('site.faq') }}">
                 <i class="fa fa-question-circle"></i>
-                <span>FAQ</span>
+                <span>@lang('site.menu_faq')</span>
               </a>
 
             </li>
@@ -455,21 +455,21 @@
              @can('site.timeline')
               <li>
               <a href="{{ URL::route('site.timeline') }}"><i class="fa fa-clock-o"></i>
-                <span>Timeline</span>
+                <span>@lang('site.menu_timeline')</span>
               </a>
             </li>
             @endcan
              @can('site.settings')
               <li>
               <a href="{{ URL::route('site.settings') }}"><i class="fa fa-cogs"></i>
-                <span>Settings</span>
+                <span>@lang('menu.settings')</span>
               </a>
             </li>
             @endcan
             @can('site.analytics')
             <li>
               <a href="{{ URL::route('site.analytics') }}"><i class="fa fa-line-chart"></i>
-                <span>Analytics</span>
+                <span>@lang('menu.analytics')</span>
               </a>
             </li>
              @endcan
