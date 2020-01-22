@@ -946,27 +946,27 @@ class PermissionTableSeeder extends Seeder
             // Grade End
             // Exam rule
             [   "slug" => "exam.rule.index",
-                "name" => "Grade View",
+                "name" => "Exam Rule View",
                 "group" => "Exam"
             ],
             [   "slug" => "exam.rule.create",
-                "name" => "Grade Create",
+                "name" => "Exam Rule Create",
                 "group" => "Exam"
             ],
             [   "slug" => "exam.rule.store",
-                "name" => "Grade Create",
+                "name" => "Exam Rule Create",
                 "group" => "Exam"
             ],
             [   "slug" => "exam.rule.edit",
-                "name" => "Grade Edit",
+                "name" => "Exam Rule Edit",
                 "group" => "Exam"
             ],
             [   "slug" => "exam.rule.update",
-                "name" => "Grade Edit",
+                "name" => "Exam Rule Edit",
                 "group" => "Exam"
             ],
             [   "slug" => "exam.rule.destroy",
-                "name" => "Grade Delete",
+                "name" => "Exam Rule Delete",
                 "group" => "Exam"
             ],
             // Exam rule End
