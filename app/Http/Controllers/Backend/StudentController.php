@@ -184,7 +184,7 @@ class StudentController extends Controller
             'guardian_phone_no' => 'nullable|max:15',
             'present_address' => 'nullable|max:500',
             'permanent_address' => 'required|max:500',
-            'card_no' => 'nullable|min:4|max:50|unique:registrations,card_no',
+            'card_no' => 'nullable|min:4|max:50',
             'username' => 'nullable|min:5|max:255|unique:users,username',
             'password' => 'nullable|min:6|max:50',
             'email' => 'nullable|email|max:255|unique:students,email',
@@ -215,6 +215,7 @@ class StudentController extends Controller
         $this->validate($request, $rules);
 
 
+
         if(AppHelper::getInstituteCategory() != 'college') {
             // now check is academic year set or not
             $settings = AppHelper::getAppSettings();
@@ -231,6 +232,18 @@ class StudentController extends Controller
         }
 
         $data = $request->all();
+
+        //card_no manual validation
+        if(strlen($data['card_no'])) {
+            $cardNoExists = Registration::where('academic_year_id', $acYearId)
+                ->where('card_no', $data['card_no'])->count();
+
+            if($cardNoExists){
+                return redirect()->route('student.create')
+                    ->with("error", 'This card number has been used for another student on this academic year!')
+                    ->withInput();
+            }
+        }
 
         if($data['nationality'] == 'Other'){
             $data['nationality']  = $data['nationality_other'];
@@ -556,7 +569,7 @@ class StudentController extends Controller
             'guardian_phone_no' => 'nullable|max:15',
             'present_address' => 'nullable|max:500',
             'permanent_address' => 'required|max:500',
-            'card_no' => 'nullable|min:4|max:50|unique:registrations,card_no,'.$regiInfo->id,
+            'card_no' => 'nullable|min:4|max:50',
             'email' => 'nullable|email|max:255|unique:students,email,'.$student->id.'|email|unique:users,email,'.$student->user_id,
 //            'class_id' => 'required|integer',
             'section_id' => 'required|integer',
@@ -575,21 +588,23 @@ class StudentController extends Controller
         }
 
 
-
         $this->validate($request, $rules);
 
+        $data = $request->all();
+        //card_no manual validation
+        if(strlen($data['card_no'])) {
+            $cardNoExists = Registration::where('academic_year_id', $regiInfo->academic_year_id)
+                ->where('card_no', $data['card_no'])
+                ->where('id', '!=', $regiInfo->id)
+                ->count();
 
-        if(AppHelper::getInstituteCategory() != 'college') {
-            // now check is academic year set or not
-            $settings = AppHelper::getAppSettings();
-            if (!isset($settings['academic_year']) || (int)($settings['academic_year']) < 1) {
-                return redirect()->back()
-                    ->with("error", 'Academic year not set yet! Please go to settings and set it.');
-
+            if($cardNoExists){
+                return redirect()->route('student.create')
+                    ->with("error", 'This card number has been used for another student on this academic year!')
+                    ->withInput();
             }
         }
 
-        $data = $request->all();
 
         if($data['nationality'] == 'Other'){
             $data['nationality']  = $data['nationality_other'];
