@@ -599,9 +599,8 @@ class StudentController extends Controller
                 ->count();
 
             if($cardNoExists){
-                return redirect()->route('student.create')
-                    ->with("error", 'This card number has been used for another student on this academic year!')
-                    ->withInput();
+                return redirect()->back()
+                    ->with("error", 'This card number has been used for another student on this academic year!');
             }
         }
 
