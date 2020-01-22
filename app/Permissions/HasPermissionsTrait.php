@@ -51,7 +51,8 @@ trait HasPermissionsTrait {
     protected function hasPermission($permission) {
 
         $that = $this;
-        $hasPermission =  Cache::rememberForever('permission'.auth()->user()->id, function() use($that, $permission) {
+        $cache_key_user = "permission_".auth()->user()->id."_".$permission->id;
+        $hasPermission =  Cache::rememberForever($cache_key_user, function() use($that, $permission) {
             return $that->permissions->where('slug', $permission->slug)->count();
         });
 
