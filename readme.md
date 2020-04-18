@@ -140,7 +140,9 @@ password: demo123
 website url: http://cloudschoolbd.com \
 app login: http://cloudschoolbd.com/login \
 username: admin\
-password: demo123
+password: demo123\
+username: superadmin\
+password: super99
 
 **N.B:**
 - For sms and email processing you need to run laravel queue worker. `bin` folder has supervisor config for start queue worker with supervisor.
