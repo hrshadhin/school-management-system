@@ -20,7 +20,7 @@ mix.webpackConfig({
         // )
         new webpack.ContextReplacementPlugin(
             // The path to directory which should be handled by this plugin
-            /moment[\/\\]locale/,
+            // /moment[\/\\]locale/,
             /select2[\/\\]dist[\/\\]js[\/\\]i18n/,
         )
     ]
@@ -68,9 +68,7 @@ mix.js('resources/assets/backend/js/app.js', 'public/js')
 
 mix.options({
     processCssUrls: true,
-    // uglify: {},
     purifyCss: false,
-    // purifyCss: {},
     clearConsole: false
 });
 
@@ -86,7 +84,3 @@ if (mix.inProduction()) {
     mix.version();
     mix.sourceMaps();
 }
-
-mix.browserSync({
-    proxy: 'l5.school.test'
-});

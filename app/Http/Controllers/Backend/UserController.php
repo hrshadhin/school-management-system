@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\AcademicYear;
 use App\Employee;
 use App\IClass;
-use App\Models\PasswordResets;
+use App\PasswordReset;
 use App\Permission;
 use App\Registration;
 use App\Role;
@@ -191,7 +191,7 @@ class UserController extends Controller
             $token = $request->get('token');
             $email = $request->get('email');
             $password = $request->get('password');
-            $reset = PasswordResets::where('email', $email)->first();
+            $reset = PasswordReset::where('email', $email)->first();
             if($reset) {
                 //token expiration checking, allow 24 hrs only
                 $today =  Carbon::now(env('APP_TIMEZONE','Asia/Dhaka'));

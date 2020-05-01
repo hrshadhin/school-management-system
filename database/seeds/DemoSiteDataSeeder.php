@@ -473,8 +473,8 @@ class DemoSiteDataSeeder extends Seeder
         }
 
         $data = [
-            'title' => 'Annual function 2018',
-            'event_time' =>  Carbon::createFromFormat('d/m/Y h:i a', '04/12/2018 01:36 pm'),
+            'title' => 'Annual function '.date('Y'),
+            'event_time' =>  Carbon::createFromFormat('d/m/Y h:i a', '20/12/'.date('Y').' 03:00 pm'),
             'cover_photo' => '',
             'slider_1' => '',
             'slider_2' => '',
@@ -508,7 +508,7 @@ class DemoSiteDataSeeder extends Seeder
 
 
         $data['title'] = 'Farewell Party';
-        $data['event_time'] = Carbon::createFromFormat('d/m/Y h:i a', '20/12/2018 03:00 pm');
+        $data['event_time'] = Carbon::now()->addDays(15);
         $data['cover_photo'] = null;
         $data['tags'] = 'farewell,party';
         $data['cover_video'] = '<iframe src="https://www.youtube.com/embed/pXfqbimmBhE" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>';

@@ -7,7 +7,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class StudentAbsent extends Mailable implements ShouldQueue
+class EmployeeAbsent extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -32,7 +32,7 @@ class StudentAbsent extends Mailable implements ShouldQueue
     public function build()
     {
         return $this->from(env('MAIL_NO_REPLY_ADDRESS','dev@hrshadhin.me'))
-            ->markdown('emails.absent.student')
+            ->markdown('emails.absent.employee')
             ->with([
                 'emailContent' => $this->emailContent
             ]);
