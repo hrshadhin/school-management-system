@@ -346,7 +346,10 @@
 <script type="text/javascript">
     window.onload = function () {
         window.print();
-        window.close();
+        window.addEventListener("afterprint", function(event) {
+            window.close();
+        })
+
     };
 </script>
 </body>

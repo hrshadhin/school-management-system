@@ -1,7 +1,7 @@
 let mixFrontend = require('laravel-mix');
 
 const fullPublicPath = "public/frontend";
-const mixManifest = fullPublicPath + '/mix-manifest.json';
+
 /*
  |--------------------------------------------------------------------------
  | Mix Frontend Asset Management
@@ -21,9 +21,7 @@ mixFrontend.js('resources/assets/frontend/js/libs.js', 'public/frontend/js')
 
 mixFrontend.options({
     processCssUrls: false,
-    // uglify: {},
     purifyCss: false,
-    // purifyCss: {},
     clearConsole: false
 });
 
@@ -39,7 +37,3 @@ if (mixFrontend.inProduction()) {
     mixFrontend.version();
     mixFrontend.sourceMaps();
 }
-
-mixFrontend.browserSync({
-    proxy: 'l5.school.test'
-});

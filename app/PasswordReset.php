@@ -1,8 +1,9 @@
 <?php
-namespace App\Models;
+namespace App;
+
 use Illuminate\Database\Eloquent\Model;
 
-class PasswordResets extends Model {
+class PasswordReset extends Model {
     /**
      * Define primary key for delete() function works.
      */
