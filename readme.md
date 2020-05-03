@@ -29,8 +29,8 @@ For Enterprise edition checkout here [EE](https://github.com/hrshadhin/school-ma
     - If its an error then paste full error log in issue details. i.e:
         ```
        The Mix manifest does not exist.
-       (View: C:\xampp\htdocs\school-management-system\resources\views\backend\layouts\front_master.blade.php) 
-      (View: C:\xampp\htdocs\school-management-system\resources\views\backend\layouts\front_master.blade.php)
+       (View: ...\cloudschool\resources\views\backend\layouts\front_master.blade.php) 
+        .......
         ```
 
 # Features
