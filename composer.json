@@ -1,9 +1,11 @@
 {
     "name": "hrshadhin/school-management-system",
-    "version": "2.0",
+    "version": "3.0.0",
     "description": "Another School Management System build with laravel",
     "keywords": [
         "School",
+        "CloudSchool",
+        "College",
         "Management",
         "Web",
         "Application",
@@ -24,14 +26,14 @@
             "name": "H.R.Shadhin",
             "email": "dev@hrshadhin.me",
             "homepage": "http://hrshadhin.me",
-            "role": "Developer"
+            "role": "Maintainer"
         }
     ],
-    "homepage": "http://school.hrshadhin.me",
-    "readme": "./readme.xml",
+    "homepage": "http://cloudschoolbd.com",
+    "readme": "./readme.md",
     "time": "2018-05-20",
     "support": {
-        "email": "hello@hrshadhin.me",
+        "email": "dev@hrshadhin.me",
         "issues": "https://github.com/hrshadhin/school-management-system/issues",
         "wiki": "https://github.com/hrshadhin/school-management-system/wiki",
         "source": "https://github.com/hrshadhin/school-management-system"
