@@ -27,13 +27,14 @@ class BackendMasterComposer
         }
 
 
-        $view->with('maintainer', 'ShanixLab');
-        $view->with('maintainer_url', 'http://shanixlab.com');
-        $view->with('majorVersion', '2');
+        $view->with('maintainer', 'CloudSchool');
+        $view->with('maintainer_url', 'http://cloudschoolbd.com');
+        $view->with('majorVersion', '3');
         $view->with('minorVersion', '0');
+        $view->with('patchVersion', '0');
         $view->with('appSettings', $appSettings);
         $view->with('languages', AppHelper::LANGUEAGES);
-        $view->with('idc', 'cc4a289fb295083729fb68ec7529a742401bbfa2');
+        $view->with('idc', '2f1aeca973c7413156bcd33355180e084a773cc9');
         $view->with('institute_category', AppHelper::getInstituteCategory());
     }
 }

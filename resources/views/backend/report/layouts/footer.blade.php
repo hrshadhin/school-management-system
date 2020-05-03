@@ -4,8 +4,8 @@
             <strong>Copyright &copy; {{date('Y')}} <i>{{$instituteName}}</i> All rights reserved.</strong>
         </div>
         <div class="col-xs-6 right">
-            <!-- Don't remove below text. Its against copy right laws. -->
-            <strong>School Management System v{{$majorVersion}}.{{$minorVersion}} || Developed by <i>{{$maintainer}}</i></strong>
+            <!-- Don't remove below text. It's violate the license. -->
+            <strong>CloudSchool v{{$majorVersion}}.{{$minorVersion}}.{{$patchVersion}} || Developed by <i>{{$maintainer}}</i></strong>
         </div>
     </div>
 </div>

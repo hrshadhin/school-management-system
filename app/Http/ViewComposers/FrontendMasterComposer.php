@@ -46,8 +46,8 @@ class FrontendMasterComposer
         }
 
 
-        $view->with('maintainer', 'ShanixLab');
-        $view->with('maintainer_url', 'http://shanixlab.com');
+        $view->with('maintainer', 'CloudSchool');
+        $view->with('maintainer_url', 'http://cloudschoolbd.com');
         $view->with('siteInfo', $siteInfo);
         $view->with('event', $upComingEvent);
         $view->with('GA_TRACKING_ID', $GA_TRACKING_ID);
