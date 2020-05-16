@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://school.hrshadhin.me'),
+    'url' => env('APP_URL', 'http://ce.cloudschoolbd.com'),
 
     /*
     |--------------------------------------------------------------------------

@@ -31,7 +31,7 @@ class StudentAbsent extends Mailable implements ShouldQueue
      */
     public function build()
     {
-        return $this->from(env('MAIL_NO_REPLY_ADDRESS','dev@hrshadhin.me'))
+        return $this->from(env('MAIL_NO_REPLY_ADDRESS','info@cloudschoolbd.com'))
             ->markdown('emails.absent.student')
             ->with([
                 'emailContent' => $this->emailContent
