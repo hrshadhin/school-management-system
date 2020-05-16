@@ -24,6 +24,7 @@ class ReportMasterComposer
         $view->with('majorVersion', '3');
         $view->with('minorVersion', '0');
         $view->with('patchVersion', '0');
+        $view->with('suffixVersion', 'ce');
         $view->with('instituteName', $instituteName);
         $view->with('instituteAddress', $instituteAddress);
         $view->with('logo', $logo);

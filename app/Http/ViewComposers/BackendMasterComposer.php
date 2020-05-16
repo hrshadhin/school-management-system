@@ -32,9 +32,10 @@ class BackendMasterComposer
         $view->with('majorVersion', '3');
         $view->with('minorVersion', '0');
         $view->with('patchVersion', '0');
+        $view->with('suffixVersion', 'ce');
         $view->with('appSettings', $appSettings);
         $view->with('languages', AppHelper::LANGUEAGES);
-        $view->with('idc', '2f1aeca973c7413156bcd33355180e084a773cc9');
+        $view->with('idc', '93b83d33891dbeee24adbc6aa9d968b4f84b7679');
         $view->with('institute_category', AppHelper::getInstituteCategory());
     }
 }
