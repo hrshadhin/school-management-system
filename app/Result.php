@@ -25,6 +25,7 @@ class Result extends Model
         'total_marks',
         'grade',
         'point',
+        'subject_fail_count',
     ];
 
 

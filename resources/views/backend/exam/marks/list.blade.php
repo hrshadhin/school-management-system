@@ -68,8 +68,11 @@
                                                 {!! Form::select('exam_id', $exams, $exam_id , ['placeholder' => 'Pick a exam...','class' => 'form-control select2', 'required' => 'true']) !!}
                                             </div>
                                         </div>
-                                        <div class="col-md-2">
-                                            <button type="submit" class="btn btn-info"><i class="fa fa-filter"></i> Get Marks</button>
+                                        <div class="col-md-6">
+                                            <div class="btn-toolbar">
+                                                <button type="submit" class="btn btn-info"><i class="fa fa-filter"></i> Get Marks</button>
+                                            </div>
+
                                         </div>
 
                                     </div>

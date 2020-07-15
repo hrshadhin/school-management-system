@@ -16,6 +16,10 @@ class PermissionMiddleware
      */
     public function handle($request, Closure $next)
     {
+        // for super admin no need to check permissions
+        if($request->user()->is_super_admin) {
+            return $next($request);
+        }
 
         $routeName = $request->route()->getName();
 

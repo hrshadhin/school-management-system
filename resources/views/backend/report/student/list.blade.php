@@ -50,7 +50,7 @@
                                             <div class="col-md-3">
                                                 <div class="form-group has-feedback">
                                                     <label for="academic_year">Academic Year<span class="text-danger">*</span></label>
-                                                    {!! Form::select('academic_year', $academic_years, null , ['placeholder' => 'Pick a year...','class' => 'form-control select2', 'required' => 'true']) !!}
+                                                    {!! Form::select('academic_year', $academic_years, $default_academic_year , ['placeholder' => 'Pick a year...','class' => 'form-control select2', 'required' => 'true']) !!}
                                                     <span class="form-control-feedback"></span>
                                                     <span class="text-danger">{{ $errors->first('academic_year') }}</span>
                                                 </div>
@@ -71,7 +71,7 @@
                                                     <span class="text-danger">{{ $errors->first('section_id') }}</span>
                                                 </div>
                                             </div>
-                                            <div class="col-md-2">
+                                            <div class="col-md-3">
                                                 <button type="submit" class="btn btn-info pull-left margin-top-24"><i class="fa fa-print"></i> Print</button>
                                             </div>
                                         </div>
@@ -85,42 +85,42 @@
                                             <div class="col-md-3">
                                                 <div class="form-group has-feedback">
                                                     <label for="academic_year">Academic Year<span class="text-danger">*</span></label>
-                                                    {!! Form::select('academic_year', $academic_years, null , ['placeholder' => 'Pick a year...','class' => 'form-control select2', 'required' => 'true']) !!}
+                                                    {!! Form::select('academic_year', $academic_years, $default_academic_year , ['placeholder' => 'Pick a year...','class' => 'form-control select2', 'required' => 'true']) !!}
                                                     <span class="form-control-feedback"></span>
                                                     <span class="text-danger">{{ $errors->first('academic_year') }}</span>
                                                 </div>
                                             </div>
                                             <div class="col-md-2">
                                                 <div class="form-group has-feedback">
-                                                    <label for="gender">Gender<span class="text-danger">*</span>
+                                                    <label for="gender">Gender
                                                         <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="select gender type"></i>
                                                     </label>
-                                                    {!! Form::select('gender', ['0' => 'All'] + AppHelper::GENDER, 0 , ['class' => 'form-control select2', 'required' => 'true']) !!}
+                                                    {!! Form::select('gender', ['0' => 'All'] + AppHelper::GENDER, 0 , ['class' => 'form-control select2']) !!}
                                                     <span class="form-control-feedback"></span>
                                                     <span class="text-danger">{{ $errors->first('gender') }}</span>
                                                 </div>
                                             </div>
-                                            <div class="col-md-3">
+                                            <div class="col-md-2">
                                                 <div class="form-group has-feedback">
-                                                    <label for="religion">Religion<span class="text-danger">*</span>
+                                                    <label for="religion">Religion
                                                         <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="select religion type"></i>
                                                     </label>
-                                                    {!! Form::select('religion', AppHelper::RELIGION, null , ['class' => 'form-control select2', 'required' => 'true']) !!}
+                                                    {!! Form::select('religion', ['0' => 'All'] + AppHelper::RELIGION, null , ['class' => 'form-control select2']) !!}
                                                     <span class="form-control-feedback"></span>
                                                     <span class="text-danger">{{ $errors->first('religion') }}</span>
                                                 </div>
                                             </div>
                                             <div class="col-md-2">
                                                 <div class="form-group has-feedback">
-                                                    <label for="blood_group">Blood Group<span class="text-danger">*</span>
+                                                    <label for="blood_group">Blood Group
                                                         <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="select blood group type"></i>
                                                     </label>
-                                                    {!! Form::select('blood_group', ['0' => 'All'] + AppHelper::BLOOD_GROUP, 0 , ['class' => 'form-control select2', 'required' => 'true']) !!}
+                                                    {!! Form::select('blood_group', ['0' => 'All'] + AppHelper::BLOOD_GROUP, 0 , ['class' => 'form-control select2']) !!}
                                                     <span class="form-control-feedback"></span>
                                                     <span class="text-danger">{{ $errors->first('blood_group') }}</span>
                                                 </div>
                                             </div>
-                                            <div class="col-md-2">
+                                            <div class="col-md-3">
                                                 <button type="submit" class="btn btn-info pull-left margin-top-24"><i class="fa fa-print"></i> Print</button>
                                             </div>
                                         </div>
@@ -141,7 +141,7 @@
 <!-- BEGIN PAGE JS-->
 @section('extraScript')
     <script type="text/javascript">
-        window.section_list_url = '{{URL::Route("academic.section")}}';
+        window.section_list_url = '{{URL::Route("public.section")}}';
         $(document).ready(function () {
             Reports.commonJs();
         });

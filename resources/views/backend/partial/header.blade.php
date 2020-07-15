@@ -35,12 +35,12 @@
          <li class="dropdown messages-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                 <i class="fa fa-bell-o"></i>
-                <span class="label label-danger"><lable class="alert-image notification_badge">0</lable></span> </a>
+                <span class="label label-warning"><lable class="alert-image notification_badge">0</lable></span> </a>
             <ul class="dropdown-menu">
                 <li class="header notificaton_header">You have 0 recent notifications</li>
                 <li>
-                        <ul class="menu notification_top">
-                        </ul>
+                <ul class="menu notification_top">
+                </ul>
                       
                 </li>
                 <li class="footer"><a href="{{route('user.notification_unread')}}">See All Notifications</a></li>

@@ -45,9 +45,9 @@
 										<div class="divider"></div>
 										<p>{{$profile->description}}</p>
 										<div class="social-link">
-											<a href="@if($profile->facebook) {{$profile->facebook}} @else # @endif" class="fa fa-facebook"></a>
-											<a href="@if($profile->google) {{$profile->google}} @else # @endif" class="fa fa-google-plus"></a>
-											<a href="@if($profile->twitter) {{$profile->twitter}} @else # @endif" class="fa fa-twitter"></a>
+											<a target="_blank" href="@if($profile->facebook) {{$profile->facebook}} @else # @endif" class="fa fa-facebook"></a>
+											<a target="_blank" href="@if($profile->instagram) {{$profile->instagram}} @else # @endif" class="fa fa-instagram"></a>
+											<a target="_blank" href="@if($profile->twitter) {{$profile->twitter}} @else # @endif" class="fa fa-twitter"></a>
 										</div>
 									</div>
 								</div>

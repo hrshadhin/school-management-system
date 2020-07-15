@@ -16,7 +16,7 @@ class CreateLeavesTable extends Migration
         Schema::create('leaves', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('employee_id');
-            $table->enum('leave_type', [1,2,3])->default(1);
+            $table->enum('leave_type', [1,2,3,4,5])->default(1);
             $table->date('leave_date');
             $table->string('document')->nullable();
             $table->text('description')->nullable();

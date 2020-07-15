@@ -39,33 +39,38 @@ return [
         ],
 
         'single' => [
-            'driver' => 'single',
+            'driver' => 'daily',
             'path' => storage_path('logs/laravel.log'),
             'level' => 'debug',
         ],
         'smsLog' => [
-            'driver' => 'single',
+            'driver' => 'daily',
             'path' => storage_path('logs/sms.log'),
             'level' => 'debug',
         ],
         'studentabsentlog' => [
-            'driver' => 'single',
+            'driver' => 'daily',
             'path' => storage_path('logs/student-absent-job.log'),
             'level' => 'debug',
         ],
         'employeeabsentlog' => [
-            'driver' => 'single',
+            'driver' => 'daily',
             'path' => storage_path('logs/employee-absent-job.log'),
             'level' => 'debug',
         ],
         'studentattendancelog' => [
-            'driver' => 'single',
+            'driver' => 'daily',
             'path' => storage_path('logs/student-attendance-upload.log'),
             'level' => 'debug',
         ],
         'employeeattendancelog' => [
-            'driver' => 'single',
+            'driver' => 'daily',
             'path' => storage_path('logs/employee-attendance-upload.log'),
+            'level' => 'debug',
+        ],
+        'bulk' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/bulk-process.log'),
             'level' => 'debug',
         ],
         'daily' => [

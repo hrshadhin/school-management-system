@@ -42,9 +42,10 @@
                                 <th width="5%">#</th>
                                 <th class="notexport" width="10%">Photo</th>
                                 <th width="10%">ID Card</th>
-                                <th width="30%">Name</th>
+                                <th width="25%">Name</th>
                                 <th width="10%">Phone No</th>
                                 <th width="10%">Type</th>
+                                <th width="5%">Order</th>
                                 <th width="10%">Status</th>
                                 <th class="notexport" width="15%">Action</th>
                             </tr>
@@ -63,6 +64,7 @@
                                     <td>{{ $employee->name }}</td>
                                     <td>{{ $employee->phone_no }}</td>
                                     <td>{{ $employee->role->name }}</td>
+                                    <td>{{$employee->order}}</td>
                                     <td>
                                         @if($employee->role->id == AppHelper::USER_TEACHER)
                                             <input disabled="disabled" type="checkbox" @if($employee->status) checked @endif data-toggle="toggle" data-on="<i class='fa fa-check-circle'></i>" data-off="<i class='fa fa-ban'></i>" data-onstyle="success" data-offstyle="danger">
@@ -105,9 +107,10 @@
                                 <th width="5%">#</th>
                                 <th class="notexport" width="10%">Photo</th>
                                 <th width="10%">ID Card</th>
-                                <th width="30%">Name</th>
+                                <th width="25%">Name</th>
                                 <th width="10%">Phone No</th>
                                 <th width="10%">Type</th>
+                                <th width="5%">Order</th>
                                 <th width="10%">Status</th>
                                 <th class="notexport" width="15%">Action</th>
                             </tr>
@@ -130,8 +133,6 @@
     <script type="text/javascript">
         $(document).ready(function () {
             window.postUrl = '{{URL::Route("hrm.employee.status", 0)}}';
-            window.changeExportColumnIndex = 5;
-            window.excludeFilterComlumns = [0,1,6,7];
             Generic.initCommonPageJS();
             Generic.initDeleteDialog();
         });

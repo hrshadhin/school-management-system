@@ -7,9 +7,9 @@ use App\Employee;
 use App\Http\Helpers\AppHelper;
 use App\Leave;
 use App\Role;
-use App\Template;
 use App\User;
 use App\UserRole;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
@@ -25,7 +25,7 @@ class EmployeeController extends Controller
     public function index()
     {
 
-        $employees = Employee::with('role')->get();
+        $employees = Employee::with('role')->orderBy('order', 'asc')->get();
 
         return view('backend.hrm.employee.list', compact('employees'));
 
@@ -45,7 +45,8 @@ class EmployeeController extends Controller
         $role = 0;
         $shift = 1;
         $roles = Role::whereNotIn('id', [AppHelper::USER_ADMIN, AppHelper::USER_TEACHER, AppHelper::USER_STUDENT, AppHelper::USER_PARENTS])->pluck('name', 'id');
-        return view('backend.hrm.employee.add', compact('employee', 'gender', 'religion', 'role', 'roles', 'shift'));
+        $designation = 0;
+        return view('backend.hrm.employee.add', compact('employee', 'gender', 'religion', 'role', 'roles', 'shift', 'designation'));
     }
 
 
@@ -60,16 +61,16 @@ class EmployeeController extends Controller
         //validate form
         $messages = [
             'photo.max' => 'The :attribute size must be under 200kb.',
-            'signature.max' => 'The :attribute size must be under 200kb.',
+            'signature.max' => 'The :attribute size must be under 100kb.',
             'photo.dimensions' => 'The :attribute dimensions min 150 X 150.',
-            'signature.dimensions' => 'The :attribute dimensions max 160 X 80.',
+            'signature.dimensions' => 'The :attribute dimensions max 170 X 60.',
         ];
 
         $rules =  [
             'name' => 'required|min:5|max:255',
             'photo' => 'mimes:jpeg,jpg,png|max:200|dimensions:min_width=150,min_height=150',
-            'signature' => 'nullable|mimes:jpeg,jpg,png|max:200|dimensions:max_width=160,max_height=80',
-            'designation' => 'max:255',
+            'signature' => 'nullable|mimes:jpeg,jpg,png|max:100|dimensions:max_width=170,max_height=60',
+            'designation' => 'required|integer',
             'qualification' => 'max:255',
             'dob' => 'min:10',
             'gender' => 'required|integer',
@@ -78,24 +79,25 @@ class EmployeeController extends Controller
             'phone_no' => 'required|min:8|max:255',
             'address' => 'max:500',
             'id_card' => 'required|min:4|max:50|unique:employees,id_card',
-            'joining_date' => 'min:10',
+            'joining_date' => 'required|min:10|max:10',
+            'leave_date' => 'nullable|min:10|max:10',
             'username' => 'nullable|min:5|max:255|unique:users,username',
             'password' => 'nullable|min:6|max:50',
             'shift' => 'nullable|integer',
             'duty_start' => 'nullable|max:8',
             'duty_end' => 'nullable|max:8',
+            'order' => 'required|integer',
 
         ];
 
-        $this->validate($request, $rules);
-
         $createUser = false;
-
         if(strlen($request->get('username',''))){
-            $rules['email' ] = 'email|max:255|unique:students,email|unique:users,email';
+            $rules['email' ] = 'required|email|max:255|unique:students,email|unique:users,email';
             $createUser = true;
 
         }
+
+        $this->validate($request, $rules);
 
 
         if($request->hasFile('photo')) {
@@ -131,6 +133,8 @@ class EmployeeController extends Controller
         $data['shift'] = $request->get('shift');
         $data['duty_start'] = $request->get('duty_start');
         $data['duty_end'] = $request->get('duty_end');
+        $data['order'] = $request->get('order');
+
 
         DB::beginTransaction();
         try {
@@ -175,7 +179,7 @@ class EmployeeController extends Controller
         catch(\Exception $e){
             DB::rollback();
             $message = str_replace(array("\r", "\n","'","`"), ' ', $e->getMessage());
-            return $message;
+//            return $message;
             return redirect()->route('hrm.employee.create')->with("error",$message);
         }
 
@@ -193,50 +197,6 @@ class EmployeeController extends Controller
      */
     public function show(Request $request, $id)
     {
-
-        // if print id card of this student then
-        // Do here
-        if($request->query->get('print_idcard',0)) {
-
-            $templateId = AppHelper::getAppSettings('employee_idcard_template');
-            $templateConfig = Template::where('id', $templateId)->where('type',3)->where('role_id', AppHelper::USER_TEACHER)->first();
-
-            if(!$templateConfig){
-                return redirect()->route('administrator.template.idcard.index')->with('error', 'Template not found!');
-            }
-
-            $templateConfig = json_decode($templateConfig->content);
-
-            $format = "format_";
-            if($templateConfig->format_id == 2){
-                $format .="two";
-            }
-            else if($templateConfig->format_id == 3){
-                $format .="three";
-            }
-            else {
-                $format .="one";
-            }
-
-            //get institute information
-            $instituteInfo = AppHelper::getAppSettings('institute_settings');
-
-
-            $employees = Employee::where('id', $id)->get();
-
-            if(!$employees){
-                abort(404);
-            }
-
-
-            $side = 'both';
-            return view('backend.report.hrm.employee.idcard.'.$format, compact(
-                'templateConfig',
-                'instituteInfo',
-                'side',
-                'employees'
-            ));
-        }
 
         $employee = Employee::with('user')->with('role')->where('id', $id)->first();
         if(!$employee){
@@ -285,6 +245,7 @@ class EmployeeController extends Controller
         $religion = $employee->getOriginal('religion');
         $role = $employee->role_id;
         $shift = $employee->getOriginal('shift');
+        $designation = $employee->getOriginal('designation');
 
         $roles = Role::whereNotIn('id', [AppHelper::USER_ADMIN, AppHelper::USER_TEACHER, AppHelper::USER_STUDENT, AppHelper::USER_PARENTS])->pluck('name', 'id');
 
@@ -298,7 +259,7 @@ class EmployeeController extends Controller
                ->pluck('name', 'id');
         }
 
-        return view('backend.hrm.employee.add', compact('employee', 'gender', 'religion', 'role', 'roles', 'shift','users'));
+        return view('backend.hrm.employee.add', compact('employee', 'gender', 'religion', 'role', 'roles', 'shift','users', 'designation'));
 
     }
 
@@ -320,16 +281,16 @@ class EmployeeController extends Controller
         //validate form
         $messages = [
             'photo.max' => 'The :attribute size must be under 200kb.',
-            'signature.max' => 'The :attribute size must be under 200kb.',
+            'signature.max' => 'The :attribute size must be under 100kb.',
             'photo.dimensions' => 'The :attribute dimensions min 150 X 150.',
-            'signature.dimensions' => 'The :attribute dimensions max 160 X 80.',
+            'signature.dimensions' => 'The :attribute dimensions max 170 X 60.',
         ];
         $this->validate(
             $request, [
                 'name' => 'required|min:5|max:255',
                 'photo' => 'mimes:jpeg,jpg,png|max:200|dimensions:min_width=150,min_height=150',
-                'signature' => 'mimes:jpeg,jpg,png|max:200|dimensions:max_width=160,max_height=80',
-                'designation' => 'max:255',
+                'signature' => 'mimes:jpeg,jpg,png|max:100|dimensions:max_width=170,max_height=60',
+                'designation' => 'required|integer',
                 'qualification' => 'max:255',
                 'dob' => 'min:10',
                 'gender' => 'required|integer',
@@ -338,11 +299,13 @@ class EmployeeController extends Controller
                 'phone_no' => 'required|min:8|max:255',
                 'address' => 'max:500',
                 'id_card' => 'required|min:4|max:50|unique:employees,id_card,'.$employee->id,
-                'joining_date' => 'min:10',
+                'joining_date' => 'required|min:10|max:10',
+                'leave_date' => 'nullable|min:10|max:10',
                 'shift' => 'nullable|integer',
                 'duty_start' => 'nullable|max:8',
                 'duty_end' => 'nullable|max:8',
                 'user_id' => 'nullable|integer',
+                'order' => 'required|integer',
 
             ]
         );
@@ -390,11 +353,13 @@ class EmployeeController extends Controller
         $data['phone_no'] = $request->get('phone_no');
         $data['address'] = $request->get('address');
         $data['joining_date'] = $request->get('joining_date');
+        $data['leave_date'] = $request->get('leave_date');
         $data['id_card'] = $request->get('id_card');
         $data['role_id'] = $request->get('role_id', 0);
         $data['shift'] = $request->get('shift', 1);
         $data['duty_start'] = $request->get('duty_start', '');
         $data['duty_end'] = $request->get('duty_end', '');
+        $data['order'] = $request->get('order');
 
         //
         if(!$employee->user_id && $request->get('user_id', 0)){
@@ -482,7 +447,14 @@ class EmployeeController extends Controller
             ];
         }
 
-        $employee->status = (string)$request->get('status');
+        $status = (string)$request->get('status');
+        $employee->status = $status;
+        if($status == '0'){
+            $employee->leave_date = Carbon::now(env('APP_TIMEZONE','Asia/Dhaka'))->format('d/m/Y');
+        }
+        else{
+            $employee->leave_date = null;
+        }
 
         $employee->save();
 
@@ -507,7 +479,9 @@ class EmployeeController extends Controller
 
             $rules = [
                 'total_casual_leave' => 'required|integer',
-                'total_sick_leave' => 'required|integer'
+                'total_sick_leave' => 'required|integer',
+                'total_maternity_leave' => 'required|integer',
+                'total_special_leave' => 'required|integer'
                 ];
 
 
@@ -521,6 +495,14 @@ class EmployeeController extends Controller
             AppMeta::updateOrCreate(
                 ['meta_key' => 'total_sick_leave'],
                 ['meta_value' => $request->get('total_sick_leave', 0)]
+            );
+            AppMeta::updateOrCreate(
+                ['meta_key' => 'total_maternity_leave'],
+                ['meta_value' => $request->get('total_maternity_leave', 0)]
+            );
+            AppMeta::updateOrCreate(
+                ['meta_key' => 'total_special_leave'],
+                ['meta_value' => $request->get('total_special_leave', 0)]
             );
 
 
@@ -537,7 +519,7 @@ class EmployeeController extends Controller
 
 
         $policies = AppMeta::whereIn('meta_key',
-            ['total_casual_leave', 'total_sick_leave']
+            ['total_casual_leave', 'total_sick_leave','total_maternity_leave','total_special_leave']
         )->get();
 
         $metas = [];

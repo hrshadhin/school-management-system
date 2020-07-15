@@ -1,3 +1,5 @@
+import Academic from "./Academic";
+
 export default class Administrator {
     /**
      * administrator related codes
@@ -24,57 +26,14 @@ export default class Administrator {
             viewMode: 'days',
             ignoreReadonly: true
         });
-        var buttonCommon = {
-            exportOptions: {
-                columns: ':not(.notexport)',
-                format: {
-                    body: function (data, row, column, node) {
-                        if (column === 4) {
-                            data = /checked/.test(data) ? 'Active' : 'Deactive';
-                        }
-                        return data;
-                    }
-                }
-            }
-        };
+
         var table = $('#listTable').DataTable({
             pageLength: 25,
             lengthChange: false,
             responsive: true,
-            buttons: [
-                $.extend(true, {}, buttonCommon, {
-                    extend: 'copy',
-                    text: '<i class="fa fa-files-o"></i>',
-                    titleAttr: 'copy',
-                }),
-                $.extend(true, {}, buttonCommon, {
-                    extend: 'csv',
-                    text: '<i class="fa fa-file-text-o"></i>',
-                    titleAttr: 'csv',
-                }),
-                $.extend(true, {}, buttonCommon, {
-                    extend: 'excel',
-                    text: '<i class="fa fa-file-excel-o"></i>',
-                    titleAttr: 'Excel',
-                }),
-                $.extend(true, {}, buttonCommon, {
-                    extend: 'pdf',
-                    text: '<i class="fa fa-file-pdf-o"></i>',
-                    titleAttr: 'pdf',
-                    customize: function (doc) {
-                        doc.content[1].table.widths = Array(doc.content[1].table.body[0].length + 1).join('*').split('');
-                        doc.content[1].alignment = "center";
-                    }
-                }),
-                $.extend(true, {}, buttonCommon, {
-                    extend: 'print',
-                    text: '<i class="fa fa-print"></i>',
-                    titleAttr: 'print',
-                })
-            ]
         });
 
-        table.buttons().container().appendTo($('.col-sm-6:eq(0)', table.table().container()));
+        // table.buttons().container().appendTo($('.col-sm-6:eq(0)', table.table().container()));
 
         let stopchange = false;
         $('.statusChange').change(function (e) {
@@ -194,7 +153,6 @@ export default class Administrator {
         $('.select2').select2();
 
         $('select[name="format_id"]').on('change', function () {
-            console.log('format chagned');
             var format = $(this).val();
             if(format) {
                 var fullTemplateUrl = templateMainUrl + format + ".html";
@@ -242,7 +200,6 @@ export default class Administrator {
             }
 
             //if not edit form
-            console.log(window.liveChange);
             if(window.liveChange) {
                 logoDataImage = $('#idFrame').contents().find('body div.logo img').attr('src');
                 signatureDataImage = $('#idFrame').contents().find('body div.signature img').attr('src');
@@ -448,8 +405,6 @@ export default class Administrator {
                         toastr.warning("Template content not found!");
                     }
                 }).catch((error) => {
-
-                    console.log(error);
                     Generic.loaderStop();
 
              });
@@ -526,8 +481,5 @@ export default class Administrator {
                 }
             }
 
-
         }
-
-
 }

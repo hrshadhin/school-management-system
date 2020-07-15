@@ -69,6 +69,20 @@
                                     <span class="text-danger">{{ $errors->first('marks_distribution_types') }}</span>
                                 </div>
                             </div>
+
+                            <div class="col-md-2">
+                                <div class="form-group has-feedback">
+                                    <label for="open_for_marks_entry">Open for marks entry
+                                        <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="If not check it then exam will not show in marks entry form. So before marks entry check it. Its helps to protect from accidental marks entry in wrong exam."></i>
+                                        <div class="checkbox icheck">
+                                            <label>
+                                                {!! Form::checkbox('open_for_marks_entry', $open_for_marks_entry, $open_for_marks_entry) !!}
+                                            </label>
+                                        </div>
+                                    </label>
+                                    <span class="text-danger">{{ $errors->first('open_for_marks_entry') }}</span>
+                                </div>
+                            </div>
                         </div>
 
                     </div>

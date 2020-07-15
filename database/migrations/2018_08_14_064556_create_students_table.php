@@ -17,6 +17,7 @@ class CreateStudentsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('user_id')->nullable();
             $table->string('name');
+            $table->string('nick_name',50)->nullable();
             $table->string('dob',10);
             $table->enum('gender', [1,2])->default(1);
             $table->string('religion')->nullable();
@@ -35,6 +36,9 @@ class CreateStudentsTable extends Migration
             $table->string('guardian_phone_no',15)->nullable();
             $table->string('present_address',500)->nullable();
             $table->string('permanent_address',500);
+            $table->smallInteger('sms_receive_no')->default(1); //0=none,1=father,2=mother,3=guardian
+            $table->string('siblings')->nullable();
+            $table->string('signature')->nullable();
             $table->enum('status', [0,1])->default(1);
 
 

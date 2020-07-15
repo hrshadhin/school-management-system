@@ -22,24 +22,33 @@
 @section('pageContent')
     <!-- Section header -->
     <section class="content-header">
+        @notrole('Student')
         <div class="btn-group">
             <a href="#"  class="btn-ta btn-sm-ta btn-print btnPrintInformation"><i class="fa fa-print"></i> Print</a>
         </div>
-        <div class="btn-group">
-            <a href="{{URL::route('student.show',$student->id)}}?print_idcard=1" target="_blank" class="btn-ta btn-sm-ta"><i class="fa fa-id-card"></i> ID Card</a>
-
-
-        </div>
-        <div class="btn-group">
-            <a href="{{URL::route('student.edit',$student->id)}}" class="btn-ta btn-sm-ta"><i class="fa fa-edit"></i> Edit</a>
-        </div>
+        @if($student->is_promoted == '0')
+            <div class="btn-group">
+                <a href="{{URL::route('student.edit',$student->id)}}" class="btn-ta btn-sm-ta"><i class="fa fa-edit"></i> Edit</a>
+            </div>
+        @endif
 
         <ol class="breadcrumb">
             <li><a href="{{URL::route('user.dashboard')}}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
             <li><a href="{{URL::route('student.index')}}"><i class="fa icon-student"></i> Student</a></li>
             <li class="active">View</li>
         </ol>
+        @endnotrole
+        @role('Student')
+        <h1>
+            Academic Details
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="{{URL::route('user.dashboard')}}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+            <li class="active">Academic</li>
+        </ol>
+        @endrole
     </section>
+
     <!-- ./Section header -->
     <!-- Main content -->
     <section class="content">
@@ -49,7 +58,7 @@
                     <div class="col-sm-3">
                         <div class="box box-info">
                             <div class="box-body box-profile">
-                                <img class="profile-user-img img-responsive img-circle" src="@if($student->student->photo ){{ asset('storage/student')}}/{{ $student->class_id }}/{{ $student->student->photo }} @else {{ asset('images/avatar.jpg')}} @endif">
+                                <img class="profile-user-img img-responsive img-circle" src="@if($student->student->photo ){{ asset('storage/student')}}/{{ $student->student->photo }} @else {{ asset('images/avatar.jpg')}} @endif">
                                 <h3 class="profile-username text-center">{{$student->student->name}}</h3>
                                 <p class="text-muted text-center">{{$student->class->name}}</p>
                                 <ul class="list-group list-group-unbordered">
@@ -74,12 +83,9 @@
                 <div class="nav-tabs-custom">
                     <ul class="nav nav-tabs">
                         <li class="active"><a href="#information" data-toggle="tab">Profile</a></li>
-                        {{--<li><a href="#routine" data-toggle="tab">Routine</a></li>--}}
+                        <li><a href="#subject" id="tabSubject" data-pk="{{$student->id}}" data-toggle="tab">Subjects</a></li>
                         <li><a href="#attendance" id="tabAttendance" data-pk="{{$student->id}}" data-toggle="tab">Attendance</a></li>
-                        {{--<li><a href="#mark" data-toggle="tab">Mark</a></li>--}}
-                        {{--<li><a href="#invoice" data-toggle="tab">Invoice</a></li>--}}
-                        {{--<li><a href="#payment" data-toggle="tab">Payment</a></li>--}}
-                        {{--<li><a href="#document" data-toggle="tab">Document</a></li>--}}
+                        <li><a href="#marks" id="tabMakrs" data-pk="{{$student->id}}" data-toggle="tab">Marks & Result</a></li>
                     </ul>
 
                     <div class="tab-content">
@@ -90,7 +96,7 @@
                                     <label for="">Full Name</label>
                                 </div>
                                 <div class="col-md-3">
-                                    <p for="">: {{$student->student->name}}</p>
+                                    <p for="">: {{$student->student->name}} @if(strlen($student->student->nick_name))[{{$student->student->nick_name}}]@endif</p>
                                 </div>
                                 <div class="col-md-3">
                                     <label for="">Date of Birth</label>
@@ -272,24 +278,18 @@
                             </div>
 
                             <div class="row">
-                                @if($student->fourth_subject)
                                 <div class="col-md-3">
-                                    <label for="">Fourth Subject</label>
+                                    <label for="">Notification SMS No.</label>
                                 </div>
                                 <div class="col-md-3">
-                                    <p for="">: {{$fourthSubject}}</p>
-                                </div>
-                                @endif
-
-                                @if($student->alt_fourth_subject)
-                                <div class="col-md-3">
-                                    <label for="">Alternative Fourth Subject</label>
+                                    <p for="">: {{AppHelper::STUDENT_SMS_NOTIFICATION_NO[$student->student->sms_receive_no]}}</p>
                                 </div>
                                 <div class="col-md-3">
-                                    <p for="">: {{$altfourthSubject}}</p>
+                                    <label for="">Siblings</label>
                                 </div>
-                                @endif
-
+                                <div class="col-md-3">
+                                    <p for="">: {{$student->student->siblings}}</p>
+                                </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-3">
@@ -314,61 +314,37 @@
 
 
                         </div>
-                        {{--<div class="tab-pane" id="routine">--}}
-                        {{--</div>--}}
+                        <div class="tab-pane" id="subject">
+                            <table id="subjectTable" class="table table-responsive table-bordered table-hover table-td-center">
+                                <thead>
+                                <tr>
+                                    <th class="text-center">Name</th>
+                                    <th class="text-center">Code</th>
+                                    <th class="text-center">Type</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
                         <div class="tab-pane" id="attendance">
-                            <table id="attendanceTable" class="table table-responsive table-bordered table-hover">
+                            <table id="attendanceTable" class="table table-responsive table-bordered table-hover table-td-center">
                                 <thead>
                                     <tr>
                                         <th class="text-center">Date</th>
                                         <th class="text-center">Status</th>
                                     </tr>
+                                </thead>
                                 <tbody>
 
                                 </tbody>
-                                </thead>
+
                             </table>
                         </div>
-                        {{--<div class="tab-pane" id="mark">--}}
+                        <div class="tab-pane" id="marks">
 
-                        {{--</div>--}}
-                        {{--<div class="tab-pane" id="invoice">--}}
-
-                        {{--</div>--}}
-                        {{--<div class="tab-pane" id="payment">--}}
-
-                        {{--</div>--}}
-                        {{--<div class="tab-pane" id="document">--}}
-                            {{--<input class="btn btn-success btn-sm" style="margin-bottom: 10px" type="button" value="Add Document" data-toggle="modal" data-target="#documentupload">--}}
-                            {{--<div id="hide-table">--}}
-                            {{--<table class="table table-striped table-bordered table-hover">--}}
-                            {{--<thead>--}}
-                            {{--<tr>--}}
-                            {{--<th>#</th>--}}
-                            {{--<th>Title</th>--}}
-                            {{--<th>Date</th>--}}
-                            {{--<th>Action</th>--}}
-                            {{--</tr>--}}
-                            {{--</thead>--}}
-                            {{--<tbody>--}}
-                            {{--<tr>--}}
-                            {{--<td data-title="#">--}}
-                            {{--1                                                    </td>--}}
-
-                            {{--<td data-title="Title">--}}
-                            {{--Computer                                                    </td>--}}
-
-                            {{--<td data-title="Date">--}}
-                            {{--05 Jun 2018                                                    </td>--}}
-                            {{--<td data-title="Action">--}}
-                            {{--<a href="" class="btn btn-success btn-xs mrg" data-placement="top" data-toggle="tooltip" data-original-title="Download"><i class="fa fa-download"></i></a>--}}
-                            {{--<a href="" onclick="return confirm('you are about to delete a record. This cannot be undone. are you sure?')" class="btn btn-danger btn-xs mrg" data-placement="top" data-toggle="tooltip" data-original-title="Delete"><i class="fa fa-trash-o"></i></a>  --}}
-                            {{--</td>--}}
-                            {{--</tr>--}}
-                            {{--</tbody>--}}
-                            {{--</table>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
+                        </div>
 
                     </div>
                 </div>
@@ -386,7 +362,9 @@
 <!-- BEGIN PAGE JS-->
 @section('extraScript')
     <script type="text/javascript">
-        window.attendanceUrl = '{{route('student_attendance.index')}}';
+        window.attendanceUrl = '{{route('public.get_student_attendance')}}';
+        window.marksUrl = '{{route('public.get_student_result')}}';
+        window.subjectUrl = '{{route('public.get_student_subject')}}';
         $(document).ready(function () {
            Academic.studentProfileInit();
         });

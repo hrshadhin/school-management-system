@@ -37,6 +37,8 @@ class CreateMarksTable extends Migration
             $table->foreign('exam_id')->references('id')->on('exams');
             $table->foreign('subject_id')->references('id')->on('subjects');
 
+            $table->unique(['class_id','exam_id','registration_id', 'subject_id']);
+
         });
     }
 

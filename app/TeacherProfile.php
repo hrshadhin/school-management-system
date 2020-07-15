@@ -24,7 +24,7 @@ class TeacherProfile extends Model
         'designation',
         'qualification',
         'facebook',
-        'google',
+        'instagram',
         'twitter',
     ];
 }

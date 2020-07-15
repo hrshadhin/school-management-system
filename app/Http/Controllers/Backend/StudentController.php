@@ -5,11 +5,11 @@ namespace App\Http\Controllers\Backend;
 use App\AcademicYear;
 use App\Http\Helpers\AppHelper;
 use App\IClass;
+use App\Mark;
 use App\Registration;
 use App\Section;
 use App\Student;
 use App\Subject;
-use App\Template;
 use App\User;
 use App\UserRole;
 use Carbon\Carbon;
@@ -28,6 +28,7 @@ class StudentController extends Controller
      */
     public function index(Request $request)
     {
+
         $classes = IClass::where('status', AppHelper::ACTIVE)
             ->orderBy('order','asc')
             ->pluck('name', 'id');
@@ -41,11 +42,13 @@ class StudentController extends Controller
         $iclass = null;
         $students = [];
         $sections = [];
+        $status = '1';
 
         // get query parameter for filter the fetch
         $class_id = $request->query->get('class',0);
         $section_id = $request->query->get('section',0);
         $acYear = $request->query->get('academic_year',0);
+        $status = $request->query->get('status','1');
 
 
         $classInfo = null;
@@ -67,6 +70,7 @@ class StudentController extends Controller
             //get student
             $students = Registration::where('class_id', $class_id)
                 ->where('academic_year_id', $acYear)
+                ->where('status', $status)
                 ->section($section_id)
                 ->with('student')
                 ->orderBy('student_id','asc')
@@ -76,6 +80,7 @@ class StudentController extends Controller
             if($section_id){
                 $sections = Section::where('status', AppHelper::ACTIVE)
                     ->where('class_id', $class_id)
+                    ->orderBy('name','asc')
                     ->pluck('name', 'id');
 
             }
@@ -84,7 +89,9 @@ class StudentController extends Controller
 
         }
 
-        return view('backend.student.list', compact('students', 'classes', 'iclass', 'sections', 'section_id', 'academic_years', 'acYear'));
+        return view('backend.student.list', compact('students', 'classes', 'iclass', 'sections',
+            'section_id', 'academic_years', 'acYear', 'status'
+        ));
 
     }
 
@@ -100,9 +107,9 @@ class StudentController extends Controller
             ->orderBy('order','asc')
             ->pluck('name', 'id');
         $student = null;
-        $gender = 1;
-        $religion = 1;
-        $bloodGroup = 1;
+        $gender = 0;
+        $religion = 0;
+        $bloodGroup = 0;
         $nationality = 'Bangladeshi';
         $group = 'None';
         $shift = 'Day';
@@ -112,21 +119,28 @@ class StudentController extends Controller
         $section = null;
         $acYear = null;
         $esubject = null;
-        $csubject = null;
+        $csubjects = [];
+        $ssubjects = [];
         $electiveSubjects = [];
+        $selectiveSubjects = [];
         $coreSubjects = [];
         $academic_years = [];
+        $classInfo = null;
 
         // check for institute type and set gender default value
         $settings = AppHelper::getAppSettings();
-        if(isset($settings['institute_type']) && intval($settings['institute_type']) == 2){
-            $gender = 2;
+        if(isset($settings['institute_type'])){
+            $gender = intval($settings['institute_type']);
+            if ($gender == 3) {
+                $gender = 0;
+            }
         }
 
         if(AppHelper::getInstituteCategory() == 'college') {
             $academic_years = AcademicYear::where('status', '1')->orderBy('id', 'desc')->pluck('title', 'id');
         }
 
+        $houseList = AppHelper::getHouseList();
 
 
         return view('backend.student.add', compact(
@@ -146,8 +160,12 @@ class StudentController extends Controller
             'acYear',
             'electiveSubjects',
             'coreSubjects',
+            'selectiveSubjects',
             'esubject',
-            'csubject'
+            'csubjects',
+            'ssubjects',
+            'houseList',
+            'classInfo'
         ));
     }
 
@@ -160,6 +178,7 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
+        //todo: wrong class section entry student bug fixed.
         //validate form
         $messages = [
             'photo.max' => 'The :attribute size must be under 200kb.',
@@ -167,6 +186,7 @@ class StudentController extends Controller
         ];
         $rules = [
             'name' => 'required|min:5|max:255',
+            'nick_name' => 'nullable|min:2|max:50',
             'photo' => 'mimes:jpeg,jpg,png|max:200|dimensions:min_width=150,min_height=150',
             'dob' => 'min:10|max:10',
             'gender' => 'required|integer',
@@ -193,14 +213,17 @@ class StudentController extends Controller
             'shift' => 'nullable|max:15',
             'roll_no' => 'nullable|integer',
             'board_regi_no' => 'nullable|max:50',
+            'core_subjects' => 'required|array',
+            'selective_subjects' => 'nullable|array',
             'fourth_subject' => 'nullable|integer',
             'house' => 'nullable|max:100',
+            'siblings' => 'nullable|max:255',
+            'sms_receive_no' => 'required|integer',
 
         ];
         //if it college then need another 2 feilds
         if(AppHelper::getInstituteCategory() == 'college') {
             $rules['academic_year'] = 'required|integer';
-            $rules['alt_fourth_subject'] = 'nullable|integer';
         }
 
 
@@ -214,6 +237,30 @@ class StudentController extends Controller
 
         $this->validate($request, $rules);
 
+        /**
+         *  Wrong class and section bug fix code
+         */
+        $classId = $request->get("class_id",0);
+        $sectionId = $request->get("section_id",0);
+        $section = Section::where('id', $sectionId)->where('status', AppHelper::ACTIVE)
+            ->where('class_id', $classId)->select('id','capacity','class_id')->first();
+        if(!$section){
+            return redirect()->route('student.create')
+                ->with("error", 'Wrong class and section selection!')
+                ->withInput();
+        }
+        //end
+
+        //for max subject validation
+        $classInfo = IClass::where('id', $classId)
+            ->first();
+        if($classInfo->have_selective_subject
+            && count($request->get('selective_subjects',[])) > $classInfo->max_selective_subject
+        ) {
+            return redirect()->route('student.create')
+                ->with("error", "Maximum {$classInfo->max_selective_subject} selective subject allowed!")
+                ->withInput($request->except(['password','class_id','section_id']));
+        }
 
 
         if(AppHelper::getInstituteCategory() != 'college') {
@@ -231,7 +278,80 @@ class StudentController extends Controller
             $acYearId = $request->get('academic_year');
         }
 
+        //Other validations
+        $studentInDesireSection = Registration::where('academic_year_id', $acYearId)
+            ->where('class_id', $section->class_id)
+            ->where('section_id', $section->id)
+            ->count();
+        $studentInDesireSection += 1;
+
+        if($studentInDesireSection > $section->capacity){
+            return redirect()->route('student.create')
+                ->with("error", 'This section is full! Register student in another section.')
+                ->withInput();
+        }
+
+        $duplicateRollNo = Registration::where('status', AppHelper::ACTIVE)
+            ->where('class_id', $classId)
+            ->where('academic_year_id', $acYearId)
+            ->where('roll_no', $request->get('roll_no', 0))
+            ->count();
+
+        if($duplicateRollNo){
+            return redirect()->route('student.create')
+                ->with("error", 'Roll no already exists!')
+                ->withInput($request->except(['roll_no','password']));
+        }
+
+
         $data = $request->all();
+        //card_no manual validation
+        if(strlen($data['card_no'])) {
+            $cardNoExists = Registration::where('academic_year_id', $acYearId)
+                ->where('card_no', $data['card_no'])->count();
+
+            if($cardNoExists){
+                return redirect()->route('student.create')
+                    ->with("error", 'This card number has been used for another student on this academic year!')
+                    ->withInput();
+            }
+        }
+
+
+        //fetch core subject from db
+        $subjects = Subject::select('id as subject_id','type as subject_type')
+            ->where('class_id', $data['class_id'])
+            ->where('type', 1) // 1 =core 2= elective , 3 = selective
+            ->where('status', AppHelper::ACTIVE)
+            ->orderBy('order', 'asc')
+            ->get()
+            ->toArray();
+
+//        $subjects = array_map(function ($subject){
+//            return [
+//                'subject_id' => $subject,
+//                'subject_type' => 1
+//            ];
+//        }, $data['core_subjects']);
+
+
+        if(isset($data['selective_subjects'])) {
+            $selectiveSubjects = array_map(function ($subject) {
+                return [
+                    'subject_id' => $subject,
+                    'subject_type' => 3
+                ];
+            }, $data['selective_subjects']);
+
+            $subjects = array_merge($subjects, $selectiveSubjects);
+        }
+
+        if(isset($data['fourth_subject'])){
+            $subjects[] = [
+                'subject_id' => $data['fourth_subject'],
+                'subject_type' => 2
+                ];
+        }
 
         //card_no manual validation
         if(strlen($data['card_no'])) {
@@ -249,7 +369,7 @@ class StudentController extends Controller
             $data['nationality']  = $data['nationality_other'];
         }
 
-        $imgStorePath = "public/student/".$request->get('class_id',0);
+        $imgStorePath = "public/student/";
         if($request->hasFile('photo')) {
             $storagepath = $request->file('photo')->store($imgStorePath);
             $fileName = basename($storagepath);
@@ -305,12 +425,11 @@ class StudentController extends Controller
                 'shift' => $data['shift'],
                 'card_no' => $data['card_no'],
                 'board_regi_no' => $data['board_regi_no'],
-                'fourth_subject' => $data['fourth_subject'] ??  0,
-                'alt_fourth_subject' => $data['alt_fourth_subject'] ??  0,
                 'house' => $data['house'] ??  ''
             ];
 
-            Registration::create($registrationData);
+           $registration =  Registration::create($registrationData);
+            $registration->subjects()->sync($subjects);
 
             // now commit the database
             DB::commit();
@@ -336,9 +455,6 @@ class StudentController extends Controller
             return redirect()->route('student.create')->with("error",$message);
         }
 
-        return redirect()->route('student.create');
-
-
     }
 
 
@@ -350,74 +466,6 @@ class StudentController extends Controller
      */
     public function show(Request $request, $id)
     {
-        // if print id card of this student then
-        // Do here
-        if($request->query->get('print_idcard',0)) {
-
-            $templateId = AppHelper::getAppSettings('student_idcard_template');
-            $templateConfig = Template::where('id', $templateId)->where('type',3)->where('role_id', AppHelper::USER_STUDENT)->first();
-
-            if(!$templateConfig){
-                return redirect()->route('administrator.template.idcard.index')->with('error', 'Template not found!');
-            }
-
-            $templateConfig = json_decode($templateConfig->content);
-
-            $format = "format_";
-            if($templateConfig->format_id == 2){
-                $format .="two";
-            }
-            else if($templateConfig->format_id == 3){
-                $format .="three";
-            }
-            else {
-                $format .="one";
-            }
-
-            //get institute information
-            $instituteInfo = AppHelper::getAppSettings('institute_settings');
-
-
-            $students = Registration::where('id', $id)
-                ->where('status', AppHelper::ACTIVE)
-                ->with(['student' => function ($query) {
-                    $query->select('name', 'blood_group', 'id', 'photo');
-                }])
-                ->with(['class' => function ($query) {
-                    $query->select('name', 'group', 'id');
-                }])
-                ->select('id', 'roll_no', 'regi_no', 'student_id','class_id', 'house', 'academic_year_id')
-                ->orderBy('roll_no', 'asc')
-                ->get();
-
-            if(!$students){
-                abort(404);
-            }
-
-
-            $acYearInfo = AcademicYear::where('id', $students[0]->academic_year_id)->first();
-            $session = $acYearInfo->title;
-            $validity = $acYearInfo->end_date->format('Y');
-
-            if($templateConfig->format_id == 3){
-                $validity = $acYearInfo->end_date->format('F Y');
-            }
-
-
-            $totalStudent = count($students);
-
-            $side = 'both';
-            return view('backend.report.student.idcard.'.$format, compact(
-                'templateConfig',
-                'instituteInfo',
-                'side',
-                'students',
-                'totalStudent',
-                'session',
-                'validity'
-            ));
-        }
-
         //get student
         $student = Registration::where('id', $id)
             ->with('student')
@@ -425,28 +473,37 @@ class StudentController extends Controller
             ->with('section')
             ->with('acYear')
             ->first();
+
         if(!$student){
             abort(404);
         }
+
         $username = '';
-        $fourthSubject = '';
-        $altfourthSubject = '';
-
-        if($student->fourth_subject) {
-            $subjectInfo = Subject::where('id', $student->fourth_subject)->select('name')->first();
-            $fourthSubject = $subjectInfo->name;
-        }
-
-        if($student->alt_fourth_subject) {
-            $subjectInfo = Subject::where('id', $student->alt_fourth_subject)->select('name')->first();
-            $altfourthSubject = $subjectInfo->name;
-        }
-
         if($student->student->user_id){
             $user = User::find($student->student->user_id);
             $username = $user->username;
         }
-        return view('backend.student.view', compact('student', 'username', 'fourthSubject', 'altfourthSubject'));
+
+        //find siblings
+        if(strlen($student->student->siblings)){
+            $siblingsRegiNumbers = array_map('trim', explode(',', $student->student->siblings));
+            if(count($siblingsRegiNumbers)) {
+                $siblingStudents = Registration::whereIn('regi_no', $siblingsRegiNumbers)
+                    ->with(['info' => function($q){
+                        $q->select('id','name');
+                    }])
+                    ->select('id','student_id')
+                    ->get()
+                    ->reduce(function ($siblingStudents, $record){
+                        $siblingStudents[] = $record->info->name;
+                        return $siblingStudents;
+                    });
+
+                  $student->student->siblings = $siblingStudents ? implode(',', $siblingStudents) : '';
+                }
+        }
+
+        return view('backend.student.view', compact('student', 'username'));
 
 
     }
@@ -469,18 +526,45 @@ class StudentController extends Controller
             abort(404);
         }
         $classes = IClass::where('status', AppHelper::ACTIVE)
+            ->orderBy('order','asc')
             ->pluck('name', 'id');
         $sections = Section::where('class_id', $regiInfo->class_id)->where('status', AppHelper::ACTIVE)
             ->pluck('name', 'id');
 
         $isCollege = (AppHelper::getInstituteCategory() == 'college');
-        $subjectType = $isCollege ? 0 : 2;
-        $electiveSubjects = Subject::select('id', 'name')->where('class_id',$regiInfo->class_id)
-            ->sType($subjectType)->where('status', AppHelper::ACTIVE)->orderBy('name', 'asc')->pluck('name', 'id');
-        $coreSubjects = null;
+
+
+
+        $coreSubjects = Subject::select('id', 'name')
+            ->where('class_id',$regiInfo->class_id)
+            ->sType(1)
+            ->where('status', AppHelper::ACTIVE)
+            ->orderBy('name', 'asc')
+            ->pluck('name', 'id');
+
+        //if college then show both subject in feild
         if($isCollege){
-            $coreSubjects = Subject::select('id', 'name')->where('class_id',$regiInfo->class_id)
-                ->sType(1)->where('status', AppHelper::ACTIVE)->orderBy('name', 'asc')->pluck('name', 'id');
+            $selectiveSubjects = Subject::select('id', 'name')
+                ->where('class_id',$regiInfo->class_id)
+                ->sType([2,3])
+                ->where('status', AppHelper::ACTIVE)
+                ->orderBy('name', 'asc')
+                ->pluck('name', 'id');
+            $electiveSubjects = $selectiveSubjects;
+        }
+        else{
+            $selectiveSubjects = Subject::select('id', 'name')
+                ->where('class_id',$regiInfo->class_id)
+                ->sType(3)
+                ->where('status', AppHelper::ACTIVE)
+                ->orderBy('name', 'asc')
+                ->pluck('name', 'id');
+            $electiveSubjects = Subject::select('id', 'name')
+                ->where('class_id',$regiInfo->class_id)
+                ->sType(2)
+                ->where('status', AppHelper::ACTIVE)
+                ->orderBy('name', 'asc')
+                ->pluck('name', 'id');
         }
 
         $gender = $student->getOriginal('gender');
@@ -488,11 +572,32 @@ class StudentController extends Controller
         $bloodGroup = $student->getOriginal('blood_group');
         $nationality = ($student->nationality != "Bangladeshi") ? "Other" : "";
         $shift = $regiInfo->shift;
-
         $section = $regiInfo->section_id;
         $iclass = $regiInfo->class_id;
-        $esubject = $regiInfo->fourth_subject;
-        $csubject = $regiInfo->alt_fourth_subject;
+        $classInfo = IClass::where('id', $iclass)
+            ->select( 'have_selective_subject', 'max_selective_subject', 'have_elective_subject')
+            ->first();
+
+        //student subjects
+        $csubjects = [];
+        $ssubjects = [];
+        $esubject = null;
+
+        foreach ($regiInfo->subjects as $subject){
+            if($subject->pivot->subject_type == 1){
+                $csubjects[] = $subject->id;
+            }
+            else if($subject->pivot->subject_type == 2){
+                $esubject = $subject->id;
+            }
+            else if($subject->pivot->subject_type == 3){
+                $ssubjects[] = $subject->id;
+            }
+        }
+
+        if(!count($csubjects)){
+            $csubjects = array_keys($coreSubjects->toArray());
+        }
 
         $users = [];
         if(!$student->user_id){
@@ -504,6 +609,7 @@ class StudentController extends Controller
                 ->pluck('name', 'id');
         }
 
+        $houseList = AppHelper::getHouseList();
 
         return view('backend.student.add', compact(
             'regiInfo',
@@ -519,9 +625,13 @@ class StudentController extends Controller
             'section',
             'electiveSubjects',
             'coreSubjects',
+            'selectiveSubjects',
             'esubject',
-            'csubject',
-            'users'
+            'csubjects',
+            'ssubjects',
+            'users',
+            'houseList',
+            'classInfo'
         ));
 
     }
@@ -552,6 +662,7 @@ class StudentController extends Controller
         ];
         $rules = [
             'name' => 'required|min:5|max:255',
+            'nick_name' => 'nullable|min:2|max:50',
             'photo' => 'mimes:jpeg,jpg,png|max:200|dimensions:min_width=150,min_height=150',
             'dob' => 'min:10|max:10',
             'gender' => 'required|integer',
@@ -576,19 +687,26 @@ class StudentController extends Controller
             'shift' => 'nullable|max:15',
             'roll_no' => 'nullable|integer',
             'board_regi_no' => 'nullable|max:50',
+            'core_subjects' => 'required|array',
+            'selective_subjects' => 'nullable|array',
             'fourth_subject' => 'nullable|integer',
             'user_id' => 'nullable|integer',
             'house' => 'nullable|max:100',
+            'siblings' => 'nullable|max:255',
+            'sms_receive_no' => 'required|integer',
 
         ];
 
-        //if it college then need another 1 feilds
-        if(AppHelper::getInstituteCategory() == 'college') {
-            $rules['alt_fourth_subject'] = 'nullable|integer';
-        }
-
 
         $this->validate($request, $rules);
+
+        //subject update validation check
+        $allowSubjectUpdate = true;
+        $haveMarks = Mark::where('registration_id', $id)
+            ->count();
+        if($haveMarks){
+            $allowSubjectUpdate = false;
+        }
 
         $data = $request->all();
         //card_no manual validation
@@ -604,12 +722,82 @@ class StudentController extends Controller
             }
         }
 
+        $duplicateRollNo = Registration::where('status', AppHelper::ACTIVE)
+            ->where('class_id', $regiInfo->class_id)
+            ->where('academic_year_id', $regiInfo->academic_year_id)
+            ->where('id', '!=', $regiInfo->id)
+            ->where('roll_no', $request->get('roll_no', 0))
+            ->count();
+
+        if($duplicateRollNo){
+            return redirect()->back()
+                ->with("error", 'Roll no already exists!');
+        }
+
+        //for max subject validation
+        $classInfo = IClass::where('id', $regiInfo->class_id)
+            ->first();
+        if($classInfo->have_selective_subject
+            && count($request->get('selective_subjects',[])) > $classInfo->max_selective_subject
+        ) {
+            return redirect()->back()
+                ->with("error", "Maximum {$classInfo->max_selective_subject} subject allowed");
+        }
+        //validation end
+
+        //fetch core subject from db
+        $subjects = [];
+        $oldSubjects = [];
+        if($allowSubjectUpdate) {
+            $subjects = Subject::select('id as subject_id', 'type as subject_type')
+                ->where('class_id', $regiInfo->class_id)
+                ->where('type', 1)// 1 =core 2= elective , 3 = selective
+                ->where('status', AppHelper::ACTIVE)
+                ->orderBy('order', 'asc')
+                ->get()
+                ->toArray();
+
+//        $subjects = array_map(function ($subject){
+//            return [
+//                'subject_id' => $subject,
+//                'subject_type' => 1
+//            ];
+//        }, $data['core_subjects']);
+
+            if (isset($data['selective_subjects'])) {
+                $selectiveSubjects = array_map(function ($subject) {
+                    return [
+                        'subject_id' => $subject,
+                        'subject_type' => 3
+                    ];
+                }, $data['selective_subjects']);
+
+                $subjects = array_merge($subjects, $selectiveSubjects);
+            }
+
+            if (isset($data['fourth_subject'])) {
+                $subjects[] = [
+                    'subject_id' => $data['fourth_subject'],
+                    'subject_type' => 2
+                ];
+            }
+
+            //fetch old subjects for this student
+            $oldSubjects = $regiInfo->subjects->map(function ($subject){
+                return [
+                    "id" => $subject->id,
+                    "name" => $subject->name,
+                    "s_type" => $subject->getOriginal('type'),
+                    "type"   => $subject->pivot->subject_type,
+                ];
+            });
+        }
 
         if($data['nationality'] == 'Other'){
             $data['nationality']  = $data['nationality_other'];
         }
 
-        $imgStorePath = "public/student/".$regiInfo->class_id;
+        $imgStorePath = "public/student/";
         if($request->hasFile('photo')) {
             $storagepath = $request->file('photo')->store($imgStorePath);
             $fileName = basename($storagepath);
@@ -635,8 +823,6 @@ class StudentController extends Controller
             'shift' => $data['shift'],
             'card_no' => $data['card_no'],
             'board_regi_no' => $data['board_regi_no'],
-            'fourth_subject' => $data['fourth_subject'] ?? 0,
-            'alt_fourth_subject' => $data['alt_fourth_subject'] ?? 0,
             'house' => $data['house'] ??  ''
         ];
 
@@ -703,36 +889,13 @@ class StudentController extends Controller
             ];
         }
 
-        if($regiInfo->fourth_subject != $data['fourth_subject']){
-            $isChanged = true;
-            $logData[] = [
-                'student_id' => $regiInfo->student_id,
-                'academic_year_id' => $regiInfo->academic_year_id,
-                'meta_key' => 'fourth subject',
-                'meta_value' => $regiInfo->fourth_subject,
-                'created_at' => $timeNow,
-
-            ];
-        }
-
-        //if it college then need another 1 feilds
-        if(AppHelper::getInstituteCategory() == 'college') {
-            if ($regiInfo->alt_fourth_subject != $data['alt_fourth_subject']) {
-                $isChanged = true;
-                $logData[] = [
-                    'student_id' => $regiInfo->student_id,
-                    'academic_year_id' => $regiInfo->academic_year_id,
-                    'meta_key' => 'alt fourth subject',
-                    'meta_value' => $regiInfo->alt_fourth_subject,
-                    'created_at' => $timeNow,
-
-                ];
-            }
-        }
 
         $message = 'Something went wrong!';
         DB::beginTransaction();
         try {
+
+            $messageType = "success";
+            $message = "Student updated!";
 
             // save registration data
             $regiInfo->fill($registrationData);
@@ -756,14 +919,32 @@ class StudentController extends Controller
             }
             $student->save();
 
+            if($allowSubjectUpdate) {
+                $regiInfo->subjects()->sync($subjects);
+                DB::table('st_subjects_log')->insert([
+                    'registration_id' => $regiInfo->id,
+                    'log' => json_encode($oldSubjects),
+                    'updated_by' => auth()->user()->id,
+                    'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+                ]);
+            }
+            else{
+                $messageType = "warning";
+                $message = "Student updated. But subjects was not updated, because have exam marks.";
+            }
+
             //if have changes then insert log
             if($isChanged){
                 DB::table('student_info_log')->insert($logData);
             }
+
+
+
             // now commit the database
             DB::commit();
 
-            return redirect()->route('student.index', ['class' => $regiInfo->class_id, 'section'=> $regiInfo->section_id, 'academic_year' => $regiInfo->academic_year_id])->with('success', 'Student updated!');
+
+            return redirect()->route('student.index', ['class' => $regiInfo->class_id, 'section'=> $regiInfo->section_id, 'academic_year' => $regiInfo->academic_year_id])->with($messageType, $message);
 
 
         }
@@ -899,19 +1080,24 @@ class StudentController extends Controller
         $classId = $request->query->get('class',0);
         $sectionId = $request->query->get('section',0);
         $acYear = $request->query->get('academic_year',0);
+        $rollNo = $request->query->get('roll_no','');
+        $regiNo = $request->query->get('regi_no','');
 
         if(AppHelper::getInstituteCategory() != 'college') {
             $acYear = AppHelper::getAcademicYear();
         }
 
-        $students = Registration::where('academic_year_id', $acYear)
-            ->where('class_id', $classId)
-            ->where('section_id', $sectionId)
+        $students = Registration::if($acYear, 'academic_year_id', '=' , $acYear)
+            ->if($classId, 'class_id', '=' ,$classId)
+            ->if($sectionId, 'section_id', '=', $sectionId)
+            ->if(strlen($regiNo), 'regi_no', '=', $regiNo)
+            ->if(strlen($rollNo), 'roll_no', '=', $rollNo)
             ->where('status', AppHelper::ACTIVE)
+            ->where('is_promoted', '0')
             ->with(['student' => function ($query) {
                 $query->select('name','id');
             }])
-            ->select('id','roll_no','student_id')
+            ->select('id','roll_no','regi_no','student_id')
             ->orderBy('roll_no','asc')
             ->get();
 

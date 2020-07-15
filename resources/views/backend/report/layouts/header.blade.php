@@ -13,7 +13,7 @@
                                 <h3 class="institute-name">{{$instituteName}}</h3>
                                 <h5 class="institute-address">{{$instituteAddress}}</h5>
                                 <h4 class="report-title">{{$reportTitle}}</h4>
-                                <h5 class="report-subtitle">{{$reportSubTitle}}</h5>
+                                <h5 class="report-subtitle">{!! $reportSubTitle !!}</h5>
                             </td>
                         </tr>
                     </table>
@@ -21,10 +21,10 @@
                 <h3 class="institute-name">{{$instituteName}}</h3>
                 <h5 class="institute-address">{{$instituteAddress}}</h5>
                 <h4 class="report-title">{{$reportTitle}}</h4>
-                <h5 class="report-subtitle">{{$reportSubTitle}}</h5>
+                <h5 class="report-subtitle">{!! $reportSubTitle !!}</h5>
                 @endif
             </div>
-            <small class="print-date">Print Date: {{date('d/m/Y')}}</small>
+            @if($showDate)<small class="print-date">Print Date: {{date('d/m/Y')}}</small>@endif
         </div>
     </div>
 </div>

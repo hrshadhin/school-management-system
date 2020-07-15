@@ -20,6 +20,7 @@ class CreateExamsTable extends Migration
             $table->decimal('elective_subject_point_addition',5,2)->default(0.00);
             $table->text('marks_distribution_types');
             $table->enum('status', [0,1])->default(1);
+            $table->boolean('open_for_marks_entry')->default(false);
             $table->timestamps();
             $table->softDeletes();
             $table->userstamps();

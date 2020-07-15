@@ -24,6 +24,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="box box-info">
+                    @notrole('Student')
                     <div class="box-header">
                         <div class="col-md-3">
                             <div class="form-group has-feedback">
@@ -34,6 +35,7 @@
                             <a class="btn btn-info btn-sm" href="{{ URL::route('academic.subject_create') }}"><i class="fa fa-plus-circle"></i> Add New</a>
                         </div>
                     </div>
+                    @endnotrole
                     <!-- /.box-header -->
                     <div class="box-body margin-top-20">
                         <div class="table-responsive">
@@ -41,13 +43,17 @@
                             <thead>
                             <tr>
                                 <th width="5%">#</th>
-                                <th width="10%">Name</th>
+                                <th width="15%">Name</th>
                                 <th width="10%">Code</th>
-                                <th width="10%">Type</th>
-                                <th width="20%">Class</th>
-                                <th width="25%">Teacher</th>
+                                <th width="5%">Type</th>
+                                <th width="15%">Class</th>
+                                <th width="20%">Teacher</th>
+                                <th width="5%">Order</th>
+                                @notrole('Student')
+                                <th width="5%" title="Exclude In Result">EIR</th>
                                 <th width="10%">Status</th>
                                 <th class="notexport" width="10%">Action</th>
+                                @endnotrole
                             </tr>
                             </thead>
                             <tbody>
@@ -60,7 +66,16 @@
                                     <td>{{ $subject->code }}</td>
                                     <td>{{ $subject->type }}</td>
                                     <td>{{ $subject->class->name }}</td>
-                                    <td>{{ $subject->teacher->name }}</td>
+                                    <td class="text-capitalize">
+                                        {{ implode(',', $subject->teachers->pluck('name')->toArray()) }}
+                                    </td>
+                                    <td>{{ $subject->order }}</td>
+                                    @notrole('Student')
+                                    <td>
+                                        @if($subject->exclude_in_result)
+                                            <i class="fa fa-2x fa-check-circle text-success"></i>
+                                        @endif
+                                    </td>
                                     <td>
                                         <!-- todo: have problem in mobile device -->
                                         <input class="statusChange" type="checkbox" data-pk="{{$subject->id}}" @if($subject->status) checked @endif data-toggle="toggle" data-on="<i class='fa fa-check-circle'></i>" data-off="<i class='fa fa-ban'></i>" data-onstyle="success" data-offstyle="danger">
@@ -82,6 +97,7 @@
                                         </div>
 
                                     </td>
+                                    @endnotrole
                                 </tr>
                             @endforeach
 
@@ -89,13 +105,17 @@
                             <tfoot>
                             <tr>
                                 <th width="5%">#</th>
-                                <th width="10%">Name</th>
+                                <th width="15%">Name</th>
                                 <th width="10%">Code</th>
-                                <th width="10%">Type</th>
-                                <th width="20%">Class</th>
-                                <th width="25%">Teacher</th>
+                                <th width="5%">Type</th>
+                                <th width="15%">Class</th>
+                                <th width="20%">Teacher</th>
+                                <th width="5%">Order</th>
+                                @notrole('Student')
+                                <th width="5%" title="Exclude In Result">EIR</th>
                                 <th width="10%">Status</th>
                                 <th class="notexport" width="10%">Action</th>
+                                @endnotrole
                             </tr>
                             </tfoot>
                         </table>
@@ -116,10 +136,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
             window.postUrl = '{{URL::Route("academic.subject_status", 0)}}';
-            window.changeExportColumnIndex = 6;
-            window.excludeFilterComlumns = [0,6,7];
             Academic.subjectInit();
-            $('title').text($('title').text() + '-' + $('select[name="class_id"] option[selected]').text());
         });
     </script>
 @endsection

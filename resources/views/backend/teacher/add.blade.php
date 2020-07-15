@@ -44,9 +44,9 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group has-feedback">
-                                        <label for="designation">Designation</label>
-                                        <input type="text" class="form-control" name="designation" placeholder="Head Master, Sr. Teacher" value="@if($teacher){{ $teacher->designation }}@else{{old('designation')}}@endif"  maxlength="255">
-                                        <span class="fa fa-info form-control-feedback"></span>
+                                        <label for="designation">Designation<span class="text-danger">*</span></label>
+                                        {!! Form::select('designation', AppHelper::EMPLOYEE_DESIGNATION_TYPES, $designation , ['placeholder' => 'Pick a designation', 'class' => 'form-control select2', 'required' => 'true']) !!}
+                                        <span class="form-control-feedback"></span>
                                         <span class="text-danger">{{ $errors->first('designation') }}</span>
                                     </div>
                                 </div>
@@ -125,7 +125,7 @@
                                 <div class="col-md-2">
                                     <div class="form-group has-feedback">
                                         <label for="joining_date">Joining Date<span class="text-danger">*</span></label>
-                                        <input type='text' class="form-control date_picker2"  readonly name="joining_date" placeholder="date" value="@if($teacher){{$teacher->joining_date}}@else{{ old('joining_date') }}@endif" required minlength="10" maxlength="255" />
+                                        <input type='text' class="form-control date_picker2"  readonly name="joining_date" placeholder="date" value="@if($teacher){{$teacher->joining_date->format('d/m/Y')}}@else{{ old('joining_date') }}@endif" required minlength="10" maxlength="255" />
                                         <span class="fa fa-calendar form-control-feedback"></span>
                                         <span class="text-danger">{{ $errors->first('joining_date') }}</span>
                                     </div>
@@ -151,7 +151,7 @@
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group has-feedback">
-                                        <label for="photo">Signature<br><span class="text-danger">[max 160 X 80 size and max 200kb]</span></label>
+                                        <label for="photo">Signature<br><span class="text-danger">[max 170 X 60 size and max 100kb]</span></label>
                                         <input  type="file" class="form-control" accept=".jpeg, .jpg, .png" name="signature" placeholder="Signature image">
                                         @if($teacher && isset($teacher->signature))
                                             <input type="hidden" name="oldSignature" value="{{$teacher->signature}}">
@@ -160,7 +160,28 @@
                                         <span class="text-danger">{{ $errors->first('signature') }}</span>
                                     </div>
                                 </div>
-
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group has-feedback">
+                                        <label for="order">Order sequence<span class="text-danger">*</span>
+                                            <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Position/sorting/ordering number"></i>
+                                        </label>
+                                        <input  type="number" class="form-control" name="order" placeholder="1,2,3,5"  value="@if($teacher){{ $teacher->order }}@else{{ old('order') }} @endif" min="0" required>
+                                        <span class="fa fa-sort-numeric-asc form-control-feedback"></span>
+                                        <span class="text-danger">{{ $errors->first('order') }}</span>
+                                    </div>
+                                </div>
+                                @if($teacher)
+                                    <div class="col-md-2">
+                                        <div class="form-group has-feedback">
+                                            <label for="leave_date">Leave Date</label>
+                                            <input type='text' class="form-control date_picker_with_clear"  readonly name="leave_date" placeholder="date" value="@if($teacher && $teacher->leave_date){{$teacher->leave_date->format('d/m/Y')}}@else{{ old('leave_date') }}@endif"  minlength="10" maxlength="255" />
+                                            <span class="fa fa-calendar form-control-feedback"></span>
+                                            <span class="text-danger">{{ $errors->first('leave_date') }}</span>
+                                        </div>
+                                    </div>
+                                @endif
                             </div>
 
                             <hr>
@@ -194,7 +215,6 @@
                                             <span class="text-danger">{{ $errors->first('user_id') }}</span>
                                         </div>
                                     </div>
-
                                 @endif
                             </div>
 

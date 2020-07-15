@@ -5,6 +5,12 @@
 $(function () {
     'use strict'
 
+
+    //skip to run below codes
+    if(window.dontRunFuther){
+        return false;
+    }
+
     /**
      * Get access to plugins
      */
@@ -128,51 +134,6 @@ $(function () {
     }
 
     /**
-     * Clock initializer
-     *
-     * @returns void
-     */
-    // function clockRun() {
-    //     if($('.clock-menu').css('display') !='none') {
-    //         var clock = document.getElementById('clock');
-    //         var date = document.getElementById('date');
-    //         date.innerHTML = getFormatedDate();
-    //
-    //         setInterval(function () {
-    //             clock.innerHTML = getCurrentTime();
-    //         }, 1);
-    //
-    //         function getCurrentTime() {
-    //             var currentDate = new Date();
-    //             var hours = currentDate.getHours() > 12 ? currentDate.getHours() - 12 : currentDate.getHours();
-    //             var ampm = currentDate.getHours() > 12 ? 'PM' : 'AM';
-    //             hours === 0 ? hours = 12 : hours = hours;
-    //             var minutes = currentDate.getMinutes();
-    //             var seconds = currentDate.getSeconds() < 10 ? '0' + currentDate.getSeconds() : currentDate.getSeconds();
-    //             var currentTime = hours + ':' + minutes + ':' + seconds + ' ' + ampm;
-    //             return currentTime;
-    //         }
-    //         function getFormatedDate() {
-    //             var date = new Date();
-    //             var monthNames = [
-    //                 "January", "February", "March",
-    //                 "April", "May", "June", "July",
-    //                 "August", "September", "October",
-    //                 "November", "December"
-    //             ];
-    //
-    //             var day = date.getDate();
-    //             var monthIndex = date.getMonth();
-    //             var year = date.getFullYear();
-    //
-    //             return monthNames[monthIndex] + ' ' + day + ', ' + year;
-    //         }
-    //     }
-    //
-    // }
-    //
-
-    /**
      * Fetch User unread notifications
      */
     function fetchNotifications() {
@@ -206,7 +167,6 @@ $(function () {
             else{
                 renderNotification();
             }
-
 
         }
 
@@ -329,10 +289,11 @@ $(function () {
                 || $(this).attr("href") == '';
 
         });
-        activeMenuItem.parent().addClass("active");
-        activeMenuItem.parent().parent().parents('li').addClass("active");
-
-        $('.sidebar').scrollTop(activeMenuItem[0].offsetTop);
+        if(activeMenuItem.length) {
+            activeMenuItem.parent().addClass("active");
+            activeMenuItem.parent().parent().parents('li').addClass("active");
+            $('.sidebar').scrollTop(activeMenuItem[0].offsetTop);
+        }
 
     },500);
 
@@ -344,13 +305,6 @@ $(function () {
     var checkBoxes = '<h4 class="control-sidebar-heading">'
         + 'Features'
         + '</h4>';
-    // clock
-    // + '<div class="form-group tablet-hidden hidden-xs">'
-    // + '<label class="control-sidebar-subheading">'
-    // + '<input type="checkbox"data-feature="clock-menu"class="dont-style pull-right" checked/> '
-    // + 'Clock'
-    // + '</label>'
-    // + '</div>';
 
     if(window.frontendWebsite){
         checkBoxes += '<div class="form-group">'
@@ -496,7 +450,7 @@ $(function () {
     $(".alert").not('.keepIt').delay(8000).slideUp(200, function () {
         $(this).alert('close');
     });
+    $(':input[type=number]').on('mousewheel',function(e){ $(this).blur(); });
 
-    // clockRun();
     fetchNotifications();
 });

@@ -31,10 +31,15 @@
                 <div class="box box-primary">
                     <div class="box-body box-profile">
                         <img class="profile-user-img img-responsive img-circle" src="{{ asset('images/avatar.jpg') }}" alt="User profile picture">
-
                         <h3 class="profile-username text-center">{{$user->name}}</h3>
                         <p class="text-muted text-center">{{$userRole->name}}</p>
 
+                        @if($user->is_super_admin)
+                            <blockquote class="blockquote text-center bg-warning">
+                                <p class="mb-0">You Are Super Admin!</p>
+                                <footer class="blockquote-footer"><cite>With great power comes great responsibility</cite></footer>
+                            </blockquote>
+                        @endif
                         <strong><i class="fa fa-user margin-r-5"></i>Username</strong>
                         <p class="text-muted">{{$user->username}}</p>
 

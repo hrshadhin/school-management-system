@@ -2,22 +2,20 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\AcademicCalendar;
 use App\AcademicYear;
 use App\Employee;
-use App\EmployeeAttendance;
 use App\Exam;
 use App\ExamRule;
 use App\Http\Helpers\AppHelper;
+use App\Http\Helpers\ReportHelper;
 use App\IClass;
+use App\EmployeeAttendance;
 use App\Leave;
 use App\Mark;
 use App\Registration;
 use App\Result;
 use App\Section;
 use App\StudentAttendance;
-use App\Template;
-use App\WorkOutside;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -26,194 +24,10 @@ use Illuminate\Support\Facades\Validator;
 
 class ReportController extends Controller
 {
-    /**
-     *  Student ID card print.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function studentIdcard(Request $request)
-    {
-
-
-        if($request->isMethod('post')){
-            $templateId = $request->get('template_id', 0);
-            $side = $request->get('side', 'back');
-//            $howMany = intval($request->get('how_many', 0));
-
-            $templateConfig = Template::where('id', $templateId)->where('type',3)->where('role_id', AppHelper::USER_STUDENT)->first();
-
-            if(!$templateConfig){
-                return redirect()->route('report.student_idcard')->with('error', 'Template not found!');
-            }
-
-            $templateConfig = json_decode($templateConfig->content);
-
-            $format = "format_";
-            if($templateConfig->format_id == 2){
-                $format .="two";
-            }
-            else if($templateConfig->format_id == 3){
-                $format .="three";
-            }
-            else {
-                $format .="one";
-            }
-
-            //get institute information
-            $instituteInfo = AppHelper::getAppSettings('institute_settings');
-
-
-            $acYear = $request->get('academic_year',0);
-            $classId = $request->get('class_id', 0);
-            $sectionId = $request->get('section_id', 0);
-
-            $session = '';
-            $validity = '';
-            $totalStudent = 0;
-
-            if($side == "front") {
-                $students = Registration::where('academic_year_id', $acYear)
-                    ->where('class_id', $classId)
-                    ->where('section_id', $sectionId)
-                    ->where('status', AppHelper::ACTIVE)
-                    ->with(['student' => function ($query) {
-                        $query->select('name', 'blood_group', 'id', 'photo');
-                    }])
-                    ->with(['class' => function ($query) {
-                        $query->select('name', 'group', 'id');
-                    }])
-                    ->select('id', 'roll_no', 'regi_no', 'student_id','class_id', 'house')
-                    ->orderBy('roll_no', 'asc')
-                    ->get();
-
-
-                $acYearInfo = AcademicYear::where('id', $acYear)->first();
-
-                $session = $acYearInfo->title;
-                $validity = $acYearInfo->end_date->format('Y');
-
-                if($templateConfig->format_id == 3){
-                    $validity = $acYearInfo->end_date->format('F Y');
-                }
-            }
-            else{
-                $students = Registration::where('academic_year_id', $acYear)
-                    ->where('class_id', $classId)
-                    ->where('section_id', $sectionId)
-                    ->where('status', AppHelper::ACTIVE)
-                    ->select('id', 'regi_no')
-                    ->orderBy('regi_no', 'asc')
-                    ->get();
-
-                $totalStudent = count($students);
-            }
-
-
-            return view('backend.report.student.idcard.'.$format, compact(
-                'templateConfig',
-                'instituteInfo',
-                'side',
-                'students',
-                'totalStudent',
-                'session',
-                'validity'
-            ));
-
-        }
-
-        $classes = IClass::where('status', AppHelper::ACTIVE)
-            ->orderBy('order','asc')
-            ->pluck('name', 'id');
-
-        $academic_years = AcademicYear::where('status', '1')->orderBy('id', 'desc')->pluck('title', 'id');
-        
-        //get templates for students
-        // AppHelper::TEMPLATE_TYPE  1=SMS , 2=EMAIL, 3=Id card
-        $templates = Template::whereIn('type',[3])->where('role_id', AppHelper::USER_STUDENT)->pluck('name','id');
-
-        return view('backend.report.student.idcard.form', compact(
-            'academic_years',
-            'classes',
-            'templates'
-        ));
-
-    }
 
     /**
-     *  Employee ID card print.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function employeeIdcard(Request $request)
-    {
-
-
-
-        if($request->isMethod('post')){
-            $templateId = $request->get('template_id', 0);
-            $side = $request->get('side', 'back');
-
-            $templateConfig = Template::where('id', $templateId)->where('type',3)->where('role_id', AppHelper::USER_TEACHER)->first();
-
-            if(!$templateConfig){
-                return redirect()->route('report.employee_idcard')->with('error', 'Template not found!');
-            }
-
-            $templateConfig = json_decode($templateConfig->content);
-
-            $format = "format_";
-            if($templateConfig->format_id == 2){
-                $format .="two";
-            }
-            else if($templateConfig->format_id == 3){
-                $format .="three";
-            }
-            else {
-                $format .="one";
-            }
-
-            //get institute information
-            $instituteInfo = AppHelper::getAppSettings('institute_settings');
-
-
-            //pull employee
-            if($side == "front") {
-                $employees = Employee::orderBy('id_card', 'asc')->get();
-
-            }
-            else{
-
-                $employees = Employee::select('id_card')->orderBy('id_card', 'asc')->get();
-            }
-
-
-            return view('backend.report.hrm.employee.idcard.'.$format, compact(
-                'templateConfig',
-                'instituteInfo',
-                'side',
-                'employees',
-                ''
-            ));
-
-        }
-
-
-
-
-        //get templates for students
-        // AppHelper::TEMPLATE_TYPE  1=SMS , 2=EMAIL, 3=Id card
-        $templates = Template::whereIn('type',[3])->where('role_id', AppHelper::USER_TEACHER)->pluck('name','id');
-
-        return view('backend.report.hrm.employee.idcard.form', compact(
-            'templates'
-        ));
-
-    }
-
-
-    /**
-     *  Student attendance Monthly Section wise
-     *  @return \Illuminate\Http\Response
+     * Student attendance Monthly Section wise
+     *  @return \Illuminate\View\View
      */
     public function studentMonthlyAttendance(Request $request){
 
@@ -270,57 +84,21 @@ class ReportController extends Controller
             if($wekends){
                 $wekends = json_decode($wekends);
             }
-            //pull holidays
-            $calendarData = AcademicCalendar::where(function ($q){
-                $q->where('is_holiday','1')
-                    ->orWhere('is_exam','1');
-            })
-                ->where(function ($q) use($monthStart, $monthEnd){
-                    $q->whereDate('date_from', '>=', $monthStart->format('Y-m-d'))
-                        ->whereDate('date_from', '<=', $monthEnd->format('Y-m-d'))
-                        ->orWhere(function ($q) use($monthStart, $monthEnd){
-                            $q->whereDate('date_upto', '>=', $monthStart->format('Y-m-d'))
-                                ->whereDate('date_upto', '<=', $monthEnd->format('Y-m-d'));
-                        });
-                })
-
-                ->select('date_from','date_upto','is_holiday','is_exam','class_ids')
-                ->get()
-                ->reduce(function ($calendarData, $calendar) use($monthEnd, $monthStart, $wekends){
-
-                    $startDate = $calendar->date_from;
-                    $endDate = $calendar->date_upto;
-                    if($calendar->date_upto->gt($monthEnd)){
-                        $endDate = $monthEnd;
-                    }
-
-                    if($calendar->date_from->lt($monthStart)){
-                        $startDate = $monthStart;
-                    }
-
-                    $cladendarDateRange = AppHelper::generateDateRangeForReport($startDate, $endDate, true, $wekends, true);
-                    foreach ($cladendarDateRange as $date => $value){
-                        $symbols = 'H';
-                        if($calendar->is_exam == 1){
-                            $symbols = 'E';
-                        }
-                        $calendarData[$date] = $symbols;
-                    }
-                    return $calendarData;
-                });
 
 
             $monthDates = AppHelper::generateDateRangeForReport($monthStart, $monthEnd, true, $wekends);
 
             $headerData = new \stdClass();
-            $headerData->reportTitle = 'Monthly Attendance';
+            $headerData->reportTitle = 'Student Monthly Attendance';
             $headerData->reportSubTitle = 'Month: '.$month->format('F,Y');
+            $fileName = $headerData->reportTitle."_".$headerData->reportSubTitle;
+            $headerData->reportFileName = ReportHelper::replaceSpaceCharInString($fileName, ' ', '_');
+
 
             $filters = [];
-            if(AppHelper::getInstituteCategory() == 'college') {
-                $academicYearInfo = AcademicYear::where('id', $academicYearId)->first();
-                $filters[] = "Academic year: ".$academicYearInfo->title;
-            }
+            $academicYearInfo = AcademicYear::where('id', $academicYearId)->first();
+            $filters[] = "Academic year: ".$academicYearInfo->title;
+
             $section = Section::where('id', $sectionId)
                 ->with(['class' => function($q){
                     $q->select('name','id');
@@ -337,7 +115,6 @@ class ReportController extends Controller
                 'monthDates',
                 'students',
                 'attendanceData',
-                'calendarData',
                 'filters'
             ));
         }
@@ -360,7 +137,7 @@ class ReportController extends Controller
     /**
      * Student list print
      * @param Request $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View|\Illuminate\Http\Response
      */
     public function studentList(Request $request){
 
@@ -397,6 +174,7 @@ class ReportController extends Controller
             $students = collect();
             $showSection = false;
             $showClass = false;
+
             if($request->get('form_name') == 'class') {
 
                 //filter input
@@ -407,16 +185,12 @@ class ReportController extends Controller
                     ->where('academic_year_id', $academicYearId)
                     ->where('class_id', $classId)
                     ->if($sectionId, 'section_id', '=', $sectionId)
-                    ->with(['info' => function($query){
-                        $query->select('name','id', 'father_name', 'father_phone_no', 'mother_name', 'mother_phone_no',
-                            'guardian', 'guardian_phone_no', 'present_address', 'permanent_address');
-                    }])
+                    ->with('info')
                     ->when($sectionId, function ($q){
                         $q->with(['section' => function($qq){
                             $qq->select('id','name');
                         }]);
                     })
-                    ->select('id','student_id','roll_no','regi_no','section_id')
                     ->orderBy('regi_no','asc')
                     ->orderBy('roll_no','asc')
                     ->get();
@@ -444,10 +218,7 @@ class ReportController extends Controller
 
                 $students =  Registration::where('status', AppHelper::ACTIVE)
                     ->where('academic_year_id', $academicYearId)
-                    ->with(['info' => function($query){
-                        $query->select('name','id', 'father_name', 'father_phone_no', 'mother_name', 'mother_phone_no',
-                            'guardian', 'guardian_phone_no', 'present_address', 'permanent_address','gender','religion','blood_group');
-                    }])
+                    ->with('info')
                     ->with(['class' => function($query){
                         $query->select('name','id');
                     }])
@@ -459,7 +230,6 @@ class ReportController extends Controller
                             ->if($gender, 'gender', '=', $gender)
                             ->if($bloodGroup, 'blood_group', '=', $bloodGroup);
                     })
-                    ->select('id','student_id','roll_no','regi_no','class_id','section_id')
                     ->orderBy('class_id','asc')
                     ->orderBy('section_id','asc')
                     ->orderBy('regi_no','asc')
@@ -479,6 +249,9 @@ class ReportController extends Controller
             $headerData = new \stdClass();
             $headerData->reportTitle = 'Student List';
             $headerData->reportSubTitle = '';
+            $fileName = $headerData->reportTitle;
+            $headerData->reportFileName = ReportHelper::replaceSpaceCharInString($fileName, ' ', '_');
+
 
             return view('backend.report.student.list_print', compact('headerData', 'students','filters','showClass','showSection'));
         }
@@ -499,13 +272,14 @@ class ReportController extends Controller
     /**
      *  Marksheet public print
      * @param Request $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
      */
     public function marksheetPublic(Request $request){
 
         if($request->isMethod('post')) {
 
             $rules = [
+                'academic_year' => 'required|integer',
                 'class_id' => 'required|integer',
                 'exam_id' => 'required|integer',
                 'regi_no' => 'required',
@@ -524,6 +298,7 @@ class ReportController extends Controller
             $classId = $request->get('class_id', 0);
             $examId = $request->get('exam_id', 0);
             $regiNo = $request->get('regi_no', '');
+            $academicYear = $request->get('academic_year', 0);
 
 
             $exam = Exam::where('id', $examId)
@@ -536,8 +311,12 @@ class ReportController extends Controller
             }
 
             $student = Registration::where('status', AppHelper::ACTIVE)
+                ->where('academic_year_id', $academicYear)
                 ->where('class_id', $classId)
-                ->where('regi_no', $regiNo)
+                ->where(function ($q) use ($regiNo){
+                    $q->where('regi_no', $regiNo)
+                        ->orWhere('roll_no', $regiNo);
+                })
                 ->with(['info' => function($query){
                     $query->select('name','dob','father_name','mother_name','id');
                 }])
@@ -550,7 +329,7 @@ class ReportController extends Controller
                 ->with(['acYear' => function($q){
                     $q->select('title','id','start_date','end_date');
                 }])
-                ->select('id','student_id','class_id','section_id','shift','regi_no','roll_no','academic_year_id','fourth_subject','alt_fourth_subject')
+                ->select('id','student_id','class_id','section_id','shift','regi_no','roll_no','academic_year_id')
                 ->first();
 
             if(!$student){
@@ -601,71 +380,61 @@ class ReportController extends Controller
                 ->where('marks.class_id', $classId)
                 ->where('marks.exam_id', $exam->id)
                 ->select('subject_id','marks','total_marks','grade','point','present','subjects.name as subject_name',
-                    'subjects.type as subject_type','subjects.code as subject_code')
-                ->orderBy('subject_code','asc')
+                    'subjects.type as subject_type','subjects.code as subject_code','subjects.order as order')
+                ->orderBy('order','asc')
                 ->get();
 
-            $coreSubjectsMakrs = [];
+            $coreSubjectsMarks = [];
             foreach ($examMakrs as $marks){
-                if($marks->subject_type == '1'){
-                    //AppHelper::SUBJECT_TYPE
-                    $coreSubjectsMakrs[] = [
-                        'id' => $marks->subject_id,
-                        'code' => $marks->subject_code,
-                        'name' => $marks->subject_name,
-                        'marks' => json_decode($marks->marks, true),
-                        'highest_marks' => $subjectWiseHighestMarks[$marks->subject_id],
-                        'total_marks' => $marks->total_marks,
-                        'grade' => $marks->grade,
-                        'point' => $marks->point
-                    ];
-                }
-                else{
-                    if($student->fourth_subject == $marks->subject_id){
-                        $coreSubjectsMakrs[] = [
-                            'id' => $marks->subject_id,
-                            'code' => $marks->subject_code,
-                            'name' => $marks->subject_name,
-                            'marks' => json_decode($marks->marks, true),
-                            'highest_marks' => $subjectWiseHighestMarks[$marks->subject_id],
-                            'total_marks' => $marks->total_marks,
-                            'grade' => $marks->grade,
-                            'point' => $marks->point
-                        ];
-                    }
-                }
+                $coreSubjectsMarks[] = [
+                    'id' => $marks->subject_id,
+                    'code' => $marks->subject_code,
+                    'name' => $marks->subject_name,
+                    'marks' => json_decode($marks->marks, true),
+                    'highest_marks' => $subjectWiseHighestMarks[$marks->subject_id],
+                    'total_marks' => $marks->total_marks,
+                    'grade' => $marks->grade,
+                    'point' => $marks->point
+                ];
             }
 
 
             //marks distribution types
             $marksDistributionTypes = json_decode($exam->marks_distribution_types, true);
+            $subjectWiseMarksDistributionTypeEmptyList = ExamRule::where('exam_id', $exam->id)
+                ->select('subject_id', 'marks_distribution')
+                ->get()
+                ->reduce(function ($subjectWiseMarksDistributionTypeEmptyList, $rule) {
+
+                    $emptyList = [];
+                    foreach (json_decode($rule->marks_distribution) as $distribution) {
+                        if($distribution->total_marks == 0) {
+                            $emptyList[$distribution->type] = 0;
+                        }
+                    }
+
+                    $subjectWiseMarksDistributionTypeEmptyList[$rule->subject_id] = $emptyList;
+
+                    return $subjectWiseMarksDistributionTypeEmptyList;
+                });
+
 
             // report settings
             $headerData = new \stdClass();
             $headerData->reportTitle = 'Marksheet';
             $headerData->reportSubTitle = $exam->name.'-'.$student->acYear->title;
-
-            $message = AppHelper::getAppSettings('report_pms_message');
-            $expireDate = AppHelper::getAppSettings('report_pms_message_exp_date');
-            $showMessage = false;
-            if($message && strlen($message) && $expireDate && strlen($expireDate)){
-                $expireDate = Carbon::createFromFormat('d/m/Y', $expireDate);
-                $nowDate = Carbon::now(env('APP_TIMEZONE','Asia/Dhaka'));
-                if($nowDate->lte($expireDate)){
-                    $showMessage = true;
-                }
-            }
+            $fileName = $headerData->reportTitle."_Class_{$student->class->name}_Section_{$student->section->name}_Roll_{$student->roll_no}";
+            $headerData->reportFileName = ReportHelper::replaceSpaceCharInString($fileName, ' ', '_');
 
 
             return view('backend.report.exam.marksheet_pub_print', compact(
                 'headerData',
                 'exam',
                 'marksDistributionTypes',
+                'subjectWiseMarksDistributionTypeEmptyList',
                 'student',
-                'coreSubjectsMakrs',
-                'result',
-                'message',
-                'showMessage'
+                'coreSubjectsMarks',
+                'result'
             ));
         }
 
@@ -675,17 +444,19 @@ class ReportController extends Controller
 
         $exams = [];
 
+        $academic_years = AcademicYear::where('status', '1')->orderBy('id', 'desc')->pluck('title', 'id');
 
         return view('backend.report.exam.marksheet_pub', compact(
             'exams',
-            'classes'
+            'classes',
+            'academic_years'
         ));
     }
 
     /**
      * employee list print
      * @param Request $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View|\Illuminate\Http\Response
      */
     public function employeeList(Request $request){
         if($request->isMethod('post')) {
@@ -697,6 +468,7 @@ class ReportController extends Controller
             }])->select(
                 'id',
                 'role_id',
+                'id_card',
                 'name',
                 'designation',
                 'qualification',
@@ -711,11 +483,14 @@ class ReportController extends Controller
                 'duty_start',
                 'duty_end',
                 'status'
-            )->get();
+            )
+                ->orderBy('order','asc')
+                ->get();
 
             $headerData = new \stdClass();
             $headerData->reportTitle = 'Employee List';
             $headerData->reportSubTitle = '';
+
 
             return view('backend.report.hrm.employee.list_print', compact('headerData','employees'));
         }
@@ -726,7 +501,7 @@ class ReportController extends Controller
 
     /**
      *  Employee attendance Monthly
-     *  @return \Illuminate\Http\Response
+     *  @return \Illuminate\View\View
      */
     public function employeeMonthlyAttendance(Request $request){
 
@@ -743,9 +518,8 @@ class ReportController extends Controller
             $monthStart = $month->startOfMonth()->copy();
             $monthEnd = $month->endOfMonth()->copy();
 
-            $employees = Employee::where('status', AppHelper::ACTIVE)
-                ->select('id','name','id_card')
-                ->orderBy('id_card','asc')
+            $employees = Employee::select('id','name','id_card')
+                ->orderBy('order','asc')
                 ->get();
 
             $employeeIds = $employees->pluck('id');
@@ -769,7 +543,7 @@ class ReportController extends Controller
 
             //get all leaves of employees for requested month
             $employeesLeaves = Leave::where('status',2) //1= pending, 2= approved, 3= Rejected
-                ->whereDate('leave_date','>=', $monthStart->format('Y-m-d'))
+            ->whereDate('leave_date','>=', $monthStart->format('Y-m-d'))
                 ->whereDate('leave_date','<=', $monthEnd->format('Y-m-d'))
                 ->get(['employee_id','leave_date'])
                 ->reduce(function ($employeesLeaves, $leave) {
@@ -777,62 +551,20 @@ class ReportController extends Controller
                     return $employeesLeaves;
                 });
 
-            //get all workoutside of employees for requested month
-            $employeesWorkoutside = WorkOutside::whereDate('work_date','>=', $monthStart->format('Y-m-d'))
-                ->whereDate('work_date','<=', $monthEnd->format('Y-m-d'))
-                ->get(['employee_id','work_date'])
-                ->reduce(function ($employeesWorkoutside, $work) {
-                    $employeesWorkoutside[$work->employee_id][$work->getOriginal('work_date')] = 1; //just true
-                    return $employeesWorkoutside;
-                });
-
 
             $wekends = AppHelper::getAppSettings('weekends');
             if($wekends){
                 $wekends = json_decode($wekends);
             }
-            //pull holidays
-            $calendarData = AcademicCalendar::where(function ($q){
-                $q->where('is_holiday','1');
-            })
-                ->where(function ($q) use($monthStart, $monthEnd){
-                    $q->whereDate('date_from', '>=', $monthStart->format('Y-m-d'))
-                        ->whereDate('date_from', '<=', $monthEnd->format('Y-m-d'))
-                        ->orWhere(function ($q) use($monthStart, $monthEnd){
-                            $q->whereDate('date_upto', '>=', $monthStart->format('Y-m-d'))
-                                ->whereDate('date_upto', '<=', $monthEnd->format('Y-m-d'));
-                        });
-                })
 
-                ->select('date_from','date_upto','is_holiday','is_exam','class_ids')
-                ->get()
-                ->reduce(function ($calendarData, $calendar) use($monthEnd, $monthStart, $wekends){
-
-                    $startDate = $calendar->date_from;
-                    $endDate = $calendar->date_upto;
-                    if($calendar->date_upto->gt($monthEnd)){
-                        $endDate = $monthEnd;
-                    }
-
-                    if($calendar->date_from->lt($monthStart)){
-                        $startDate = $monthStart;
-                    }
-
-                    $cladendarDateRange = AppHelper::generateDateRangeForReport($startDate, $endDate, true, $wekends, true);
-                    foreach ($cladendarDateRange as $date => $value){
-                        $symbols = 'H';
-                        $calendarData[$date] = $symbols;
-                    }
-                    return $calendarData;
-                });
 
             $monthDates = AppHelper::generateDateRangeForReport($monthStart, $monthEnd, true, $wekends);
 
             $headerData = new \stdClass();
-            $headerData->reportTitle = 'Monthly Attendance';
+            $headerData->reportTitle = 'Employee Monthly Attendance';
             $headerData->reportSubTitle = 'Month: '.$month->format('F,Y');
-
-            $filters = [];
+            $fileName = $headerData->reportTitle."_".$headerData->reportSubTitle;
+            $headerData->reportFileName = ReportHelper::replaceSpaceCharInString($fileName, ' ', '_');
 
 
             return view('backend.report.hrm.employee.attendance.monthly_print',compact(
@@ -840,13 +572,12 @@ class ReportController extends Controller
                 'monthDates',
                 'employees',
                 'attendanceData',
-                'calendarData',
-                'employeesLeaves',
-                'employeesWorkoutside'
+                'employeesLeaves'
             ));
         }
 
         return view('backend.report.hrm.employee.attendance.monthly');
 
     }
+
 }

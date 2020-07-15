@@ -52,6 +52,15 @@
                             <span class="fa fa-calendar form-control-feedback"></span>
                             <span class="text-danger">{{ $errors->first('end_date') }}</span>
                         </div>
+                        <div class="form-group has-feedback hide">
+                            <label for="have_selective_subject">Is open for Admission?
+                                <div class="checkbox icheck">
+                                    <input type="checkbox" name="is_open_for_admission" class="have_selective_subject" @if($is_open_for_admission) checked @endif>
+                                </div>
+                            </label>
+                            <span class="text-danger">{{ $errors->first('is_open_for_admission') }}</span>
+                        </div>
+
 
                     </div>
                     <!-- /.box-body -->
@@ -74,6 +83,11 @@
     <script type="text/javascript">
         $(document).ready(function () {
             Administrator.academicYearInit();
+            $('input').not('.dont-style').iCheck({
+                checkboxClass: 'icheckbox_square-blue',
+                radioClass: 'iradio_square-blue',
+                increaseArea: '20%' /* optional */
+            });
         });
     </script>
 @endsection

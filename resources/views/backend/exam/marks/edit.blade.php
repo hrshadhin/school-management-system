@@ -56,7 +56,9 @@
                                                     $marksDistributions = json_decode($examRule->marks_distribution);
                                                 @endphp
                                                 @foreach($marksDistributions as $distribution)
-                                                    <th>{{AppHelper::MARKS_DISTRIBUTION_TYPES[$distribution->type]}}</th>
+                                                    @if($distribution->total_marks > 0)
+                                                        <th>{{AppHelper::MARKS_DISTRIBUTION_TYPES[$distribution->type]}}</th>
+                                                    @endif
                                                 @endforeach
                                                 <th>Total Marks</th>
                                                 <th>Absent</th>
@@ -74,9 +76,11 @@
                                                     $achivemarks = json_decode($marks->marks, true);
                                                 @endphp
                                                 @foreach($marksDistributions as $distribution)
+                                                    @if($distribution->total_marks > 0)
                                                     <td>
-                                                        <input type="number" class="form-control" name="type[{{$distribution->type}}]" value="{{$achivemarks[$distribution->type]}}" required max="{{$distribution->total_marks}}" min="0">
+                                                        <input type="number" @if($marks->present == 0) readonly @endif class="form-control"  name="type[{{$distribution->type}}]" value="{{$achivemarks[$distribution->type]}}" required max="{{$distribution->total_marks}}" min="0">
                                                     </td>
+                                                    @endif
                                                 @endforeach
                                                 <td>
                                                     <input type="text" readonly class="form-control totalMarks" value="{{$marks->total_marks}}">

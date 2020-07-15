@@ -2,12 +2,9 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\AcademicCalendar;
 use App\AcademicYear;
 use App\Grade;
 use App\Http\Helpers\AppHelper;
-use App\IClass;
-use App\Template;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -48,9 +45,10 @@ class SettingsController extends Controller
                 'establish' => 'min:4|max:255',
                 'website_link' => 'max:255',
                 'email' => 'nullable|email|max:255',
-                'phone_no' => 'required|min:8|max:15',
+                'phone_no' => 'required|min:8|max:255',
                 'address' => 'required|max:500',
 //                'language' => 'required|min:2',
+                'board_name' => 'nullable|max:255',
                 'weekends' => 'required|array',
                 'morning_start' => 'required|max:8|min:7',
                 'morning_end' => 'required|max:8|min:7',
@@ -58,18 +56,21 @@ class SettingsController extends Controller
                 'day_end' => 'required|max:8|min:7',
                 'evening_start' => 'required|max:8|min:7',
                 'evening_end' => 'required|max:8|min:7',
-                'student_attendance_notification' => 'required|integer',
-                'employee_attendance_notification' => 'required|integer',
                 'institute_type' => 'required|integer',
-                'student_idcard_template' => 'required|integer',
-                'employee_idcard_template' => 'required|integer',
                 'result_default_grade_id' => 'required|integer',
+                'START_DAY_OF_WEEK' => 'required|integer',
+                'END_DAY_OF_WEEK' => 'required|integer',
+
             ];
 
             if(AppHelper::getInstituteCategory() != 'college') {
                 $rules[ 'academic_year'] ='required|integer';
             }
             $this->validate($request, $rules, $messages);
+
+            if($request->get('START_DAY_OF_WEEK') == $request->get('END_DAY_OF_WEEK')){
+                return redirect()->back()->with('error','Start and End day of week can\'t be same')->withInput();
+            }
 
 
             if($request->hasFile('logo')) {
@@ -120,6 +121,7 @@ class SettingsController extends Controller
                 $data['favicon'] = $request->get('oldFavicon','');
             }
 
+
             $data['name'] = $request->get('name');
             $data['short_name'] = $request->get('short_name');
             $data['establish'] = $request->get('establish');
@@ -160,6 +162,11 @@ class SettingsController extends Controller
                 ['meta_value' => $request->get('institute_type', 1)]
             );
 
+            AppMeta::updateOrCreate(
+                ['meta_key' => 'board_name'],
+                ['meta_value' => $request->get('board_name', '')]
+            );
+
             $shiftData = [
                 'Morning' => [
                     'start' => strtolower($request->get('morning_start','12:00 am')),
@@ -184,42 +191,14 @@ class SettingsController extends Controller
                 ['meta_key' => 'weekends'],
                 ['meta_value' => json_encode($request->get('weekends',[]))]
             );
-
-
-
             AppMeta::updateOrCreate(
-                ['meta_key' => 'student_attendance_notification'],
-                ['meta_value' => $request->get('student_attendance_notification', 0)]
-            );
-            AppMeta::updateOrCreate(
-                ['meta_key' => 'employee_attendance_notification'],
-                ['meta_value' => $request->get('employee_attendance_notification', 0)]
+                ['meta_key' => 'week_start_day'],
+                ['meta_value' => trim($request->get('START_DAY_OF_WEEK'))]
             );
 
-            //if send notification then add settings
             AppMeta::updateOrCreate(
-                ['meta_key' => 'student_attendance_gateway'],
-                ['meta_value' => $request->get('sms_gateway_St', 0)]
-            );
-            AppMeta::updateOrCreate(
-                ['meta_key' => 'student_attendance_template'],
-                ['meta_value' => $request->get('notification_template_St', 0)]
-            );
-            AppMeta::updateOrCreate(
-                ['meta_key' => 'employee_attendance_gateway'],
-                ['meta_value' => $request->get('sms_gateway_Emp', 0)]
-            );
-            AppMeta::updateOrCreate(
-                ['meta_key' => 'employee_attendance_template'],
-                ['meta_value' => $request->get('notification_template_Emp', 0)]
-            );
-            AppMeta::updateOrCreate(
-                ['meta_key' => 'student_idcard_template'],
-                ['meta_value' => $request->get('student_idcard_template', 0)]
-            );
-            AppMeta::updateOrCreate(
-                ['meta_key' => 'employee_idcard_template'],
-                ['meta_value' => $request->get('employee_idcard_template', 0)]
+                ['meta_key' => 'week_end_day'],
+                ['meta_value' => trim($request->get('END_DAY_OF_WEEK'))]
             );
 
             AppMeta::updateOrCreate(
@@ -229,6 +208,11 @@ class SettingsController extends Controller
 
 
             Cache::forget('app_settings');
+            //invalid dashboard cache
+            Cache::forget('studentCount');
+            Cache::forget('student_count_by_class');
+            Cache::forget('student_count_by_section');
+            Cache::forget('default_academic_year');
 
             //now notify the admins about this record
             $msg = "Institute settings updated by ".auth()->user()->name;
@@ -265,8 +249,6 @@ class SettingsController extends Controller
         $frontend_website = isset($metas['frontend_website']) ? $metas['frontend_website'] : 0;
         $language = isset($metas['language']) ? $metas['language'] : 'en';
         $disable_language = isset($metas['disable_language']) ? $metas['disable_language'] : 1;
-        $student_attendance_notification = isset($metas['student_attendance_notification']) ? $metas['student_attendance_notification'] : 0;
-        $employee_attendance_notification = isset($metas['employee_attendance_notification']) ? $metas['employee_attendance_notification'] : 0;
         $institute_type = isset($metas['institute_type']) ? $metas['institute_type'] : 1;
 
         $weekends = isset($metas['weekends']) ? json_decode($metas['weekends'], true) : [-1];
@@ -284,19 +266,13 @@ class SettingsController extends Controller
             $metas['shift_data'] = $formatedShiftData;
         }
 
-        //get idcard templates
-        // AppHelper::TEMPLATE_TYPE  1=SMS , 2=EMAIL, 3=Id card
-        $studentIdcardTemplates = Template::whereIn('type',[3])->where('role_id', AppHelper::USER_STUDENT)
-            ->pluck('name','id')->prepend('None', 0);
-        $employeIdcardTemplates = Template::whereIn('type',[3])->where('role_id', AppHelper::USER_TEACHER)
-            ->pluck('name','id')->prepend('None', 0);
-
-        $student_idcard_template = $metas['student_idcard_template'] ?? 0;
-        $employee_idcard_template = $metas['employee_idcard_template'] ?? 0;
 
         //result settings
         $grades = Grade::pluck('name', 'id')->prepend('None',0);
         $grade_id = $metas['result_default_grade_id'] ?? 0;
+
+        $START_DAY_OF_WEEK  = $metas['week_start_day'] ?? null;
+        $END_DAY_OF_WEEK  = $metas['week_end_day'] ?? null;
 
 
         return view(
@@ -309,245 +285,14 @@ class SettingsController extends Controller
                 'grade_id',
                 'frontend_website',
                 'disable_language',
-                'student_attendance_notification',
-                'employee_attendance_notification',
                 'institute_type',
                 'language',
                 'metas',
-                'studentIdcardTemplates',
-                'employeIdcardTemplates',
-                'student_idcard_template',
-                'employee_idcard_template'
+                'START_DAY_OF_WEEK',
+                'END_DAY_OF_WEEK'
             )
         );
     }
-
-
-
-    /**
-     * academic calendar settings  manage
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function academicCalendarIndex(Request $request)
-    {
-        //for save on POST request
-        if ($request->isMethod('post')) {//
-            $this->validate($request, [
-                'hiddenId' => 'required|integer',
-            ]);
-
-            $calendar = AcademicCalendar::findOrFail($request->get('hiddenId'));
-            $calendar->delete();
-
-            return redirect()->route('settings.academic_calendar.index')->with('success', 'Entry deleted!');
-        }
-
-        //for get request
-        $year = $request->query->get('year','');
-        $calendars = collect();
-        if(strlen($year)) {
-            $calendars = AcademicCalendar::whereYear('date_from', $year)
-                ->whereYear('date_upto', $year)
-                ->get();
-        }
-
-        return view('backend.settings.academic_calendar_list', compact('calendars','year'));
-    }
-
-    /**
-     *  academic calendar settings   manage
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function academicCalendarCru(Request $request, $id=0)
-    {
-        //for save on POST request
-        if ($request->isMethod('post')) {
-
-            $rules =  [
-                'title' => 'required|max:255',
-                'date_from' => 'required|min:10|max:10',
-                'date_upto' => 'nullable|min:10|max:10',
-                'description' => 'nullable|min:5|max:500',
-            ];
-
-            if(AppHelper::getInstituteCategory() == 'college' && $request->has('is_exam')) {
-                $rules['class_id'] = 'required|array';
-            }
-            $this->validate($request, $rules);
-
-
-            $dateFrom = Carbon::createFromFormat('d/m/Y', $request->get('date_from'));
-            $dateUpto = $dateFrom;
-            if(strlen($request->get('date_upto'))){
-                $dateUpto = Carbon::createFromFormat('d/m/Y', $request->get('date_upto'));
-            }
-
-            if($dateUpto->lessThan($dateFrom)){
-                return redirect()->back()->with('error', 'Date up-to can not be less than date from!');
-            }
-
-            $data =  [
-                'title' => $request->get('title'),
-                'date_from' => $dateFrom,
-                'date_upto' => $dateUpto,
-                'description' => $request->get('description',''),
-            ];
-            if($request->has('is_holiday')){
-                $data['is_holiday'] = '1';
-            }
-
-            if($request->has('is_exam')){
-                $data['is_exam'] = '1';
-
-                if(AppHelper::getInstituteCategory() == 'college') {
-                    $data['class_ids'] = json_encode($request->get('class_id', []));
-                }
-
-            }
-            else{
-                $data['is_exam'] = '0';
-                $data['class_ids']  = null;
-            }
-
-            AcademicCalendar::updateOrCreate(['id' => $id], $data);
-
-            $msg = "Calendar entry";
-            $msg .= $id ? 'updated.' : 'added.';
-            if($id){
-                return redirect()->route('settings.academic_calendar.index')->with('success', $msg);
-            }
-            return redirect()->route('settings.academic_calendar.create')->with('success', $msg);
-        }
-
-        //for get request
-        $classes = collect();
-        $calendar = AcademicCalendar::where('id', $id)->first();
-        $is_holiday = 0;
-        $is_exam = 0;
-        $class_id = [];
-        if($calendar) {
-           $is_holiday = $calendar->is_holiday;
-           $is_exam = $calendar->is_exam;
-           $class_id = $calendar->class_ids ? json_decode($calendar->class_ids) : [];
-        }
-
-        if(AppHelper::getInstituteCategory() == 'college') {
-            $classes = IClass::where('status', AppHelper::ACTIVE)
-                ->orderBy('order','asc')
-                ->pluck('name', 'id');
-        }
-
-         $weekends = AppHelper::getAppSettings('weekends');
-
-        return view('backend.settings.academic_calendar_add', compact('calendar', 'is_holiday',
-            'is_exam','classes','class_id','weekends'));
-    }
-
-
-    /**
-     * SMS Gateway settings  manage
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function smsGatewayIndex(Request $request)
-    {
-        //for save on POST request
-        if ($request->isMethod('post')) {//
-            $this->validate($request, [
-                'hiddenId' => 'required|integer',
-            ]);
-
-            $gateway = AppMeta::findOrFail($request->get('hiddenId'));
-
-            // now check is gateway currently used ??
-            $stGateway = AppHelper::getAppSettings('student_attendance_gateway');
-            $empGateway = AppHelper::getAppSettings('employee_attendance_gateway');
-            if($gateway->id == $stGateway || $gateway->id == $empGateway){
-                return redirect()->route('settings.sms_gateway.index')->with('error', 'Can not delete it because this gateway is being used.');
-            }
-            if($gateway->meta_key == "sms_gateway"){
-                $gateway->delete();
-            }
-
-            return redirect()->route('settings.sms_gateway.index')->with('success', 'Gateway deleted!');
-        }
-
-        //for get request
-        $smsGateways = AppMeta::where('meta_key','sms_gateway')->get();
-
-        //if it is ajax request then send json response with formated data
-        if($request->ajax()){
-            $data = [];
-            foreach ($smsGateways as $gateway){
-                $json_data = json_decode($gateway->meta_value);
-                $data[] = [
-                    'id' => $gateway->id,
-                    'text' => $json_data->name.'['.AppHelper::SMS_GATEWAY_LIST[$json_data->gateway].']',
-                ];
-            }
-
-            return response()->json($data);
-        }
-
-
-
-        return view('backend.settings.smsgateway_list', compact('smsGateways'));
-    }
-
-    /**
-     *  SMS Gateway settings   manage
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function smsGatewayCru(Request $request, $id=0)
-    {
-        //for save on POST request
-        if ($request->isMethod('post')) {
-            $this->validate($request, [
-                'gateway' => 'required|integer',
-                'name' => 'required|min:4|max:255',
-                'sender_id' => 'nullable',
-                'user' => 'required|max:255',
-                'password' => 'nullable|max:255',
-                'api_url' => 'required',
-            ]);
-
-
-            $data = [
-                'gateway' => $request->get('gateway',''),
-                'name' => $request->get('name',''),
-                'sender_id' => $request->get('sender_id',''),
-                'user' => $request->get('user',''),
-                'password' => $request->get('password',''),
-                'api_url' => $request->get('api_url',''),
-            ];
-
-
-            AppMeta::updateOrCreate(
-                ['id' => $id],
-                [
-                    'meta_key' => 'sms_gateway',
-                    'meta_value' => json_encode($data)
-                ]
-            );
-            $msg = "SMS Gateway ";
-            $msg .= $id ? 'updated.' : 'added.';
-
-            if($id){
-                return redirect()->route('settings.sms_gateway.index')->with('success', $msg);
-            }
-            return redirect()->route('settings.sms_gateway.create')->with('success', $msg);
-        }
-
-        //for get request
-        $gateways = AppHelper::SMS_GATEWAY_LIST;
-        $gateway_id = null;
-        $gateway = AppMeta::find($id);
-        if($gateway) {
-            $gateway_id = (json_decode($gateway->meta_value))->gateway;
-        }
-
-        return view('backend.settings.smsgateway_add', compact('gateways', 'gateway', 'gateway_id'));
-    }
-
 
     /**
      * report settings  manage
@@ -562,12 +307,16 @@ class SettingsController extends Controller
 
             //validate form
             $messages = [
+                'ms_log.max' => 'Logo must be under 512kb.',
+                'ms_log.dimensions' => 'Logo size must be 150x110.',
+                'ms_watermark.max' => 'Watermark must be under 1mb.',
+                'ms_watermark.dimensions' => 'Watermark size must be 649x918.',
+                'ms_title.max' => 'Institute name must be under 512kb.',
+                'ms_title.dimensions' => 'Institute name size must be 428x92.',
             ];
             $rules = [
                 'background_color' => 'nullable|max:255',
-                'text_color' => 'nullable|max:255',
-                'message' => 'nullable|max:1000',
-                'message_expire_date' => 'nullable|min:10|max:11',
+                'text_color' => 'nullable|max:255'
 
             ];
             $this->validate($request, $rules, $messages);
@@ -595,16 +344,6 @@ class SettingsController extends Controller
             AppMeta::updateOrCreate(
                 ['meta_key' => 'report_text_color'],
                 ['meta_value' => $request->get('text_color', '')]
-            );
-
-            AppMeta::updateOrCreate(
-                ['meta_key' => 'report_pms_message'],
-                ['meta_value' => trim($request->get('message', ''))]
-            );
-
-            AppMeta::updateOrCreate(
-                ['meta_key' => 'report_pms_message_exp_date'],
-                ['meta_value' => trim($request->get('message_expire_date', ''))]
             );
 
             Cache::forget('app_settings');

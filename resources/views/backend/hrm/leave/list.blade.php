@@ -186,7 +186,6 @@
 @section('extraScript')
     <script type="text/javascript">
         $(document).ready(function () {
-            window.excludeFilterComlumns = [0,4,5,6,7];
             Generic.initCommonPageJS();
             Generic.initDeleteDialog();
         });

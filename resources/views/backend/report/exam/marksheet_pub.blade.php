@@ -38,7 +38,15 @@
                         <div class="box-body">
                             @csrf
                             <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md-2">
+                                    <div class="form-group has-feedback">
+                                        <label for="academic_year">Academic Year<span class="text-danger">*</span></label>
+                                        {!! Form::select('academic_year', $academic_years, null , ['placeholder' => 'Pick a year...','class' => 'form-control select2', 'required' => 'true']) !!}
+                                        <span class="form-control-feedback"></span>
+                                        <span class="text-danger">{{ $errors->first('academic_year') }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
                                     <div class="form-group has-feedback">
                                         <label for="class_id">Class Name
                                             <span class="text-danger">*</span>
@@ -48,7 +56,7 @@
                                         <span class="text-danger">{{ $errors->first('class_id') }}</span>
                                     </div>
                                 </div>
-                                <div class="col-md-5">
+                                <div class="col-md-4">
                                     <div class="form-group has-feedback">
                                         <label for="class_id">Exam Name
                                             <span class="text-danger">*</span>
@@ -60,7 +68,7 @@
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group has-feedback">
-                                        <label for="regi_no">Student Regi No.<span class="text-danger">*</span></label>
+                                        <label for="regi_no">Student Registration/Roll No.<span class="text-danger">*</span></label>
                                         <input type='text'  class="form-control" name="regi_no" placeholder="registration number" value="" required />
                                         <span class="fa fa-sort-numeric-asc form-control-feedback"></span>
                                         <span class="text-danger">{{ $errors->first('regi_no') }}</span>

@@ -45,7 +45,8 @@
                                     <th width="10%">Class</th>
                                     <th width="20%">Name</th>
                                     <th width="10%">Elective Subject Point Above Addition</th>
-                                    <th width="35%">Marks Distribution Types</th>
+                                    <th width="30%">Marks Distribution Types</th>
+                                    <th width="5%">Open For Marks Entry</th>
                                     <th width="10%">Status</th>
                                     <th class="notexport" width="10%">Action</th>
                                 </tr>
@@ -69,6 +70,10 @@
 
                                         </td>
                                         <td>
+                                                <input class="openEntryChange" type="checkbox" data-pk="{{$exam->id}}" @if($exam->open_for_marks_entry) checked @endif data-toggle="toggle" data-on="Yes" data-off="No" data-onstyle="success" data-offstyle="danger">
+
+                                        </td>
+                                        <td>
                                             <input class="statusChange" type="checkbox" data-pk="{{$exam->id}}" @if($exam->status) checked @endif data-toggle="toggle" data-on="<i class='fa fa-check-circle'></i>" data-off="<i class='fa fa-ban'></i>" data-onstyle="success" data-offstyle="danger">
                                         </td>
                                         <td>
@@ -80,7 +85,7 @@
                                             <div class="btn-group">
                                                 <form  class="myAction" method="POST" action="{{URL::route('exam.destroy',$exam->id)}}">
                                                     @csrf
-                                                    <button type="submit" class="btn btn-danger btn-sm" title="Delete">
+                                                    <button type="submit" class="btn btn-danger btn-sm" title="Devare">
                                                         <i class="fa fa-fw fa-trash"></i>
                                                     </button>
                                                 </form>
@@ -97,7 +102,8 @@
                                     <th width="10%">Class</th>
                                     <th width="20%">Name</th>
                                     <th width="10%">Elective Subject Point Above Addition</th>
-                                    <th width="35%">Marks Distribution Types</th>
+                                    <th width="30%">Marks Distribution Types</th>
+                                    <th width="5%">Open For Marks Entry</th>
                                     <th width="10%">Status</th>
                                     <th class="notexport" width="10%">Action</th>
                                 </tr>
@@ -119,11 +125,10 @@
 @section('extraScript')
     <script type="text/javascript">
         window.postUrl = '{{URL::Route("exam.status", 0)}}';
-        window.changeExportColumnIndex = 5;
+        window.changeExportColumnIndex = 6;
         $(document).ready(function () {
             Generic.initCommonPageJS();
             Generic.initDeleteDialog();
-            $('title').text($('title').text() + '-' + $('select[name="class_id"] option[selected]').text());
             $('#class_id_filter').on('change', function () {
                 var class_id = $(this).val();
                 var getUrl = window.location.href.split('?')[0];
@@ -134,6 +139,43 @@
                 window.location = getUrl;
 
             });
+
+            //open/close toogle button
+            var stopchange = false;
+            $('html #listDataTable').on('change', 'input.openEntryChange', function (e) {
+                var that = $(this);
+                if (stopchange === false) {
+                    var isActive = $(this).prop('checked') ? 1 : 0;
+                    var pk = $(this).attr('data-pk');
+                    var newpostUrl = postUrl.replace(/\.?0+$/, pk);
+                    axios.post(newpostUrl, { 'status': isActive, 'open_entry': 1 })
+                        .then((response) => {
+                            if (response.data.success) {
+                                toastr.success(response.data.message);
+                            }
+                            else {
+                                var status = response.data.message;
+                                if (stopchange === false) {
+                                    stopchange = true;
+                                    that.bootstrapToggle('toggle');
+                                    stopchange = false;
+                                }
+                                toastr.error(status);
+                            }
+                        }).catch((error) => {
+                        // console.log(error.response);
+                        var status = error.response.statusText;
+                        if (stopchange === false) {
+                            stopchange = true;
+                            that.bootstrapToggle('toggle');
+                            stopchange = false;
+                        }
+                        toastr.error(status);
+
+                    });
+                }
+            });
+
         });
     </script>
 @endsection

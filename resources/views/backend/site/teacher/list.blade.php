@@ -47,7 +47,7 @@
                                 <th width="6%">Qualification</th>
                                 <th width="15%">Description</th>
                                 <th width="7%">Facebook</th>
-                                <th width="7%">Google</th>
+                                <th width="7%">Instagram</th>
                                 <th width="7%">Twitter</th>
                                 <th width="10%">Action</th>
                             </tr>
@@ -69,8 +69,8 @@
 
                                     </td>
                                     <td>
-                                         @if($profile->google)
-                                        <a href="{{ $profile->google }}" target="_blank" class="link"><i class="fa fa-2x fa-google"></i></a>
+                                         @if($profile->instagram)
+                                        <a href="{{ $profile->instagram }}" target="_blank" class="link"><i class="fa fa-2x fa-instagram"></i></a>
                                         @endif
                                     </td>
                                     <td>
@@ -107,7 +107,7 @@
                                 <th width="6%">Qualification</th>
                                 <th width="15%">Description</th>
                                 <th width="7%">Facebook</th>
-                                <th width="7%">Google</th>
+                                <th width="7%">Instagram</th>
                                 <th width="7%">Twitter</th>
                                 <th width="10%">Action</th>
                             </tr>

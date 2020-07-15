@@ -5,6 +5,7 @@ use App\User;
 use App\Role;
 use App\UserRole;
 use App\Permission;
+use App\AppMeta;
 
 class DatabaseSeeder extends Seeder
 {
@@ -23,8 +24,10 @@ class DatabaseSeeder extends Seeder
         Role::truncate();
         UserRole::truncate();
         Permission::truncate();
+        AppMeta::truncate();
         DB::table('roles_permissions')->truncate();
         DB::table('users_permissions')->truncate();
+        DB::table('notifications')->truncate();
 
         DB::statement("SET foreign_key_checks=1");
 

@@ -47,13 +47,6 @@
                                         <span class="text-danger">{{ $errors->first('attendance_date') }}</span>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="checkbox icheck">
-                                        <label class="margin-top-20">
-                                            <input type="checkbox" name="is_send_notification" class="notMe" @if($sendNotification) checked @endif> <span class="text-bold text-warning">Send Absent Notification?</span>
-                                        </label>
-                                    </div>
-                                </div>
                             </div>
 
                             <div class="row">

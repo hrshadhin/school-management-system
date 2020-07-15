@@ -1,29 +1,59 @@
 <?php
+
 namespace App\Http\Helpers;
 
-use App\Employee;
+use App\AppMeta;
 use App\Event;
-use App\Jobs\ProcessSms;
+use App\Leave;
 use App\Notifications\UserActivity;
 use App\Permission;
-use App\Registration;
 use App\SiteMeta;
-use App\Template;
 use App\User;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
-use App\AppMeta;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
-use Picqer\Barcode\BarcodeGeneratorPNG;
+use Illuminate\Support\Facades\Schema;
 
 
 class AppHelper
 {
+    const STUDENT_SMS_NOTIFICATION_NO = [
+        //        0 => 'None',
+        1 => 'Father\'s Phone No.',
+        2 => 'Mother\'s Phone No.',
+        3 => 'Guardian Phone No.'
+    ];
+
+    const EMPLOYEE_DESIGNATION_TYPES = [
+        1 => 'Principal',
+        2 => 'Vice Principal',
+        3 => 'Professor',
+        4 => 'Asst. Professor',
+        5 => 'Associate Professor',
+        6 => 'Lecturer',
+        7 => 'Headmaster',
+        8 => 'Asst. Headmaster',
+        9 => 'Asst. Teacher',
+        10 => 'Demonstrator',
+        11 => 'Instructor',
+        12 => 'Lab Assistant',
+        13 => 'Clark',
+        14 => 'Computer Operator',
+        15 => 'Accountant',
+        16 => 'Cashier',
+        17 => 'Aya',
+        18 => 'Peon',
+        19 => 'Night guard',
+        20 => 'Other'
+    ];
+
+    const EMPLOYEE_PRINCIPAL = 1;
+    const EMPLOYEE_HEADMASTER = 7;
 
     const weekDays = [
         0 => "Sunday",
@@ -78,7 +108,8 @@ class AppHelper
 
     const SUBJECT_TYPE = [
         1 => 'Core',
-        2 => 'Electives'
+        2 => 'Electives',
+        3 => 'Selective'
     ];
 
     const ATTENDANCE_TYPE = [
@@ -86,33 +117,12 @@ class AppHelper
         1 => 'Present'
     ];
 
-    const TEMPLATE_TYPE = [
-        1 => 'SMS',
-        2 => 'EMAIL',
-        3 => 'ID CARD'
-    ];
-
-    const TEMPLATE_USERS = [
-        AppHelper::USER_TEACHER => "Employee",
-        AppHelper::USER_STUDENT => "Student",
-        AppHelper::USER_PARENTS => "Parents",
-        0 => "System Users"
-    ];
-
-    const SMS_GATEWAY_LIST = [
-        1 => 'Bulk SMS Route',
-        2 => 'IT Solutionbd',
-        3 => 'Zaman IT',
-        4 => 'MIM SMS',
-        5 => 'Twilio',
-        6 => 'Doze Host',
-        7 => 'Log Locally',
-    ];
-
     const LEAVE_TYPES = [
         1 => 'Casual leave (CL)',
         2 => 'Sick leave (SL)',
-        3 => 'Undefined leave (UL)'
+        3 => 'Undefined leave (UL)',
+        4 => 'Maternity leave (ML)',
+        5 => 'Special leave (SL)',
     ];
 
     const MARKS_DISTRIBUTION_TYPES = [
@@ -134,7 +144,7 @@ class AppHelper
         6 => 'D',
         7 => 'F',
     ];
-    const PASSING_RULES = [1 => 'Over All', 2 => 'Individual', 3 => 'Over All & Individual' ];
+    const PASSING_RULES = [1 => 'Over All', 2 => 'Individual', 3 => 'Over All & Individual'];
 
 
     /**
@@ -142,24 +152,22 @@ class AppHelper
      * school or college
      * @return mixed
      */
-    public static function getInstituteCategory() {
+    public static function getInstituteCategory()
+    {
 
         $iCategory = env('INSTITUTE_CATEGORY', 'school');
-        if($iCategory != 'school' && $iCategory != 'college'){
+        if ($iCategory != 'school' && $iCategory != 'college') {
             $iCategory = 'school';
         }
 
         return $iCategory;
     }
 
-    public static function getAcademicYear() {
-        $settings = AppHelper::getAppSettings();
+    public static function getAcademicYear()
+    {
+        $settings = AppHelper::getAppSettings(null, true);
         return isset($settings['academic_year']) ? intval($settings['academic_year']) : 0;
     }
-
-    /**
-     * @return string
-     */
 
     public static function getUserSessionHash()
     {
@@ -184,7 +192,8 @@ class AppHelper
         return preg_replace('~\b(\w)|.~', '$1', $phrase);
     }
 
-    public static function base64url_encode($data) {
+    public static function base64url_encode($data)
+    {
         return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
     }
 
@@ -211,15 +220,15 @@ class AppHelper
             "iat" => $now
         )));
 
-        $data = $jwtHeader.".".$jwtClaim;
+        $data = $jwtHeader . "." . $jwtClaim;
 
         // Signature
         $Sig = '';
-        openssl_sign($data,$Sig,$private_key,'SHA256');
+        openssl_sign($data, $Sig, $private_key, 'SHA256');
         $jwtSign = self::base64url_encode($Sig);
 
         //{Base64url encoded JSON header}.{Base64url encoded JSON claim set}.{Base64url encoded signature}
-        $jwtAssertion = $data.".".$jwtSign;
+        $jwtAssertion = $data . "." . $jwtSign;
         return $jwtAssertion;
     }
 
@@ -238,10 +247,9 @@ class AppHelper
             return $result;
         }
 
-        if(!file_exists($private_key_file)){
+        if (!file_exists($private_key_file)) {
             $result['message'] = 'Google json key file missing!';
             return $result;
-
         }
 
         $jwtAssertion = self::getJwtAssertion($private_key_file);
@@ -266,14 +274,12 @@ class AppHelper
 
             $expiresAt = now()->addMinutes(58);
             Cache::put('google_token', $result['token'], $expiresAt);
-
         } catch (RequestException $e) {
             $result['message'] = $e->getMessage();
         }
 
 
         return $result;
-
     }
 
     /**
@@ -282,10 +288,10 @@ class AppHelper
      *
      */
 
-    public static function en2bnNumber ($number)
+    public static function en2bnNumber($number)
     {
-        $replace_array= array("১", "২", "৩", "৪", "৫", "৬", "৭", "৮", "৯", "০");
-        $search_array= array("1", "2", "3", "4", "5", "6", "7", "8", "9", "0");
+        $replace_array = array("১", "২", "৩", "৪", "৫", "৬", "৭", "৮", "৯", "০");
+        $search_array = array("1", "2", "3", "4", "5", "6", "7", "8", "9", "0");
         $en_number = str_replace($search_array, $replace_array, $number);
 
         return $en_number;
@@ -298,9 +304,9 @@ class AppHelper
     public static function translateNumber($text)
     {
         $locale = App::getLocale();
-        if($locale == "bn"){
+        if ($locale == "bn") {
             $transText = '';
-            foreach (str_split($text) as $letter){
+            foreach (str_split($text) as $letter) {
                 $transText .= self::en2bnNumber($letter);
             }
             return $transText;
@@ -348,15 +354,16 @@ class AppHelper
      *    site meta data settings fetch
      *
      */
-    public static function getSiteMetas(){
+    public static function getSiteMetas()
+    {
         $siteMetas = null;
         if (Cache::has('site_metas')) {
             $siteMetas = Cache::get('site_metas');
-        }
-        else{
+        } else {
 
             $settings = SiteMeta::whereIn(
-                'meta_key', [
+                'meta_key',
+                [
                     'contact_address',
                     'contact_phone',
                     'contact_email',
@@ -365,12 +372,11 @@ class AppHelper
             )->get();
 
             $metas = [];
-            foreach ($settings as $setting){
+            foreach ($settings as $setting) {
                 $metas[$setting->meta_key] = $setting->meta_value;
             }
             $siteMetas = $metas;
             Cache::forever('site_metas', $metas);
-
         }
 
         return $siteMetas;
@@ -381,15 +387,14 @@ class AppHelper
      *    Website settings fetch
      *
      */
-    public static function getWebsiteSettings(){
+    public static function getWebsiteSettings()
+    {
         $webSettings = null;
         if (Cache::has('website_settings')) {
             $webSettings = Cache::get('website_settings');
-        }
-        else{
-            $webSettings = SiteMeta::where('meta_key','settings')->first();
+        } else {
+            $webSettings = SiteMeta::where('meta_key', 'settings')->first();
             Cache::forever('website_settings', $webSettings);
-
         }
 
         return $webSettings;
@@ -400,15 +405,14 @@ class AppHelper
      *   up comming event fetch
      *
      */
-    public static function getUpcommingEvent(){
+    public static function getUpcommingEvent()
+    {
         $event = null;
         if (Cache::has('upcomming_event')) {
             $event = Cache::get('upcomming_event');
-        }
-        else{
-            $event = Event::whereDate('event_time','>=', date('Y-m-d'))->orderBy('event_time','asc')->take(1)->first();
+        } else {
+            $event = Event::whereDate('event_time', '>=', date('Y-m-d'))->orderBy('event_time', 'asc')->take(1)->first();
             Cache::forever('upcomming_event', $event);
-
         }
 
         return $event;
@@ -419,7 +423,8 @@ class AppHelper
      *   check is frontend website enabled
      *
      */
-    public static function isFrontendEnabled(){
+    public static function isFrontendEnabled()
+    {
         // get app settings
         $appSettings = AppHelper::getAppSettings();
         if (isset($appSettings['frontend_website']) && $appSettings['frontend_website'] == '1') {
@@ -433,7 +438,8 @@ class AppHelper
      * Create triggers
      * This function only used on shared hosting deployment
      */
-    public static function createTriggers(){
+    public static function createTriggers()
+    {
 
         // class history table trigger
         DB::unprepared("DROP TRIGGER IF EXISTS i_class__ai;");
@@ -467,8 +473,63 @@ class AppHelper
         DB::unprepared("CREATE TRIGGER subject_au AFTER UPDATE ON subjects FOR EACH ROW
     INSERT INTO subject_history SELECT 'update', NULL, d.*
     FROM subjects AS d WHERE d.id = NEW.id;");
-    }
 
+        //now create triggers for manage book stock
+        DB::unprepared("DROP TRIGGER IF EXISTS book__ai;");
+        DB::unprepared("DROP TRIGGER IF EXISTS book__au;");
+        //book add trigger
+        DB::unprepared('
+			CREATE TRIGGER book__ai AFTER INSERT ON books FOR EACH ROW
+			BEGIN
+			insert into book_stocks
+			set
+			book_id = new.id,
+			quantity = new.quantity;
+			END
+			');
+
+        //book update trigger
+        DB::unprepared('
+			CREATE TRIGGER book__au AFTER UPDATE ON books FOR EACH ROW
+			BEGIN
+			UPDATE book_stocks
+			set
+			quantity = new.quantity-(old.quantity-quantity)
+			WHERE book_id=old.id;
+			END
+			');
+
+        DB::unprepared("DROP TRIGGER IF EXISTS book_issue__ai;");
+        DB::unprepared("DROP TRIGGER IF EXISTS book_issue__au;");
+        //after issue book add
+        DB::unprepared('
+			CREATE TRIGGER book_issue__ai AFTER INSERT ON book_issues FOR EACH ROW
+			BEGIN
+			UPDATE book_stocks
+			set quantity = quantity-new.quantity
+			where book_id=new.book_id;
+			END
+			');
+
+        //after issue book update
+        DB::unprepared("
+			CREATE TRIGGER book_issue__au AFTER UPDATE ON book_issues FOR EACH ROW
+			BEGIN
+                IF (new.status = '1' AND new.status <> old.status AND new.deleted_at IS NULL AND new.deleted_by IS NULL)
+                THEN
+                        UPDATE book_stocks
+                        set quantity = quantity+new.quantity
+                        WHERE book_id=new.book_id;                      
+                END IF;
+                IF (new.status = '0' AND new.deleted_at IS NOT NULL AND new.deleted_by IS NOT NULL)
+                THEN
+                        UPDATE book_stocks
+                        set quantity = quantity+new.quantity
+                        WHERE book_id=new.book_id;
+                END IF;
+			END
+			");
+    }
 
 
     /**
@@ -476,17 +537,16 @@ class AppHelper
      *    Application Permission
      *
      */
-    public static function getPermissions(){
+    public static function getPermissions()
+    {
 
         if (Cache::has('app_permissions')) {
             $permissions = Cache::get('app_permissions');
-        }
-        else{
-            try{
+        } else {
+            try {
 
                 $permissions = Permission::get();
                 Cache::forever('app_permissions', $permissions);
-
             } catch (\Illuminate\Database\QueryException $e) {
                 $permissions = collect();
             }
@@ -500,15 +560,15 @@ class AppHelper
      *    Application users By group
      *
      */
-    public static function getUsersByGroup($groupId){
+    public static function getUsersByGroup($groupId)
+    {
 
-        try{
+        try {
 
             $users = User::rightJoin('user_roles', 'users.id', '=', 'user_roles.user_id')
                 ->where('user_roles.role_id', $groupId)
                 ->select('users.id')
                 ->get();
-
         } catch (\Illuminate\Database\QueryException $e) {
             $users = collect();
         }
@@ -522,7 +582,8 @@ class AppHelper
      *    Send notification to users
      *
      */
-    public static function sendNotificationToUsers($users, $type, $message){
+    public static function sendNotificationToUsers($users, $type, $message)
+    {
         Notification::send($users, new UserActivity($type, $message));
 
         return true;
@@ -533,282 +594,10 @@ class AppHelper
      *    Send notification to Admin users
      *
      */
-    public static function sendNotificationToAdmins($type, $message){
+    public static function sendNotificationToAdmins($type, $message)
+    {
         $admins = AppHelper::getUsersByGroup(AppHelper::USER_ADMIN);
         return AppHelper::sendNotificationToUsers($admins, $type, $message);
-    }
-
-    /**
-     *  Send notification to student via sms
-     * @param $students
-     * @param $date
-     * @return bool
-     */
-    public static function sendAbsentNotificationForStudentViaSMS($studentIds, $date) {
-
-        $attendance_date = date('d/m/Y', strtotime($date));
-        $gateway = AppMeta::where('id', AppHelper::getAppSettings('student_attendance_gateway'))->first();
-        $gateway = json_decode($gateway->meta_value);
-
-        //pull students
-        $students = Registration::whereIn('id', $studentIds)
-            ->where('status', AppHelper::ACTIVE)
-            ->with(['class' => function($query) {
-                $query->select('name','id');
-            }])
-            ->with(['section' => function($query) {
-                $query->select('name','id');
-            }])
-            ->with('student')
-            ->select('id','regi_no','roll_no','student_id','class_id','section_id')
-            ->get();
-
-        //compile message
-        $template = Template::where('id', AppHelper::getAppSettings('student_attendance_template'))->first();
-
-        foreach ($students as $student){
-            $keywords['regi_no'] = $student->regi_no;
-            $keywords['roll_no'] = $student->roll_no;
-            $keywords['class'] = $student->class->name;
-            $keywords['section'] = $student->section->name;
-            $studentArray = $student->toArray();
-            $keywords = array_merge($keywords ,$studentArray['student']);
-            $keywords['date'] = $attendance_date;
-
-            $message = $template->content;
-            foreach ($keywords as $key => $value) {
-                $message = str_replace('{{' . $key . '}}', $value, $message);
-            }
-
-            $cellNumber = AppHelper::validateCellNo($studentArray['student']['father_phone_no']);
-
-            if($cellNumber){
-
-                //send sms via helper
-                $smsHelper = new SmsHelper($gateway);
-                $res = $smsHelper->sendSms($cellNumber, $message);
-
-            }
-            else{
-                Log::channel('smsLog')->error("Invalid Cell No! ".$studentArray['student']['father_phone_no']);
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     *  Send notification to employee via sms
-     * @param $students
-     * @param $date
-     * @return bool
-     */
-    public static function sendAbsentNotificationForEmployeeViaSMS($employeeIds, $date) {
-
-        $attendance_date = date('d/m/Y', strtotime($date));
-        $gateway = AppMeta::where('id', AppHelper::getAppSettings('employee_attendance_gateway'))->first();
-        $gateway = json_decode($gateway->meta_value);
-
-        //pull employee
-        $employees = Employee::whereIn('id', $employeeIds)
-            ->where('status', AppHelper::ACTIVE)
-            ->with('user')
-            ->select('id','name','designation','dob','gender','religion','email','phone_no','address','joining_date','user_id')
-            ->get();
-
-        //compile message
-        $template = Template::where('id', AppHelper::getAppSettings('employee_attendance_template'))->first();
-
-        foreach ($employees as $employee){
-
-            $keywords = $employee->toArray();
-            $keywords['date'] = $attendance_date;
-            $keywords['username'] = $keywords['user']['username'];
-            unset($keywords['user']);
-
-            $message = $template->content;
-            foreach ($keywords as $key => $value) {
-                $message = str_replace('{{' . $key . '}}', $value, $message);
-            }
-
-            $cellNumber = AppHelper::validateCellNo($employee->phone_no);
-
-            if($cellNumber){
-
-                //send sms via helper
-                $smsHelper = new SmsHelper($gateway);
-                $res = $smsHelper->sendSms($cellNumber, $message);
-
-            }
-            else{
-                Log::channel('smsLog')->error("Invalid Cell No! ".$employee->phone_no);
-            }
-        }
-
-        return true;
-    }
-
-
-    /**
-     * @param $number
-     * @return bool|mixed|string
-     */
-    public static function validateBangladeshiCellNo($number) {
-        $number = str_replace('+','',$number);
-
-        //
-        if (!preg_match("/^88/i", $number)){
-            $number = "88".$number;
-        }
-
-        if (preg_match("/^88017/i", $number)
-            or preg_match("/^88016/i", $number)
-            or preg_match("/^88015/i", $number)
-            or preg_match("/^88011/i", "$number")
-            or preg_match("/^88018/i", "$number")
-            or preg_match("/^88019/i", "$number")
-            or preg_match("/^88013/i", "$number")
-            or preg_match("/^88014/i", "$number")
-        ) {
-
-            return $number;
-
-
-        }
-
-        return false;
-
-
-    }
-    /**
-     * @param $number
-     * @return bool|mixed|string
-     */
-    public static function validateCellNo($number) {
-        return $number;
-    }
-
-
-    public static function isLineValid($lineContent) {
-        // remove utf8 bom identify characters
-        //clear invalid UTF8 characters
-        $lineContent  = iconv("UTF-8","ISO-8859-1//IGNORE",$lineContent);
-
-        if(!strlen($lineContent)){
-            return 0;
-        }
-
-
-        $lineSplits = explode(':', $lineContent);
-        if(count($lineSplits) >= 4){
-            return 1;
-        }
-
-
-        $lineSplits = preg_split("/\s+/", $lineContent);
-        if(count($lineSplits)){
-            return 2;
-        }
-
-        return 0;
-
-
-    }
-
-    public static  function parseRow($lineContent, $fileFormat){
-        // remove utf8 bom identify characters
-        //clear invalid UTF8 characters
-        $lineContent  = iconv("UTF-8","ISO-8859-1//IGNORE",$lineContent);
-
-        if(!strlen($lineContent)){
-            return [];
-        }
-
-        $data = [];
-        if($fileFormat === 1){
-            $lineSplits = explode(':', $lineContent);
-            $id = trim(ltrim($lineSplits[1], '0'));
-            //only for student id , remove teacher ids
-            if(strlen($id) > 2){
-                $data = [
-                    'date' => $lineSplits[2],
-                    'id' => $id,
-                    'time' => trim($lineSplits[3]),
-                ];
-            }
-
-        }
-
-        if($fileFormat === 2){
-            $lineSplits = preg_split("/\s+/", $lineContent);
-            $id = trim($lineSplits[0]);
-            //only for student id , remove teacher ids
-            if(strlen($id) > 2){
-                $aDate = str_replace('-','',$lineSplits[1]);
-                $aTime = str_replace(':','',$lineSplits[2]);
-                $data = [
-                    'date' => $aDate,
-                    'id' => $id,
-                    'time' => $aTime,
-                ];
-            }
-        }
-
-        return $data;
-
-    }
-
-    public static  function parseRowForEmployee($lineContent, $fileFormat){
-        // remove utf8 bom identify characters
-        //clear invalid UTF8 characters
-        $lineContent  = iconv("UTF-8","ISO-8859-1//IGNORE",$lineContent);
-
-        if(!strlen($lineContent)){
-            return [];
-        }
-
-        $data = [];
-        if($fileFormat === 1){
-            $lineSplits = explode(':', $lineContent);
-            $id = trim(ltrim($lineSplits[1], '0'));
-            //only for employee id , remove student ids
-            if(strlen($id) == 2){
-                $data = [
-                    'date' => $lineSplits[2],
-                    'time' => trim($lineSplits[3]),
-                    'id' => str_pad($id, 10, "0", STR_PAD_LEFT),
-                ];
-            }
-
-        }
-
-        if($fileFormat === 2){
-            $lineSplits = preg_split("/\s+/", $lineContent);
-            $id = trim($lineSplits[0]);
-            //only for employee id , remove student ids
-            if(strlen($id) == 2){
-                $aDate = str_replace('-','',$lineSplits[1]);
-                $aTime = str_replace(':','',$lineSplits[2]);
-
-                $data = [
-                    'date' => $aDate,
-                    'time' => $aTime,
-                    'id' => str_pad($id, 10, "0", STR_PAD_LEFT)
-                ];
-            }
-        }
-
-        return $data;
-
-    }
-
-
-    public static function getIdcardBarCode($code) {
-        $generator = new BarcodeGeneratorPNG();
-        $imageString = 'data:image/png;base64,' . base64_encode($generator->getBarcode($code, $generator::TYPE_CODE_128,2,25));
-
-        return $imageString;
-
     }
 
     /**
@@ -818,20 +607,20 @@ class AppHelper
      * @param array $weekendDays
      * @return array
      */
-    public static function generateDateRangeForReport(Carbon $start_date, Carbon $end_date, $checkWeekends=false, $weekendDays=[], $exludeWeekends=false)
+    public static function generateDateRangeForReport(Carbon $start_date, Carbon $end_date, $checkWeekends = false, $weekendDays = [], $exludeWeekends = false)
     {
 
 
         $dates = [];
-        for($date = $start_date->copy(); $date->lte($end_date); $date->addDay()) {
-            if($checkWeekends){
+        for ($date = $start_date->copy(); $date->lte($end_date); $date->addDay()) {
+            if ($checkWeekends) {
                 $weekend = 0;
-                if(in_array($date->dayOfWeek, $weekendDays)){
+                if (in_array($date->dayOfWeek, $weekendDays)) {
                     $weekend = 1;
                 }
 
-                if($exludeWeekends){
-                    if(!$weekend){
+                if ($exludeWeekends) {
+                    if (!$weekend) {
                         $dates[$date->format('Y-m-d')] = intval($date->format('d'));
                     }
                     continue;
@@ -841,17 +630,13 @@ class AppHelper
                     'day' => intval($date->format('d')),
                     'weekend' => $weekend
                 ];
-
-            }
-            else{
+            } else {
                 $dates[$date->format('Y-m-d')] = intval($date->format('d'));
             }
-
         }
 
         return $dates;
     }
-
 
     /**
      * Process student entry marks and
@@ -862,25 +647,26 @@ class AppHelper
      * @param $distributeMarksRules array
      * @param $strudnetMarks array
      */
-    public static function processMarksAndCalculateResult($examRule, $gradingRules, $distributeMarksRules, $studentMarks) {
+    public static function processMarksAndCalculateResult($examRule, $gradingRules, $distributeMarksRules, $studentMarks)
+    {
         $totalMarks = 0;
         $isFail = false;
         $isInvalid = false;
         $message = "";
 
-        foreach ($studentMarks as $type => $marks){
+        foreach ($studentMarks as $type => $marks) {
             $marks = floatval($marks);
             $totalMarks += $marks;
 
             // AppHelper::PASSING_RULES
-            if(in_array($examRule->passing_rule, [2,3])){
-                if($marks > $distributeMarksRules[$type]['total_marks']){
+            if (in_array($examRule->passing_rule, [2, 3])) {
+                if ($marks > $distributeMarksRules[$type]['total_marks']) {
                     $isInvalid = true;
-                    $message = AppHelper::MARKS_DISTRIBUTION_TYPES[$type]. " marks is too high from exam rules marks distribution!";
+                    $message = AppHelper::MARKS_DISTRIBUTION_TYPES[$type] . " marks is too high from exam rules marks distribution!";
                     break;
                 }
 
-                if($marks < $distributeMarksRules[$type]['pass_marks']){
+                if ($marks < $distributeMarksRules[$type]['pass_marks']) {
                     $isFail = true;
                 }
             }
@@ -890,13 +676,13 @@ class AppHelper
         $totalMarks = ceil($totalMarks);
 
         // AppHelper::PASSING_RULES
-        if(in_array($examRule->passing_rule, [1,3])){
-            if($totalMarks < $examRule->over_all_pass){
+        if (in_array($examRule->passing_rule, [1, 3])) {
+            if ($totalMarks < $examRule->over_all_pass) {
                 $isFail = true;
             }
         }
 
-        if($isFail){
+        if ($isFail) {
             $grade = 'F';
             $point = 0.00;
 
@@ -906,14 +692,14 @@ class AppHelper
         [$grade, $point] = AppHelper::findGradePointFromMarks($gradingRules, $totalMarks);
 
         return [$isInvalid, $message, $totalMarks, $grade, $point];
-
     }
 
-    public static function findGradePointFromMarks($gradingRules, $marks) {
+    public static function findGradePointFromMarks($gradingRules, $marks)
+    {
         $grade = 'F';
         $point = 0.00;
-        foreach ($gradingRules as $rule){
-            if ($marks >= $rule->marks_from && $marks <= $rule->marks_upto){
+        foreach ($gradingRules as $rule) {
+            if ($marks >= $rule->marks_from && $marks <= $rule->marks_upto) {
                 $grade = AppHelper::GRADE_TYPES[$rule->grade];
                 $point = $rule->point;
                 break;
@@ -922,29 +708,30 @@ class AppHelper
         return [$grade, $point];
     }
 
-    public static function findGradeFromPoint($point, $gradingRules) {
+    public static function findGradeFromPoint($point, $gradingRules)
+    {
         $grade = 'F';
 
-        foreach ($gradingRules as $rule){
-            if($point >= floatval($rule->point)){
+        foreach ($gradingRules as $rule) {
+            if ($point >= floatval($rule->point)) {
                 $grade = AppHelper::GRADE_TYPES[$rule->grade];
                 break;
             }
         }
 
         return $grade;
-
     }
 
-    public static function isAndInCombine($subject_id, $rules){
+    public static function isAndInCombine($subject_id, $rules)
+    {
         $isCombine = false;
-        foreach ($rules as $subject => $data){
-            if($subject == $subject_id && $data['combine_subject_id']){
+        foreach ($rules as $subject => $data) {
+            if ($subject == $subject_id && $data['combine_subject_id']) {
                 $isCombine = true;
                 break;
             }
 
-            if($data['combine_subject_id'] == $subject_id){
+            if ($data['combine_subject_id'] == $subject_id) {
                 $isCombine = true;
                 break;
             }
@@ -953,19 +740,19 @@ class AppHelper
         return $isCombine;
     }
 
-    public static function processCombineSubjectMarks($subjectMarks, $pairSubjectMarks, $subjectRule, $pairSubjectRule){
+    public static function processCombineSubjectMarks($subjectMarks, $pairSubjectMarks, $subjectRule, $pairSubjectRule)
+    {
         $pairFail = false;
 
         $combineTotalMarks = ($subjectMarks->total_marks + $pairSubjectMarks->total_marks);
 
-        if($subjectRule['total_exam_marks'] == $pairSubjectRule['total_exam_marks']){
+        if ($subjectRule['total_exam_marks'] == $pairSubjectRule['total_exam_marks']) {
             //dividing factor
-            $totalMarks = ($combineTotalMarks/2);
-        }
-        else{
+            $totalMarks = ($combineTotalMarks / 2);
+        } else {
             //if both subject exam marks not same then it must be 2:1 ratio
             //Like: subject marks 100 pair subject marks 50
-            $totalMarks = ($combineTotalMarks/ 1.5);
+            $totalMarks = ($combineTotalMarks / 1.5);
         }
 
         //fraction number make ceiling
@@ -973,80 +760,118 @@ class AppHelper
 
         $passingRule = $subjectRule['passing_rule'];
         // AppHelper::PASSING_RULES
-        if(in_array($passingRule, [1,3])){
-            if($totalMarks < $subjectRule['over_all_pass']){
+        if (in_array($passingRule, [1, 3])) {
+            if ($totalMarks < $subjectRule['over_all_pass']) {
                 $pairFail = true;
             }
         }
 
         //if any subject absent then its fail
-        if($subjectMarks->present == 0 || $pairSubjectMarks->present == 0){
+        if ($subjectMarks->present == 0 || $pairSubjectMarks->present == 0) {
             $pairFail = true;
         }
 
         // AppHelper::PASSING_RULES
-        if(!$pairFail && in_array($passingRule, [2,3])){
+        if (!$pairFail && in_array($passingRule, [2, 3])) {
 
             //acquire marks
             $combineDistributedMarks = [];
-            foreach (json_decode($subjectMarks->marks) as $key => $distMarks){
+            foreach (json_decode($subjectMarks->marks) as $key => $distMarks) {
                 $combineDistributedMarks[$key] = floatval($distMarks);
-
             }
 
-            foreach (json_decode($pairSubjectMarks->marks) as $key => $distMarks){
+            foreach (json_decode($pairSubjectMarks->marks) as $key => $distMarks) {
                 $combineDistributedMarks[$key] += floatval($distMarks);
-
             }
 
 
             //passing rules marks
             $combineDistributeMarks = [];
-            foreach ($subjectRule['marks_distribution'] as $distMarks){
+            foreach ($subjectRule['marks_distribution'] as $distMarks) {
                 $combineDistributeMarks[$distMarks->type] = floatval($distMarks->pass_marks);
             }
 
-            foreach ($pairSubjectRule['marks_distribution'] as $key => $distMarks){
+            foreach ($pairSubjectRule['marks_distribution'] as $key => $distMarks) {
                 $combineDistributeMarks[$distMarks->type] += floatval($distMarks->pass_marks);
-
             }
 
             //now check for pass
-            foreach ($combineDistributeMarks as $key => $value){
-                if($combineDistributedMarks[$key] < $value){
+            foreach ($combineDistributeMarks as $key => $value) {
+                if ($combineDistributedMarks[$key] < $value) {
                     $pairFail = true;
                 }
             }
-
         }
 
 
         return [$pairFail, $combineTotalMarks, $totalMarks];
-
     }
 
-    /**
-     * @param $number integer
-     * @return string
-     */
-    public static function convertNumberToNumberRankingWord($number) {
-        $rankWord = 'TH';
-
-        if($number == 1){
-            $rankWord = "ST";
+    public static function getHouseList() {
+        $houseList = env('HOUSE_LIST', "");
+        if(strlen($houseList)){
+            $houseList = explode(',', $houseList);
+            array_unshift($houseList, ' ');
+            $houseList = array_combine($houseList, $houseList);
         }
-        else if($number == 2) {
-            $rankWord = "ND";
-        }else if($number == 3) {
-            $rankWord = "RD";
+        else{
+            $houseList = [];
         }
 
-        return strval($number).$rankWord;
-
+        return $houseList;
     }
 
+    public static function checkLeaveBalance($leaveType, $requestLeaveDay, $employeeId)
+    {
+        $holidayBalance = true;
+        $message = '';
+        $leaveKey = '';
 
+        if ($leaveType == 1) {
+            $leaveKey = 'total_casual_leave';
+        } else if ($leaveType == 2) {
+            $leaveKey = 'total_sick_leave';
+        } else if ($leaveType == 4) {
+            $leaveKey = 'total_maternity_leave';
+        } else if ($leaveType == 5) {
+            $leaveKey = 'total_special_leave';
+        }
 
+        if (strlen($leaveKey)) {
+            $totalAllowLeave = AppHelper::getAppSettings($leaveKey);
+            $usedLeave = Leave::where('employee_id', $employeeId)
+                ->where('leave_type', $leaveType)
+                ->where('status', '2')
+                ->whereYear('leave_date', date('Y'))
+                ->count();
 
+            if (($requestLeaveDay + $usedLeave) > $totalAllowLeave) {
+                $holidayBalance = false;
+                $message = AppHelper::LEAVE_TYPES[$leaveType] . " leave limit is over. He/She took $usedLeave/$totalAllowLeave day's leave already.";
+            }
+        }
+
+        return [$holidayBalance, $message];
+    }
+
+    public static function get_default_ac_year(){
+        if (AppHelper::getInstituteCategory() == "school" && Schema::hasTable('app_metas'))
+        {
+          return  AppHelper::getAcademicYear();
+        }
+
+        return 0;
+    }
+
+    public static function check_dev_route_access($code) {
+        if ($code !== '007') {
+            dd("Wrong code!");
+        }
+
+        //check if developer mode enabled?
+        if (!env('DEVELOPER_MODE_ENABLED', false)) {
+            dd("Please enable developer mode in '.env' file." . PHP_EOL . "set 'DEVELOPER_MODE_ENABLED=true'");
+        }
+    }
 
 }

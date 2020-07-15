@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Session;
 use App\Http\Helpers\AppHelper;
 /*
 |--------------------------------------------------------------------------
@@ -12,13 +11,6 @@ use App\Http\Helpers\AppHelper;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-//Route::group(['middleware' => 'role:admin'], function() {
-//    Route::get('/admin', function() {
-//        return 'Welcome Admin';
-//    });
-//});
-
 
 /**
  * Admin panel routes goes below
@@ -110,34 +102,6 @@ Route::group(
     Route::post('settings/institute', 'SettingsController@institute')
         ->name('settings.institute');
 
-    // academic calendar
-    Route::get('settings/academic-calendar', 'SettingsController@academicCalendarIndex')
-        ->name('settings.academic_calendar.index');
-    Route::post('settings/academic-calendar', 'SettingsController@academicCalendarIndex')
-        ->name('settings.academic_calendar.destroy');
-    Route::get('settings/academic-calendar/create', 'SettingsController@academicCalendarCru')
-        ->name('settings.academic_calendar.create');
-    Route::post('settings/academic-calendar/create', 'SettingsController@academicCalendarCru')
-        ->name('settings.academic_calendar.store');
-    Route::get('settings/academic-calendar/edit/{id}', 'SettingsController@academicCalendarCru')
-        ->name('settings.academic_calendar.edit');
-    Route::post('settings/academic-calendar/update/{id}', 'SettingsController@academicCalendarCru')
-        ->name('settings.academic_calendar.update');
-
-    //sms gateways
-    Route::get('settings/sms-gateway', 'SettingsController@smsGatewayIndex')
-        ->name('settings.sms_gateway.index');
-    Route::post('settings/sms-gateway', 'SettingsController@smsGatewayIndex')
-        ->name('settings.sms_gateway.destroy');
-    Route::get('settings/sms-gateway/create', 'SettingsController@smsGatewayCru')
-        ->name('settings.sms_gateway.create');
-    Route::post('settings/sms-gateway/create', 'SettingsController@smsGatewayCru')
-        ->name('settings.sms_gateway.store');
-    Route::get('settings/sms-gateway/edit/{id}', 'SettingsController@smsGatewayCru')
-        ->name('settings.sms_gateway.edit');
-    Route::post('settings/sms-gateway/update/{id}', 'SettingsController@smsGatewayCru')
-        ->name('settings.sms_gateway.update');
-
     //report settings
     Route::get('settings/report', 'SettingsController@report')
         ->name('settings.report');
@@ -161,34 +125,6 @@ Route::group(
         ->name('administrator.academic_year_update');
     Route::post('administrator/academic_year/status/{id}', 'AdministratorController@academicYearChangeStatus')
         ->name('administrator.academic_year_status');
-
-    // template
-    //mail and sms
-    Route::get('administrator/template-mailandsms', 'AdministratorController@templateMailAndSmsIndex')
-        ->name('administrator.template.mailsms.index');
-    Route::post('administrator/template-mailandsms', 'AdministratorController@templateMailAndSmsIndex')
-        ->name('administrator.template.mailsms.destroy');
-    Route::get('administrator/template-mailandsms/create', 'AdministratorController@templateMailAndSmsCru')
-        ->name('administrator.template.mailsms.create');
-    Route::post('administrator/template-mailandsms/create', 'AdministratorController@templateMailAndSmsCru')
-        ->name('administrator.template.mailsms.store');
-    Route::get('administrator/template-mailandsms/edit/{id}', 'AdministratorController@templateMailAndSmsCru')
-        ->name('administrator.template.mailsms.edit');
-    Route::post('administrator/template-mailandsms/update/{id}', 'AdministratorController@templateMailAndSmsCru')
-        ->name('administrator.template.mailsms.update');
-    // id card
-    Route::get('administrator/template-idcard', 'AdministratorController@templateIdcardIndex')
-        ->name('administrator.template.idcard.index');
-    Route::post('administrator/template-idcard', 'AdministratorController@templateIdcardIndex')
-        ->name('administrator.template.idcard.destroy');
-    Route::get('administrator/template-idcard/create', 'AdministratorController@templateIdcardCru')
-        ->name('administrator.template.idcard.create');
-    Route::post('administrator/template-idcard/create', 'AdministratorController@templateIdcardCru')
-        ->name('administrator.template.idcard.store');
-    Route::get('administrator/template-idcard/edit/{id}', 'AdministratorController@templateIdcardCru')
-        ->name('administrator.template.idcard.edit');
-    Route::post('administrator/template-idcard/update/{id}', 'AdministratorController@templateIdcardCru')
-        ->name('administrator.template.idcard.update');
 
 
     // academic routes
@@ -251,7 +187,7 @@ Route::group(
     Route::post('student/status/{id}', 'StudentController@changeStatus')
         ->name('student.status');
     Route::get('student-list-by-filter', 'StudentController@studentListByFitler')
-        ->name('student.list_by_fitler');
+        ->name('student.list_by_filter');
 
     // student attendance routes
     Route::get('student-attendance', 'StudentAttendanceController@index')->name('student_attendance.index');
@@ -259,19 +195,14 @@ Route::group(
     Route::post('student-attendance/store', 'StudentAttendanceController@store')->name('student_attendance.store');
     Route::post('student-attendance/status/{id}', 'StudentAttendanceController@changeStatus')
         ->name('student_attendance.status');
-    Route::any('student-attendance/file-upload', 'StudentAttendanceController@createFromFile')
-        ->name('student_attendance.create_file');
-    Route::get('student-attendance/file-queue-status', 'StudentAttendanceController@fileQueueStatus')
-        ->name('student_attendance.file_queue_status');
 
     // HRM
-        //Employee
+    //Employee
     Route::resource('hrm/employee', 'EmployeeController', ['as' => 'hrm']);
     Route::post('hrm/employee/status/{id}', 'EmployeeController@changeStatus')
         ->name('hrm.employee.status');
     // Leave
     Route::resource('hrm/leave', 'LeaveController', ['as' => 'hrm']);
-    Route::resource('hrm/work_outside', 'WorkOutsideController', ['as' => 'hrm']);
     // policy
     Route::get('hrm/policy', 'EmployeeController@hrmPolicy')
         ->name('hrm.policy');
@@ -284,10 +215,6 @@ Route::group(
     Route::post('employee-attendance/create', 'EmployeeAttendanceController@store')->name('employee_attendance.store');
     Route::post('employee-attendance/status/{id}', 'EmployeeAttendanceController@changeStatus')
         ->name('employee_attendance.status');
-    Route::any('employee-attendance/file-upload', 'EmployeeAttendanceController@createFromFile')
-        ->name('employee_attendance.create_file');
-    Route::get('employee-attendance/file-queue-status', 'EmployeeAttendanceController@fileQueueStatus')
-        ->name('employee_attendance.file_queue_status');
 
 
     //exam
@@ -351,8 +278,14 @@ Route::group(
     Route::any('result/delete', 'MarkController@resultDelete')
         ->name('result.delete');
 
-    // Reporting
+    // Promotion
+    Route::any('promotion', 'MarkController@promotion')
+        ->name('promotion.create');
+    Route::post('do-promotion', 'MarkController@doPromotion')
+        ->name('promotion.store');
 
+
+    // Reporting
     Route::any('report/student-monthly-attendance', 'ReportController@studentMonthlyAttendance')
         ->name('report.student_monthly_attendance');
     Route::any('report/student-list', 'ReportController@studentList')
@@ -364,118 +297,67 @@ Route::group(
 
 });
 
+//non privilege routes
+Route::group(['namespace' => 'Backend', 'middleware' => ['auth']], function () {
+    Route::get('/st-profile', 'PublicController@studentProfile')
+        ->name('public.student_profile');
+    Route::get('public/get-student-attendance', 'PublicController@getStudentAttendance')
+        ->name('public.get_student_attendance');
+    Route::get('public/check-section-empty-seat', 'PublicController@checkSectionHaveEmptySeat')
+        ->name('public.section_capacity_check');
+    Route::get('public/promotional-year-list', 'PublicController@getAcademicYearsForPromotion')
+        ->name('public.get_promotional_year_list');
+    Route::get('public/class-subject-count', 'PublicController@getClassSubjectCountNewAlgo')
+        ->name('public.class_subject_count');
+
+    Route::get('/public/get-student-result', 'PublicController@getStudentResults')
+        ->name('public.get_student_result');
+    Route::get('/public/get-student-subject', 'PublicController@getStudentSubject')
+        ->name('public.get_student_subject');
+    Route::get('/public/get-subject-settings/{classId}', 'PublicController@getClassSubjectSettings')
+        ->name('public.get_class_subject_settings');
+    Route::get('/public/get-section', 'AcademicController@sectionIndex')
+        ->name('public.section');
+
+
+    Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index')
+        ->name('app_log');
+});
+
+
 //web artisan routes
-Route::get(
-    '/student-attendance-file-queue-start/{code}', function ($code) {
-    if($code == "hr799"){
-        try {
-            echo '<br>Started student attendance processing...<br>';
-            Artisan::call('attendance:seedStudent');
-            echo '<br>Student attendance processing completed.<br>You will be redirect in 5 seconds.<br>';
-            sleep(5);
-
-            return redirect()->route('student_attendance.create_file')->with("success", "Students attendance saved and send sms successfully.");
-
-        } catch (Exception $e) {
-            Response::make($e->getMessage(), 500);
-        }
-    }else{
-        App::abort(404);
-    }
-}
-)->name('student_attendance_seeder');
-Route::get(
-    '/employee-attendance-file-queue-start/{code}', function ($code) {
-    if($code == "hr799"){
-        try {
-            echo '<br>Started employee attendance processing...<br>';
-            Artisan::call('attendance:seedEmployee');
-            echo '<br>Employee attendance processing completed.<br>You will be redirect in 5 seconds.<br>';
-            sleep(5);
-
-            return redirect()->route('employee_attendance.create_file')->with("success", "Employee attendance saved and notify successfully.");
-
-        } catch (Exception $e) {
-            Response::make($e->getMessage(), 500);
-        }
-    }else{
-        App::abort(404);
-    }
-}
-)->name('employee_attendance_seeder');
 
 //dev routes
-Route::get(
-    '/make-link/{code}', function ($code) {
-    if($code !== '007') {
-        return 'Wrong code!';
-    }
+Route::get('/make-link/{code}', function ($code) {
+    //check access
+    AppHelper::check_dev_route_access($code);
 
-    //check if developer mode enabled?
-    if(!env('DEVELOPER_MODE_ENABLED', false)) {
-        return "Please enable developer mode in '.env' file.".PHP_EOL."set 'DEVELOPER_MODE_ENABLED=true'";
-    }
     //remove first
-    if(is_link(public_path('storage'))){
+    if (is_link(public_path('storage'))) {
         unlink(public_path('storage'));
     }
-
 
     //create symbolic link for public image storage
     App::make('files')->link(storage_path('app/public'), public_path('storage'));
     return 'Done link';
-}
-);
-Route::get(
-    '/cache-clear/{code}', function ($code) {
-    if($code !== '007') {
-        return 'Wrong code!';
-    }
+});
 
-    //check if developer mode enabled?
-    if(!env('DEVELOPER_MODE_ENABLED', false)) {
-        return "Please enable developer mode in '.env' file.".PHP_EOL."set 'DEVELOPER_MODE_ENABLED=true'";
-    }
+Route::get('/cache-clear/{code}', function ($code) {
+    //check access
+    AppHelper::check_dev_route_access($code);
 
     $exitCode = Artisan::call('cache:clear');
     $exitCode = Artisan::call('config:clear');
     $exitCode = Artisan::call('view:clear');
     $exitCode = Artisan::call('route:clear');
     return 'clear cache';
-}
-);
-//create tiggers
-Route::get(
-    '/create-triggers/{code}', function ($code) {
-    if($code !== '007') {
-        return 'Wrong code!';
-    }
+});
 
-    //check if developer mode enabled?
-    if(!env('DEVELOPER_MODE_ENABLED', false)) {
-        return "Please enable developer mode in '.env' file.".PHP_EOL."set 'DEVELOPER_MODE_ENABLED=true'";
-    }
+//create triggers
+Route::get('/create-triggers/{code}', function ($code) {
+    //check access
+    AppHelper::check_dev_route_access($code);
 
     AppHelper::createTriggers();
-
     return 'Triggers created :)';
-}
-);
-//test sms send
-Route::get(
-    '/test-sms/{code}', function ($code) {
-    if($code !== '007') {
-        return 'Wrong code!';
-    }
-    //check if developer mode enabled?
-    if(!env('DEVELOPER_MODE_ENABLED', false)) {
-        return "Please enable developer mode in '.env' file.".PHP_EOL."set 'DEVELOPER_MODE_ENABLED=true'";
-    }
-
-    $gateway = \App\AppMeta::where('id', AppHelper::getAppSettings('student_attendance_gateway'))->first();
-    $gateway = json_decode($gateway->meta_value);
-    $smsHelper = new \App\Http\Helpers\SmsHelper($gateway);
-    $res = $smsHelper->sendSms('8801722813644','test sms vai');
-    dd($res);
-}
-);
+});

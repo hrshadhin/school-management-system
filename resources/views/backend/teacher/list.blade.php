@@ -42,9 +42,10 @@
                                 <th width="5%">#</th>
                                 <th class="notexport" width="10%">Photo</th>
                                 <th width="8%">ID Card</th>
-                                <th width="25%">Name</th>
+                                <th width="24%">Name</th>
                                 <th width="8%">Phone No</th>
-                                <th width="19%">Email</th>
+                                <th width="15%">Email</th>
+                                <th width="5%">Order</th>
                                 <th width="10%">Status</th>
                                 <th class="notexport" width="15%">Action</th>
                             </tr>
@@ -62,6 +63,7 @@
                                     <td>{{ $teacher->name }}</td>
                                     <td>{{ $teacher->phone_no }}</td>
                                     <td>{{ $teacher->email }}</td>
+                                    <td>{{ $teacher->order }}</td>
                                     <td>
                                         <!-- todo: have problem in mobile device -->
                                         <input class="statusChange" type="checkbox" data-pk="{{$teacher->id}}" @if($teacher->status) checked @endif data-toggle="toggle" data-on="<i class='fa fa-check-circle'></i>" data-off="<i class='fa fa-ban'></i>" data-onstyle="success" data-offstyle="danger">
@@ -96,9 +98,10 @@
                                 <th width="5%">#</th>
                                 <th class="notexport" width="10%">Photo</th>
                                 <th width="8%">ID Card</th>
-                                <th width="25%">Name</th>
+                                <th width="24%">Name</th>
                                 <th width="8%">Phone No</th>
                                 <th width="15%">Email</th>
+                                <th width="5%">Order</th>
                                 <th width="10%">Status</th>
                                 <th class="notexport" width="15%">Action</th>
                             </tr>
@@ -121,8 +124,6 @@
     <script type="text/javascript">
         $(document).ready(function () {
             window.postUrl = '{{URL::Route("teacher.status", 0)}}';
-            window.changeExportColumnIndex = 5;
-            window.excludeFilterComlumns = [0,1,6,7];
             Generic.initCommonPageJS();
             Generic.initDeleteDialog();
         });

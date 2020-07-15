@@ -57,6 +57,69 @@ class PermissionTableSeeder extends Seeder
 
         ];
 
+        $exclusiveAdministratorPermissionList = [
+            [   "slug" => "user.role_index",
+                "name" => "User Role View",
+                "group" => "Administration Exclusive"
+            ],
+            [   "slug" => "user.role_destroy",
+                "name" => "User Role Delete",
+                "group" => "Administration Exclusive"
+            ],
+            [   "slug" => "user.role_create",
+                "name" => "User Role Create",
+                "group" => "Administration Exclusive"
+            ],
+            [   "slug" => "user.role_store",
+                "name" => "User Role Create",
+                "group" => "Administration Exclusive"
+            ],
+            [   "slug" => "user.role_update",
+                "name" => "User Role Edit",
+                "group" => "Administration Exclusive"
+            ],
+            [
+                "slug" => "administrator.user_index",
+                "name" => "System Admin View",
+                "group" => "Administration Exclusive"
+            ],
+            [
+                "slug" => "administrator.user_create",
+                "name" => "System Admin Create",
+                "group" => "Administration Exclusive"
+            ],
+            [
+                "slug" => "administrator.user_status",
+                "name" => "System Admin Edit",
+                "group" => "Administration Exclusive"
+            ],
+            [
+                "slug" => "administrator.user_store",
+                "name" => "System Admin Create",
+                "group" => "Administration Exclusive"
+            ],
+            [
+                "slug" => "administrator.user_update",
+                "name" => "System Admin Edit",
+                "group" => "Administration Exclusive"
+            ],
+            [
+                "slug" => "administrator.user_destroy",
+                "name" => "System Admin Delete",
+                "group" => "Administration Exclusive"
+            ],
+            [
+                "slug" => "administrator.user_edit",
+                "name" => "System Admin Edit",
+                "group" => "Administration Exclusive"
+            ],
+            [   "slug" => "administrator.user_password_reset",
+                "name" => "User Password Edit",
+                "group" => "Administration Exclusive"
+            ],
+
+        ];
+
         $administratorPermissionList = [
 
             [   "slug" => "user.store",
@@ -94,213 +157,49 @@ class PermissionTableSeeder extends Seeder
             [   "slug" => "user.permission",
                 "name" => "User Edit",
                 "group" => "Administration"
-            ]
-        ];
-
-        $onlyAdminPermissions = [
+            ],
             [
                 "slug" => "administrator.academic_year_destroy",
                 "name" => "Academic Year Delete",
-                "group" => "Admin Only"
+                "group" => "Administration"
             ],
             [
                 "slug" => "administrator.academic_year",
                 "name" => "Academic Year View",
-                "group" => "Admin Only"
+                "group" => "Administration"
             ],
             [
                 "slug" => "administrator.academic_year_store",
                 "name" => "Academic Year Create",
-                "group" => "Admin Only"
+                "group" => "Administration"
             ],
             [
                 "slug" => "administrator.academic_year_create",
                 "name" => "Academic Year Create",
-                "group" => "Admin Only"
+                "group" => "Administration"
             ],
             [
                 "slug" => "administrator.academic_year_edit",
                 "name" => "Academic Year Edit",
-                "group" => "Admin Only"
+                "group" => "Administration"
             ],
             [
                 "slug" => "administrator.academic_year_status",
                 "name" => "Academic Year Edit",
-                "group" => "Admin Only"
+                "group" => "Administration"
             ],
             [
                 "slug" => "administrator.academic_year_update",
                 "name" => "Academic Year Edit",
-                "group" => "Admin Only"
+                "group" => "Administration"
             ],
             [ "slug" => "settings.institute",
-                "name" => "Institute Edit",
-                "group" => "Admin Only"
+                "name" => "Institute Settings Edit",
+                "group" => "Administration"
             ],
             [ "slug" => "settings.report",
-                "name" => "Report Edit",
-                "group" => "Admin Only"
-            ],
-            [   "slug" => "user.role_index",
-                "name" => "Role View",
-                "group" => "Admin Only"
-            ],
-            [   "slug" => "user.role_destroy",
-                "name" => "Role Delete",
-                "group" => "Admin Only"
-            ],
-            [   "slug" => "user.role_create",
-                "name" => "Role Create",
-                "group" => "Admin Only"
-            ],
-            [   "slug" => "user.role_store",
-                "name" => "Role Create",
-                "group" => "Admin Only"
-            ],
-            [   "slug" => "user.role_update",
-                "name" => "Role Edit",
-                "group" => "Admin Only"
-            ],
-            [
-                "slug" => "administrator.user_index",
-                "name" => "System Admin View",
-                "group" => "Admin Only"
-            ],
-            [
-                "slug" => "administrator.user_create",
-                "name" => "System Admin Create",
-                "group" => "Admin Only"
-            ],
-            [
-                "slug" => "administrator.user_status",
-                "name" => "System Admin Edit",
-                "group" => "Admin Only"
-            ],
-            [
-                "slug" => "administrator.user_store",
-                "name" => "System Admin Create",
-                "group" => "Admin Only"
-            ],
-            [
-                "slug" => "administrator.user_update",
-                "name" => "System Admin Edit",
-                "group" => "Admin Only"
-            ],
-            [
-                "slug" => "administrator.user_destroy",
-                "name" => "System Admin Delete",
-                "group" => "Admin Only"
-            ],
-            [
-                "slug" => "administrator.user_edit",
-                "name" => "System Admin Edit",
-                "group" => "Admin Only"
-            ],
-            [   "slug" => "administrator.user_password_reset",
-                "name" => "User Password Reset",
-                "group" => "Admin Only"
-            ],
-            // mail / sms template
-            [   "slug" => "administrator.template.mailsms.index",
-                "name" => "Mail_and_SMS Template View",
-                "group" => "Admin Only"
-            ],
-            [   "slug" => "administrator.template.mailsms.create",
-                "name" => "Mail_and_SMS Template Create",
-                "group" => "Admin Only"
-            ],
-            [   "slug" => "administrator.template.mailsms.store",
-                "name" => "Mail_and_SMS Template Create",
-                "group" => "Admin Only"
-            ],
-            [   "slug" => "administrator.template.mailsms.edit",
-                "name" => "Mail_and_SMS Template Edit",
-                "group" => "Admin Only"
-            ],
-            [   "slug" => "administrator.template.mailsms.update",
-                "name" => "Mail_and_SMS Template Edit",
-                "group" => "Admin Only"
-            ],
-            [   "slug" => "administrator.template.mailsms.destroy",
-                "name" => "Mail_and_SMS Template Delete",
-                "group" => "Admin Only"
-            ],
-            //mail / sms end
-            // idcard template
-            [   "slug" => "administrator.template.idcard.index",
-                "name" => "Idcard Template View",
-                "group" => "Admin Only"
-            ],
-            [   "slug" => "administrator.template.idcard.create",
-                "name" => "Idcard Template Create",
-                "group" => "Admin Only"
-            ],
-            [   "slug" => "administrator.template.idcard.store",
-                "name" => "Idcard Template Create",
-                "group" => "Admin Only"
-            ],
-            [   "slug" => "administrator.template.idcard.edit",
-                "name" => "Idcard Template Edit",
-                "group" => "Admin Only"
-            ],
-            [   "slug" => "administrator.template.idcard.update",
-                "name" => "Idcard Template Edit",
-                "group" => "Admin Only"
-            ],
-            [   "slug" => "administrator.template.idcard.destroy",
-                "name" => "Idcard Template Delete",
-                "group" => "Admin Only"
-            ],
-            //idcard end
-            //sms gateway
-            [   "slug" => "settings.sms_gateway.index",
-                "name" => "SMS Gateway View",
-                "group" => "Admin Only"
-            ],
-            [   "slug" => "settings.sms_gateway.create",
-                "name" => "SMS Gateway Create",
-                "group" => "Admin Only"
-            ],
-            [   "slug" => "settings.sms_gateway.store",
-                "name" => "SMS Gateway Create",
-                "group" => "Admin Only"
-            ],
-            [   "slug" => "settings.sms_gateway.edit",
-                "name" => "SMS Gateway Edit",
-                "group" => "Admin Only"
-            ],
-            [   "slug" => "settings.sms_gateway.update",
-                "name" => "SMS Gateway Edit",
-                "group" => "Admin Only"
-            ],
-            [   "slug" => "settings.sms_gateway.destroy",
-                "name" => "SMS Gateway Delete",
-                "group" => "Admin Only"
-            ],
-            //academic calendar
-            [   "slug" => "settings.academic_calendar.index",
-                "name" => "Academic Calendar View",
-                "group" => "Admin Only"
-            ],
-            [   "slug" => "settings.academic_calendar.create",
-                "name" => "Academic Calendar Create",
-                "group" => "Admin Only"
-            ],
-            [   "slug" => "settings.academic_calendar.store",
-                "name" => "Academic Calendar Create",
-                "group" => "Admin Only"
-            ],
-            [   "slug" => "settings.academic_calendar.edit",
-                "name" => "Academic Calendar Edit",
-                "group" => "Admin Only"
-            ],
-            [   "slug" => "settings.academic_calendar.update",
-                "name" => "Academic Calendar Edit",
-                "group" => "Admin Only"
-            ],
-            [   "slug" => "settings.academic_calendar.destroy",
-                "name" => "Academic Calendar Delete",
-                "group" => "Admin Only"
+                "name" => "Report Settings Edit",
+                "group" => "Administration"
             ]
         ];
 
@@ -420,7 +319,7 @@ class PermissionTableSeeder extends Seeder
                 "name" => "Student View",
                 "group" => "Academic"
             ],
-            [   "slug" => "student.list_by_fitler",
+            [   "slug" => "student.list_by_filter",
                 "name" => "Student View",
                 "group" => "Academic"
             ],
@@ -495,14 +394,6 @@ class PermissionTableSeeder extends Seeder
             ],
             [   "slug" => "student_attendance.status",
                 "name" => "Student Attendance Edit",
-                "group" => "Academic"
-            ],
-            [   "slug" => "student_attendance.create_file",
-                "name" => "Student Attendance Create",
-                "group" => "Academic"
-            ],
-            [   "slug" => "student_attendance.file_queue_status",
-                "name" => "Student Attendance Create",
                 "group" => "Academic"
             ],
             //student attendance end
@@ -829,36 +720,6 @@ class PermissionTableSeeder extends Seeder
                 "group" => "HRM"
             ],
             // Policy
-            // Work Outside
-            [   "slug" => "hrm.work_outside.index",
-                "name" => "Work Outside View",
-                "group" => "HRM"
-            ],
-            [   "slug" => "hrm.work_outside.store",
-                "name" => "Work Outside Create",
-                "group" => "HRM"
-            ],
-            [   "slug" => "hrm.work_outside.create",
-                "name" => "Work Outside Create",
-                "group" => "HRM"
-            ],
-            [   "slug" => "hrm.work_outside.destroy",
-                "name" => "Work Outside Delete",
-                "group" => "HRM"
-            ],
-            [   "slug" => "hrm.work_outside.update",
-                "name" => "Work Outside Edit",
-                "group" => "HRM"
-            ],
-            [   "slug" => "hrm.work_outside.show",
-                "name" => "Work Outside View",
-                "group" => "HRM"
-            ],
-            [   "slug" => "hrm.work_outside.edit",
-                "name" => "Work Outside Edit",
-                "group" => "HRM"
-            ],
-            // Work Outside
             // employee attendance
             [   "slug" => "employee_attendance.index",
                 "name" => "Employee Attendance View",
@@ -874,14 +735,6 @@ class PermissionTableSeeder extends Seeder
             ],
             [   "slug" => "employee_attendance.status",
                 "name" => "Employee Attendance Edit",
-                "group" => "HRM"
-            ],
-            [   "slug" => "employee_attendance.create_file",
-                "name" => "Employee Attendance Create",
-                "group" => "HRM"
-            ],
-            [   "slug" => "employee_attendance.file_queue_status",
-                "name" => "Employee Attendance Create",
                 "group" => "HRM"
             ],
             //employee attendance end
@@ -1006,6 +859,16 @@ class PermissionTableSeeder extends Seeder
                 "group" => "Exam"
             ],
             // Exam Result End
+            // Promotion
+            [   "slug" => "promotion.create",
+                "name" => "Promotion Create",
+                "group" => "Exam"
+            ],
+            [   "slug" => "promotion.store",
+                "name" => "Promotion Create",
+                "group" => "Exam"
+            ],
+            // Promotion End
         ];
 
 
@@ -1027,42 +890,36 @@ class PermissionTableSeeder extends Seeder
                 "group" => "Report"
             ],
             [
-            "slug" => "report.employee_monthly_attendance",
-            "name" => "Employee Monthly Attendance View",
-            "group" => "Report"
-        ],
+                "slug" => "report.employee_monthly_attendance",
+                "name" => "Employee Monthly Attendance View",
+                "group" => "Report"
+            ],
             // Report
         ];
 
         //merge all permissions and insert into db
-        $permissions = array_merge($commonPermissionList, $administratorPermissionList, $onlyAdminPermissions,
-            $academicPermissionList, $websitePermissionList, $hrmPermissionList, $examPermissionList, $reportsPermissionList);
+        $permissions = array_merge($commonPermissionList, $exclusiveAdministratorPermissionList,
+            $administratorPermissionList, $academicPermissionList, $websitePermissionList, $hrmPermissionList,
+            $examPermissionList, $reportsPermissionList);
+
 
         echo PHP_EOL , 'seeding permissions...';
 
         Permission::insert($permissions);
 
-
         echo PHP_EOL , 'seeding role permissions...', PHP_EOL;
         //now add admin role permissions
         $admin = Role::where('name', 'admin')->first();
-        $permissions = Permission::get();
+        $permissions = Permission::where('group', '!=', 'Administration Exclusive')->get();
         $admin->permissions()->saveMany($permissions);
 
         //now add other roles common permissions
-        $slugs = array_map(function ($permission){
-            return $permission['slug'];
-        }, $commonPermissionList);
-
-        $permissions = Permission::whereIn('slug', $slugs)->get();
+        $permissions = Permission::where('group', 'Common')->get();
 
         $roles = Role::where('name', '!=', 'admin')->get();
         foreach ($roles as $role){
             echo 'seeding '.$role->name.' permissions...', PHP_EOL;
             $role->permissions()->saveMany($permissions);
         }
-
-
-
     }
 }

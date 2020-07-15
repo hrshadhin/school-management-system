@@ -22,6 +22,7 @@ class CreateResultsTable extends Migration
             $table->integer('total_marks');
             $table->string('grade');
             $table->decimal('point',5,2);
+            $table->unsignedSmallInteger('subject_fail_count')->default(0);
             $table->timestamps();
             $table->softDeletes();
             $table->userstamps();

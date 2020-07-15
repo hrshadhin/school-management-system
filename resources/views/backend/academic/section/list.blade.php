@@ -115,8 +115,6 @@
     <script type="text/javascript">
         $(document).ready(function () {
             window.postUrl = '{{URL::Route("academic.section_status", 0)}}';
-            window.changeExportColumnIndex = 6;
-            window.excludeFilterComlumns = [0,6,7];
             Academic.sectionInit();
         });
     </script>

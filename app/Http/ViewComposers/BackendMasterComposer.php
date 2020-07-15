@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\ViewComposers;
+
 use App\Http\Helpers\AppHelper;
 use Illuminate\Contracts\View\View;
 

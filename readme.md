@@ -7,16 +7,15 @@ Another School Management System build with laravel and PHP 7
 
 
 :loudspeaker:
-**Notic:**  Now its version [v3.0.0](https://github.com/hrshadhin/school-management-system/releases/tag/v3.0.0) (community edition)
-. If you need PHP 5 support then use version [v1.0](https://github.com/hrshadhin/school-management-system/releases/tag/v1.0)
-For Enterprise edition checkout here [EE](https://github.com/hrshadhin/school-management-system/tree/empty)
+**For Enterprise Edition(EE) checkout [here](https://github.com/hrshadhin/school-management-system/tree/empty)**
 
-# Join Our Discord Server
-:mega:[CloudSchool](https://discord.gg/7rXyuu8):mega:
+## Have query?
+:mega: Join our discord channel: [CloudSchool](https://discord.gg/7rXyuu8):mega:
 
+:mega: Send us an email: [info@cloudschoolbd.com](mailto:info@cloudschoolbd.com):mega:
 
 # Help/Bug Report
-- If you discover a security vulnerability within CloudSchool app, please send an e-mail to [hello@hrshadhin.me](mailto:hello@hrshadhin.me) or [sos@cloudschoolbd.com](mailto:sos@cloudschoolbd.com). All security vulnerabilities will be promptly addressed.
+- If you discover a security vulnerability within CloudSchool app, please send an e-mail to [sos@cloudschoolbd.com](mailto:sos@cloudschoolbd.com). All security vulnerabilities will be promptly addressed.
 - If you faced any problems, first check previous issue list. If doesn't exists then create a new one.
 - For any help or bug report please create a issue here with proper details. i.e:
     - Which version of the app you are using?
@@ -44,17 +43,18 @@ For Enterprise edition checkout here [EE](https://github.com/hrshadhin/school-ma
 | Student Admission | Student Admission |
 | Student Attendance |  Student Attendance |
 | Exam & Grading Rules | Exam & Grading Rules |
-| Makrs & Result | Easy Makrs Entry & Result Manage |
+| Marks & Result | Easy Marks Entry & Result Manage |
+| Student Promotion | Dynamic and more advance Student Promotion |
 | Employees Manage | Employees Manage |
 | Employees Attendance | Employees Attendance | 
 | Employees Leave | Employees Leave |
 | Employees Work Outside | Employees Work Outside |
-| SMS Gateway Setup  | SMS Gateway Setup |
-| Email & SMS Templating  | Email & SMS Templating |
-| Attendance notification email/sms  | Attendance notification email/sms |
-| Id Card templates Manage | Id Card templates Manage |
-| Employee & Student id card print | Employee & Student id card print |
-| User & Role manage with permision grid(ACL) | User & Role manage with permision grid(ACL) |
+|   | SMS Gateway Setup |
+|   | Email & SMS Templating |
+|   | Attendance notification email/sms |
+|  | Id Card templates Manage |
+|  | Employee & Student id card print |
+| User & Role manage with permission grid(ACL) | User & Role manage with permission grid(ACL) |
 | User wise Dashboard | User wise Dashboard
 | Report Settings | Report Settings |
 | Only 5 Reports | **40+** Reports |
@@ -66,7 +66,6 @@ For Enterprise edition checkout here [EE](https://github.com/hrshadhin/school-ma
 | User Notification | User Notification |
 |                   | Online Admission |
 |                   | Online Admit Card & Payslip |
-|                   | Student Promotion |
 |                   | Notice Board |
 |                   | Student & Employee Id card bulk/mass print |
 |                   | Account Manage |
@@ -83,6 +82,40 @@ For Enterprise edition checkout here [EE](https://github.com/hrshadhin/school-ma
 |                   | Academic Calendar Print |
 |                   | Bulk SMS and Email Sending |
 |                   | **40+** Reports |
+
+# Demo's
+**Community Edition (CE)**
+- Website: [http://ce.cloudschoolbd.com](http://ce.cloudschoolbd.com)
+- App login: [http://ce.cloudschoolbd.com/login](http://ce.cloudschoolbd.com/login)
+- username: admin
+- password: demo123
+- username: superadmin
+- password: super99
+
+**Enterprise Edition (EE)**
+- Website: [http://ee.cloudschoolbd.com](http://ee.cloudschoolbd.com)
+- App login: [http://ee.cloudschoolbd.com/login](http://ee.cloudschoolbd.com/login)
+- username: admin
+- password: demo123
+- username: superadmin
+- password: super99
+
+# Documentation
+- [Community Edition (CE)](http://ugc.cloudschoolbd.com)
+- [Enterprise Edition (EE)](http://uge.cloudschoolbd.com)
+
+# Timeline
+- [Check Here](CHANGELOG.md)
+
+# Screenshot
+<img src="./screenshot/ce/dashboard.png" >
+<img src="./screenshot/site-dashboard.png" >
+<img src="./screenshot/ce/st-profile.png" >
+<img src="./screenshot/r-attendance.png" >
+<img src="./screenshot/pub-marksheet.png" >
+
+**[I want more screenshots](screenshot/more.md)**
+
 
 # Installation and use
 
@@ -116,39 +149,40 @@ For Enterprise edition checkout here [EE](https://github.com/hrshadhin/school-ma
     ```
     $ composer install
     ```
-- Setup application
-    ```
-    $ php artisan storage:link
-    ```
-    ```
-    $ php artisan key:generate --ansi
-    ```
-- Create database tables and load essential data
-    ```
-    $ php artisan migrate
-    ```
-    ```
-    $ php artisan db:seed
-    ```
-- Load demo data
-    ```
-    $ php artisan db:seed --class DemoSiteDataSeeder
-    ```
-    ```
-    $ php artisan db:seed --class DemoAppDataSeeder
-    ```
-- Clear cache
-    ```
-    $ sudo php artisan cache:clear
-    ```
+ - Setup application 
+    - Method 1: By one command
+         ```
+         # setup cloudschool with out demo data
+         $ php artisan fresh-install
+       
+         # setup cloudschool with demo data
+         $ php artisan fresh-install --with-data
+          # OR
+         $ php artisan fresh-install -d
+         ```
+    - Method 2: Step by step
+        ```
+        $ php artisan storage:link
+        $ php artisan key:generate --ansi
+      
+        # Create database tables and load essential data
+        $ php artisan migrate
+        $ php artisan db:seed
+      
+        # Load demo data
+        $ php artisan db:seed --class DemoSiteDataSeeder
+        $ php artisan db:seed --class DemoAppDataSeeder
+      
+        # Clear all caches
+        $ php artisan view:clear
+        $ php artisan route:clear
+        $ php artisan config:clear
+        $ php artisan cache:clear
+        ```
 - Install frontend(css,js) dependency libraries and bundle them
     ```
     $ npm install
-    ```
-    ```
     $ npm run backend-prod
-    ```
-    ```
     $ npm run frontend-prod
     ```
 - Start development server
@@ -160,36 +194,6 @@ For Enterprise edition checkout here [EE](https://github.com/hrshadhin/school-ma
     - App login: [http://localhost:8000/login](http://localhost:8000/login)
     - username: admin
     - password: demo123
-
-:loudspeaker: **N.B:**
-- For sms and email processing you need to run laravel queue worker. `bin` folder has supervisor config for start queue worker with supervisor.
-
-**Demo Community Edition (CE)**
-- Website: [http://ce.cloudschoolbd.com](http://ce.cloudschoolbd.com)
-- App login: [http://ce.cloudschoolbd.com/login](http://ce.cloudschoolbd.com/login)
-- username: admin
-- password: demo123
-
-**Demo Enterprise Edition (EE)**
-- Website: [http://ee.cloudschoolbd.com](http://ee.cloudschoolbd.com)
-- App login: [http://ee.cloudschoolbd.com/login](http://ee.cloudschoolbd.com/login)
-- username: admin
-- password: demo123
-- username: superadmin
-- password: super99
-
-# Screenshot
-<img src="./screenshot/ce/dashboard.png" >
-<img src="./screenshot/site-dashboard.png" >
-<img src="./screenshot/ce/menu.png" >
-<img src="./screenshot/list.png" >
-<img src="./screenshot/ce/profile-st.png" >
-<img src="./screenshot/id-2.png" >
-<img src="./screenshot/attendance.jpg" >
-<img src="./screenshot/grade.png" >
-<img src="./screenshot/rules.png" >
-<img src="./screenshot/marksheet.jpg" >
-<img src="./screenshot/home.png" >
 
 # Contributors
 - [H.R. Shadhin](https://github.com/hrshadhin)
@@ -216,7 +220,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 All Frameworks and libraries are distributed with it's own license.
 
-**As it is a free(free as in freedom) and open-source software. To keep the credit for this works, you should
+**As it is a free(free as in freedom) software. To keep the credit for this works, you should
 not remove application footer information text**
 
-**Why AGPL [Read Here](https://www.gnu.org/licenses/why-affero-gpl.html)**
+**Why AGPL? [Read Here](https://www.gnu.org/licenses/why-affero-gpl.html)**

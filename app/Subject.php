@@ -25,14 +25,16 @@ class Subject extends Model
         'code',
         'type',
         'class_id',
-        'teacher_id',
         'status',
+        'order',
+        'exclude_in_result'
     ];
 
 
-    public function teacher()
+    public function teachers()
     {
-        return $this->belongsTo('App\Employee', 'teacher_id');
+        return $this->belongsToMany('App\Employee','teacher_subjects', 'subject_id', 'teacher_id')
+            ->select('employees.id','employees.name');
     }
     public function class()
     {
@@ -60,10 +62,20 @@ class Subject extends Model
 
     public function scopeSType($query, $subjectType)
     {
+        if($subjectType && is_array($subjectType)){
+            return $query->whereIn('type', $subjectType);
+        }
         if($subjectType){
             return $query->where('type', $subjectType);
         }
 
         return $query;
     }
+
+    public function students()
+    {
+        return $this->belongsToMany('App\Registration','student_subjects', 'subject_id', 'registration_id');
+    }
+
+
 }

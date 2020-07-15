@@ -41,9 +41,14 @@
                                 {!! Form::select('class_id', $classes, $iclass , ['placeholder' => 'Pick a class...','class' => 'form-control select2', 'required' => 'true']) !!}
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="form-group has-feedback">
                                 {!! Form::select('section_id', $sections, $section_id , ['placeholder' => 'Pick a section...','class' => 'form-control select2', 'id' => 'student_list_filter', 'required' => 'true']) !!}
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group has-feedback">
+                                {!! Form::select('status', ['1' => "Active", '0' => 'Deactivate'], $status , ['class' => 'form-control select2 student_list_filter', 'required' => 'true']) !!}
                             </div>
                         </div>
                         <div class="box-tools pull-right">
@@ -75,7 +80,7 @@
                                         {{$loop->iteration}}
                                     </td>
                                     <td>
-                                        <img class="img-responsive center" style="height: 35px; width: 35px;" src="@if($info->student->photo ){{ asset('storage/student')}}/{{ $info->class_id }}/{{ $info->student->photo }} @else {{ asset('images/avatar.jpg')}} @endif" alt="">
+                                        <img class="img-responsive center" style="height: 35px; width: 35px;" src="@if($info->student->photo ){{ asset('storage/student')}}/{{ $info->student->photo }} @else {{ asset('images/avatar.jpg')}} @endif" alt="">
                                     </td>
                                     <td>{{ $info->regi_no }}</td>
                                     <td>{{ $info->roll_no }}</td>
@@ -92,20 +97,22 @@
                                             <a title="Details"  href="{{URL::route('student.show',$info->id)}}"  class="btn btn-primary btn-sm"><i class="fa fa-eye"></i>
                                             </a>
                                         </div>
-                                        <div class="btn-group">
-                                            <a title="Edit" href="{{URL::route('student.edit',$info->id)}}" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
-                                            </a>
-                                        </div>
-                                        <!-- todo: have problem in mobile device -->
-                                        <div class="btn-group">
-                                            <form  class="myAction" method="POST" action="{{URL::route('student.destroy', $info->id)}}">
-                                                @csrf
-                                                <input name="_method" type="hidden" value="DELETE">
-                                                <button type="submit" class="btn btn-danger btn-sm" title="Delete">
-                                                    <i class="fa fa-fw fa-trash"></i>
-                                                </button>
-                                            </form>
-                                        </div>
+                                        @if($info->is_promoted == '0')
+                                            <div class="btn-group">
+                                                <a title="Edit" href="{{URL::route('student.edit',$info->id)}}" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
+                                                </a>
+                                            </div>
+                                            <!-- todo: have problem in mobile device -->
+                                            <div class="btn-group">
+                                                <form  class="myAction" method="POST" action="{{URL::route('student.destroy', $info->id)}}">
+                                                    @csrf
+                                                    <input name="_method" type="hidden" value="DELETE">
+                                                    <button type="submit" class="btn btn-danger btn-sm" title="Delete">
+                                                        <i class="fa fa-fw fa-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        @endif
 
                                     </td>
                                 </tr>
@@ -145,10 +152,7 @@
         $(document).ready(function () {
             window.postUrl = '{{URL::Route("student.status", 0)}}';
             window.section_list_url = '{{URL::Route("academic.section")}}';
-            window.changeExportColumnIndex = 7;
-            window.excludeFilterComlumns = [0,1,8,9];
            Academic.studentInit();
-           $('title').text($('title').text() + '-' + $('select[name="class_id"] option[selected]').text() + '(' + $('select[name="section_id"] option[selected]').text() +')');
         });
     </script>
 @endsection

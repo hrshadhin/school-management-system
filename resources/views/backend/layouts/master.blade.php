@@ -63,7 +63,7 @@
     <div class="content-wrapper">
         <!-- Message -->
         @if (Session::has('success') || Session::has('error') || Session::has('warning'))
-            <div class="alert custom_alert @if (Session::has('success')) alert-success @elseif(Session::has('error')) alert-danger @else alert-warning @endif alert-dismissible">
+            <div class="no-print alert custom_alert @if (Session::has('success')) alert-success @elseif(Session::has('error')) alert-danger @else alert-warning @endif alert-dismissible">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                 @if (Session::has('success'))
                     <h5><i class="icon fa fa-check"></i>{!! Session::get('success') !!} </h5>
@@ -76,7 +76,7 @@
             </div>
         @endif
         @if (Session::has('message'))
-            <div class="alert  alert-success keepIt">
+            <div class="alert  alert-success keepIt no-print">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                 <h5 style="font-weight: bold; font-size: large;"><i class="icon fa fa-check"></i>{!! Session::get('message') !!} </h5>
             </div>

@@ -70,19 +70,19 @@
                             </div>
                             <div class="form-group has-feedback">
                                 <label for="facebook">Facebook link</label>
-                                <input  type="url" class="form-control" name="facebook" placeholder="https://facebook.com/mr.jamil00003" value="@if($profile){{ $profile->facebook }}@else{{ old('facebook') }} @endif" maxlength="255">
+                                <input  type="text" class="form-control" name="facebook" placeholder="https://facebook.com/mr.jamil00003" value="@if($profile){{ $profile->facebook }}@else{{ old('facebook') }} @endif" maxlength="255">
                                 <span class="glyphicon glyphicon-info form-control-feedback"></span>
                                 <span class="text-danger">{{ $errors->first('facebook') }}</span>
                             </div>
                             <div class="form-group has-feedback">
-                                <label for="google">Google plus link</label>
-                                <input  type="url" class="form-control" name="google" placeholder="https://google.com/mr.jamil00003" value="@if($profile){{ $profile->google }}@else{{ old('google') }} @endif" maxlength="255">
+                                <label for="instagram">Instagram link</label>
+                                <input  type="text" class="form-control" name="instagram" placeholder="https://instagram.com/mr.jamil00003" value="@if($profile){{ $profile->instagram }}@else{{ old('instagram') }} @endif" maxlength="255">
                                 <span class="glyphicon glyphicon-info form-control-feedback"></span>
-                                <span class="text-danger">{{ $errors->first('google') }}</span>
+                                <span class="text-danger">{{ $errors->first('instagram') }}</span>
                             </div>
                             <div class="form-group has-feedback">
                                 <label for="twitter">Twitter link</label>
-                                <input  type="url" class="form-control" name="twitter" placeholder="https://twitter.com/mr.jamil00003" value="@if($profile){{ $profile->twitter }}@else{{ old('twitter') }} @endif" maxlength="255">
+                                <input  type="text" class="form-control" name="twitter" placeholder="https://twitter.com/mr.jamil00003" value="@if($profile){{ $profile->twitter }}@else{{ old('twitter') }} @endif" maxlength="255">
                                 <span class="glyphicon glyphicon-info form-control-feedback"></span>
                                 <span class="text-danger">{{ $errors->first('twitter') }}</span>
                             </div>

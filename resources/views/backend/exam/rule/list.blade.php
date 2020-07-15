@@ -160,13 +160,9 @@
 <!-- BEGIN PAGE JS-->
 @section('extraScript')
     <script type="text/javascript">
-        window.changeExportColumnIndex = -1;
-        window.excludeFilterComlumns = [0,4,6,7,8];
         window.exam_list_url = '{{URL::Route("exam.index")}}';
         $(document).ready(function () {
            Academic.examRuleInit();
-            $('title').text($('title').text() + '-' + $('select[name="class"] option[selected]').text() + '-' + $('select[name="exam"] option[selected]').text());
-
         });
     </script>
 @endsection

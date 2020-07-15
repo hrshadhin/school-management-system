@@ -41,8 +41,9 @@
                             </div>
                         </div>
                         <div class="box-tools pull-right">
-                            <a class="btn btn-info btn-sm" href="{{ URL::route('employee_attendance.create') }}"><i class="fa fa-plus-circle"></i> Add New</a>
-                            <a class="btn btn-primary btn-sm" href="{{ URL::route('employee_attendance.create_file') }}"><i class="fa fa-upload"></i> Upload File</a>
+                            @can('employee_attendance.create')
+                                <a class="btn btn-info btn-sm" href="{{ URL::route('employee_attendance.create') }}"><i class="fa fa-plus-circle"></i> Add New</a>
+                            @endcan
                         </div>
                     </div>
                     <!-- /.box-header -->
@@ -112,9 +113,6 @@
     <script type="text/javascript">
         $(document).ready(function () {
             window.postUrl = '{{URL::Route("employee_attendance.status", 0)}}';
-            window.changeExportColumnIndex = 7;
-            window.changeExportColumnValue = ['Present', 'Absent'];
-            window.excludeFilterComlumns = [0,4,5,6,7];
             HRM.attendanceInit();
         });
     </script>

@@ -28,8 +28,18 @@
                         </tr>
                         </thead>
                         <tbody>
+                        @php
+                            $dayWisePresent = [];
+                            $dayWiseAbsent = [];
+                            //init 0 values
+                            foreach($monthDates as $date => $value){
+                               $dayWisePresent[$date] = 0;
+                               $dayWiseAbsent[$date] = 0;
+                            }
+                        @endphp
                             @foreach($employees as $employee)
-                                <tr>
+                                @if(isset($attendanceData[$employee->id]))
+                                 <tr>
                                     <td>{{$loop->iteration}}</td>
                                     <td>{{$employee->name}}</td>
                                     @php
@@ -51,27 +61,23 @@
                                                             $tPresent--;
                                                         }
 
+                                                        $dayWisePresent[$date] += 1;
+
                                                     }
                                                     else{
-                                                        if(!isset($employeesWorkoutside[$employee->id][$date])
-                                                        && !isset($employeesLeaves[$employee->id][$date])
+                                                        if(!isset($employeesLeaves[$employee->id][$date])
                                                         && !isset($calendarData[$date])
                                                         && !$value['weekend']
                                                         ){
                                                             $status = 'A';
                                                             $tabsent++;
                                                             $color = 'red';
+
+                                                            $dayWiseAbsent[$date] += 1;
                                                         }
 
                                                     }
                                                 }
-
-
-                                                 if(isset($calendarData[$date])) {
-                                                        $status .= $calendarData[$date];
-                                                        $color = 'holiday';
-                                                        $tPresent++;
-                                                 }
 
 
                                                 if($value['weekend']){
@@ -82,11 +88,6 @@
                                                 if(isset($employeesLeaves[$employee->id][$date])) {
                                                         $status = 'L';
                                                         $color = 'blue';
-                                                        $tPresent++;
-                                                }
-                                                if(isset($employeesWorkoutside[$employee->id][$date])) {
-                                                        $status = 'WO';
-                                                        $color = 'green';
                                                         $tPresent++;
                                                 }
                                         @endphp
@@ -102,7 +103,10 @@
                                         {{$tPresent + $tabsent}}
                                     </td>
                                 </tr>
+                                @endif
                             @endforeach
+                        {!! ReportHelper::generateEmployeeMonthlyAttendanceSumTableRows($dayWisePresent,$dayWiseAbsent) !!}
+
                         </tbody>
                     </table>
                 </div>

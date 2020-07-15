@@ -370,6 +370,8 @@
     overflow: hidden;
     text-overflow: ellipsis;
     margin-left: 20px !important;
+     height: auto;
+     width: auto;
  }
  #listDataTableWithSearch thead input {
              width: 100%;
@@ -468,7 +470,15 @@ table.attendance-add tr td .help-block{
    color:red;
 }
 
-table.haveForm tr td, table.haveForm tr th{
+.registration_form {
+    margin: 20px;
+}
+
+.registration_form_body_color {
+    background: #ccc;
+}
+
+table.haveForm tr td, table.haveForm tr th,table.haveFormBigInput tr td, table.haveFormBigInput tr th{
     text-align: center;
 }
 table.haveForm tr td input {
@@ -476,7 +486,13 @@ table.haveForm tr td input {
     max-width: 120px;
     padding-right: 0 !important;
 }
-table.haveForm tr td .help-block{
+
+table.haveFormBigInput tr td input {
+    margin: auto;
+    max-width: 250px;
+    padding-right: 0 !important;
+}
+table.haveForm tr td .help-block, table tr td .help-block{
    color:red;
 }
 
@@ -534,6 +550,38 @@ select[readonly].select2 + .select2-container {
 .bg-13 {
     background-color: #d81b60 !important;
 }
+.lead {
+    margin-bottom: 5px;
+}
+#paymentListTable tr th,#paymentListTable tr td {
+    text-align: center;
+}
+.notice-holder {
+    width: 100%;
+}
+.notice-holder a {
+   line-height: 18px;
+}
+.notice-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    float: left;
+}
+.notice-clock {
+    color: darkorange;
+    white-space: nowrap;
+    overflow: hidden;
+    float: right;
+    font-size: 16px;
+}
+
+@media (min-width: 768px) {
+    .modal-dialog {
+        width: 700px;
+    }
+}
 
 .public_marksheet_form {
     margin: 20px;
@@ -543,6 +591,57 @@ select[readonly].select2 + .select2-container {
     background: #ccc;
 }
 
+.has-feedback .form-control {
+    padding-right: 10px;
+}
+
+.navbar-nav > .notifications-menu > .dropdown-menu, .navbar-nav > .messages-menu > .dropdown-menu, .navbar-nav > .tasks-menu > .dropdown-menu {
+    width: 280px;
+    padding: 0 0 0 0;
+    margin: 0;
+    top: 100%;
+}
+
+.table-td-center tbody tr td {
+    text-align: center;
+}
+.table-marks-and-result thead tr td,
+.table-marks-and-result tbody tr td,
+.table-marks-and-result tfoot tr td {
+    text-align: center;
+}
+.table-marks-and-result thead tr td, .table-marks-and-result tfoot tr td {
+    font-weight: bold;
+    vertical-align: middle;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+input[type=number] {
+    -moz-appearance:textfield; /* Firefox */
+}
+
+@-o-keyframes trfadeIt {
+    0%   { background-color: #1D8348; }
+    50%  { background-color: #82E0AA; }
+    100% { background-color: #ffffff; }
+}
+@keyframes trfadeIt {
+    0%   { background-color: #82E0AA; }
+    50%  { background-color: #28B463; }
+    100% { background-color: #1D8348; }
+}
+
+.tr-remove-animate{
+    background-image:none !important;
+    -o-animation: trfadeIt 5s ease-in-out;
+    animation: trfadeIt 5s ease-in-out;
+}
 /**
  Mobile view element hide css
  */
@@ -573,4 +672,29 @@ select[readonly].select2 + .select2-container {
     #leaveStats .tile_count .tile_stats_count span {
         font-size: 13px;
     }
+}
+
+// Phone
+@media  only screen and (max-width:320px) {
+    .notice-title {
+        max-width: 60%;
+    }
+    .notice-clock {
+        font-size: 14px;
+    }
+}
+
+// Tablet
+@media   only screen and (min-width:321px) and (max-width:768px) {
+    .notice-title {
+        max-width: 70%;
+    }
+    .notice-clock {
+        font-size: 14px;
+    }
+}
+
+// Desktop
+@media   only screen and (min-width:769px) {
+
 }

@@ -13,6 +13,7 @@ class ReportMasterComposer
         $instituteSettings = AppHelper::getAppSettings('institute_settings');
         $instituteName = '';
         $instituteAddress = '';
+        $logo = '';
         if($instituteSettings) {
             $instituteName = $instituteSettings['name'] ??  '';
             $instituteAddress = $instituteSettings['address'] ??  '';

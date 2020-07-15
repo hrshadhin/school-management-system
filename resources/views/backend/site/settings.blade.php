@@ -48,44 +48,44 @@
                                 <span class="text-danger">{{ $errors->first('short_name') }}</span>
                             </div>
                             <div class="form-group has-feedback">
-                                <label for="logo">Logo<span class="text-danger">[82 X 72 exact size and max 1MB]*</span></label>
-                                <input  type="file" class="form-control" accept=".jpeg, .jpg, .png" name="logo" placeholder="logo image" required>
+                                <label for="logo">Logo<span class="text-danger">[82 X 72 exact size and max 1MB]</span></label>
+                                <input  type="file" class="form-control" accept=".jpeg, .jpg, .png" name="logo" placeholder="logo image">
                                 <span class="glyphicon glyphicon-open-file form-control-feedback"></span>
                                 <span class="text-danger">{{ $errors->first('logo') }}</span>
                             </div>
                             <div class="form-group has-feedback">
-                                <label for="logo2x">Logo 2x<span class="text-danger">[162 X 142 exact size and max 1MB]*</span></label>
-                                <input  type="file" class="form-control" accept=".jpeg, .jpg, .png" name="logo2x" placeholder="logo image" required>
+                                <label for="logo2x">Logo 2x<span class="text-danger">[162 X 142 exact size and max 1MB]</span></label>
+                                <input  type="file" class="form-control" accept=".jpeg, .jpg, .png" name="logo2x" placeholder="logo image">
                                 <span class="glyphicon glyphicon-open-file form-control-feedback"></span>
                                 <span class="text-danger">{{ $errors->first('logo2x') }}</span>
                             </div>
                             <div class="form-group has-feedback">
-                                <label for="favicon">Favicon<span class="text-danger">[only .png image][32 X 32 exact size and max 512KB]*</span></label>
-                                <input  type="file" class="form-control" accept=".png" name="favicon" placeholder="favicon image" required>
+                                <label for="favicon">Favicon<span class="text-danger">[only .png image][32 X 32 exact size and max 512KB]</span></label>
+                                <input  type="file" class="form-control" accept=".png" name="favicon" placeholder="favicon image">
                                 <span class="glyphicon glyphicon-open-file form-control-feedback"></span>
                                 <span class="text-danger">{{ $errors->first('favicon') }}</span>
                             </div>
                             <div class="form-group has-feedback">
                                 <label for="facebook">Facebook Link</label>
-                                <input  type="url" class="form-control" name="facebook"  placeholder="url" value="@if($info) {{ $info->facebook }} @endif" minlength="8" maxlength="500">
+                                <input  type="text" class="form-control" name="facebook"  placeholder="url" value="@if($info) {{ $info->facebook }} @endif" maxlength="500">
                                 <span class="fa fa-facebook form-control-feedback"></span>
                                 <span class="text-danger">{{ $errors->first('facebook') }}</span>
                             </div>
                             <div class="form-group has-feedback">
-                                <label for="google">Google Plus Link</label>
-                                <input  type="url" class="form-control" name="google"  placeholder="url" value="@if($info) {{ $info->google }} @endif" minlength="8" maxlength="500">
-                                <span class="fa fa-google-plus form-control-feedback"></span>
-                                <span class="text-danger">{{ $errors->first('google') }}</span>
+                                <label for="instagram">Instagram Link</label>
+                                <input  type="text" class="form-control" name="instagram"  placeholder="url" value="@if($info) {{ $info->instagram }} @endif" maxlength="500">
+                                <span class="fa fa-instagram form-control-feedback"></span>
+                                <span class="text-danger">{{ $errors->first('instagram') }}</span>
                             </div>
                             <div class="form-group has-feedback">
                                 <label for="twitter">Twitter Link</label>
-                                <input  type="url" class="form-control" name="twitter"  placeholder="url" value="@if($info) {{ $info->twitter }} @endif" minlength="8" maxlength="500">
+                                <input  type="text" class="form-control" name="twitter"  placeholder="url" value="@if($info) {{ $info->twitter }} @endif" maxlength="500">
                                 <span class="fa fa-twitter form-control-feedback"></span>
                                 <span class="text-danger">{{ $errors->first('twitter') }}</span>
                             </div>
                             <div class="form-group has-feedback">
                                 <label for="youtube">Youtube Link</label>
-                                <input  type="url" class="form-control" name="youtube"  placeholder="url" value="@if($info) {{ $info->youtube }} @endif" minlength="8" maxlength="500">
+                                <input  type="text" class="form-control" name="youtube"  placeholder="url" value="@if($info) {{ $info->youtube }} @endif" maxlength="500">
                                 <span class="fa fa-youtube form-control-feedback"></span>
                                 <span class="text-danger">{{ $errors->first('youtube') }}</span>
                             </div>
