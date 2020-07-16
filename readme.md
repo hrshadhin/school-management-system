@@ -6,7 +6,7 @@ Another School Management System build with laravel and PHP 7
 [![Known Vulnerabilities](https://snyk.io/test/github/hrshadhin/school-management-system/badge.svg?targetFile=package.json)](https://snyk.io/test/github/hrshadhin/school-management-system?targetFile=package.json)
 
 
-## :loudspeaker: **For Enterprise Edition(EE) checkout [here](../empty)**
+## :loudspeaker: **For Enterprise Edition(EE) checkout [here](../tree/empty)**
 
 ## Have query?
 :mega: Join our discord channel: [CloudSchool](https://discord.gg/7rXyuu8):mega:
@@ -190,8 +190,11 @@ admin       | demo123
 - Use the app
     - Website: [http://localhost:8000](http://localhost:8000)
     - App login: [http://localhost:8000/login](http://localhost:8000/login)
-    - username: admin
-    - password: demo123
+
+    Username    | Password
+    ------------|:-----------
+    superadmin  | super99
+    admin       | demo123
 
 # Contributors
 - [H.R. Shadhin](https://github.com/hrshadhin)
