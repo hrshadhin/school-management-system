@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Backend;
 use App\Employee;
 use App\Http\Helpers\AppHelper;
 use App\Leave;
-use App\WorkOutside;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -38,10 +37,6 @@ class LeaveController extends Controller
                 ->whereStatus($status)
                 ->get();
         }
-
-
-
-
 
         return view('backend.hrm.leave.list', compact(
             'leaves',
@@ -117,44 +112,9 @@ class LeaveController extends Controller
             }
         }
 
-        $haveWorkOutSide = WorkOutside::where('employee_id', $request->get('employee_id',0))
-            ->whereIn('work_date', $dateList)
-            ->count();
 
-        if($haveWorkOutSide){
-            $message = 'This employee has work outside schedule';
-            if($leaveDateEnd){
-                $message .= ' inside '.$leaveDateStart->format('d/m/Y').' to '.$leaveDateEnd->format('d/m/Y');
-            }
-            else{
-                $message .= ' on '.$leaveDateStart->format('d/m/Y');
-            }
-            return redirect()->back()->with('error', $message);
-        }
-
-        $holidayBalance = true;
-        if($request->get('leave_type',0) == 1) {
-            $totalAllowCasualLeave = AppHelper::getAppSettings('total_casual_leave');
-
-            $usedLeave = Leave::where('employee_id',$request->get('employee_id'))
-                ->where('leave_type',1)->where('status','2')->count();
-
-            if(($dayCount + $usedLeave) > $totalAllowCasualLeave) {
-                $holidayBalance = false;
-                $message = "Casual leave limit is over. He/She took $usedLeave/$totalAllowCasualLeave day's leave already.";
-            }
-        }
-
-        if($request->get('leave_type',0) == 2) {
-            $totalAllowSickLeave = AppHelper::getAppSettings('total_sick_leave');
-            $usedLeave = Leave::where('employee_id',$request->get('employee_id'))
-                ->where('leave_type',2)->where('status','2')->count();
-
-            if(($dayCount + $usedLeave) > $totalAllowSickLeave) {
-                $holidayBalance = false;
-                $message = "Sick leave limit is over. He/She took $usedLeave/$totalAllowSickLeave day's leave already.";
-            }
-        }
+        [$holidayBalance, $message] = AppHelper::checkLeaveBalance($request->get('leave_type',0),
+            $dayCount, $request->get('employee_id'));
 
         if(!$holidayBalance){
             return redirect()->back()->with('error', $message);
@@ -250,13 +210,6 @@ class LeaveController extends Controller
         }
 
         $leaveDate = Carbon::createFromFormat('d/m/Y',$request->get('leave_date'))->format('Y-m-d');
-        $haveWorkOutSide = WorkOutside::where('employee_id', $leave->employee_id)
-            ->whereDate('work_date', $leaveDate)
-            ->count();
-        if($haveWorkOutSide){
-            $message = 'This employee has work outside schedule  on '.$request->get('leave_date');
-            return redirect()->back()->with('error', $message);
-        }
 
         $data = $request->all();
         unset($data['employee_id']);

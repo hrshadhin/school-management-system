@@ -8,6 +8,7 @@ use App\Http\Helpers\AppHelper;
 use App\IClass;
 use App\Employee;
 use App\Section;
+use Illuminate\Support\Facades\DB;
 
 class DemoAppDataSeeder extends Seeder
 {
@@ -34,10 +35,6 @@ class DemoAppDataSeeder extends Seeder
         echo PHP_EOL , 'seeding institute settings...';
         $this->instituteSettingsData();
 
-        //seed academic Calendar
-        echo PHP_EOL , 'seeding academic calendar...';
-        $this->academicCalendarData();
-
         //seed class
         echo PHP_EOL , 'seeding class...';
         $this->classData();
@@ -62,15 +59,6 @@ class DemoAppDataSeeder extends Seeder
         echo PHP_EOL , 'seeding student...';
         $this->studentData();
 
-        //seed id card template for both
-        //employee and students
-        echo PHP_EOL , 'seeding id card template...';
-        $this->idcardTemplateData();
-
-        //seed attendance absent sms and email template
-        echo PHP_EOL , 'seeding absent sms & email template...';
-        $this->smsAndEmailTemplateData();
-
         //seed student attendance
         echo PHP_EOL , 'seeding student attendance...';
         $this->studentAttendance();
@@ -80,8 +68,8 @@ class DemoAppDataSeeder extends Seeder
         $this->employeeAttendance();
 
         //leave and work out side data
-        echo PHP_EOL , 'seeding leave and outside work data...';
-        $this->leaveAndWorkOutSide();
+        echo PHP_EOL , 'seeding leave...';
+        $this->leave();
 
         //seed exam
         echo PHP_EOL , 'seeding exam...';
@@ -119,7 +107,6 @@ class DemoAppDataSeeder extends Seeder
         Section::truncate();
         \App\Subject::truncate();
         \App\Student::truncate();
-        \App\Template::truncate();
         \App\Registration::truncate();
         \App\StudentAttendance::truncate();
         \App\EmployeeAttendance::truncate();
@@ -129,9 +116,10 @@ class DemoAppDataSeeder extends Seeder
         \App\Mark::truncate();
         \App\Result::truncate();
         \App\Leave::truncate();
-        \App\WorkOutside::truncate();
         \Illuminate\Support\Facades\DB::table('result_publish')->truncate();
         \Illuminate\Support\Facades\DB::table('result_combines')->truncate();
+        \Illuminate\Support\Facades\DB::table('teacher_subjects')->truncate();
+        \Illuminate\Support\Facades\DB::table('student_subjects')->truncate();
         \Illuminate\Support\Facades\DB::statement("SET foreign_key_checks=1");
 
         //delete images
@@ -143,7 +131,6 @@ class DemoAppDataSeeder extends Seeder
             $storagePath.'/invoice',
             $storagePath.'/leave',
             $storagePath.'/logo',
-            $storagePath.'/payroll',
             $storagePath.'/report',
             $storagePath.'/student',
             $storagePath.'/work_outside',
@@ -217,8 +204,8 @@ class DemoAppDataSeeder extends Seeder
         $data['establish'] = '2010';
         $data['website_link'] = 'http://cloudschoolbd.com';
         $data['email'] = 'info@cloudschoolbd.com';
-        $data['phone_no'] = '+8801554322707';
-        $data['address'] = 'Dhanmondi,Dhaka-1207';
+        $data['phone_no'] = '+8801xxxxxxxxx';
+        $data['address'] = 'Dhanmondi, Dhaka-1207';
 
         $created_by = 1;
         $created_at = Carbon::now(env('APP_TIMEZONE','Asia/Dhaka'));
@@ -263,8 +250,13 @@ class DemoAppDataSeeder extends Seeder
             ['meta_key' => 'institute_type', 'meta_value' => 1, 'created_by' => $created_by, 'created_at' => $created_at],
             ['meta_key' => 'shift_data', 'meta_value' => json_encode($shiftData), 'created_by' => $created_by, 'created_at' => $created_at],
             ['meta_key' => 'weekends', 'meta_value' => json_encode([5]), 'created_by' => $created_by, 'created_at' => $created_at],
+            ['meta_key' => 'week_start_day', 'meta_value' => 6, 'created_by' => $created_by, 'created_at' => $created_at],
+            ['meta_key' => 'week_end_day', 'meta_value' => 5, 'created_by' => $created_by, 'created_at' => $created_at],
             ['meta_key' => 'total_casual_leave', 'meta_value' => 14, 'created_by' => $created_by, 'created_at' => $created_at],
-            ['meta_key' => 'total_sick_leave', 'meta_value' => 10, 'created_by' => $created_by, 'created_at' => $created_at]
+            ['meta_key' => 'total_sick_leave', 'meta_value' => 10, 'created_by' => $created_by, 'created_at' => $created_at],
+            ['meta_key' => 'total_maternity_leave', 'meta_value' => 90, 'created_by' => $created_by, 'created_at' => $created_at],
+            ['meta_key' => 'total_special_leave', 'meta_value' => 5, 'created_by' => $created_by, 'created_at' => $created_at],
+            ['meta_key' => 'board_name', 'meta_value' => 'Dhaka', 'created_by' => $created_by, 'created_at' => $created_at]
         ];
 
         //now crate
@@ -275,154 +267,6 @@ class DemoAppDataSeeder extends Seeder
     }
 
 
-    private function academicCalendarData() {
-        $created_by = 1;
-        $created_at = Carbon::now(env('APP_TIMEZONE','Asia/Dhaka'));
-        $year = date('Y');
-
-        $data = [
-            [
-                'title' => "New Year",
-                'date_from' => $year.'-01-01',
-                'date_upto' => $year.'-01-01',
-                'is_holiday' => '1',
-                'is_exam' => '0',
-                'description' => 'Happy New Year',
-                'created_by' => $created_by,
-                'created_at' => $created_at
-            ],[
-                'title' => "Language Martyrs' Day",
-                'date_from' => $year.'-02-21',
-                'date_upto' => $year.'-02-21',
-                'is_holiday' => '1',
-                'is_exam' => '0',
-                'description' => 'International Mother Language Day',
-                'created_by' => $created_by,
-                'created_at' => $created_at
-            ],[
-                'title' => "Sheikh Mujibur Rahman's birthday",
-                'date_from' => $year.'-03-17',
-                'date_upto' => $year.'-03-17',
-                'is_holiday' => '1',
-                'is_exam' => '0',
-                'description' => 'Father of Nation of Bangladesh',
-                'created_by' => $created_by,
-                'created_at' => $created_at
-            ],[
-                'title' => "Independence Day",
-                'date_from' => $year.'-03-26',
-                'date_upto' => $year.'-03-26',
-                'is_holiday' => '1',
-                'is_exam' => '0',
-                'description' => 'Declaration of Independence from Pakistan in 1971',
-                'created_by' => $created_by,
-                'created_at' => $created_at
-            ],[
-                'title' => "1st Term Exam",
-                'date_from' => $year.'-04-05',
-                'date_upto' => $year.'-04-13',
-                'is_holiday' => '0',
-                'is_exam' => '1',
-                'description' => '',
-                'created_by' => $created_by,
-                'created_at' => $created_at
-            ],[
-                'title' => "Bengali New Year",
-                'date_from' => $year.'-04-14',
-                'date_upto' => $year.'-04-14',
-                'is_holiday' => '1',
-                'is_exam' => '0',
-                'description' => 'Festival marking the start of the Bengali year',
-                'created_by' => $created_by,
-                'created_at' => $created_at
-            ],[
-                'title' => "May Day",
-                'date_from' => $year.'-05-01',
-                'date_upto' => $year.'-05-01',
-                'is_holiday' => '1',
-                'is_exam' => '0',
-                'description' => 'International Labour Day',
-                'created_by' => $created_by,
-                'created_at' => $created_at
-            ],[
-                'title' => "Buddha Purnima",
-                'date_from' => $year.'-05-19',
-                'date_upto' => $year.'-05-19',
-                'is_holiday' => '1',
-                'is_exam' => '0',
-                'description' => 'Birth of Buddha. Observed on the day of the full moon in May',
-                'created_by' => $created_by,
-                'created_at' => $created_at
-            ],[
-                'title' => "2nd Term Exam",
-                'date_from' => $year.'-07-05',
-                'date_upto' => $year.'-07-13',
-                'is_holiday' => '0',
-                'is_exam' => '1',
-                'description' => '',
-                'created_by' => $created_by,
-                'created_at' => $created_at
-            ], [
-                'title' => "National Mourning Day",
-                'date_from' => $year.'-08-15',
-                'date_upto' => $year.'-08-15',
-                'is_holiday' => '1',
-                'is_exam' => '0',
-                'description' => 'National Mourning Day',
-                'created_by' => $created_by,
-                'created_at' => $created_at
-            ],[
-                'title' => "Janmashtami",
-                'date_from' => $year.'-08-24',
-                'date_upto' => $year.'-08-24',
-                'is_holiday' => '1',
-                'is_exam' => '0',
-                'description' => 'Restricted Holiday. Celebrates the birth of Lord Shri Krishna',
-                'created_by' => $created_by,
-                'created_at' => $created_at
-            ],[
-                'title' => "Victory Day",
-                'date_from' => $year.'-12-16',
-                'date_upto' => $year.'-12-16',
-                'is_holiday' => '1',
-                'is_exam' => '0',
-                'description' => 'Commemorates the surrender of the Pakistani army to the Mukti Bahini',
-                'created_by' => $created_by,
-                'created_at' => $created_at
-            ],[
-                'title' => "Final Exam",
-                'date_from' => $year.'-12-17',
-                'date_upto' => $year.'-12-24',
-                'is_holiday' => '0',
-                'is_exam' => '1',
-                'description' => '',
-                'created_by' => $created_by,
-                'created_at' => $created_at
-            ],
-            [
-                'title' => "Christmas Day",
-                'date_from' => $year.'-12-25',
-                'date_upto' => $year.'-12-25',
-                'is_holiday' => '1',
-                'is_exam' => '0',
-                'description' => 'Christmas Day',
-                'created_by' => $created_by,
-                'created_at' => $created_at
-            ],[
-                'title' => "Year end holidays",
-                'date_from' => $year.'-12-26',
-                'date_upto' => $year.'-12-31',
-                'is_holiday' => '1',
-                'is_exam' => '0',
-                'description' => '',
-                'created_by' => $created_by,
-                'created_at' => $created_at
-            ],
-
-        ];
-
-        \App\AcademicCalendar::insert($data);
-    }
 
     private function classData(){
         $created_by = 1;
@@ -540,6 +384,24 @@ class DemoAppDataSeeder extends Seeder
         $created_by = 1;
         $created_at = Carbon::now(env('APP_TIMEZONE','Asia/Dhaka'));
 
+        $insHeadDesignation = 7;
+        if(AppHelper::getInstituteCategory() == "college"){
+            $insHeadDesignation = 1;
+        }
+
+        $instituteHead = factory(App\Employee::class, 1)
+            ->create(['designation' => $insHeadDesignation,'created_by' => $created_by,'created_at' => $created_at]);
+
+        $instituteHead->each(function ($teacher) use($created_at, $created_by) {
+            \App\UserRole::create([
+                'user_id' => $teacher->user_id,
+                'role_id' => AppHelper::USER_TEACHER,
+                'created_by' => $created_by,
+                'created_at' => $created_at
+
+            ]);
+        });
+
         $teachers = factory(App\Employee::class, 5)
             ->create(['created_by' => $created_by,'created_at' => $created_at]);
 
@@ -552,6 +414,8 @@ class DemoAppDataSeeder extends Seeder
 
             ]);
         });
+
+
     }
     private function employeeData() {
 
@@ -595,32 +459,120 @@ class DemoAppDataSeeder extends Seeder
             ->create(['class_id'=> 1, 'name' => 'C', 'created_by' => $created_by,'created_at' => $created_at]);
     }
 
-    private function subjectData() {
+    private function subjectData()
+    {
         $created_by = 1;
-        $created_at = Carbon::now(env('APP_TIMEZONE','Asia/Dhaka'));
+        $created_at = Carbon::now(env('APP_TIMEZONE', 'Asia/Dhaka'));
 
         $subject = factory(App\Subject::class, 10)
-            ->create(['created_by' => $created_by,'created_at' => $created_at]);
+            ->create(['created_by' => $created_by, 'created_at' => $created_at]);
 
-        $subject = factory(App\Subject::class)
-            ->create(['class_id'=> 1, 'type' => 1, 'name' => 'Bangla 1st', 'code' => '101', 'created_by' => $created_by,'created_at' => $created_at]);
+        $subject->each(function ($sub) {
+            $teacher = App\Employee::where('role_id', \App\Http\Helpers\AppHelper::USER_TEACHER)->inRandomOrder()->first();
+            // Create Pivot
+            $sub->teachers()->attach($teacher->id);
+        });
 
-        $subject = factory(App\Subject::class)
-            ->create(['class_id'=> 1, 'type' => 1, 'name' => 'Bangla 2nd', 'code' => '102', 'created_by' => $created_by,'created_at' => $created_at]);
+        $subject = factory(App\Subject::class, 1)
+            ->create(['class_id' => 1, 'type' => 1, 'name' => 'Bangla 1st', 'code' => '101', 'created_by' => $created_by, 'created_at' => $created_at]);
+        $subject->each(function ($sub) {
+            $teacher = App\Employee::where('role_id', \App\Http\Helpers\AppHelper::USER_TEACHER)->inRandomOrder()->first();
+            // Create Pivot
+            $sub->teachers()->attach($teacher->id);
+        });
 
-        $subject = factory(App\Subject::class)
-            ->create(['class_id'=> 1, 'type' => 1, 'name' => 'English 1st', 'code' => '107', 'created_by' => $created_by,'created_at' => $created_at]);
+        $subject = factory(App\Subject::class, 1)
+            ->create(['class_id' => 1, 'type' => 1, 'name' => 'Bangla 2nd', 'code' => '102', 'created_by' => $created_by, 'created_at' => $created_at]);
+        $subject->each(function ($sub) {
+            $teacher = App\Employee::where('role_id', \App\Http\Helpers\AppHelper::USER_TEACHER)->inRandomOrder()->first();
+            // Create Pivot
+            $sub->teachers()->attach($teacher->id);
+        });
 
-        $subject = factory(App\Subject::class)
-            ->create(['class_id'=> 1, 'type' => 1, 'name' => 'English 2nd', 'code' => '108', 'created_by' => $created_by,'created_at' => $created_at]);
+        $subject = factory(App\Subject::class, 1)
+            ->create(['class_id' => 1, 'type' => 1, 'name' => 'English 1st', 'code' => '107', 'created_by' => $created_by, 'created_at' => $created_at]);
+        $subject->each(function ($sub) {
+            $teacher = App\Employee::where('role_id', \App\Http\Helpers\AppHelper::USER_TEACHER)->inRandomOrder()->first();
+            // Create Pivot
+            $sub->teachers()->attach($teacher->id);
+        });
 
-        $subject = factory(App\Subject::class)
-            ->create(['class_id'=> 1, 'type' => 1, 'name' => 'Math', 'code' => '111', 'created_by' => $created_by,'created_at' => $created_at]);
+        $subject = factory(App\Subject::class, 1)
+            ->create(['class_id' => 1, 'type' => 1, 'name' => 'English 2nd', 'code' => '108', 'created_by' => $created_by, 'created_at' => $created_at]);
+        $subject->each(function ($sub) {
+            $teacher = App\Employee::where('role_id', \App\Http\Helpers\AppHelper::USER_TEACHER)->inRandomOrder()->first();
+            // Create Pivot
+            $sub->teachers()->attach($teacher->id);
+        });
 
-        $subject = factory(App\Subject::class)
-            ->create(['class_id'=> 1, 'type' => 1, 'name' => 'Computer', 'code' => '112', 'created_by' => $created_by,'created_at' => $created_at]);
+        $subject = factory(App\Subject::class, 1)
+            ->create(['class_id' => 1, 'type' => 1, 'name' => 'Math', 'code' => '111', 'created_by' => $created_by, 'created_at' => $created_at]);
+        $subject->each(function ($sub) {
+            $teacher = App\Employee::where('role_id', \App\Http\Helpers\AppHelper::USER_TEACHER)->inRandomOrder()->first();
+            // Create Pivot
+            $sub->teachers()->attach($teacher->id);
+        });
+
+        $subject = factory(App\Subject::class, 1)
+            ->create(['class_id' => 1, 'type' => 1, 'name' => 'Computer', 'code' => '112', 'created_by' => $created_by, 'created_at' => $created_at]);
+        $subject->each(function ($sub) {
+            $teacher = App\Employee::where('role_id', \App\Http\Helpers\AppHelper::USER_TEACHER)->inRandomOrder()->first();
+            // Create Pivot
+            $sub->teachers()->attach($teacher->id);
+        });
+
+        echo PHP_EOL."seeding class two subjects";
+        $subject = factory(App\Subject::class, 1)
+            ->create(['class_id' => 2, 'type' => 1, 'name' => 'Bangla 1st', 'code' => '101', 'created_by' => $created_by, 'created_at' => $created_at]);
+        $subject->each(function ($sub) {
+            $teacher = App\Employee::where('role_id', \App\Http\Helpers\AppHelper::USER_TEACHER)->inRandomOrder()->first();
+            // Create Pivot
+            $sub->teachers()->attach($teacher->id);
+        });
+
+        $subject = factory(App\Subject::class, 1)
+            ->create(['class_id' => 2, 'type' => 3, 'name' => 'Magic Study', 'code' => '102', 'created_by' => $created_by, 'created_at' => $created_at]);
+        $subject->each(function ($sub) {
+            $teacher = App\Employee::where('role_id', \App\Http\Helpers\AppHelper::USER_TEACHER)->inRandomOrder()->first();
+            // Create Pivot
+            $sub->teachers()->attach($teacher->id);
+        });
+
+        $subject = factory(App\Subject::class, 1)
+            ->create(['class_id' => 2, 'type' => 1, 'name' => 'English 1st', 'code' => '107', 'created_by' => $created_by, 'created_at' => $created_at]);
+        $subject->each(function ($sub) {
+            $teacher = App\Employee::where('role_id', \App\Http\Helpers\AppHelper::USER_TEACHER)->inRandomOrder()->first();
+            // Create Pivot
+            $sub->teachers()->attach($teacher->id);
+        });
+
+        $subject = factory(App\Subject::class, 1)
+            ->create(['class_id' => 2, 'type' => 3, 'name' => 'Drawing', 'code' => '108', 'created_by' => $created_by, 'created_at' => $created_at]);
+        $subject->each(function ($sub) {
+            $teacher = App\Employee::where('role_id', \App\Http\Helpers\AppHelper::USER_TEACHER)->inRandomOrder()->first();
+            // Create Pivot
+            $sub->teachers()->attach($teacher->id);
+        });
+
+        $subject = factory(App\Subject::class, 1)
+            ->create(['class_id' => 2, 'type' => 1, 'name' => 'Math', 'code' => '111', 'created_by' => $created_by, 'created_at' => $created_at]);
+        $subject->each(function ($sub) {
+            $teacher = App\Employee::where('role_id', \App\Http\Helpers\AppHelper::USER_TEACHER)->inRandomOrder()->first();
+            // Create Pivot
+            $sub->teachers()->attach($teacher->id);
+        });
+
+        $subject = factory(App\Subject::class, 1)
+            ->create(['class_id' => 2, 'type' => 2, 'name' => 'Computer', 'code' => '112', 'created_by' => $created_by, 'created_at' => $created_at]);
+        $subject->each(function ($sub) {
+            $teacher = App\Employee::where('role_id', \App\Http\Helpers\AppHelper::USER_TEACHER)->inRandomOrder()->first();
+            // Create Pivot
+            $sub->teachers()->attach($teacher->id);
+        });
+
 
     }
+
 
     private function studentData() {
         $created_by = 1;
@@ -678,8 +630,6 @@ class DemoAppDataSeeder extends Seeder
                     'shift'    => 'Morning',
                     'card_no'    => null,
                     'board_regi_no' => null,
-                    'fourth_subject' => 0,
-                    'alt_fourth_subject' => 0,
                     'house' => null,
                     'status' => '1',
                     'created_by' => $created_by,
@@ -705,8 +655,6 @@ class DemoAppDataSeeder extends Seeder
                     'shift'    => 'Morning',
                     'card_no'    => null,
                     'board_regi_no' => null,
-                    'fourth_subject' => 0,
-                    'alt_fourth_subject' => 0,
                     'house' => null,
                     'status' => '1',
                     'created_by' => $created_by,
@@ -731,8 +679,6 @@ class DemoAppDataSeeder extends Seeder
                     'shift'    => 'Morning',
                     'card_no'    => null,
                     'board_regi_no' => null,
-                    'fourth_subject' => 0,
-                    'alt_fourth_subject' => 0,
                     'house' => null,
                     'status' => '1',
                     'created_by' => $created_by,
@@ -757,8 +703,6 @@ class DemoAppDataSeeder extends Seeder
                     'shift'    => 'Morning',
                     'card_no'    => null,
                     'board_regi_no' => null,
-                    'fourth_subject' => 0,
-                    'alt_fourth_subject' =>  0,
                     'house' => null,
                     'status' => '1',
                     'created_by' => $created_by,
@@ -771,170 +715,20 @@ class DemoAppDataSeeder extends Seeder
             $counter++;
         }
 
+        //now assign subject to class 1 students
+        $students = \App\Registration::where('class_id', 1)->get();
+        $subjects = \App\Subject::where('class_id', 1)->get()->map(function ($subject){
+            return [
+                'subject_id' => $subject->id,
+                'subject_type' => $subject->getOriginal('type')
+            ];
+        });
 
-    }
-
-    private function idcardTemplateData() {
-        $created_by = 1;
-        $created_at = Carbon::now(env('APP_TIMEZONE','Asia/Dhaka'));
-        $data = [
-            [
-                'name' => "Student Idcard",
-                'type' =>  3, //AppHelper::TEMPLATE_TYPE
-                'role_id' => AppHelper::USER_STUDENT,
-                'content' => json_encode([
-                    "format_id" => "1",
-                    "bg_color" => null,
-                    "border_color" => null,
-                    "body_text_color" => null,
-                    "fs_title_color" => null,
-                    "picture_border_color" => null,
-                    "bs_title_color" => null,
-                    "website_link_color" => null,
-                    "fs_title_bg_color" => null,
-                    "id_title_color" => null,
-                    "title_bg_image" => null,
-                    "signature" => base64_encode(file_get_contents(resource_path('assets/backend/images/signature.png'))),
-                    "logo" => base64_encode(file_get_contents(resource_path('assets/backend/images/idlogo.png'))),
-                ]),
-                'created_by' => $created_by,
-                'created_at' => $created_at
-            ],
-            [
-                'name' => "Employee Idcard",
-                'type' =>  3, //AppHelper::TEMPLATE_TYPE
-                'role_id' => AppHelper::USER_TEACHER,
-                'content' => json_encode([
-                    "format_id" => "2",
-                    "bg_color" => null,
-                    "border_color" => null,
-                    "body_text_color" => null,
-                    "fs_title_color" => null,
-                    "picture_border_color" => null,
-                    "bs_title_color" => null,
-                    "website_link_color" => null,
-                    "fs_title_bg_color" => null,
-                    "id_title_color" => null,
-                    "title_bg_image" => null,
-                    "signature" => base64_encode(file_get_contents(resource_path('assets/backend/images/signature.png'))),
-                    "logo" => base64_encode(file_get_contents(resource_path('assets/backend/images/idlogo.png'))),
-                ]),
-                'created_by' => $created_by,
-                'created_at' => $created_at
-            ]
-        ];
-
-        \App\Template::insert($data);
-
-        AppMeta::insert([
-            [
-                'meta_key' => 'student_idcard_template',
-                'meta_value' => 1,
-                'created_by' => $created_by,
-                'created_at' => $created_at
-            ],
-            [
-                'meta_key' => 'employee_idcard_template',
-                'meta_value' => 2,
-                'created_by' => $created_by,
-                'created_at' => $created_at
-            ]
-        ]);
-
-    }
-
-    private function smsAndEmailTemplateData() {
-        $created_by = 1;
-        $created_at = Carbon::now(env('APP_TIMEZONE','Asia/Dhaka'));
-
-        $data = [
-
-            [
-                'name' => "Student Absent SMS Template",
-                'type' =>  1, //AppHelper::TEMPLATE_TYPE
-                'role_id' => AppHelper::USER_STUDENT,
-                'content' => "Dear Parents your child (Name-{{name}},Class-{{class}},Roll-{{roll_no}}) is absent from school on {{date}}. Head master, CloudSchool BD.",
-                 'created_by' => $created_by,
-                'created_at' => $created_at
-            ],[
-                'name' => "Student Absent Email Template",
-                'type' =>  2, //AppHelper::TEMPLATE_TYPE
-                'role_id' => AppHelper::USER_STUDENT,
-                'content' => "<p></p><pre>Dear <b>{{name}}</b>,</pre><pre><b></b>You are absent from school on {{date}}. Bring your parents to school on next day.</pre><p></p>",
-                 'created_by' => $created_by,
-                'created_at' => $created_at
-            ],
-            [
-                'name' => "Employee Absent SMS Template",
-                'type' =>  1, //AppHelper::TEMPLATE_TYPE
-                'role_id' => AppHelper::USER_TEACHER,
-                'content' => "Dear {{name}}, You are absent from school on {{date}}. Head master, CloudSchool BD.",
-                 'created_by' => $created_by,
-                'created_at' => $created_at
-            ],[
-                'name' => "Employee Absent Email Template",
-                'type' =>  2, //AppHelper::TEMPLATE_TYPE
-                'role_id' => AppHelper::USER_TEACHER,
-                'content' => "<p></p><pre>Dear <b>{{name}}</b>,</pre><pre><b></b>You are absent from school on {{date}}. Meet the authority of the school on next day.</pre><p></p>",
-                 'created_by' => $created_by,
-                'created_at' => $created_at
-            ],
-        ];
-
-        \App\Template::insert($data);
-
-        AppMeta::insert([
-            [
-                'meta_key' => 'student_attendance_notification',
-                'meta_value' => 1,
-                'created_by' => $created_by,
-                'created_at' => $created_at
-            ],
-            [
-                'meta_key' => 'employee_attendance_notification',
-                'meta_value' => 2,
-                'created_by' => $created_by,
-                'created_at' => $created_at
-            ],
-            [
-                'meta_key' => 'student_attendance_template',
-                'meta_value' => 3,
-                'created_by' => $created_by,
-                'created_at' => $created_at
-            ],
-            [
-                'meta_key' => 'employee_attendance_template',
-                'meta_value' => 6,
-                'created_by' => $created_by,
-                'created_at' => $created_at
-            ]
-        ]);
-
-        //now add sms gate way and
-        // default gateway
-        $data = [
-            'gateway' => 7,
-            'name' => 'student absent sms',
-            'sender_id' => 'test',
-            'user' => 'test',
-            'password' => 'test',
-            'api_url' => 'http://loglocally.test',
-        ];
+        foreach ($students as $student){
+            $student->subjects()->sync($subjects);
+        }
 
 
-        $gatewayId = AppMeta::create([
-                'meta_key' => 'sms_gateway',
-                'meta_value' => json_encode($data),
-            'created_by' => $created_by,
-            'created_at' => $created_at
-            ]);
-
-        AppMeta::insert([[
-                'meta_key' => 'student_attendance_gateway',
-                'meta_value' => $gatewayId->id,
-                'created_by' => $created_by,
-                'created_at' => $created_at
-            ]]);
     }
 
     private function studentAttendance() {
@@ -944,7 +738,7 @@ class DemoAppDataSeeder extends Seeder
         $endDate = $created_at->copy();
         $startDate = $created_at->copy()->subDays(15);
 
-        $wekends = AppHelper::getAppSettings('weekends');
+        $wekends = AppHelper::getAppSettings('weekends', true);
         if($wekends){
             $wekends = json_decode($wekends);
         }
@@ -953,18 +747,9 @@ class DemoAppDataSeeder extends Seeder
         }
 
         $attendanceDates = AppHelper::generateDateRangeForReport($startDate, $endDate, true, $wekends, true);
-        $holiDays = \App\AcademicCalendar::where('date_from','>=', $startDate->format('Y-m-d'))
-            ->where('date_upto', '<=', $endDate->format('Y-m-d'))
-            ->where('is_holiday','1')
-            ->get(['date_from']);
-
-        //remove holidays from attendance dates
-        foreach ($holiDays as $holiDay){
-            unset($attendanceDates[$holiDay->date_from->format('Y-m-d')]);
-        }
 
         //fetch institute shift running times
-        $shiftData = AppHelper::getAppSettings('shift_data');
+        $shiftData = AppHelper::getAppSettings('shift_data', true);
         if($shiftData){
             $shiftData = json_decode($shiftData, true);
         }
@@ -1017,11 +802,6 @@ class DemoAppDataSeeder extends Seeder
 
         //now insert into db
         \App\StudentAttendance::insert($attendances);
-
-
-
-
-
     }
 
     private function employeeAttendance() {
@@ -1031,7 +811,7 @@ class DemoAppDataSeeder extends Seeder
         $endDate = $created_at->copy();
         $startDate = $created_at->copy()->subDays(15);
 
-        $wekends = AppHelper::getAppSettings('weekends');
+        $wekends = AppHelper::getAppSettings('weekends', true);
         if($wekends){
             $wekends = json_decode($wekends);
         }
@@ -1040,18 +820,9 @@ class DemoAppDataSeeder extends Seeder
         }
 
         $attendanceDates = AppHelper::generateDateRangeForReport($startDate, $endDate, true, $wekends, true);
-        $holiDays = \App\AcademicCalendar::where('date_from','>=', $startDate->format('Y-m-d'))
-            ->where('date_upto', '<=', $endDate->format('Y-m-d'))
-            ->where('is_holiday','1')
-            ->get(['date_from']);
-
-        //remove holidays from attendance dates
-        foreach ($holiDays as $holiDay){
-            unset($attendanceDates[$holiDay->date_from->format('Y-m-d')]);
-        }
 
         //fetch institute shift running times
-        $shiftData = AppHelper::getAppSettings('shift_data');
+        $shiftData = AppHelper::getAppSettings('shift_data', true);
         if($shiftData){
             $shiftData = json_decode($shiftData, true);
         }
@@ -1105,14 +876,12 @@ class DemoAppDataSeeder extends Seeder
 
     }
 
-    private function leaveAndWorkOutSide() {
+    private function leave() {
         $created_by = 1;
         $created_at = Carbon::now(env('APP_TIMEZONE','Asia/Dhaka'));
         $leaves = factory(App\Leave::class, 5)
             ->create(['created_by' => $created_by,'created_at' => $created_at]);
 
-        $workoutside = factory(App\WorkOutside::class, 3)
-            ->create(['created_by' => $created_by,'created_at' => $created_at]);
     }
 
     private function examData() {
@@ -1128,6 +897,7 @@ class DemoAppDataSeeder extends Seeder
                 'name' => '1st Term Exam',
                 'elective_subject_point_addition' => 0,
                 'marks_distribution_types' => json_encode([1,2,7]),
+                'open_for_marks_entry' => true,
                 'created_by' => $created_by,
                 'created_at' => $created_at
             ]);
@@ -1398,6 +1168,7 @@ class DemoAppDataSeeder extends Seeder
         $created_at = Carbon::now(env('APP_TIMEZONE','Asia/Dhaka'));
 
         $class_id = 1;
+        $academic_year_id = 1;
 
         $subjects = \App\Subject::where('class_id', $class_id)
             ->orderBy('code', 'asc')
@@ -1515,7 +1286,7 @@ class DemoAppDataSeeder extends Seeder
         $students = \App\Registration::where('status', AppHelper::ACTIVE)
             ->where('academic_year_id', $acYear)
             ->where('class_id', $class_id)
-            ->select('id','fourth_subject','alt_fourth_subject')
+            ->select('id')
             ->with(['marks' => function($query) use($acYear,$class_id,$exam_id){
                 $query->select('registration_id','subject_id','marks', 'total_marks', 'point', 'present')
                     ->where('academic_year_id', $acYear)
@@ -1536,7 +1307,12 @@ class DemoAppDataSeeder extends Seeder
             $totalSubject = 0;
             $combineSubjectsMarks = [];
             $isFail = false;
+            $subjectFailCount = 0;
 
+            $studentSubjects = $student->subjects->reduce(function ($studentSubjects, $subject){
+                $studentSubjects[$subject->id] =  $subject->pivot->subject_type;
+                return $studentSubjects;
+            });
 
             foreach ($student->marks as $marks) {
                 //find combine subjects
@@ -1549,27 +1325,12 @@ class DemoAppDataSeeder extends Seeder
                 }
 
                 //find 4th subject AppHelper::SUBJECT_TYPE
-                $is4thSubject = ($examRules[$marks->subject_id]['subject_type'] == 2) ? 1 : 0;
+                $is4thSubject = ($studentSubjects[$marks->subject_id] == 2) ? 1 : 0;
                 if ($is4thSubject) {
 
-                    if ($student->fourth_subject == $marks->subject_id && $marks->point >= $examInfo->elective_subject_point_addition) {
+                    if ($marks->point >= $examInfo->elective_subject_point_addition) {
                         $totalPoint += ($marks->point - $examInfo->elective_subject_point_addition);
                     }
-
-                    //if its college then may have student exchange their 4th subject
-                    //with main subject
-                    if(AppHelper::getInstituteCategory() == 'college') {
-                        if ($student->alt_fourth_subject == $marks->subject_id) {
-                            $totalPoint += $marks->point;
-
-                            //if fail then result will be fail
-                            if (intval($marks->point) == 0) {
-                                $isFail = true;
-                            }
-                            $totalSubject++;
-                        }
-                    }
-                    //end college logic
 
                     $totalMarks += $marks->total_marks;
 
@@ -1580,28 +1341,12 @@ class DemoAppDataSeeder extends Seeder
                 //process not combine and 4th subjects
                 if (!$isAndInCombineSubject && !$is4thSubject) {
 
-                    //if its college then may have student exchange their 4th subject
-                    //with main subject
-                    if(AppHelper::getInstituteCategory() == 'college') {
-                        if ($student->fourth_subject == $marks->subject_id) {
-                            if($marks->point >= $examInfo->elective_subject_point_addition){
-                                $totalPoint += ($marks->point - $examInfo->elective_subject_point_addition);
-                            }
-
-                            $totalMarks += $marks->total_marks;
-
-                            //skip for next subject
-                            continue;
-                        }
-                    }
-                    //end college logic
-
-
                     $totalMarks += $marks->total_marks;
                     $totalPoint += $marks->point;
                     $totalSubject++;
                     if (intval($marks->point) == 0) {
                         $isFail = true;
+                        $subjectFailCount++;
                     }
 
                 }
@@ -1624,6 +1369,7 @@ class DemoAppDataSeeder extends Seeder
                         $pairGrade = "F";
                         $pairPoint = 0.00;
                         $isFail = true;
+                        $subjectFailCount++;
                     } else {
 
                         [$pairGrade, $pairPoint] = AppHelper::findGradePointFromMarks($gradingRules, $pairTotalMarks);
@@ -1660,6 +1406,7 @@ class DemoAppDataSeeder extends Seeder
                 'total_marks' => $totalMarks,
                 'grade' => $finalGrade,
                 'point' => $finalPoint,
+                'subject_fail_count' => $subjectFailCount,
                 "created_at" => $created_at,
                 "created_by" => $userId,
             ];
@@ -1677,4 +1424,5 @@ class DemoAppDataSeeder extends Seeder
 
 
     }
+
 }

@@ -21,7 +21,7 @@ class CreateTeacherProfilesTable extends Migration
             $table->longText('description')->nullable();
             $table->longText('qualification')->nullable();
             $table->string('facebook')->nullable();
-            $table->string('google')->nullable();
+            $table->string('instagram')->nullable();
             $table->string('twitter')->nullable();
             $table->timestamps();
             $table->softDeletes();

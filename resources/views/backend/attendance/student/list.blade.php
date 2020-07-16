@@ -53,8 +53,9 @@
                             </div>
                         </div>
                         <div class="box-tools pull-right">
-                            <a class="btn btn-info btn-sm" href="{{ URL::route('student_attendance.create') }}"><i class="fa fa-plus-circle"></i> Add New</a>
-                            <a class="btn btn-primary btn-sm" href="{{ URL::route('student_attendance.create_file') }}"><i class="fa fa-upload"></i> Upload File</a>
+                            @can('student_attendance.create')
+                                <a class="btn btn-info btn-sm" href="{{ URL::route('student_attendance.create') }}"><i class="fa fa-plus-circle"></i> Add New</a>
+                            @endcan
                         </div>
                     </div>
                     <!-- /.box-header -->
@@ -125,11 +126,7 @@
         $(document).ready(function () {
             window.postUrl = '{{URL::Route("student_attendance.status", 0)}}';
             window.section_list_url = '{{URL::Route("academic.section")}}';
-            window.changeExportColumnIndex = 4;
-            window.changeExportColumnValue = ['Present', 'Absent'];
-            window.excludeFilterComlumns = [0,4,5,6,7];
             Academic.attendanceInit();
-            $('title').text($('title').text() + '-' + $('select[name="class_id"] option[selected]').text() + '(' + $('select[name="section_id"] option[selected]').text() +')');
         });
     </script>
 @endsection

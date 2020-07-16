@@ -9,9 +9,6 @@ use App\PasswordReset;
 use App\Permission;
 use App\Registration;
 use App\Role;
-use App\Section;
-use App\smsLog;
-use App\Student;
 use App\Subject;
 use App\User;
 use App\UserRole;
@@ -74,6 +71,8 @@ class UserController extends Controller
             session(['user_role_id' => auth()->user()->role->role_id]);
 
             $appSettings = AppHelper::getAppSettings(null, true);
+            $ac_year = isset($appSettings['academic_year']) ? intval($appSettings['academic_year']) : 0;
+            session(['default_academic_year' => $ac_year]);
 
             $msgType = "success";
             $msg = "Welcome to admin panel.";
@@ -228,9 +227,6 @@ class UserController extends Controller
         $employee = 0;
         $students = 0;
         $subjects = 0;
-        $monthWiseSms = [];
-        $studentsCount = [];
-        $sectionStudentCount = [];
         $attendanceChartPresentData = [];
         $attendanceChartAbsentData = [];
 
@@ -238,19 +234,13 @@ class UserController extends Controller
         if($userRoleId == AppHelper::USER_ADMIN){
             //these models records count
             [$teachers, $employee, $students, $subjects] = $this->getStatisticData();
-            //sms chart data
-            $monthWiseSms = $this->getSmsChartData();
         }
 
         //all user except students
         if($userRoleId != AppHelper::USER_STUDENT) {
             //attendance chart data
             [$attendanceChartPresentData, $attendanceChartAbsentData] = $this->getClassWiseTodayAttendanceCount();
-
-            $studentsCount = $this->getClassWiseStudentCount();
-            $sectionStudentCount = $this->getSectionWiseStudentCountForSpecificClasses();
         }
-
 
         return view('backend.user.dashboard', compact(
             'teachers',
@@ -258,9 +248,6 @@ class UserController extends Controller
             'students',
             'subjects',
             'userRoleId',
-            'studentsCount',
-            'sectionStudentCount',
-            'monthWiseSms',
             'attendanceChartPresentData',
             'attendanceChartAbsentData'
         ));
@@ -462,12 +449,8 @@ class UserController extends Controller
         catch(\Exception $e){
             DB::rollback();
             $message = str_replace(array("\r", "\n","'","`"), ' ', $e->getMessage());
-            return $message;
             return redirect()->route('user.create')->with("error",$message);
         }
-
-        return redirect()->route('user.create');
-
 
     }
 
@@ -586,8 +569,12 @@ class UserController extends Controller
 
          $user =  User::findOrFail($id);
 
-         $userRole = UserRole::where('user_id', $user->id)->first();
+        if($user->id == auth()->user()->id){
+            return redirect()->route('user.index')->with('error', 'You can\'t update yourself!');
 
+        }
+
+         $userRole = UserRole::where('user_id', $user->id)->first();
          if($userRole && $userRole->role_id == AppHelper::USER_ADMIN){
              return redirect()->route('user.index')->with('error', 'Don not mess with the system');
 
@@ -651,6 +638,14 @@ class UserController extends Controller
             ];
         }
 
+        if($user->id == auth()->user()->id){
+            return [
+                'success' => false,
+                'message' => 'You can\'t change your own status!'
+            ];
+
+        }
+
         $userRole = UserRole::where('user_id', $user->id)->first();
 
         if($userRole && $userRole->role_id == AppHelper::USER_ADMIN){
@@ -684,6 +679,11 @@ class UserController extends Controller
     public function updatePermission(Request $request, $id)
     {
         $user =  User::findOrFail($id);
+        if($user->id == auth()->user()->id){
+            return redirect()->route('user.index')->with('error', 'You can\'t update your permission!');
+
+        }
+
         $userRole = UserRole::where('user_id', $user->id)->first();
 
         if($userRole && $userRole->role_id == AppHelper::USER_ADMIN){
@@ -736,7 +736,9 @@ class UserController extends Controller
         $userPermissions = DB::table('users_permissions')->where('user_id', $user->id)
             ->whereNull('deleted_at')->pluck('permission_id')->toArray();
 
-        $permissions = Permission::select('id','name','group')->whereNotIn('group',['Admin Only','Common'])->orderBy('group','asc')->get();
+        $permissions = Permission::select('id','name','group')
+            ->whereNotIn('group',['Administration', 'Administration Exclusive', 'Common'])
+            ->orderBy('group','asc')->get();
 
         $permissionList = $this->formatPermissions($permissions, $userPermissions);
 
@@ -856,7 +858,9 @@ class UserController extends Controller
         }
 
 
-       $permissions = Permission::select('id','name','group')->whereNotIn('group',['Admin Only','Common'])->orderBy('group','asc')->get();
+       $permissions = Permission::select('id','name','group')
+           ->whereNotIn('group',['Administration', 'Administration Exclusive', 'Common'])
+           ->orderBy('group','asc')->get();
 
         $permissionList = $this->formatPermissions($permissions);
         $role = null;
@@ -870,7 +874,7 @@ class UserController extends Controller
      */
     public function roleUpdate(Request $request, $id)
     {
-        //check if it is admin role then, reject from modify
+        //check if it is admin role then and not super admin, reject from modify
         if($id == AppHelper::USER_ADMIN){
             return redirect()->route('user.role_index')->with('error', 'Don not mess with the system');
         }
@@ -919,10 +923,16 @@ class UserController extends Controller
         }
 
 
-
         $rolePermissions = DB::table('roles_permissions')->where('role_id', $role->id)->whereNull('deleted_at')->pluck('permission_id')->toArray();
 
-        $permissions = Permission::select('id','name','group')->whereNotIn('group',['Admin Only','Common'])->orderBy('group','asc')->get();
+
+        $excludePermissionGroups = ['Administration', 'Administration Exclusive', 'Common'];
+        if($id == AppHelper::USER_ADMIN){
+            $excludePermissionGroups = ['Common'];
+        }
+        $permissions = Permission::select('id','name','group')
+            ->whereNotIn('group', $excludePermissionGroups)
+            ->orderBy('group','asc')->get();
 
         $permissionList = $this->formatPermissions($permissions, $rolePermissions);
 
@@ -962,7 +972,7 @@ class UserController extends Controller
 
         $now = Carbon::now(env('APP_TIMEZONE','Asia/Dhaka'));
 
-        if(count($permissionList)) {
+        if(!empty($permissionList) && count($permissionList)) {
 
             foreach ($permissionList as $permissions) {
                 $permissions = explode(',', $permissions);
@@ -1036,37 +1046,6 @@ class UserController extends Controller
        return [$teachers, $employee, $students, $subjects];
    }
 
-   private function getSmsChartData() {
-       $smsSend = Cache::rememberForever('smsChartData' , function () {
-           $allMonthSmsSended =  smsLog::selectRaw('count(id) as send,MONTH(created_at) as month')
-               ->whereYear('created_at', date('Y'))
-               ->groupby('month')
-               ->get();
-
-           return $allMonthSmsSended;
-       });
-
-       $smsSend = $smsSend->reduce(function ($smsSend, $record){
-           $smsSend[$record->month] = $record->send;
-           return $smsSend;
-       });
-
-       $monthWiseSms['Jan'] = $smsSend[1] ?? 0;
-       $monthWiseSms['Feb'] = $smsSend[2] ?? 0;
-       $monthWiseSms['Mar'] = $smsSend[3] ?? 0;
-       $monthWiseSms['Apr'] = $smsSend[4] ?? 0;
-       $monthWiseSms['May'] = $smsSend[5] ?? 0;
-       $monthWiseSms['Jun'] = $smsSend[6] ?? 0;
-       $monthWiseSms['Jul'] = $smsSend[7] ?? 0;
-       $monthWiseSms['Aug'] = $smsSend[8] ?? 0;
-       $monthWiseSms['Sep'] = $smsSend[9] ?? 0;
-       $monthWiseSms['Oct'] = $smsSend[10] ?? 0;
-       $monthWiseSms['Nov'] = $smsSend[11] ?? 0;
-       $monthWiseSms['Dec'] = $smsSend[12] ?? 0;
-
-       return $monthWiseSms;
-   }
-
    private function getClassWiseTodayAttendanceCount() {
        $academicYearId = $this->getAcademicYearForDashboard();
        $iclasses = Cache::rememberForever('student_attendance_count' , function () use($academicYearId) {
@@ -1079,6 +1058,7 @@ class UserController extends Controller
                        ->groupBy('class_id', 'present');
                }])
                ->select('id', 'name')
+               ->orderBy('order','asc')
                ->get();
        });
 
@@ -1100,52 +1080,4 @@ class UserController extends Controller
        return [$attendanceChartPresentData, $attendanceChartAbsentData];
    }
 
-   private function getClassWiseStudentCount()
-   {
-       $academicYearId = $this->getAcademicYearForDashboard();
-       $studentCount = Cache::rememberForever('student_count_by_class', function () use ($academicYearId) {
-         return  IClass::where('status', AppHelper::ACTIVE)
-               ->with(['student' => function ($query) use ($academicYearId) {
-                   $query->where('status', AppHelper::ACTIVE)
-                       ->where('academic_year_id', $academicYearId)
-                       ->selectRaw('class_id, count(*) as total')
-                       ->groupBy('class_id');
-               }])
-               ->select('id', 'name')
-               ->orderBy('numeric_value', 'asc')
-               ->get();
-       });
-
-       return $studentCount;
-   }
-
-   private function getSectionWiseStudentCountForSpecificClasses() {
-       $academicYearId = $this->getAcademicYearForDashboard();
-       $selectedClassNumericValues = explode(',', env('DASHBOARD_SECTION_STUDENT_CLASS_CODE', '90,91,92,100,101,102'));
-       $selectedClasses = Cache::rememberForever('selected_classes_4_dashboard', function () use ($selectedClassNumericValues) {
-          return IClass::where('status', AppHelper::ACTIVE)
-               ->whereIn('numeric_value', $selectedClassNumericValues)->pluck('id');
-       });
-
-       $sectionStudentCount = Cache::rememberForever('student_count_by_section', function () use ($selectedClasses, $academicYearId) {
-          return  Section::where('status', AppHelper::ACTIVE)
-               ->whereIn('class_id', $selectedClasses)
-               ->with(['student' => function ($query) use ($academicYearId) {
-                   $query->where('status', AppHelper::ACTIVE)
-                       ->where('academic_year_id', $academicYearId)
-                       ->selectRaw('section_id, count(*) as total')
-                       ->groupBy('section_id');
-               }])
-               ->with(['class' => function ($query) {
-                   $query->select('id', 'name');
-               }])
-               ->select('id', 'name', 'class_id')
-               ->orderBy('class_id', 'asc')
-               ->orderBy('name', 'asc')
-               ->get();
-       });
-
-       return $sectionStudentCount;
-
-   }
 }

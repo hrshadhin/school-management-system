@@ -16,6 +16,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        //user caching observer
         User::observe(UserObserver::class);
 
         //custom if query builder macro

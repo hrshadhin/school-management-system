@@ -140,7 +140,7 @@ class DemoSiteDataSeeder extends Seeder
         $data['name'] = 'Cloud School';
         $data['short_name'] = 'CloudSchool';
         $data['facebook'] = '#';
-        $data['google'] = '#';
+        $data['instagram'] = '#';
         $data['twitter'] = '#';
         $data['youtube'] = '#';
 
@@ -433,11 +433,11 @@ class DemoSiteDataSeeder extends Seeder
         $data = [
             'name' => 'Fakir Chand',
             'image' => '',
-            'designation' => 'Head Master',
+            'designation' => 'Headmaster',
             'qualification' => 'M.A in English',
             'description' => 'Super cool boy!',
             'facebook' => '#',
-            'google' => '#',
+            'instagram' => '#',
             'twitter' => '#',
         ];
 
@@ -453,7 +453,7 @@ class DemoSiteDataSeeder extends Seeder
             'qualification' => 'Hons in English',
             'description' => '',
             'facebook' => '#',
-            'google' => '#',
+            'instagram' => '#',
             'twitter' => '#',
         ];
 

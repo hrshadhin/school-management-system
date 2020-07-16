@@ -5,7 +5,6 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Hrshadhin\Userstamps\UserstampsTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Arr;
 
 class AcademicYear extends Model
 {
@@ -18,7 +17,7 @@ class AcademicYear extends Model
      *
      * @var array
      */
-    protected $fillable = ['title','start_date', 'end_date', 'status'];
+    protected $fillable = ['title','start_date', 'end_date', 'status','is_open_for_admission'];
 
 
 }

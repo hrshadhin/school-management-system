@@ -39,7 +39,7 @@
                             <form novalidate class="reportForm" target="_blank" action="{{URL::Route('report.employee_list')}}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <div class="row">
-                                    <div class="col-md-2">
+                                    <div class="col-md-4">
                                         <button type="submit" class="btn btn-info pull-left margin-top-24"><i class="fa fa-print"></i> Print</button>
                                     </div>
                                 </div>

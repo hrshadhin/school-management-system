@@ -42,9 +42,13 @@
                                 <th width="5%">#</th>
                                 <th width="25%">Name</th>
                                 <th width="5%">Numeric Value</th>
-                                <th width="10%">Order Sequence</th>
-                                <th width="10%">Group</th>
-                                <th width="25%">Note</th>
+                                <th width="8%">Order</th>
+                                <th width="7%">Group</th>
+                                <th width="5%">Duration</th>
+                                <th width="5%">Have Selective</th>
+                                <th width="5%">Max Selective</th>
+                                <th width="5%">Have Elective</th>
+                                <th width="10%">Note</th>
                                 <th width="10%">Status</th>
                                 <th class="notexport" width="10%">Action</th>
                             </tr>
@@ -59,6 +63,22 @@
                                     <td>{{ $iclass->numeric_value }}</td>
                                     <td>{{ $iclass->order }}</td>
                                     <td>{{ $iclass->group }}</td>
+                                    <td>
+                                        {{$iclass->duration}} @if($iclass->duration > 1){{'years'}} @else {{'year'}}@endif
+                                    </td>
+                                    <td>
+                                        @if($iclass->have_selective_subject)
+                                            <span class="badge bg-green">Yes</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        {{$iclass->max_selective_subject}}
+                                    </td>
+                                    <td>
+                                        @if($iclass->have_elective_subject)
+                                            <span class="badge bg-green">Yes</span>
+                                        @endif
+                                    </td>
                                     <td>{{ $iclass->note }}</td>
                                     <td>
                                         <!-- todo: have problem in mobile device -->
@@ -90,9 +110,13 @@
                                 <th width="5%">#</th>
                                 <th width="25%">Name</th>
                                 <th width="5%">Numeric Value</th>
-                                <th width="10%">Order Sequence</th>
-                                <th width="10%">Group</th>
-                                <th width="25%">Note</th>
+                                <th width="8%">Order</th>
+                                <th width="7%">Group</th>
+                                <th width="5%">Duration</th>
+                                <th width="5%">Have Selective</th>
+                                <th width="5%">Max Selective</th>
+                                <th width="5%">Have Elective</th>
+                                <th width="10%">Note</th>
                                 <th width="10%">Status</th>
                                 <th class="notexport" width="10%">Action</th>
                             </tr>
@@ -115,8 +139,6 @@
     <script type="text/javascript">
         $(document).ready(function () {
             window.postUrl = '{{URL::Route("academic.class_status", 0)}}';
-            window.changeExportColumnIndex = 6;
-            window.excludeFilterComlumns = [0,2,3,5,6,7];
             Academic.iclassInit();
         });
     </script>

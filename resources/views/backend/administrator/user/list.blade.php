@@ -65,20 +65,23 @@
                                         <input class="statusChange" type="checkbox" data-pk="{{$user->id}}" @if($user->status) checked @endif data-toggle="toggle" data-on="<i class='fa fa-check-circle'></i>" data-off="<i class='fa fa-ban'></i>" data-onstyle="success" data-offstyle="danger">
                                     </td>
                                     <td>
-
-                                        <div class="btn-group">
-                                            <a title="Edit" href="{{URL::route('administrator.user_edit',$user->id)}}" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
-                                            </a>
-                                        </div>
+                                        @can('administrator.user_edit')
+                                            <div class="btn-group">
+                                                <a title="Edit" href="{{URL::route('administrator.user_edit',$user->id)}}" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
+                                                </a>
+                                            </div>
+                                        @endcan
                                         <!-- todo: have problem in mobile device -->
-                                        <div class="btn-group">
-                                            <form  class="myAction" method="POST" action="{{URL::route('administrator.user_destroy', $user->id)}}">
-                                                @csrf
-                                                <button type="submit" class="btn btn-danger btn-sm" title="Delete">
-                                                    <i class="fa fa-fw fa-trash"></i>
-                                                </button>
-                                            </form>
-                                        </div>
+                                        @can('administrator.user_destroy')
+                                            <div class="btn-group">
+                                                <form  class="myAction" method="POST" action="{{URL::route('administrator.user_destroy', $user->id)}}">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-danger btn-sm" title="Delete">
+                                                        <i class="fa fa-fw fa-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        @endcan
 
                                     </td>
                                 </tr>

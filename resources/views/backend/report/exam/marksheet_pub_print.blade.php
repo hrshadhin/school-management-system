@@ -33,8 +33,8 @@
                         <thead>
                         <tr>
                             <th width="3%">SL</th>
-                            <th>Sub Name</th>
                             <th>Code</th>
+                            <th>Sub Name</th>
                             @foreach($marksDistributionTypes as $type)
                             <th>{{AppHelper::MARKS_DISTRIBUTION_TYPES[$type]}}</th>
                             @endforeach
@@ -45,13 +45,17 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($coreSubjectsMakrs as $subjectMarks)
+                        @foreach($coreSubjectsMarks as $subjectMarks)
                             <tr @if($loop->last) class="lastItem" @endif>
                                 <td>{{$loop->iteration}}</td>
                                 <td>{{$subjectMarks['code']}}</td>
                                 <td>{{$subjectMarks['name']}}</td>
                                 @foreach($marksDistributionTypes as $type)
-                                    <td>{{$subjectMarks['marks'][$type]}}</td>
+                                    @if(isset($subjectWiseMarksDistributionTypeEmptyList[$subjectMarks['id']][$type]))
+                                        <td>-</td>
+                                    @else
+                                        <td>{{$subjectMarks['marks'][$type]}}</td>
+                                    @endif
                                 @endforeach
                                 <td><b>{{$subjectMarks['highest_marks']}}</b></td>
                                 <td><b>{{$subjectMarks['total_marks']}}</b></td>
@@ -81,18 +85,9 @@
                 <div class="col-xs-4">
                 </div>
                 <div class="col-xs-4" style="text-align: right;">
-                    <h5 style="text-align: right;">@if(AppHelper::getInstituteCategory() == 'college') {{'Principal'}} @else {{'Head Master'}} @endif Signature</h5>
+                    <h5 style="text-align: right;">@if(AppHelper::getInstituteCategory() == 'college') {{'Principal'}} @else {{'Headmaster'}} @endif Signature</h5>
                 </div>
             </div>
         </div>
-        @if($showMessage)
-        <div class="row" style="margin-top: 40px;">
-            <div class="col-xs-12">
-                <p>
-                    {{$message}}
-                </p>
-            </div>
-        </div>
-        @endif
     </div>
 @endsection

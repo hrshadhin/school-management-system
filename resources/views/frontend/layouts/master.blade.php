@@ -5,8 +5,8 @@
 	<title>{{$siteInfo['short_name']}} | @yield('pageTitle')</title>
 	<meta charset="utf-8">
 	<meta name="description" content="{{$siteInfo['name']}}">
-    <meta name="keywords" content="school,college,management,result,exam,attendace,hostel,admission,events">
-    <meta name="author" content="H.R.Shadhin">
+    <meta name="keywords" content="school,college,management,result,exam,attendance,account,hrm,library,payroll,hostel,admission,events">
+    <meta name="author" content="CloudSchool">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 	<!-- style -->
 	<link rel="shortcut icon" href="@if($siteInfo['favicon']){{asset('storage/site/'.$siteInfo['favicon'])}} @else{{ asset('images/favicon.png') }}@endif">

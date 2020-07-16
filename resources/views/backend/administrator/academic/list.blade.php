@@ -88,7 +88,7 @@
                                 <th width="20%">Start Date</th>
                                 <th width="20%">End Date</th>
                                 <th width="10%">Status</th>
-                                <th width="10%">Action</th>
+                                <th class="notexport" width="10%">Action</th>
                             </tr>
                             </tfoot>
                         </table>

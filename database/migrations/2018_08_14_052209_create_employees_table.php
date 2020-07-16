@@ -19,7 +19,7 @@ class CreateEmployeesTable extends Migration
             $table->unsignedInteger('role_id');
             $table->string('id_card',50)->unique();
             $table->string('name');
-            $table->string('designation')->nullable();
+            $table->unsignedTinyInteger('designation')->nullable(20);
             $table->string('qualification')->nullable();
             $table->string('dob',10);
             $table->enum('gender', [1,2])->default(1);
@@ -27,13 +27,15 @@ class CreateEmployeesTable extends Migration
             $table->string('email',100)->nullable();
             $table->string('phone_no',15)->nullable();
             $table->string('address',500)->nullable();
-            $table->string('joining_date',10);
+            $table->date('joining_date');
+            $table->date('leave_date')->nullable();
             $table->string('photo')->nullable();
             $table->string('signature')->nullable();
             $table->enum('shift', [1,2])->default(1);
             $table->time('duty_start')->nullable();
             $table->time('duty_end')->nullable();
             $table->enum('status', [0,1])->default(1);
+            $table->unsignedSmallInteger('order')->default(0);
             $table->timestamps();
             $table->softDeletes();
             $table->userstamps();

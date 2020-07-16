@@ -27,10 +27,10 @@ class Registration extends Model
         'shift',
         'card_no',
         'board_regi_no',
-        'fourth_subject',
-        'alt_fourth_subject',
         'house',
         'status',
+        'is_promoted',
+        'old_registration_id',
     ];
 
     public function student()
@@ -94,5 +94,11 @@ class Registration extends Model
         }
 
         return $query->get();
+    }
+
+    public function subjects()
+    {
+        return $this->belongsToMany('App\Subject','student_subjects', 'registration_id', 'subject_id')->withPivot('subject_type')
+            ->select('id','name','code','type');
     }
 }

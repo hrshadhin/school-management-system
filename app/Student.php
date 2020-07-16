@@ -23,6 +23,7 @@ class Student extends Model
     protected $fillable = [
         'user_id',
         'name',
+        'nick_name',
         'dob',
         'gender',
         'religion',
@@ -41,6 +42,8 @@ class Student extends Model
         'guardian_phone_no',
         'present_address',
         'permanent_address',
+        'sms_receive_no',
+        'siblings',
         'status',
     ];
 
@@ -60,6 +63,9 @@ class Student extends Model
 
     public function getBloodGroupAttribute($value)
     {
-        return Arr::get(AppHelper::BLOOD_GROUP, $value);
+        if($value) {
+            return Arr::get(AppHelper::BLOOD_GROUP, $value);
+        }
+        return "";
     }
 }

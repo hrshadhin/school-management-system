@@ -127,90 +127,16 @@
             </div>
         </div>
         @endif
-            
-        @if($userRoleId == AppHelper::USER_ADMIN)
+        @if($userRoleId == AppHelper::USER_STUDENT)
             <div class="row">
-                <div class="col-md-12">
-                    <div class="box box-warning">
-                        <div class="box-header with-border x_title">
-                            <h3>Sending SMS Report</h3>
-                            <div class="box-tools pull-right">
-                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                                </button>
-                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                            </div>
-                        </div>
-                        <!-- /.box-header -->
-                        <div class="box-body">
-                            <canvas id="smsChart" style="width: 821px; height: 136px;"></canvas>
-                        </div>
-                        <!-- /.box-body -->
-                    </div>
-                    <!-- /.box -->
+                <div class="col-md-3 col-md-offset-4">
+                <div class="callout callout-success text-center">
+                    <h3>Welcome to CloudSchool</h3>
+                    <p>Lot's of things are coming soon...</p>
+                </div>
                 </div>
             </div>
         @endif
-
-        @if($userRoleId != AppHelper::USER_STUDENT)
-            <div class="row">
-                    <div class="col-md-6">
-                        <div class="box box-success">
-                            <div class="box-header with-border x_title">
-                                <h3>Class Wise Students</h3>
-                                <div class="box-tools pull-right">
-                                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                                </div>
-                            </div>
-                            <div class="box-body">
-                                <ul class="nav nav-stacked">
-                                    @php $color = 0; @endphp
-                                    @foreach($studentsCount as $iclass)
-                                        @php
-                                            ++$color;
-                                            if($color>7) {
-                                                $color = 1;
-                                            }
-                                        @endphp
-                                        <li><a href="#">{{$iclass->name}} <span class="pull-right badge bg-{{$color}}">@if(count($iclass->student)) {{$iclass->student->first()->total}} @else {{0}} @endif</span></a></li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                            <!-- /.box-body -->
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="box box-danger">
-                            <div class="box-header with-border x_title">
-                                <h3>Section Wise Students</h3>
-                                <div class="box-tools pull-right">
-                                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                                </div>
-                            </div>
-                            <div class="box-body">
-                                <ul class="nav nav-stacked">
-                                    @php $color = 0; @endphp
-                                    @foreach($sectionStudentCount as $section)
-                                        @php
-                                            ++$color;
-                                            if($color>7) {
-                                                $color = 1;
-                                            }
-                                        @endphp
-                                        <li><a href="#">{{$section->class->name}}[{{$section->name}}]<span class="pull-right badge bg-{{$color}}">@if(count($section->student)) {{$section->student->first()->total}} @else {{0}} @endif</span></a></li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                            <!-- /.box-body -->
-                        </div>
-                        <!-- /.box -->
-                    </div>
-                </div>
-        @endif
-
 
     </section>
     <!-- /.content -->
@@ -221,15 +147,12 @@
 @section('extraScript')
     <script src="{{asset(mix('js/dashboard.js'))}}"></script>
     <script type="text/javascript">
-        @if($userRoleId == AppHelper::USER_ADMIN)
-            window.smsLabel = @php echo json_encode(array_keys($monthWiseSms)) @endphp;
-            window.smsValue = @php echo json_encode(array_values($monthWiseSms)) @endphp;
-        @endif
         @if($userRoleId != AppHelper::USER_STUDENT)
             window.attendanceLabel = @php echo json_encode(array_keys($attendanceChartPresentData)) @endphp;
             window.presentData = @php echo json_encode(array_values($attendanceChartPresentData)) @endphp;
             window.absentData = @php echo json_encode(array_values($attendanceChartAbsentData)) @endphp;
         @endif
+
         $(document).ready(function () {
             Dashboard.init();
 

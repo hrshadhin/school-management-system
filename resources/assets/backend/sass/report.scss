@@ -447,6 +447,7 @@ table {
   border-bottom: 1px solid #ddd;
 }
 
+
 .report-body .report-data table.classic tr th {
   text-align: center;
   font-weight: bold;
@@ -462,6 +463,27 @@ table {
   vertical-align: middle;
   border: 1px solid #000;
   padding: 1px;
+}
+
+.report-body .report-data table.classic2 tr th {
+  text-align: center;
+  font-weight: bold;
+  font-size: 12px;
+  vertical-align: bottom;
+  border: 1px solid #000;
+  padding: 8px;
+}
+
+.report-body .report-data table.classic2 tr td {
+  text-align: center;
+  font-size: 10px;
+  padding: 8px;
+  vertical-align: top;
+  border: 1px solid #000;
+}
+
+.report-body .report-data table.classic2 tr.lastItem td {
+  border-bottom: 2px solid #ddd;
 }
 
 .report-authority .col-xs-4 {
@@ -506,6 +528,54 @@ table {
 .text-bold {
   font-weight: bold;
 }
+.badge {
+  display: inline-block;
+  min-width: 10px;
+  padding: 3px 7px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  background-color: #777;
+  border-radius: 10px;
+}
+.bg-green {
+  background-color: #00a65a !important;
+}
+
+.bg-red {
+  background-color: #dd4b39 !important;
+}
+.pull-right {
+  float: right;
+}
+
+.subTotal td {
+  font-size: 12px !important;
+  font-weight: bold;
+}
+
+.btn-print {
+  color: #ffffff;
+  background-color: #0F9966;
+  border-color: #19910E;
+  font-size: 24px;
+  border-radius: 10px;
+  top: 25px;
+  right: 0;
+  position: absolute;
+}
+
+.btn-print:hover,
+.btn-print:focus,
+.btn-print:active
+{
+  background-color: #49b3e2;
+  border-color: #aed0df;
+}
 
 /*
  * Misc: print
@@ -523,7 +593,8 @@ table {
   @page {
     size:  A4 portrait;
     margin: 2mm;
-    margin-bottom: 20px;
+    margin-bottom: 5mm;
+    margin-top: 5mm;
   }
 
   * {

@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Helpers\AppHelper;
 use App\Section;
 use App\Subject;
-use App\Template;
 use App\User;
 use App\UserRole;
 use Carbon\Carbon;
@@ -26,7 +25,7 @@ class TeacherController extends Controller
     public function index()
     {
 
-        $teachers = Employee::where('role_id', AppHelper::EMP_TEACHER)->get();
+        $teachers = Employee::where('role_id', AppHelper::EMP_TEACHER)->orderBy('order', 'asc')->get();
 
         return view('backend.teacher.list', compact('teachers'));
 
@@ -43,7 +42,9 @@ class TeacherController extends Controller
         $teacher = null;
         $gender = 1;
         $religion = 1;
-        return view('backend.teacher.add', compact('teacher', 'gender', 'religion'));
+        $designation = 0;
+
+        return view('backend.teacher.add', compact('teacher', 'gender', 'religion', 'designation'));
     }
 
 
@@ -58,27 +59,29 @@ class TeacherController extends Controller
         //validate form
         $messages = [
             'photo.max' => 'The :attribute size must be under 200kb.',
-            'signature.max' => 'The :attribute size must be under 200kb.',
+            'signature.max' => 'The :attribute size must be under 100kb.',
             'photo.dimensions' => 'The :attribute dimensions min 150 X 150.',
-            'signature.dimensions' => 'The :attribute dimensions max 160 X 80.',
+            'signature.dimensions' => 'The :attribute dimensions max 170 X 60.',
         ];
         $this->validate(
             $request, [
                 'name' => 'required|min:5|max:255',
                 'photo' => 'mimes:jpeg,jpg,png|max:200|dimensions:min_width=150,min_height=150',
-                'signature' => 'mimes:jpeg,jpg,png|max:200|dimensions:max_width=160,max_height=80',
-                'designation' => 'max:255',
+                'signature' => 'mimes:jpeg,jpg,png|max:100|dimensions:max_width=170,max_height=60',
+                'designation' => 'required|integer',
                 'qualification' => 'max:255',
-                'dob' => 'min:10',
+                'dob' => 'min:10|max:10',
                 'gender' => 'required|integer',
                 'religion' => 'required|integer',
                 'email' => 'email|max:255|unique:employees,email|unique:users,email',
                 'phone_no' => 'required|min:8|max:255',
                 'address' => 'max:500',
                 'id_card' => 'required|min:4|max:50|unique:employees,id_card',
-                'joining_date' => 'min:10',
+                'joining_date' => 'required|min:10|max:10',
+                'leave_date' => 'nullable|min:10|max:10',
                 'username' => 'required|min:5|max:255|unique:users,username',
                 'password' => 'required|min:6|max:50',
+                'order' => 'required|integer',
 
             ]
         );
@@ -112,6 +115,7 @@ class TeacherController extends Controller
         $data['address'] = $request->get('address');
         $data['joining_date'] = $request->get('joining_date');
         $data['id_card'] = $request->get('id_card');
+        $data['order'] = $request->get('order');
         $data['role_id'] = AppHelper::EMP_TEACHER;
 
         DB::beginTransaction();
@@ -174,52 +178,6 @@ class TeacherController extends Controller
      */
     public function show(Request $request, $id)
     {
-        // if print id card of this student then
-        // Do here
-        if($request->query->get('print_idcard',0)) {
-
-            $templateId = AppHelper::getAppSettings('employee_idcard_template');
-            $templateConfig = Template::where('id', $templateId)->where('type',3)->where('role_id', AppHelper::USER_TEACHER)->first();
-
-            if(!$templateConfig){
-                return redirect()->route('administrator.template.idcard.index')->with('error', 'Template not found!');
-            }
-
-            $templateConfig = json_decode($templateConfig->content);
-
-            $format = "format_";
-            if($templateConfig->format_id == 2){
-                $format .="two";
-            }
-            else if($templateConfig->format_id == 3){
-                $format .="three";
-            }
-            else {
-                $format .="one";
-            }
-
-            //get institute information
-            $instituteInfo = AppHelper::getAppSettings('institute_settings');
-
-
-            $employees = Employee::where('id', $id)->get();
-
-            if(!$employees){
-                abort(404);
-            }
-
-
-            $side = 'both';
-            return view('backend.report.hrm.employee.idcard.'.$format, compact(
-                'templateConfig',
-                'instituteInfo',
-                'side',
-                'employees'
-            ));
-        }
-
-
-
         $teacher = Employee::with('user')->where('role_id', AppHelper::EMP_TEACHER)->where('id', $id)->first();
         if(!$teacher){
             abort(404);
@@ -232,13 +190,14 @@ class TeacherController extends Controller
             ->select('name','class_id')
             ->orderBy('name','asc')
             ->get();
-
+        
         $subjects = Subject::with(['class' => function($query){
-            $query->select('name','id');
+                $query->select('name','id');
             }])
-            ->where('teacher_id', $teacher->id)
-            ->select('name','class_id','code')
-            ->orderBy('name','asc')
+            ->join('teacher_subjects','teacher_subjects.subject_id','subjects.id')
+            ->where('teacher_subjects.teacher_id', $teacher->id)
+            ->select('subjects.name','subjects.class_id','subjects.code')
+            ->orderBy('subjects.class_id','asc')
             ->get();
 
 
@@ -263,6 +222,7 @@ class TeacherController extends Controller
         }
         $gender = $teacher->getOriginal('gender');
         $religion = $teacher->getOriginal('religion');
+        $designation = $teacher->getOriginal('designation');
 
         $users = [];
         if(!$teacher->user_id){
@@ -274,7 +234,7 @@ class TeacherController extends Controller
                 ->pluck('name', 'id');
         }
 
-        return view('backend.teacher.add', compact('teacher', 'gender', 'religion', 'users'));
+        return view('backend.teacher.add', compact('teacher', 'gender', 'religion', 'users','designation'));
 
     }
 
@@ -296,26 +256,28 @@ class TeacherController extends Controller
         //validate form
         $messages = [
             'photo.max' => 'The :attribute size must be under 200kb.',
-            'signature.max' => 'The :attribute size must be under 200kb.',
+            'signature.max' => 'The :attribute size must be under 100kb.',
             'photo.dimensions' => 'The :attribute dimensions min 150 X 150.',
-            'signature.dimensions' => 'The :attribute dimensions max 160 X 80.',
+            'signature.dimensions' => 'The :attribute dimensions max 170 X 60.',
         ];
         $this->validate(
             $request, [
                 'name' => 'required|min:5|max:255',
                 'photo' => 'mimes:jpeg,jpg,png|max:200|dimensions:min_width=150,min_height=150',
-                'signature' => 'mimes:jpeg,jpg,png|max:200|dimensions:max_width=160,max_height=80',
-                'designation' => 'max:255',
+                'signature' => 'mimes:jpeg,jpg,png|max:200|dimensions:max_width=170,max_height=60',
+                'designation' => 'required|integer',
                 'qualification' => 'max:255',
-                'dob' => 'min:10',
+                'dob' => 'min:10|max:10',
                 'gender' => 'required|integer',
                 'religion' => 'required|integer',
                 'email' => 'email|max:255|unique:employees,email,'.$teacher->id.'|unique:users,email,'.$teacher->user_id,
                 'phone_no' => 'required|min:8|max:255',
                 'address' => 'max:500',
                 'id_card' => 'required|min:4|max:50|unique:employees,id_card,'.$teacher->id,
-                'joining_date' => 'min:10',
+                'joining_date' => 'required|min:10|max:10',
+                'leave_date' => 'nullable|min:10|max:10',
                 'user_id' => 'nullable|integer',
+                'order' => 'required|integer',
 
             ]
         );
@@ -363,7 +325,9 @@ class TeacherController extends Controller
         $data['phone_no'] = $request->get('phone_no');
         $data['address'] = $request->get('address');
         $data['joining_date'] = $request->get('joining_date');
+        $data['leave_date'] = $request->get('leave_date');
         $data['id_card'] = $request->get('id_card');
+        $data['order'] = $request->get('order');
 
         //
         if(!$teacher->user_id && $request->get('user_id', 0)){
@@ -400,7 +364,9 @@ class TeacherController extends Controller
         }
         //protect from delete the teacher if have any class or section connected with this teacher
         $haveSection = Section::where('teacher_id', $teacher->id)->count();
-        $haveSubject = Subject::where('teacher_id', $teacher->id)->count();
+        $haveSubject = DB::table('teacher_subjects')
+            ->where('teacher_subjects.teacher_id', $teacher->id)
+            ->count();
 
         if($haveSection || $haveSubject){
             return redirect()->route('teacher.index')->with('error', 'Can not delete! Teacher used in section or subject.');
@@ -460,7 +426,14 @@ class TeacherController extends Controller
             ];
         }
 
-        $employee->status = (string)$request->get('status');
+        $status = (string)$request->get('status');
+        $employee->status = $status;
+        if($status == '0'){
+            $employee->leave_date = Carbon::now(env('APP_TIMEZONE','Asia/Dhaka'))->format('d/m/Y');
+        }
+        else{
+            $employee->leave_date = null;
+        }
 
         $employee->save();
 

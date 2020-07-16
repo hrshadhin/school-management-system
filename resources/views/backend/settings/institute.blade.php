@@ -197,6 +197,17 @@
                                         <span class="text-danger">{{ $errors->first('frontend_website') }}</span>
                                     </div>
                                 </div>
+
+                                <div class="col-md-2">
+                                    <div class="form-group has-feedback">
+                                        <label for="board_name">Board Name
+                                            <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Which board this institute belongs to?"></i>
+                                        </label>
+                                        <input  type="text" class="form-control" name="board_name"  placeholder="board name" value="@if(isset($metas['board_name'])) {{ $metas['board_name'] }}@endif" maxlength="255">
+                                        <span class="fa fa-info-circle form-control-feedback"></span>
+                                        <span class="text-danger">{{ $errors->first('board_name') }}</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <!-- /.box-body -->
@@ -210,17 +221,37 @@
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group has-feedback">
-                                        <label for="weekends">Weekends</label>
+                                        <label for="weekends">Weekends<span class="text-danger">*</span></label>
                                         {!! Form::select('weekends[]', AppHelper::weekDays, $weekends, ['class' => 'form-control select2', 'required' => 'true','multiple' => 'true']) !!}
                                         <span class="form-control-feedback"></span>
                                         <span class="text-danger">{{ $errors->first('weekends') }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group has-feedback">
+                                        <label for="weekends">Week Start Day<span class="text-danger">*</span>
+                                            <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="If holiday day is Friday then start day will Saturday"></i>
+                                        </label>
+                                        {!! Form::select('START_DAY_OF_WEEK', AppHelper::weekDays, $START_DAY_OF_WEEK, ['class' => 'form-control select2', 'placeholder' => 'Pick a day', 'required' => 'true']) !!}
+                                        <span class="form-control-feedback"></span>
+                                        <span class="text-danger">{{ $errors->first('START_DAY_OF_WEEK') }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group has-feedback">
+                                        <label for="weekends">Week End Day<span class="text-danger">*</span>
+                                            <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="If holiday day is Friday then end day will Friday"></i>
+                                        </label>
+                                        {!! Form::select('END_DAY_OF_WEEK', AppHelper::weekDays, $END_DAY_OF_WEEK, ['class' => 'form-control select2', 'placeholder' => 'Pick a day', 'required' => 'true']) !!}
+                                        <span class="form-control-feedback"></span>
+                                        <span class="text-danger">{{ $errors->first('END_DAY_OF_WEEK') }}</span>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-2">
                                     <div class="form-group has-feedback">
-                                        <label for="morning_start">Morning Shift Start</label>
+                                        <label for="morning_start">Morning Shift Start<span class="text-danger">*</span></label>
                                         <input type='text' class="form-control time_picker"  readonly name="morning_start" placeholder="time" value="@if(isset($metas['shift_data'])){{$metas['shift_data']['Morning']['start']}}@else{{'12:00 am'}}@endif" required minlength="7" maxlength="8" />
                                         <span class="fa fa-clock-o form-control-feedback"></span>
                                         <span class="text-danger">{{ $errors->first('morning_start') }}</span>
@@ -228,7 +259,7 @@
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group has-feedback">
-                                        <label for="morning_end">Morning Shift End</label>
+                                        <label for="morning_end">Morning Shift End<span class="text-danger">*</span></label>
                                         <input type='text' class="form-control time_picker"  readonly name="morning_end" placeholder="time" value="@if(isset($metas['shift_data'])){{$metas['shift_data']['Morning']['end']}}@else{{'12:00 am'}}@endif" required minlength="7" maxlength="8" />
                                         <span class="fa fa-clock-o form-control-feedback"></span>
                                         <span class="text-danger">{{ $errors->first('morning_end') }}</span>
@@ -236,7 +267,7 @@
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group has-feedback">
-                                        <label for="day_start">Day Shift Start</label>
+                                        <label for="day_start">Day Shift Start<span class="text-danger">*</span></label>
                                         <input type='text' class="form-control time_picker"  readonly name="day_start" placeholder="time" value="@if(isset($metas['shift_data'])){{$metas['shift_data']['Day']['start']}}@else{{'12:00 am'}}@endif" required minlength="7" maxlength="8" />
                                         <span class="fa fa-clock-o form-control-feedback"></span>
                                         <span class="text-danger">{{ $errors->first('day_start') }}</span>
@@ -244,7 +275,7 @@
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group has-feedback">
-                                        <label for="day_end">Day Shift End</label>
+                                        <label for="day_end">Day Shift End<span class="text-danger">*</span></label>
                                         <input type='text' class="form-control time_picker"  readonly name="day_end" placeholder="time" value="@if(isset($metas['shift_data'])){{$metas['shift_data']['Day']['end']}}@else{{'12:00 am'}}@endif" required  minlength="7"  maxlength="8" />
                                         <span class="fa fa-clock-o form-control-feedback"></span>
                                         <span class="text-danger">{{ $errors->first('day_end') }}</span>
@@ -252,7 +283,7 @@
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group has-feedback">
-                                        <label for="evening_start">Evening Shift Start</label>
+                                        <label for="evening_start">Evening Shift Start<span class="text-danger">*</span></label>
                                         <input type='text' class="form-control time_picker"  readonly name="evening_start" placeholder="time" value="@if(isset($metas['shift_data'])){{$metas['shift_data']['Evening']['start']}}@else{{'12:00 am'}}@endif" required   minlength="7" maxlength="8" />
                                         <span class="fa fa-clock-o form-control-feedback"></span>
                                         <span class="text-danger">{{ $errors->first('evening_start') }}</span>
@@ -260,88 +291,10 @@
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group has-feedback">
-                                        <label for="evening_end">Evening Shift End</label>
+                                        <label for="evening_end">Evening Shift End<span class="text-danger">*</span></label>
                                         <input type='text' class="form-control time_picker" readonly  autocomplete="off" name="evening_end" placeholder="time" value="@if(isset($metas['shift_data'])){{$metas['shift_data']['Evening']['end']}}@else{{'12:00 am'}}@endif" required  minlength="7"  maxlength="8" />
                                         <span class="fa fa-clock-o form-control-feedback"></span>
                                         <span class="text-danger">{{ $errors->first('evening_end') }}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                            <div class="box box-info">
-                        <div class="box-header with-border">
-                            <h3 class="box-title">Attendance Notification Settings</h3>
-                        </div>
-                        <!-- /.box-header -->
-                        <div class="box-body">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group has-feedback">
-                                        <label for="student_attendance_notification">Student Attendance Notification Type
-                                            <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="select attendance notificaton type"></i>
-                                        </label>
-                                        {!! Form::select('student_attendance_notification', [0 => "None", 1 => "SMS", 2 => "Email"], $student_attendance_notification , ['class' => 'form-control select2']) !!}
-                                        <span class="form-control-feedback"></span>
-                                        <span class="text-danger">{{ $errors->first('student_attendance_notification') }}</span>
-                                    </div>
-                                </div>
-                                <div id="divSmsGateWayList_St" class="col-md-4 @if(!$student_attendance_notification || $student_attendance_notification != 1) hide @endif">
-
-                                </div>
-                                <div id="divTemplateList_St" class="col-md-4 @if(!$student_attendance_notification) hide @endif">
-
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group has-feedback">
-                                        <label for="employee_attendance_notification">Employee Attendance Notification Type
-                                            <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="select attendance notificaton type"></i>
-                                        </label>
-                                        {!! Form::select('employee_attendance_notification', [0 => "None", 1 => "SMS", 2 => "Email"], $employee_attendance_notification , ['class' => 'form-control select2']) !!}
-                                        <span class="form-control-feedback"></span>
-                                        <span class="text-danger">{{ $errors->first('employee_attendance_notification') }}</span>
-                                    </div>
-                                </div>
-                                <div id="divSmsGateWayList_Emp" class="col-md-4 @if(!$employee_attendance_notification || $employee_attendance_notification != 1) hide @endif">
-
-                                </div>
-                                <div id="divTemplateList_Emp" class="col-md-4 @if(!$employee_attendance_notification) hide @endif">
-
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-
-
-                    <div class="box box-info">
-                        <div class="box-header with-border">
-                            <h3 class="box-title">Default Idcard templates</h3>
-                        </div>
-                        <!-- /.box-header -->
-                        <div class="box-body">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group has-feedback">
-                                        <label for="student_idcard_template">Student Idcard template
-                                            <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="select idcard template for student"></i>
-                                        </label>
-                                        {!! Form::select('student_idcard_template', $studentIdcardTemplates, $student_idcard_template , ['class' => 'form-control select2', 'required' => 'true']) !!}
-                                        <span class="form-control-feedback"></span>
-                                        <span class="text-danger">{{ $errors->first('student_idcard_template') }}</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group has-feedback">
-                                        <label for="employee_idcard_template">Employee Idcard template
-                                            <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="select idcard template for Employee"></i>
-                                        </label>
-                                        {!! Form::select('employee_idcard_template', $employeIdcardTemplates, $employee_idcard_template , ['class' => 'form-control select2', 'required' => 'true']) !!}
-                                        <span class="form-control-feedback"></span>
-                                        <span class="text-danger">{{ $errors->first('employee_idcard_template') }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -369,6 +322,7 @@
                         </div>
                     </div>
 
+
                     <div class="box">
                         <div class="box-footer">
                             <a href="{{URL::route('user.dashboard')}}" class="btn btn-default">Cancel</a>
@@ -387,14 +341,6 @@
 <!-- BEGIN PAGE JS-->
 @section('extraScript')
     <script type="text/javascript">
-        window.smsGatewayListURL = '{{URL::route('settings.sms_gateway.index')}}';
-        window.templateListURL = '{{URL::route('administrator.template.mailsms.index')}}';
-
-        window.gatewaySt = @if(isset($metas['student_attendance_gateway'])) {{$metas['student_attendance_gateway']}}; @else 0; @endif
-        window.templateSt = @if(isset($metas['student_attendance_template'])) {{$metas['student_attendance_template']}}; @else 0; @endif
-        window.gatewayEmp = @if(isset($metas['employee_attendance_gateway'])) {{$metas['employee_attendance_gateway']}}; @else 0; @endif
-        window.templateEmp = @if(isset($metas['employee_attendance_template'])) {{$metas['employee_attendance_template']}}; @else 0; @endif
-
         $(document).ready(function () {
             Settings.instituteInit();
 

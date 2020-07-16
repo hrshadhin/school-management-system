@@ -26,9 +26,6 @@
             <a href="#"  class="btn-ta btn-sm-ta btn-print btnPrintInformation"><i class="fa fa-print"></i> Print</a>
         </div>
         <div class="btn-group">
-            <a  href="{{URL::route('teacher.show',$teacher->id)}}?print_idcard=1" class="btn-ta btn-sm-ta" target="_blank"><span class="fa fa-floppy-o"></span> ID Card </a>
-        </div>
-        <div class="btn-group">
             <a href="{{URL::route('teacher.edit',$teacher->id)}}" class="btn-ta btn-sm-ta"><i class="fa fa-edit"></i> Edit</a>
         </div>
 
@@ -163,20 +160,45 @@
                                                 <p for="">: {{$teacher->religion}}</p>
                                             </div>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-md-3">
-                                                <label for="">Join Date</label>
+                                        @if($teacher->leave_date)
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <label for="">Join Date</label>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <p for="">: {{$teacher->joining_date->format('d/m/Y')}}</p>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label for="">Leave Date</label>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <p for="">: {{$teacher->leave_date->format('d/m/Y')}}</p>
+                                                </div>
                                             </div>
-                                            <div class="col-md-3">
-                                                <p for="">: {{$teacher->joining_date}}</p>
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <label for="">Username</label>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <p for="">: {{$teacher->user->username}}</p>
+                                                </div>
                                             </div>
-                                            <div class="col-md-3">
-                                                <label for="">Username</label>
+                                        @else
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <label for="">Join Date</label>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <p for="">: {{$teacher->joining_date->format('d/m/Y')}}</p>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label for="">Username</label>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <p for="">: {{$teacher->user->username}}</p>
+                                                </div>
                                             </div>
-                                            <div class="col-md-3">
-                                                <p for="">: {{$teacher->user->username}}</p>
-                                            </div>
-                                        </div>
+                                        @endif
                                         <div class="row">
                                             <div class="col-md-3">
                                                 <label for="">Address</label>
@@ -220,17 +242,17 @@
                                         <table class="table table-responsive table-bordered table-hover">
                                             <thead>
                                             <tr>
-                                                <th class="text-center">Class</th>
                                                 <th class="text-center">Subject</th>
+                                                <th class="text-center">Class</th>
                                             </tr>
                                             <tbody>
                                             @foreach($subjects as $subject)
                                                 <tr>
                                                     <td class="text-center">
-                                                        {{$subject->class->name}}
+                                                        {{$subject->name}}[{{$subject->code}}]
                                                     </td>
                                                     <td class="text-center">
-                                                        {{$subject->name}}[{{$subject->code}}]
+                                                        {{$subject->class->name}}
                                                     </td>
                                                 </tr>
                                             @endforeach

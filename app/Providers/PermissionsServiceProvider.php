@@ -3,7 +3,6 @@
 namespace App\Providers;
 
 use App\Http\Helpers\AppHelper;
-use App\Permission;
 use Gate;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
@@ -20,6 +19,10 @@ class PermissionsServiceProvider extends ServiceProvider
 
             AppHelper::getPermissions()->map(function ($permission) {
                 Gate::define($permission->slug, function ($user) use ($permission) {
+                    // for super admin no need to check permissions
+                    if($user->is_super_admin) {
+                        return true;
+                    }
                     return $user->hasPermissionTo($permission);
                 });
             });

@@ -18,6 +18,7 @@ class CreateAcademicYearsTable extends Migration
             $table->string('title');
             $table->date('start_date');
             $table->date('end_date');
+            $table->boolean('is_open_for_admission')->default(false);
             $table->enum('status', [0,1])->default(0);
             $table->timestamps();
             $table->softDeletes();

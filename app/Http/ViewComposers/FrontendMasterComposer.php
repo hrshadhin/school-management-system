@@ -25,7 +25,7 @@ class FrontendMasterComposer
             'logo2x' => '',
             'favicon' => '',
             'facebook' => '',
-            'google' => '',
+            'instagram' => '',
             'twitter' => '',
             'youtube' => '',
         ];
@@ -36,11 +36,11 @@ class FrontendMasterComposer
             $info = json_decode($settings->meta_value);
             $siteInfo['name'] = $info->name;
             $siteInfo['short_name'] = $info->short_name;
-            $siteInfo['logo'] = $info->logo;
-            $siteInfo['logo2x'] = $info->logo2x;
-            $siteInfo['favicon'] = $info->favicon;
+            $siteInfo['logo'] = $info->logo ?? null;
+            $siteInfo['logo2x'] = $info->logo2x ?? null;
+            $siteInfo['favicon'] = $info->favicon ?? null;
             $siteInfo['facebook'] = $info->facebook;
-            $siteInfo['google'] = $info->google;
+            $siteInfo['instagram'] = $info->instagram;
             $siteInfo['twitter'] = $info->twitter;
             $siteInfo['youtube'] = $info->youtube;
         }

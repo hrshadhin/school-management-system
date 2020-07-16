@@ -9,7 +9,7 @@
 @section('reportBody')
     <div class="report-body">
         <div class="report-filter">
-            <span class="filter-text">Filters:</span> <span class="filters">{{implode(' || ',$filters)}}</span>
+            <span class="filter-text">Filters:</span> <span class="filters">{{implode(' II ',$filters)}}</span>
         </div>
         <div class="report-data">
             <div class="row">
@@ -34,6 +34,15 @@
                         </tr>
                         </thead>
                         <tbody>
+                            @php
+                             $dayWisePresent = [];
+                             $dayWiseAbsent = [];
+                             //init 0 values
+                             foreach($monthDates as $date => $value){
+                                $dayWisePresent[$date] = 0;
+                                $dayWiseAbsent[$date] = 0;
+                             }
+                            @endphp
                             @foreach($students as $student)
                                 <tr>
                                     <td>{{$loop->iteration}}</td>
@@ -61,43 +70,26 @@
                                                             $tlPresent++;
                                                         }
 
+                                                        $dayWisePresent[$date] += 1;
+
                                                     }
                                                     else{
-                                                        $status = 'A';
-                                                        $tabsent++;
-                                                        $color = 'red';
+                                                        if (!$value['weekend']) {
+                                                            $status = 'A';
+                                                            $tabsent++;
+                                                            $color = 'red';
+
+                                                            $dayWiseAbsent[$date] += 1;
+                                                        }
                                                     }
                                                 }
-
-
-                                                 if(isset($calendarData[$date])) {
-                                                    //if student has present in exam
-                                                    if($calendarData[$date] == 'E' && ($status == 'P' || $status == 'A')){
-                                                        if($status == 'P'){
-                                                            $status .= $calendarData[$date];
-                                                        }
-
-                                                        if($status == 'A'){
-                                                            $tabsent--;
-                                                            $status = $calendarData[$date];
-                                                            $color = 'holiday';
-                                                        }
-
-                                                    }
-                                                    else{
-                                                        $status = $calendarData[$date];
-                                                        $color = 'holiday';
-                                                    }
-
-                                                 }
-
-
 
 
                                             if($value['weekend']){
                                                     $status .= 'W';
                                                     $color = 'weekend';
                                             }
+
                                         @endphp
                                         <td class="{{$color}}">{{$status}}</td>
                                     @endforeach
@@ -114,12 +106,15 @@
                                         {{$tPresent}}
                                     </td>
                                 </tr>
+
                             @endforeach
+                            {!! ReportHelper::generateStudentMonthlyAttendanceSumTableRows($dayWisePresent,$dayWiseAbsent) !!}
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
+
         <div class="report-authority">
             <div class="row">
                 <div class="col-xs-4">
@@ -129,7 +124,7 @@
                     <h5>Class Teacher</h5>
                 </div>
                 <div class="col-xs-4">
-                    <h5>@if(AppHelper::getInstituteCategory() == "college") Principal @else Head Master  @endif</h5>
+                    <h5>@if(AppHelper::getInstituteCategory() == 'college') Principal @else Headmaster @endif</h5>
                 </div>
             </div>
         </div>

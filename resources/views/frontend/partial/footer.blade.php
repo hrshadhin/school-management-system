@@ -76,9 +76,9 @@
 				</div>
 
 				<div class="footer-social">
-					<a target="_blank" href="@if($siteInfo['google']){{$siteInfo['google']}}@else #@endif" class="fa fa-google-plus"></a>
-					<a target="_blank" href="@if($siteInfo['twitter']){{$siteInfo['twitter']}}@else #@endif" class="fa fa-twitter"></a>
 					<a target="_blank" href="@if($siteInfo['facebook']){{$siteInfo['facebook']}}@else #@endif" class="fa fa-facebook"></a>
+					<a target="_blank" href="@if($siteInfo['instagram']){{$siteInfo['instagram']}}@else #@endif" class="fa fa-instagram"></a>
+					<a target="_blank" href="@if($siteInfo['twitter']){{$siteInfo['twitter']}}@else #@endif" class="fa fa-twitter"></a>
 					<a target="_blank" href="@if($siteInfo['youtube']){{$siteInfo['youtube']}}@else #@endif" class="fa fa-youtube"></a>
 				</div>
 

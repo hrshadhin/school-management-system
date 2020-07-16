@@ -14,7 +14,7 @@ class Employee extends Model
     use SoftDeletes;
     use UserstampsTrait;
 
-    protected $dates = [];
+    protected $dates = ['joining_date','leave_date'];
 
 
     /**
@@ -36,12 +36,14 @@ class Employee extends Model
         'phone_no',
         'address',
         'joining_date',
+        'leave_date',
         'photo',
         'signature',
         'shift',
         'duty_start',
         'duty_end',
-        'status'
+        'status',
+        'order'
     ];
 
 
@@ -60,6 +62,30 @@ class Employee extends Model
     {
         return Arr::get(AppHelper::EMP_SHIFTS, $value);
     }
+
+    public function getDesignationAttribute($value)
+    {
+        return Arr::get(AppHelper::EMPLOYEE_DESIGNATION_TYPES, $value);
+    }
+
+
+    public function setJoiningDateAttribute($value)
+    {
+        $this->attributes['joining_date'] = Carbon::createFromFormat('d/m/Y', $value)->format('Y-m-d');
+
+    }
+
+    public function setLeaveDateAttribute($value)
+    {
+        if(strlen($value)) {
+            $this->attributes['leave_date'] = Carbon::createFromFormat('d/m/Y', $value)->format('Y-m-d');
+        }
+        else{
+            $this->attributes['leave_date'] = null;
+        }
+
+    }
+
     public function setDutyStartAttribute($value)
     {
         if(strlen($value)){
@@ -114,6 +140,13 @@ class Employee extends Model
     public function role()
     {
         return $this->belongsTo('App\Role', 'role_id');
+    }
+
+
+    public function attendance()
+    {
+
+        return $this->hasMany('App\EmployeeAttendance', 'employee_id');
     }
 
 

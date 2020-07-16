@@ -25,11 +25,15 @@ class ExamController extends Controller
 
             //exam list by class
             $class_id = $request->query->get('class_id', 0);
+            $onlyOpenForExam = $request->query->get('open_for_exam', '');
+
             if($class_id){
                 $exams = Exam::where('status', AppHelper::ACTIVE)
                     ->where('class_id', $class_id)
+                    ->if(strlen($onlyOpenForExam), 'open_for_marks_entry', '=', true)
                     ->select('name as text', 'id')
-                    ->orderBy('name', 'asc')->get();
+                    ->orderBy('name', 'asc')
+                    ->get();
 
                 return response()->json($exams);
             }
@@ -58,6 +62,7 @@ class ExamController extends Controller
         $exams = Exam::iclass($class_id)->with('class')->get();
 
         $classes = IClass::where('status', AppHelper::ACTIVE)
+            ->orderBy('order','asc')
             ->pluck('name', 'id');
         $iclass = $class_id;
 
@@ -119,9 +124,12 @@ class ExamController extends Controller
         $marksDistributionTypes = [1,2];
 
         $classes = IClass::where('status', AppHelper::ACTIVE)
+            ->orderBy('order','asc')
             ->pluck('name', 'id');
 
-        return view('backend.exam.add', compact('exam', 'marksDistributionTypes','classes'));
+        $open_for_marks_entry = 0;
+
+        return view('backend.exam.add', compact('exam', 'marksDistributionTypes','classes','open_for_marks_entry'));
     }
 
     /**
@@ -145,6 +153,9 @@ class ExamController extends Controller
 
         $data = $request->all();
         $data['marks_distribution_types'] = json_encode($data['marks_distribution_types']);
+        if($request->has('open_for_marks_entry')){
+            $data['open_for_marks_entry'] = true;
+        }
 
         // now save employee
         Exam::create($data);
@@ -171,7 +182,9 @@ class ExamController extends Controller
         //todo: need protection to massy events. like modify after used or delete after user
         $marksDistributionTypes = json_decode($exam->marks_distribution_types,true);
 
-        return view('backend.exam.add', compact('exam', 'marksDistributionTypes'));
+        $open_for_marks_entry = $exam->open_for_marks_entry;
+
+        return view('backend.exam.add', compact('exam', 'marksDistributionTypes', 'open_for_marks_entry'));
 
 
     }
@@ -200,6 +213,12 @@ class ExamController extends Controller
         $data = $request->all();
         unset($data['class_id']);
         $data['marks_distribution_types'] = json_encode($data['marks_distribution_types']);
+        if($request->has('open_for_marks_entry')){
+            $data['open_for_marks_entry'] = true;
+        }
+        else {
+            $data['open_for_marks_entry'] = false;
+        }
 
 
         $exam->fill($data);
@@ -234,8 +253,17 @@ class ExamController extends Controller
             ];
         }
 
-        $exam->status = (string)$request->get('status');
+        if($request->has('open_entry')){
+            $exam->open_for_marks_entry = $request->get('status');
+            $exam->save();
 
+            return [
+                'success' => true,
+                'message' => 'Record updated.'
+            ];
+        }
+
+        $exam->status = (string)$request->get('status');
         $exam->save();
 
         return [
@@ -429,6 +457,7 @@ class ExamController extends Controller
         }
 
         $classes = IClass::where('status', AppHelper::ACTIVE)
+            ->orderBy('order','asc')
             ->pluck('name', 'id');
         $exams = Exam::where('class_id', $class_id)
             ->where('status', AppHelper::ACTIVE)
@@ -504,6 +533,7 @@ class ExamController extends Controller
         $grade_id = null;
 
         $classes = IClass::where('status', AppHelper::ACTIVE)
+            ->orderBy('order','asc')
             ->pluck('name', 'id');
         $exams = [];//Exam::where('status', AppHelper::ACTIVE)->pluck('name', 'id');
         $grades = Grade::pluck('name', 'id');
@@ -585,6 +615,7 @@ class ExamController extends Controller
 
         $subjects = Subject::where('class_id', $rule->class_id)
             ->where('status', AppHelper::ACTIVE)
+            ->orderBy('order','asc')
             ->pluck('name', 'id');
         $exams = Exam::where('class_id', $rule->class_id)
             ->where('status', AppHelper::ACTIVE)

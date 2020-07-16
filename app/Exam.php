@@ -23,6 +23,7 @@ class Exam extends Model
         'elective_subject_point_addition',
         'marks_distribution_types',
         'status',
+        'open_for_marks_entry'
     ];
 
 
@@ -38,5 +39,17 @@ class Exam extends Model
         }
 
         return $query;
+    }
+
+    public function marks()
+    {
+        return $this->hasMany('App\Mark', 'exam_id');
+
+    }
+
+    public function result()
+    {
+        return $this->hasMany('App\Result', 'exam_id');
+
     }
 }

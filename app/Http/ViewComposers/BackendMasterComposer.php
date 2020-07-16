@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\ViewComposers;
+
 use App\Http\Helpers\AppHelper;
 use Illuminate\Contracts\View\View;
 
@@ -32,9 +33,10 @@ class BackendMasterComposer
         $view->with('majorVersion', '3');
         $view->with('minorVersion', '0');
         $view->with('patchVersion', '0');
+        $view->with('suffixVersion', 'ce');
         $view->with('appSettings', $appSettings);
         $view->with('languages', AppHelper::LANGUEAGES);
-        $view->with('idc', '2f1aeca973c7413156bcd33355180e084a773cc9');
+        $view->with('idc', 'f51d28b319e6729b462abf03856d26985137752d');
         $view->with('institute_category', AppHelper::getInstituteCategory());
     }
 }

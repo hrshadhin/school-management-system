@@ -9,7 +9,7 @@
 @section('reportBody')
     <div class="report-body">
         <div class="report-filter">
-            <span class="filter-text">Filters:</span> <span class="filters">{{implode(' || ',$filters)}}</span>
+            <span class="filter-text">Filters:</span> <span class="filters">{{implode(' II ',$filters)}}</span>
         </div>
         <div class="report-data">
             <div class="row">

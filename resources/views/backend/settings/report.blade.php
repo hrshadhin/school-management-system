@@ -72,34 +72,6 @@
                         <!-- /.box-body -->
                     </div>
 
-                    <div class="box box-info">
-                        <div class="box-header with-border">
-                            <h3 class="box-title">Public Marksheet Settings</h3>
-                        </div>
-                        <!-- /.box-header -->
-                        <div class="box-body">
-                            <div class="row">
-                                <div class="col-md-10">
-                                    <div class="form-group has-feedback">
-                                        <label for="address">Message For Student</label>
-                                        <textarea name="message" class="form-control"  maxlength="1000" required>@if(isset($metas['report_pms_message']) && strlen($metas['report_pms_message'])) {{$metas['report_pms_message']}} @endif</textarea>
-                                        <span class="fa fa-location-arrow form-control-feedback"></span>
-                                        <span class="text-danger">{{ $errors->first('message') }}</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <div class="form-group has-feedback">
-                                        <label for="message_expire_date">Message Expire Date<span class="text-danger">*</span></label>
-                                        <input type='text' class="form-control date_picker" readonly  name="message_expire_date" placeholder="date" value="@if(isset($metas['report_pms_message_exp_date']) && strlen($metas['report_pms_message_exp_date'])) {{$metas['report_pms_message_exp_date']}} @endif" minlength="10" maxlength="11" />
-                                        <span class="fa fa-calendar form-control-feedback"></span>
-                                        <span class="text-danger">{{ $errors->first('message_expire_date') }}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /.box-body -->
-                    </div>
-
                     <div class="box">
                         <div class="box-footer">
                             <a href="{{URL::route('user.dashboard')}}" class="btn btn-default">Cancel</a>

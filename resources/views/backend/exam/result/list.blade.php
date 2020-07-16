@@ -42,13 +42,11 @@
                                     <form novalidate id="entryForm" action="{{URL::Route('result.index')}}" method="post" enctype="multipart/form-data">
                                         @csrf
                                         <div class="row">
-                                            @if(AppHelper::getInstituteCategory() == 'college')
-                                                <div class="col-md-3">
-                                                    <div class="form-group has-feedback">
-                                                        {!! Form::select('academic_year_id', $academic_years, $acYear , ['placeholder' => 'Pick a year...', 'class' => 'form-control select2', 'required' => 'true']) !!}
-                                                    </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group has-feedback">
+                                                    {!! Form::select('academic_year_id', $academic_years, $acYear , ['placeholder' => 'Pick a year...', 'class' => 'form-control select2', 'required' => 'true']) !!}
                                                 </div>
-                                            @endif
+                                            </div>
                                             <div class="col-md-3">
                                                 <div class="form-group has-feedback">
                                                     {!! Form::select('class_id', $classes, $class_id , ['placeholder' => 'Pick a class...', 'id' => 'class_change', 'class' => 'form-control select2', 'required' => 'true']) !!}
@@ -59,26 +57,16 @@
                                                     {!! Form::select('section_id', $sections, $section_id , ['placeholder' => 'Pick a section...','class' => 'form-control select2']) !!}
                                                 </div>
                                             </div>
-                                            <div class="col-md-4">
+                                            <div class="col-md-3">
                                                 <div class="form-group has-feedback">
                                                     {!! Form::select('exam_id', $exams, $exam_id , ['placeholder' => 'Pick a exam...','class' => 'form-control select2', 'required' => 'true']) !!}
                                                 </div>
                                             </div>
-                                            @if(AppHelper::getInstituteCategory() != 'college')
-                                                <div class="row">
-                                                    <div class="col-md-2">
-                                                        <button type="submit" class="btn btn-info"><i class="fa fa-filter"></i> Get List</button>
-                                                    </div>
-                                                </div>
-                                            @endif
-                                        </div>
-                                        @if(AppHelper::getInstituteCategory() == 'college')
-                                            <div class="row">
-                                                <div class="col-md-2">
-                                                    <button type="submit" class="btn btn-info"><i class="fa fa-filter"></i> Get List</button>
-                                                </div>
+                                            <div class="col-md-2">
+                                                <button type="submit" class="btn btn-info"><i class="fa fa-filter"></i> Get List</button>
                                             </div>
-                                        @endif
+                                        </div>
+
                                     </form>
 
                                 </fieldset>
@@ -102,7 +90,7 @@
                                                 <th>Grade</th>
                                                 <th>Point</th>
                                                 <th>Total Marks</th>
-                                                <th class="notexport" width="5%">Action</th>
+                                                <th class="notexport" width="10%">Action</th>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -115,14 +103,23 @@
                                                     @if(!$section_id)
                                                         <td>{{$student->section->name}}</td>
                                                     @endif
+                                                    @if($student->result->first())
                                                     <td>{{$student->result->first()->grade}}</td>
                                                     <td>{{$student->result->first()->point}}</td>
                                                     <td>{{$student->result->first()->total_marks}}</td>
-                                                    <td>
+                                                    <td width="10%">
                                                         <div class="btn-group">
-                                                            <a title="Marksheet Public" href="#0" data-regino="{{$student->regi_no}}" class="btn btn-primary btn-sm viewMarksheetPubBtn"><i class="fa fa-eye"></i></a>
+                                                            <a style="margin-left: 5px;" title="Marksheet" href="#0" data-regino="{{$student->regi_no}}" class="btn btn-primary btn-sm viewMarksheetPubBtn"><i class="fa fa-file-pdf-o"></i></a>
                                                         </div>
                                                     </td>
+                                                    @else
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td>
+                                                            <button class="btn btn-warning btn-sm" title="This student didn't attend in exam!"><i class="fa fa-question-circle"></i></button>
+                                                        </td>
+                                                    @endif
 
                                                 </tr>
                                             @endforeach
@@ -152,8 +149,6 @@
                 </div>
             </div>
         </div>
-
-
     </section>
     <!-- /.content -->
 @endsection
@@ -165,11 +160,6 @@
         window.section_list_url = '{{URL::Route("academic.section")}}';
         window.exam_list_url = '{{URL::Route("exam.index")}}';
         window.marksheetpub_url = '{{URL::Route("report.marksheet_pub")}}';
-        window.changeExportColumnIndex = -1;
-        window.excludeFilterComlumns = [0,6,7];
-        @if(!$section_id)
-            window.excludeFilterComlumns = [0,4,7,8];
-        @endif
         $(document).ready(function () {
             Academic.resultInit();
         });

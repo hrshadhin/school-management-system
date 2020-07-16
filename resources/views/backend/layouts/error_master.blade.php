@@ -5,8 +5,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="CloudSchool">
-    <meta name="keywords" content="school,college,management,result,exam,attendace,hostel,admission,events">
-    <meta name="author" content="H.R.Shadhin">
+    <meta name="keywords" content="school,college,management,result,exam,attendance,account,hrm,library,payroll,hostel,admission,events">
+    <meta name="author" content="CloudSchool">
     <title>@yield('pageTitle')</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">

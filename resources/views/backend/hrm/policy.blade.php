@@ -32,7 +32,7 @@
                         <!-- /.box-header -->
                         <div class="box-body">
                             <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group has-feedback">
                                         <label for="total_casual_leave">Total Causal Leave<span class="text-danger">*</span></label>
                                         <input autofocus type="number" name="total_casual_leave" class="form-control" placeholder="11" value="@if(isset($metas['total_casual_leave'])){{ $metas['total_casual_leave'] }}@endif" min="0" required />
@@ -40,12 +40,28 @@
                                         <span class="text-danger">{{ $errors->first('total_casual_leave') }}</span>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group has-feedback">
                                         <label for="total_sick_leave">Total Sick Leave<span class="text-danger">*</span></label>
                                         <input type="number" name="total_sick_leave" class="form-control" placeholder="10" value="@if(isset($metas['total_sick_leave'])){{ $metas['total_sick_leave'] }}@endif" min="0" required />
                                         <span class="fa fa-sort-numeric-asc form-control-feedback"></span>
                                         <span class="text-danger">{{ $errors->first('total_sick_leave') }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group has-feedback">
+                                        <label for="total_maternity_leave">Total Maternity Leave<span class="text-danger">*</span></label>
+                                        <input type="number" name="total_maternity_leave" class="form-control" placeholder="90" value="@if(isset($metas['total_maternity_leave'])){{ $metas['total_maternity_leave'] }}@endif" min="0" required />
+                                        <span class="fa fa-sort-numeric-asc form-control-feedback"></span>
+                                        <span class="text-danger">{{ $errors->first('total_maternity_leave') }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group has-feedback">
+                                        <label for="total_special_leave">Total Special Leave<span class="text-danger">*</span></label>
+                                        <input type="number" name="total_special_leave" class="form-control" placeholder="5" value="@if(isset($metas['total_special_leave'])){{ $metas['total_special_leave'] }}@endif" min="0" required />
+                                        <span class="fa fa-sort-numeric-asc form-control-feedback"></span>
+                                        <span class="text-danger">{{ $errors->first('total_special_leave') }}</span>
                                     </div>
                                 </div>
 
