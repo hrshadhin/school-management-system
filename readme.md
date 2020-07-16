@@ -108,13 +108,8 @@ Another School Management System build with laravel and PHP 7
 - [Check Here](CHANGELOG.md)
 
 # Screenshot
-<img src="./screenshot/ce/dashboard.png" >
-<img src="./screenshot/site-dashboard.png" >
-<img src="./screenshot/ce/st-profile.png" >
-<img src="./screenshot/r-attendance.png" >
-<img src="./screenshot/pub-marksheet.png" >
-
-**[I want more screenshots](screenshot/more.md)**
+![Dashboard](../assets/screenshots/ce/dashboard.png?raw=true)
+## [More...](../assets/screenshots/ce/showme.md)
 
 
 # Installation and use
