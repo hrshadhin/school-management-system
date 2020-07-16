@@ -87,18 +87,22 @@ Another School Management System build with laravel and PHP 7
 **Community Edition (CE)**
 - Website: [http://ce.cloudschoolbd.com](http://ce.cloudschoolbd.com)
 - App login: [http://ce.cloudschoolbd.com/login](http://ce.cloudschoolbd.com/login)
-- username: admin
-- password: demo123
-- username: superadmin
-- password: super99
+
+Username    | Password
+------------|:-----------
+superadmin  | super99
+admin       | demo123
+
 
 **Enterprise Edition (EE)**
 - Website: [http://ee.cloudschoolbd.com](http://ee.cloudschoolbd.com)
 - App login: [http://ee.cloudschoolbd.com/login](http://ee.cloudschoolbd.com/login)
-- username: admin
-- password: demo123
-- username: superadmin
-- password: super99
+
+Username    | Password
+------------|:-----------
+superadmin  | super99
+admin       | demo123
+
 
 # Documentation
 - [Community Edition (CE)](http://ugc.cloudschoolbd.com)
@@ -108,8 +112,8 @@ Another School Management System build with laravel and PHP 7
 - [Check Here](CHANGELOG.md)
 
 # Screenshot
-![Dashboard](../assets/screenshots/ce/dashboard.png?raw=true)
-## [More...](../assets/screenshots/ce/showme.md)
+- ![Dashboard](../assets/screenshots/ce/dashboard.png?raw=true)
+- **[More...](../assets/screenshots/ce/showme.md)**
 
 
 # Installation and use
