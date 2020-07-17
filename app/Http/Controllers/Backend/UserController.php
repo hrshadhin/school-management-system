@@ -71,8 +71,6 @@ class UserController extends Controller
             session(['user_role_id' => auth()->user()->role->role_id]);
 
             $appSettings = AppHelper::getAppSettings(null, true);
-            $ac_year = isset($appSettings['academic_year']) ? intval($appSettings['academic_year']) : 0;
-            session(['default_academic_year' => $ac_year]);
 
             $msgType = "success";
             $msg = "Welcome to admin panel.";
