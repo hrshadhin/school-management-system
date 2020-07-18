@@ -336,25 +336,6 @@ class AcademicController extends Controller
             return redirect()->route('academic.subject')->with('success', 'Record deleted!');
         }
 
-
-        //failsafe protection for student
-        if(session('user_role_id',0) == AppHelper::USER_STUDENT) {
-            $studentInfo = Student::where('user_id', auth()->user()->student->user_id)
-                ->first();
-            if (!$studentInfo) {
-                abort(401);
-            }
-            $regiInfo = Registration::where('student_id', $studentInfo->id)
-                ->where('is_promoted', '0')
-                ->first();
-            if (!$regiInfo) {
-                abort(401);
-            }
-
-            $request->query->set('class', $regiInfo->class_id);
-        }
-        //end
-
         // check for ajax request here
         if($request->ajax()){
             $class_id = $request->query->get('class', 0);
