@@ -692,7 +692,7 @@ class UserController extends Controller
         //for save on POST request
         if ($request->isMethod('post')) {
 
-            $permissionList = $request->get('permissions');
+            $permissionList = $request->get('permissions', []);
 
             $message = "Something went wrong!";
             DB::beginTransaction();
@@ -883,7 +883,7 @@ class UserController extends Controller
         //for save on POST request
         if ($request->isMethod('post')) {
 
-            $permissionList = $request->get('permissions');
+            $permissionList = $request->get('permissions', []);
 
             $message = "Something went wrong!";
             DB::beginTransaction();
