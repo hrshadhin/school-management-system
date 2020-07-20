@@ -212,7 +212,7 @@ class SettingsController extends Controller
             Cache::forget('studentCount');
             Cache::forget('student_count_by_class');
             Cache::forget('student_count_by_section');
-            Cache::forget('default_academic_year');
+            Cache::put('default_academic_year', $request->get('academic_year', 0));
 
             //now notify the admins about this record
             $msg = "Institute settings updated by ".auth()->user()->name;

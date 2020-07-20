@@ -166,7 +166,10 @@ class AppHelper
     public static function getAcademicYear()
     {
         $settings = AppHelper::getAppSettings(null, true);
-        return isset($settings['academic_year']) ? intval($settings['academic_year']) : 0;
+        if(AppHelper::getInstituteCategory() != 'college') {
+            return isset($settings['academic_year']) ? intval($settings['academic_year']) : 0;
+        }
+        return 0;
     }
 
     public static function getUserSessionHash()
@@ -852,15 +855,6 @@ class AppHelper
         }
 
         return [$holidayBalance, $message];
-    }
-
-    public static function get_default_ac_year(){
-        if (AppHelper::getInstituteCategory() == "school" && Schema::hasTable('app_metas'))
-        {
-          return  AppHelper::getAcademicYear();
-        }
-
-        return 0;
     }
 
     public static function check_dev_route_access($code) {
