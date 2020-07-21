@@ -22,7 +22,7 @@ Another School Management System build with Laravel and PHP 7
 
 ## Index
 
-- [Query](#have-a-query)
+- [Have a Query?](#have-a-query)
 - [Demo](#demo)
     - [Community Edition (CE)](#community-edition)
     - [Enterprise Edition (EE)](#enterprise-edition)
