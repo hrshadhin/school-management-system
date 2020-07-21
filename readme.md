@@ -1,12 +1,38 @@
 # CloudSchool Enterprise Edition
+
+[![php](https://img.shields.io/badge/php-7.2-brightgreen.svg?logo=php)](https://www.php.net)
+[![laravel](https://img.shields.io/badge/laravel-6.x-orange.svg?logo=laravel)](https://laravel.com)
+
 Another School Management System build with laravel and PHP 7
 
-## Have query?
+## Index
+
+- [Have a Query?](#have-a-query)
+- [Demo](#demo)
+- [Modules](#modules)
+- [Features](#features)
+- [Screenshot](#screenshot)
+- [License](#license)
+
+## Have a query
 :mega: Join our discord channel: [CloudSchool](https://discord.gg/7rXyuu8):mega:
 
 :mega: Send us an email: [info@cloudschoolbd.com](mailto:info@cloudschoolbd.com):mega:
 
-# Modules
+## Demo
+
+- Website: [http://ee.cloudschoolbd.com](http://ee.cloudschoolbd.com)
+- App login: [http://ee.cloudschoolbd.com/login](http://ee.cloudschoolbd.com/login)
+- Login Info
+
+    | Username | Password |
+    |----------|----------|
+    | supearadmin | super99 |
+    | admin | demo123 |
+
+## Modules
+[:arrow_up: Back to top](#index)
+
 - Administration
 - User & Roles
 - Website
@@ -27,7 +53,9 @@ Another School Management System build with laravel and PHP 7
 - Reports
 
 
-# Features
+## Features
+[:arrow_up: Back to top](#index)
+
 - **40+ Reports**
 - **Bulk SMS and Email Sending**
 - Academic Year manage
@@ -75,30 +103,16 @@ Another School Management System build with laravel and PHP 7
 - Issue book and fine collection
 - Academic Calendar Print
 
+## Screenshot
+[:arrow_up: Back to top](#index)
 
-# Demo
-- Website: [http://ee.cloudschoolbd.com](http://ee.cloudschoolbd.com)
-- App login: [http://ee.cloudschoolbd.com/login](http://ee.cloudschoolbd.com/login)
-- Login Info
-
-    | Username | Password |
-    |----------|----------|
-    | supearadmin | super99 |
-    | admin | demo123 |
-
-# Documentation
-- [Here](http://uge.cloudschoolbd.com)
-
-# Timeline
-- [Check Here](../master/CHANGELOG.md)
-
-# Screenshot
 - ![Dashboard](../assets/screenshots/ee/dashboard.png?raw=true)
 - **[More...](../assets/screenshots/ee/showme.md)**
 
 
 
-# License
+## License
+[:arrow_up: Back to top](#index)
 
 CloudSchool Enterprise Edition is licensed under custom license.
 And all Frameworks and libraries are distributed with it's own license.
