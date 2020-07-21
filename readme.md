@@ -87,7 +87,7 @@ Another School Management System build with Laravel and PHP 7
 | Employees Manage | Employees Manage |
 | Employees Attendance | Employees Attendance | 
 | Employees Leave | Employees Leave |
-| Employees Work Outside | Employees Work Outside |
+|   | Employees Work Outside |
 |   | SMS Gateway Setup |
 |   | Email & SMS Templating |
 |   | Attendance notification email/sms |
@@ -202,13 +202,13 @@ Another School Management System build with Laravel and PHP 7
 #### Use the app
 [:arrow_up: Back to top](#index)
 
-    - Website: [http://localhost:8000](http://localhost:8000)
-    - App login: [http://localhost:8000/login](http://localhost:8000/login)
+- Website: [http://localhost:8000](http://localhost:8000)
+- App login: [http://localhost:8000/login](http://localhost:8000/login)
 
-        Username    | Password
-        ------------|:-----------
-        superadmin  | super99
-        admin       | demo123
+    Username    | Password
+    ------------|:-----------
+    superadmin  | super99
+    admin       | demo123
 
 ## Documentation
 [:arrow_up: Back to top](#index)
