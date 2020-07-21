@@ -8,7 +8,7 @@ Another School Management System build with Laravel and PHP 7
 
 ## Index
 
-- [Query](#have-a-query)
+- [Have a Query?](#have-a-query)
 - [Demo](#demo)
 - [Features](#features)
 - [Installation](#installation)
