@@ -1,15 +1,31 @@
 ## CloudSchool
 
+[![Codeship Status for hrshadhin/school-management-system](https://app.codeship.com/projects/09010350-b97f-0136-1477-5a7589b245e6/status?branch=master)](https://app.codeship.com/projects/312233)
 [![license](https://img.shields.io/badge/license-AGPL-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 [![php](https://img.shields.io/badge/php-7.2-brightgreen.svg?logo=php)](https://www.php.net)
 [![laravel](https://img.shields.io/badge/laravel-6.x-orange.svg?logo=laravel)](https://laravel.com)
 
+
+```
+                       _____  _                    _   _____        _                    _ 
+                      / ____|| |                  | | / ____|      | |                  | |
+                     | |     | |  ___   _   _   __| || (___    ___ | |__    ___    ___  | |
+                     | |     | | / _ \ | | | | / _` | \___ \  / __|| '_ \  / _ \  / _ \ | |
+                     | |____ | || (_) || |_| || (_| | ____) || (__ | | | || (_) || (_) || |
+                      \_____||_| \___/  \__,_| \__,_||_____/  \___||_| |_| \___/  \___/ |_|       
+```                                                                                                                               
+
 Another School Management System build with Laravel and PHP 7
+
+
+## :loudspeaker: **For Enterprise Edition(EE) checkout [here](https://github.com/hrshadhin/school-management-system/tree/empty)**
 
 ## Index
 
 - [Query](#have-a-query)
 - [Demo](#demo)
+    - [Community Edition (CE)](#community-edition)
+    - [Enterprise Edition (EE)](#enterprise-edition)
 - [Features](#features)
 - [Installation](#installation)
     - [Installing dependencies](#installing-dependencies)
@@ -18,6 +34,9 @@ Another School Management System build with Laravel and PHP 7
 - [Documentation](#documentation)
 - [Changelog/Timeline](#timeline)
 - [Screenshot](#screenshot)
+- [Contributing](#contributing)
+  - [To-do](#to-do)
+  - [Contributers](#contributers)
 - [Issues](#issues)
 - [License](#license)
 
@@ -31,8 +50,19 @@ Another School Management System build with Laravel and PHP 7
 ## Demo
 [:arrow_up: Back to top](#index)
 
+#### Community Edition
 - Website: [http://ce.cloudschoolbd.com](http://ce.cloudschoolbd.com)
 - App login: [http://ce.cloudschoolbd.com/login](http://ce.cloudschoolbd.com/login)
+
+    Username    | Password
+    ------------|:-----------
+    superadmin  | super99
+    admin       | demo123
+
+
+#### Enterprise Edition
+- Website: [http://ee.cloudschoolbd.com](http://ee.cloudschoolbd.com)
+- App login: [http://ee.cloudschoolbd.com/login](http://ee.cloudschoolbd.com/login)
 
     Username    | Password
     ------------|:-----------
@@ -42,30 +72,55 @@ Another School Management System build with Laravel and PHP 7
 ## Features
 [:arrow_up: Back to top](#index)
 
-- Academic Year manage 
-- Academic Calendar Setup
-- Institute Setup
-- Class & Section Manage
-- Subject & Teacher Manage
-- Student Admission
-- Student Attendance
-- Exam & Grading Rules
-- Marks & Result
-- Student Promotion
-- Employees Manage
-- Employees Attendance
-- Employees Leave
-- User & Role manage with permission grid(ACL)
-- User wise Dashboard
-- Report Settings
-- Only 5 Reports
-- Dynamic Front Website
-- Website Management Panel
-- Photo Gallery
-- Event Manage
-- Google Analytics
-- User Notification
-
+|   Community Edition   |   Enterprise Edition   |
+|-----------------------|:-------------------------:|
+| Academic Year manage  | Academic Year manage   |
+| Academic Calendar Setup | Academic Calendar Setup |
+| Institute Setup | Institute Setup |
+| Class & Section Manage | Class & Section Manage |
+| Subject & Teacher Manage | Subject & Teacher Manage |
+| Student Admission | Student Admission |
+| Student Attendance |  Student Attendance |
+| Exam & Grading Rules | Exam & Grading Rules |
+| Marks & Result | Easy Marks Entry & Result Manage |
+| Student Promotion | Dynamic and more advance Student Promotion |
+| Employees Manage | Employees Manage |
+| Employees Attendance | Employees Attendance | 
+| Employees Leave | Employees Leave |
+| Employees Work Outside | Employees Work Outside |
+|   | SMS Gateway Setup |
+|   | Email & SMS Templating |
+|   | Attendance notification email/sms |
+|  | Id Card templates Manage |
+|  | Employee & Student id card print |
+| User & Role manage with permission grid(ACL) | User & Role manage with permission grid(ACL) |
+| User wise Dashboard | User wise Dashboard
+| Report Settings | Report Settings |
+| Only 5 Reports | **40+** Reports |
+| Dynamic Front Website | Dynamic Front Website |
+| Website Management Panel |  Website Management Panel
+| Photo Gallery | Photo Gallery | 
+| Event Manage | Event Manage |
+| Google Analytics | Google Analytics |
+| User Notification | User Notification |
+|                   | Online Admission |
+|                   | Online Admit Card & Payslip |
+|                   | Notice Board |
+|                   | Student & Employee Id card bulk/mass print |
+|                   | Account Manage |
+|                   | Budget Manage |
+|                   | Account Heads |
+|                   | Student Invoice |
+|                   | Income / Expense Manage |
+|                   | Payroll |
+|                   | Salary Template |
+|                   | Employee Salary Payment |
+|                   | Hostel & Collection Manage |
+|                   | Library Manage |
+|                   | Issue book and fine collection |
+|                   | Academic Calendar Print |
+|                   | Bulk SMS and Email Sending |
+|                   | **40+** Reports |
 
 
 ## Installation
@@ -87,8 +142,10 @@ Another School Management System build with Laravel and PHP 7
 
 #### Download and setup
 
-- Download source code
-
+ - Clone the repo
+    ```
+    $ git clone https://github.com/hrshadhin/school-management-system.git cloudschool
+    ```
 - change directory
     ```
     $ cd cloudschool
@@ -145,20 +202,22 @@ Another School Management System build with Laravel and PHP 7
 #### Use the app
 [:arrow_up: Back to top](#index)
 
-- Website: [http://localhost:8000](http://localhost:8000)
-- App login: [http://localhost:8000/login](http://localhost:8000/login)
+    - Website: [http://localhost:8000](http://localhost:8000)
+    - App login: [http://localhost:8000/login](http://localhost:8000/login)
 
-    Username    | Password
-    ------------|:-----------
-    superadmin  | super99
-    admin       | demo123
+        Username    | Password
+        ------------|:-----------
+        superadmin  | super99
+        admin       | demo123
 
 ## Documentation
+[:arrow_up: Back to top](#index)
 
-[Check Here](http://ugc.cloudschoolbd.com)
+- [Community Edition (CE)](http://ugc.cloudschoolbd.com)
+- [Enterprise Edition (EE)](http://uge.cloudschoolbd.com)
 
 ## Timeline
-[Check Here](CHANGELOG.md)
+- [Check Here](CHANGELOG.md)
 
 ## Screenshot
 [:arrow_up: Back to top](#index)
@@ -166,11 +225,33 @@ Another School Management System build with Laravel and PHP 7
 - ![Dashboard](../assets/screenshots/ce/dashboard.png?raw=true)
 - **[More...](../assets/screenshots/ce/showme.md)**
 
+## Contributing
+[:arrow_up: Back to top](#index)
+
+Don't be shy to make some PR's here :smile:
+
+#### To-do
+- [ ] Add **unit & integration**. Like real quick!
+- [ ] Add shortcut link for create things. i.e: `student`, `attendance`, `marks` etc
+- [ ] Add new UI theme version **AdminLTE**
+- [ ] Update Jquery with datetime picker library
+
+#### Contributers
+
+A big shout out to all the contributers, more specifically to these guys
+
+- [H.R. Shadhin](https://github.com/hrshadhin)
+- [Ashutosh Das](https://github.com/pyprism)
+- [order4adwriter](https://github.com/order4adwriter)
+- [Zahid Irfan](https://github.com/zahidirfan)
+- [Oshane Bailey](https://github.com/b4oshany)
 
 ## Issues
 [:arrow_up: Back to top](#index)
 
-If you discover bug or security vulnerability within CloudSchool app, please send an e-mail to [sos@cloudschoolbd.com](mailto:sos@cloudschoolbd.com). All security vulnerabilities will be promptly addressed.
+- If you faced any problems, first check previous issue list. If doesn't exists then create a new one.
+- You can report the bugs at the [issue tracker](https://github.com/hrshadhin/school-management-system/issues)
+- If you discover a security vulnerability within CloudSchool app, please send an e-mail to [sos@cloudschoolbd.com](mailto:sos@cloudschoolbd.com). All security vulnerabilities will be promptly addressed.
 
 ## License
 [:arrow_up: Back to top](#index)
