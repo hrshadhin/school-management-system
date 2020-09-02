@@ -24,7 +24,7 @@ class ReportMasterComposer
         $view->with('maintainer_url', 'http://cloudschoolbd.com');
         $view->with('majorVersion', '3');
         $view->with('minorVersion', '0');
-        $view->with('patchVersion', '0');
+        $view->with('patchVersion', '1');
         $view->with('suffixVersion', 'ce');
         $view->with('instituteName', $instituteName);
         $view->with('instituteAddress', $instituteAddress);
