@@ -280,6 +280,9 @@ class DemoAppDataSeeder extends Seeder
                 'group' => 'None',
                 'status' => '1',
                 'note' => 'demo test',
+                'have_selective_subject' => false,
+                'max_selective_subject' => null,
+                'have_elective_subject' => false,
                 'created_by' => $created_by,
                 'created_at' => $created_at
             ],
@@ -290,6 +293,9 @@ class DemoAppDataSeeder extends Seeder
                 'group' => 'None',
                 'status' => '1',
                 'note' => 'demo test',
+                'have_selective_subject' => true,
+                'max_selective_subject' => 2,
+                'have_elective_subject' => true,
                 'created_by' => $created_by,
                 'created_at' => $created_at
             ],
@@ -300,6 +306,9 @@ class DemoAppDataSeeder extends Seeder
                 'group' => 'None',
                 'status' => '1',
                 'note' => 'demo test',
+                 'have_selective_subject' => false,
+                'max_selective_subject' => null,
+                'have_elective_subject' => false,
                 'created_by' => $created_by,
                 'created_at' => $created_at
             ],
@@ -310,6 +319,9 @@ class DemoAppDataSeeder extends Seeder
                 'group' => 'None',
                 'status' => '1',
                 'note' => 'demo test',
+                 'have_selective_subject' => false,
+                'max_selective_subject' => null,
+                'have_elective_subject' => false,
                 'created_by' => $created_by,
                 'created_at' => $created_at
             ],
@@ -320,6 +332,9 @@ class DemoAppDataSeeder extends Seeder
                 'group' => 'None',
                 'status' => '1',
                 'note' => 'demo test',
+                 'have_selective_subject' => false,
+                'max_selective_subject' => null,
+                'have_elective_subject' => false,
                 'created_by' => $created_by,
                 'created_at' => $created_at
             ],
@@ -330,6 +345,9 @@ class DemoAppDataSeeder extends Seeder
                 'group' => 'None',
                 'status' => '1',
                 'note' => 'demo test',
+                 'have_selective_subject' => false,
+                'max_selective_subject' => null,
+                'have_elective_subject' => false,
                 'created_by' => $created_by,
                 'created_at' => $created_at
             ],
@@ -340,6 +358,9 @@ class DemoAppDataSeeder extends Seeder
                 'group' => 'None',
                 'status' => '1',
                 'note' => 'demo test',
+                 'have_selective_subject' => false,
+                'max_selective_subject' => null,
+                'have_elective_subject' => false,
                 'created_by' => $created_by,
                 'created_at' => $created_at
             ],
@@ -350,6 +371,9 @@ class DemoAppDataSeeder extends Seeder
                 'group' => 'None',
                 'status' => '1',
                 'note' => 'demo test',
+                 'have_selective_subject' => false,
+                'max_selective_subject' => null,
+                'have_elective_subject' => false,
                 'created_by' => $created_by,
                 'created_at' => $created_at
             ],
@@ -360,6 +384,9 @@ class DemoAppDataSeeder extends Seeder
                 'group' => 'Science',
                 'status' => '1',
                 'note' => 'demo test',
+                 'have_selective_subject' => false,
+                'max_selective_subject' => null,
+                'have_elective_subject' => false,
                 'created_by' => $created_by,
                 'created_at' => $created_at
             ],
@@ -370,6 +397,9 @@ class DemoAppDataSeeder extends Seeder
                 'group' => 'Humanities',
                 'status' => '1',
                 'note' => 'demo test',
+                 'have_selective_subject' => false,
+                'max_selective_subject' => null,
+                'have_elective_subject' => false,
                 'created_by' => $created_by,
                 'created_at' => $created_at
             ],
@@ -717,13 +747,10 @@ class DemoAppDataSeeder extends Seeder
 
         //now assign subject to class 1 students
         $students = \App\Registration::where('class_id', 1)->get();
-        $subjects = \App\Subject::where('class_id', 1)->get()->map(function ($subject){
-            return [
-                'subject_id' => $subject->id,
-                'subject_type' => $subject->getOriginal('type')
-            ];
-        });
-
+        $subjects = \App\Subject::where('class_id', 1)->get()->mapWithKeys(function ($sub) {
+            return [$sub->id => ['subject_type' => $sub->getOriginal('type')]];
+        })->toArray();
+        
         foreach ($students as $student){
             $student->subjects()->sync($subjects);
         }

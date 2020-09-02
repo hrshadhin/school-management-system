@@ -319,38 +319,24 @@ class StudentController extends Controller
 
 
         //fetch core subject from db
-        $subjects = Subject::select('id as subject_id','type as subject_type')
+        $subjects = Subject::select('id')
             ->where('class_id', $data['class_id'])
             ->where('type', 1) // 1 =core 2= elective , 3 = selective
             ->where('status', AppHelper::ACTIVE)
             ->orderBy('order', 'asc')
             ->get()
-            ->toArray();
+            ->mapWithKeys(function ($sub) {
+                return [$sub->id => ['subject_type' => "1"]];
+            })->toArray();
 
-//        $subjects = array_map(function ($subject){
-//            return [
-//                'subject_id' => $subject,
-//                'subject_type' => 1
-//            ];
-//        }, $data['core_subjects']);
-
-
-        if(isset($data['selective_subjects'])) {
-            $selectiveSubjects = array_map(function ($subject) {
-                return [
-                    'subject_id' => $subject,
-                    'subject_type' => 3
-                ];
-            }, $data['selective_subjects']);
-
-            $subjects = array_merge($subjects, $selectiveSubjects);
+        if (isset($data['selective_subjects'])) {
+            foreach ($data['selective_subjects'] as $sub) {
+                $subjects[$sub] = ['subject_type' => "3"];
+            }
         }
 
-        if(isset($data['fourth_subject'])){
-            $subjects[] = [
-                'subject_id' => $data['fourth_subject'],
-                'subject_type' => 2
-                ];
+        if (isset($data['fourth_subject'])) {
+            $subjects[$data['fourth_subject']] = ['subject_type' => "2"];
         }
 
         //card_no manual validation
@@ -429,7 +415,7 @@ class StudentController extends Controller
             ];
 
            $registration =  Registration::create($registrationData);
-            $registration->subjects()->sync($subjects);
+           $registration->subjects()->sync($subjects);
 
             // now commit the database
             DB::commit();
@@ -749,37 +735,24 @@ class StudentController extends Controller
         $subjects = [];
         $oldSubjects = [];
         if($allowSubjectUpdate) {
-            $subjects = Subject::select('id as subject_id', 'type as subject_type')
+            $subjects = Subject::select('id', 'type as sub_type')
                 ->where('class_id', $regiInfo->class_id)
                 ->where('type', 1)// 1 =core 2= elective , 3 = selective
                 ->where('status', AppHelper::ACTIVE)
                 ->orderBy('order', 'asc')
                 ->get()
-                ->toArray();
-
-//        $subjects = array_map(function ($subject){
-//            return [
-//                'subject_id' => $subject,
-//                'subject_type' => 1
-//            ];
-//        }, $data['core_subjects']);
+                ->mapWithKeys(function ($sub) {
+                    return [$sub->id => ['subject_type' => "1"]];
+                })->toArray();
 
             if (isset($data['selective_subjects'])) {
-                $selectiveSubjects = array_map(function ($subject) {
-                    return [
-                        'subject_id' => $subject,
-                        'subject_type' => 3
-                    ];
-                }, $data['selective_subjects']);
-
-                $subjects = array_merge($subjects, $selectiveSubjects);
+                foreach ($data['selective_subjects'] as $sub) {
+                    $subjects[$sub] = ['subject_type' => "3"];
+                }
             }
 
             if (isset($data['fourth_subject'])) {
-                $subjects[] = [
-                    'subject_id' => $data['fourth_subject'],
-                    'subject_type' => 2
-                ];
+                $subjects[$data['fourth_subject']] = ['subject_type' => "2"];
             }
 
             //fetch old subjects for this student
