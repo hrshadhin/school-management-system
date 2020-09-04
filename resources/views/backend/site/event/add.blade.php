@@ -136,9 +136,6 @@
     <script type="text/javascript">
         $(document).ready(function () {
             Site.EventInit();
-
-
-
         });
     </script>
 @endsection

@@ -126,12 +126,10 @@
             Site.timeLineInit();
             initDeleteDialog();
             $(".year").datetimepicker({
-                format: "yyyy",
-                autoclose: true,
-                startView: 'decade',
-                minView:'decade',
-                maxView:'decade',
-                viewSelect:'decade'
+                format: "YYYY",
+                viewMode: 'years',
+                ignoreReadonly: true,
+                useCurrent: false
             });
         });
     </script>

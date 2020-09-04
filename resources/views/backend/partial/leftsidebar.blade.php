@@ -304,7 +304,7 @@
                                     <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
                                 </a>
                                 <ul class="treeview-menu">
-                                    @can('site.index')
+                                    @can('slider.index')
                                         <li><a href="{{URL::route('slider.index')}}"><i class="fa fa-picture-o text-aqua"></i> Sliders</a></li>
                                     @endcan
                                     @can('site.about_content')
