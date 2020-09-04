@@ -53,7 +53,7 @@ class ClassProfileController extends Controller
 
         ClassProfile::create($data);
 
-        return redirect()->back()->with('success', 'New class profile created.');
+        return redirect()->route('class_profile.create')->with('success', 'New class profile created.');
     }
 
     public function edit($id)

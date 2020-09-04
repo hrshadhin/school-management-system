@@ -321,10 +321,9 @@ export default class Site {
         });
 
         $(".event_time").datetimepicker({
-            format: "dd/mm/yyyy HH:ii P",
-            showMeridian: true,
-            autoclose: true,
-            todayBtn: true
+            format: "DD/MM/YYYY LT",
+            viewMode: 'days',
+            ignoreReadonly: true
         });
 
     }

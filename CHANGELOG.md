@@ -1,3 +1,7 @@
+## 3.0.1 # 2020-09-02
+- Update libs
+- Fixed minor bugs
+
 ## 3.0.0 # 2020-07-16
 - Upgrade support to PHP 7.2 from 7.1
 - Upgraded to Laravel 6(LTS) from 5.8

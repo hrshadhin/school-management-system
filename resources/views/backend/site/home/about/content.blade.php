@@ -47,13 +47,13 @@
                             </div>
                             <div class="form-group has-feedback">
                                 <label for="key_point_1_title">Key point 1 title<span class="text-danger">*</span></label>
-                                <input  type="text" class="form-control" name="key_point_1_title" required placeholder="title" value="@if($content) {{ $content->key_point_1_title }} @endif" required minlength="5" maxlength="100">
+                                <input  type="text" class="form-control" name="key_point_1_title" required placeholder="title" value="@if($content){{ trim($content->key_point_1_title) }}@endif" required minlength="5" maxlength="100">
                                 <span class="glyphicon glyphicon-info form-control-feedback"></span>
                                 <span class="text-danger">{{ $errors->first('key_point_1_title') }}</span>
                             </div>
                             <div class="form-group has-feedback">
                                 <label for="key_point_1_content">Key point 1 Content<span class="text-danger">*</span></label>
-                                <textarea name="key_point_1_content" class="form-control textarea"  required >@if($content) {{ $content->key_point_1_content }} @endif</textarea>
+                                <textarea name="key_point_1_content" class="form-control textarea"  required >@if($content){{ trim($content->key_point_1_content) }}@endif</textarea>
                                 <span class="glyphicon glyphicon-info form-control-feedback"></span>
                                 <span class="text-danger">{{ $errors->first('key_point_1_content') }}</span>
                             </div>

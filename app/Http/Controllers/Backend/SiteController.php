@@ -391,6 +391,9 @@ class SiteController extends Controller
                 ['meta_key' => 'contact_latlong'],
                 [ 'meta_value' => $request->get('latlong')]
             );
+
+            Cache::forget('site_metas');
+
             return redirect()->route('site.contact_us')->with('success', 'Information saved!');
         }
 
@@ -517,7 +520,7 @@ class SiteController extends Controller
             ];
             $this->validate($request, [
                 'name' => 'required|min:5|max:255',
-                'short_name' => 'required|min:5|max:255',
+                'short_name' => 'required|min:3|max:255',
                 'logo' => 'nullable|mimes:jpeg,jpg,png|max:1024|dimensions:min_width=82,min_height=72,max_width=82,max_height=72',
                 'logo2x' => 'nullable|mimes:jpeg,jpg,png|max:1024|dimensions:min_width=162,min_height=142,max_width=162,max_height=142',
                 'favicon' => 'nullable|mimes:png|max:512|dimensions:min_width=32,min_height=32,max_width=32,max_height=32',

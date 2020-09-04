@@ -21,8 +21,6 @@ class CreateStudentSubjectsTable extends Migration
             $table->foreign('subject_id')->references('id')->on('subjects');
             $table->foreign('registration_id')->references('id')->on('registrations');
 
-            $table->unique(['registration_id', 'subject_id']);
-
         });
 
         Schema::create('st_subjects_log', function (Blueprint $table) {

@@ -1173,6 +1173,8 @@ class MarkController extends Controller
 
         return $isCombine;
     }
+
+
     private function processCombineSubjectMarks($subjectMarks, $pairSubjectMarks, $subjectRule, $pairSubjectRule){
         $pairFail = false;
 
@@ -1496,13 +1498,10 @@ class MarkController extends Controller
             ->where('status', AppHelper::ACTIVE)
             ->orderBy('order', 'asc')
             ->get()
-            ->reduce(function ($subjects, $subject){
-                $subjects[] = [
-                    'subject_id' => $subject->id,
-                    'subject_type' => 1 //core subject
-                ];
-                return $subjects;
-            });
+            ->mapWithKeys(function ($sub) {
+                return [$sub->id => ['subject_type' => "1"]];
+            })->toArray();
+
         $need_to_assign_subject = false;
         if(count($subjects)>0){
             $need_to_assign_subject = true;
@@ -1610,13 +1609,11 @@ class MarkController extends Controller
                     if (!isset($studentsSubjects[$oldId])) {
                         continue;
                     }
-                    $subjectWithType = $studentsSubjects[$oldId]->map(function ($record, $key) {
-                        return [
-                            'subject_id' => $record->subject_id,
-                            'subject_type' => $record->subject_type,
-                        ];
-                    });
-                    $student->subjects()->sync($subjectWithType->toArray());
+
+                    $subjectWithType = $studentsSubjects[$oldId]->mapWithKeys(function ($record) {
+                        return [$record->subject_id => ['subject_type' => $record->subject_type]];
+                    })->toArray();
+                    $student->subjects()->sync($subjectWithType);
                 }
             }
             // re-admission done
