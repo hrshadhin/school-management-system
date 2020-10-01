@@ -246,6 +246,8 @@ A big shout out to all the contributers, more specifically to these guys
 - [Zahid Irfan](https://github.com/zahidirfan)
 - [Oshane Bailey](https://github.com/b4oshany)
 
+Suggestions are always welcome, thankyou!
+
 ## Issues
 [:arrow_up: Back to top](#index)
 
@@ -276,3 +278,4 @@ All Frameworks and libraries are distributed with it's own license.
 not remove application footer information text**
 
 **Why AGPL? [Read Here](https://www.gnu.org/licenses/why-affero-gpl.html)**
+
