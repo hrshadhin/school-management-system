@@ -126,7 +126,7 @@ Another School Management System build with Laravel and PHP 7
 ## Installation
 [:arrow_up: Back to top](#index)
 
-#### Installing dependencies
+#### Server Requirements
 
 - PHP >= 7.2
 - OpenSSL PHP Extension
@@ -140,9 +140,10 @@ Another School Management System build with Laravel and PHP 7
 - [hrshadhin/laravel-userstamps](https://github.com/hrshadhin/laravel-userstamps.git) [**Already Installed**]
 - NodeJS, npm, webpack
 
-#### Download and setup
-
- - Clone the repo
+#### How to Use/Install
+ 
+ - Open your terminal and follow the instruction:
+ - Clone the repo, enter the command:
     ```
     $ git clone https://github.com/hrshadhin/school-management-system.git cloudschool
     ```
@@ -154,7 +155,7 @@ Another School Management System build with Laravel and PHP 7
     ```
     $ cp .env.example .env
     ```
-- Install php libraries
+- Install composer and php libraries
     ```
     $ composer install
     ```
