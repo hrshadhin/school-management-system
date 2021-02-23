@@ -1,5 +1,12 @@
-* text=auto eol=lf
+* text=auto
 *.css linguist-vendored
 *.scss linguist-vendored
-*.js linguist-vendored
-CHANGELOG.md export-ignore
+**/frontend/** linguist-vendored
+adminlte.js linguist-vendored
+bootstrap3-wysihtml5.all.min.js linguist-vendored
+bootstrap.js linguist-vendored
+colorpicker.js linguist-vendored
+bootstrap-datetimepicker.min.js linguist-vendored
+bootstrap-toggle.min.js linguist-vendored
+webpack.backend.mix.js linguist-vendored
+webpack.frontend.mix.js linguist-vendored
