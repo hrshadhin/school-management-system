@@ -143,6 +143,12 @@ Another School Management System build with Laravel and PHP 7
 #### Download and setup
 
  - Clone the repo
+
+    **For Windows run below commands before cloning the Repo.**
+    ```
+    git config --global core.eol lf
+    git config --global core.autocrlf false
+    ```
     ```
     $ git clone https://github.com/hrshadhin/school-management-system.git cloudschool
     ```
