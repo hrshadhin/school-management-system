@@ -27,7 +27,7 @@
     "dependencies": {
         "bootstrap": "^3.4.0",
         "bootstrap-colorpicker": "^2.5.3",
-        "chart.js": "^2.9.3",
+        "chart.js": "^2.9.4",
         "datatables.net": "^1.10.20",
         "datatables.net-bs": "^1.10.20",
         "datatables.net-responsive-bs": "^2.2.1",
