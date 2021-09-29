@@ -28,7 +28,7 @@
         "bootstrap": "^3.4.0",
         "bootstrap-colorpicker": "^2.5.3",
         "chart.js": "^2.9.3",
-        "datatables.net": "^1.10.20",
+        "datatables.net": "^1.11.3",
         "datatables.net-bs": "^1.10.20",
         "datatables.net-responsive-bs": "^2.2.1",
         "fastclick": "^1.0.6",
