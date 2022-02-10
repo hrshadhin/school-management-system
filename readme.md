@@ -21,8 +21,8 @@ Another School Management System build with laravel and PHP 7
 
 ## Demo
 
-- Website: [http://ee.cloudschoolbd.com](http://ee.cloudschoolbd.com)
-- App login: [http://ee.cloudschoolbd.com/login](http://ee.cloudschoolbd.com/login)
+- Website: [https://demo.cloudschoolbd.com](https://demo.cloudschoolbd.com)
+- App login: [https://demo.cloudschoolbd.com/login](https://demo.cloudschoolbd.com/login)
 - Login Info
 
     | Username | Password |
