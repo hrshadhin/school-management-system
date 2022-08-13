@@ -1,0 +1,34 @@
+* text=auto
+*.css linguist-vendored
+*.scss linguist-vendored
+**/frontend/** linguist-vendored
+adminlte.js linguist-vendored
+bootstrap3-wysihtml5.all.min.js linguist-vendored
+bootstrap.js linguist-vendored
+colorpicker.js linguist-vendored
+bootstrap-datetimepicker.min.js linguist-vendored
+bootstrap-toggle.min.js linguist-vendored
+webpack.backend.mix.js linguist-vendored
+webpack.frontend.mix.js linguist-vendored
+
+# These files are text and should be normalized (Convert crlf => lf)
+*.php text
+
+# These files are binary and should be left untouched
+# (binary is a macro for -text -diff)
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.mov binary
+*.mp4 binary
+*.mp3 binary
+*.flv binary
+*.fla binary
+*.swf binary
+*.gz binary
+*.zip binary
+*.7z binary
+*.ttf binary
+*.pyc binary
