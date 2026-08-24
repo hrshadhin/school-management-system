@@ -77,7 +77,9 @@ Another School Management System build with Laravel and PHP 7
 | Student Promotion                            |  Dynamic and more advance Student Promotion  |
 | Employees Manage                             |               Employees Manage               |
 | Employees Attendance                         |             Employees Attendance             |
-| Employees Leave                              |               Employees Leave                |
+| Employees Leave   
+i am here to destroy bthis file 
+                          |               Employees Leave                |
 |                                              |            Employees Work Outside            |
 |                                              |              SMS Gateway Setup               |
 |                                              |            Email & SMS Templating            |
