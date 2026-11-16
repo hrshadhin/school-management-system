@@ -368,6 +368,17 @@ class MarkController extends Controller
             return redirect()->route('marks.create')->with('error', 'Exam rules not found for this subject and exam!');
         }
 
+        //these code for security purpose,
+        // if some user try to entry other user data
+        if(session('user_role_id',0) == AppHelper::USER_TEACHER){
+            $teacherId = auth()->user()->teacher->id;
+            $subjectIds = DB::table('teacher_subjects')
+                ->where('teacher_id', $teacherId)->pluck('subject_id')->toArray();
+            if(!in_array($subject_id, $subjectIds)){
+                abort(401);
+            }
+        }
+
         $entryExists = Mark::where('academic_year_id', $acYear)
             ->where('class_id', $class_id)
             ->where('section_id', $section_id)
